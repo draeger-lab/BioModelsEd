@@ -51,11 +51,10 @@ public class SBGNEditMode<T> extends RestrictedEditMode implements GraphListener
 		this.converter = converter;
 		allowNodeCreation(true);
 		setCreateEdgeMode(new CreateReactionEdgeMode());
-    allowEdgeCreation(true); 
+		allowEdgeCreation(true); 
 	}
-	
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see y.view.EditMode#mousePressedRight(double, double)
 	 */
