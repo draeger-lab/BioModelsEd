@@ -1,6 +1,6 @@
 /*
- * $Id:  EditorMenu.java 22:02:21 jakob $
- * $URL: EditorMenu.java $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -24,25 +24,30 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import de.zbit.kegg.io.KEGGtranslator;
-
 /**
  * @author Jakob Matthes
  * @version $Rev$
  */
 public class EditorMenu extends JMenuBar  {
-
+	private MenuListener menuListener = new MenuListener();
+	/**
+	 * TODO Add mnemonics and seperators split into different functions?
+	 */
 	public EditorMenu() {
+
 		JMenu menuFile = new JMenu("File");
 		menuFile.setMnemonic(KeyEvent.VK_F);
 		add(menuFile);
+		menuFile.addActionListener(menuListener);
 		addItem(menuFile, "New", KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
 		menuFile.addSeparator();
 		addItem(menuFile, "Open", KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
 		addItem(menuFile, "Close", KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK);
+		menuFile.addSeparator();
 		addItem(menuFile, "Save", KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
 		addItem(menuFile, "Save as...");
 		addItem(menuFile, "Export");
+		menuFile.addSeparator();
 		addItem(menuFile, "Quit", KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK);		
 
 		JMenu menuEdit = new JMenu("Edit");
@@ -65,7 +70,6 @@ public class EditorMenu extends JMenuBar  {
 		addItem(menuHelp,"About");
 		
 	}
-
 	/**
 	 * Adding new item to given menu
 	 * @param menu
@@ -76,6 +80,7 @@ public class EditorMenu extends JMenuBar  {
 	private void addItem(JMenu menu, String label, int key, int modifier) {
 		JMenuItem item = new JMenuItem(label);
 		item.setAccelerator(KeyStroke.getKeyStroke(key, modifier));
+		item.addActionListener(menuListener);
 		menu.add(item);
 	}
 	
@@ -96,6 +101,7 @@ public class EditorMenu extends JMenuBar  {
 	 */
 	private void addItem(JMenu menu, String label) {
 		JMenuItem item = new JMenuItem(label);
+		item.addActionListener(menuListener);
 		menu.add(item);
 	}
 	

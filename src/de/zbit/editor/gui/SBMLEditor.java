@@ -1,6 +1,6 @@
 /*
- * $Id:  SBMLEditor.java 22:02:21 jakob $
- * $URL: SBMLEditor.java $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
