@@ -18,6 +18,7 @@
 package de.zbit.editor.gui;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
 /**
@@ -26,13 +27,30 @@ import javax.swing.JToolBar;
  */
 public class EditorToolbar extends JToolBar {
 
-	private static final String SMALL_MOLECULE = "Small Molecule";
-
 	public EditorToolbar() {
-	    JButton buttonSmallMolecule = new JButton("Small Molecule");
-	    buttonSmallMolecule.setActionCommand(SMALL_MOLECULE);
-	    //buttonSmallMolecule.addActionListener(...);
-		add(buttonSmallMolecule);
+		addButton("Unspecified");
+	    addButton("Simple Chemical");	    
+	    addButton("Macromolecule");
+	    addButton("Sink");
+	    addSeparator();
+	    addButton("Reaction");
+	    addButton("Catalysis");
+	    addButton("Inhibition");
+	    addSeparator();
+	    
+	    String[] layoutArray = {"A", "B","C"};
+	    JComboBox layoutComboBox = new JComboBox(layoutArray);
+	    layoutComboBox.setSelectedIndex(0);
+	    //layoutComboBox.addActionListener(l);
+	    add(layoutComboBox);
+	    addButton("open");
+	    addButton("open in new tab");
 	}
 
+	private void addButton(String name) {
+		JButton button = new JButton(name);
+		add(button);
+	    //buttonSmallMolecule.setActionCommand(...);
+	    //buttonSmallMolecule.addActionListener(...);
+	}
 }
