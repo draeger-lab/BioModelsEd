@@ -1,6 +1,6 @@
 /*
- * $Id:  EditorToolbar.java 22:02:21 jakob $
- * $URL: EditorToolbar.java $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -17,6 +17,8 @@
 
 package de.zbit.editor.gui;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
@@ -26,6 +28,8 @@ import javax.swing.JToolBar;
  * @version $Rev$
  */
 public class EditorToolbar extends JToolBar {
+	
+	private ToolbarListener toolbarListener = new ToolbarListener();
 
 	public EditorToolbar() {
 		addButton("Unspecified");
@@ -41,7 +45,7 @@ public class EditorToolbar extends JToolBar {
 	    String[] layoutArray = {"A", "B","C"};
 	    JComboBox layoutComboBox = new JComboBox(layoutArray);
 	    layoutComboBox.setSelectedIndex(0);
-	    //layoutComboBox.addActionListener(l);
+	    layoutComboBox.addActionListener(toolbarListener);
 	    add(layoutComboBox);
 	    addButton("open");
 	    addButton("open in new tab");
@@ -49,8 +53,7 @@ public class EditorToolbar extends JToolBar {
 
 	private void addButton(String name) {
 		JButton button = new JButton(name);
+		button.addActionListener(toolbarListener);
 		add(button);
-	    //buttonSmallMolecule.setActionCommand(...);
-	    //buttonSmallMolecule.addActionListener(...);
 	}
 }
