@@ -48,7 +48,8 @@ public class SBMLEditor {
 	 */
 	public static void main(String[] args) throws Throwable {
 		int level = 3, version = 1;
-
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "SBMLeditor");
+		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		JFrame f = new JFrame("SBML Editor");
 		

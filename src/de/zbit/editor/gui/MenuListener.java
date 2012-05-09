@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 /**
@@ -32,7 +33,6 @@ public class MenuListener implements ActionListener {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "Quit") {
 			System.exit(0);

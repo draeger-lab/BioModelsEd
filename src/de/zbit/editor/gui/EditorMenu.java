@@ -18,6 +18,7 @@
 package de.zbit.editor.gui;
 
 import java.awt.event.KeyEvent;
+import java.util.Properties;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -29,6 +30,10 @@ import javax.swing.KeyStroke;
  * @version $Rev$
  */
 public class EditorMenu extends JMenuBar  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1560365025631426435L;
 	private MenuListener menuListener = new MenuListener();
 	/**
 	 * TODO Add mnemonics and seperators split into different functions?
