@@ -25,13 +25,12 @@ import java.awt.event.ActionListener;
  */
 public class ToolbarListener implements ActionListener {
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		// TODO
-		System.out.println(e);
-	}
-
+  /* (non-Javadoc)
+   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+   */
+  public void actionPerformed(ActionEvent e) {
+    // TODO
+    System.out.println(e);
+  }
 
 }

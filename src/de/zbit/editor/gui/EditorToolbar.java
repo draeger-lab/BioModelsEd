@@ -28,32 +28,32 @@ import javax.swing.JToolBar;
  * @version $Rev$
  */
 public class EditorToolbar extends JToolBar {
-	
-	private ToolbarListener toolbarListener = new ToolbarListener();
 
-	public EditorToolbar() {
-		addButton("Unspecified");
-	    addButton("Simple Chemical");	    
-	    addButton("Macromolecule");
-	    addButton("Sink");
-	    addSeparator();
-	    addButton("Reaction");
-	    addButton("Catalysis");
-	    addButton("Inhibition");
-	    addSeparator();
-	    
-	    String[] layoutArray = {"A", "B","C"};
-	    JComboBox layoutComboBox = new JComboBox(layoutArray);
-	    layoutComboBox.setSelectedIndex(0);
-	    layoutComboBox.addActionListener(toolbarListener);
-	    add(layoutComboBox);
-	    addButton("open");
-	    addButton("open in new tab");
-	}
+  private ToolbarListener toolbarListener = new ToolbarListener();
 
-	private void addButton(String name) {
-		JButton button = new JButton(name);
-		button.addActionListener(toolbarListener);
-		add(button);
-	}
+  public EditorToolbar() {
+    addButton("Unspecified");
+    addButton("Simple Chemical");
+    addButton("Macromolecule");
+    addButton("Sink");
+    addSeparator();
+    addButton("Reaction");
+    addButton("Catalysis");
+    addButton("Inhibition");
+    addSeparator();
+
+    String[] layoutArray = { "A", "B", "C" };
+    JComboBox layoutComboBox = new JComboBox(layoutArray);
+    layoutComboBox.setSelectedIndex(0);
+    layoutComboBox.addActionListener(toolbarListener);
+    add(layoutComboBox);
+    addButton("open");
+    addButton("open in new tab");
+  }
+
+  private void addButton(String name) {
+    JButton button = new JButton(name);
+    button.addActionListener(toolbarListener);
+    add(button);
+  }
 }

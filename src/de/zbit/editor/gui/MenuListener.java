@@ -30,17 +30,20 @@ import javax.swing.JOptionPane;
  */
 public class MenuListener implements ActionListener {
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == "Quit") {
-			System.exit(0);
-		}
-		if (e.getActionCommand() == "About") {
-			new JOptionPane().showMessageDialog(new JFrame("SBML Editor"), "Universität Tübingen, Softwareprojekt SS 2012\nDiamantikos,Matthes,Netz,Rudolph");
-		}
-		System.out.println(e);
-	}
+  /* (non-Javadoc)
+   * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+   */
+  public void actionPerformed(ActionEvent e) {
+    if (e.getActionCommand() == "Quit") {
+      System.exit(0);
+    }
+    if (e.getActionCommand() == "About") {
+      new JOptionPane()
+      .showMessageDialog(
+          new JFrame("SBML Editor"),
+          "Universität Tübingen, Softwareprojekt SS 2012\nDiamantikos,Matthes,Netz,Rudolph");
+    }
+    System.out.println(e);
+  }
 
 }

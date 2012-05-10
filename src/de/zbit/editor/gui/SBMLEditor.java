@@ -41,45 +41,46 @@ import y.view.ViewMode;
  * @version $Rev$
  */
 public class SBMLEditor {
-	
-	/**
-	 * @param args
-	 * @throws Throwable
-	 */
-	public static void main(String[] args) throws Throwable {
-		int level = 3, version = 1;
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "SBMLeditor");
-		
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		JFrame f = new JFrame("SBML Editor");
-		
-		f.setJMenuBar(new EditorMenu());
-	    f.add(new EditorToolbar(), BorderLayout.NORTH);
 
-		// Model: SBMLDocument
-		SBMLDocument doc = new SBMLDocument(level, version);
-		Model model = doc.createModel("m1");
+  /**
+   * @param args
+   * @throws Throwable
+   */
+  public static void main(String[] args) throws Throwable {
+    int level = 3, version = 1;
+    System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+        "SBMLeditor");
 
-		// Layout
-		ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
-		model.addExtension(LayoutConstant.namespaceURI, extLayout);
-		Layout layout = extLayout.createLayout();
-		
-		TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(doc, false);
-		
-		Graph2DView view = panel.getGraph2DView();
-		view.removeViewMode((ViewMode) view.getViewModes().next());
-		EditMode editMode = new SBGNEditMode<SBMLDocument>(panel.getConverter());
-		editMode.showNodeTips(true);
-		view.addViewMode(editMode);
-		
-		f.getContentPane().add(panel);
-		
-		f.setMinimumSize(new Dimension(640, 480));
-		f.pack();
-		f.setLocationRelativeTo(null);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
-	}
-	
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    JFrame f = new JFrame("SBML Editor");
+
+    f.setJMenuBar(new EditorMenu());
+    f.add(new EditorToolbar(), BorderLayout.NORTH);
+
+    // Model: SBMLDocument
+    SBMLDocument doc = new SBMLDocument(level, version);
+    Model model = doc.createModel("m1");
+
+    // Layout
+    ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+    model.addExtension(LayoutConstant.namespaceURI, extLayout);
+    Layout layout = extLayout.createLayout();
+
+    TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(doc, false);
+
+    Graph2DView view = panel.getGraph2DView();
+    view.removeViewMode((ViewMode) view.getViewModes().next());
+    EditMode editMode = new SBGNEditMode<SBMLDocument>(panel.getConverter());
+    editMode.showNodeTips(true);
+    view.addViewMode(editMode);
+
+    f.getContentPane().add(panel);
+
+    f.setMinimumSize(new Dimension(640, 480));
+    f.pack();
+    f.setLocationRelativeTo(null);
+    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    f.setVisible(true);
+  }
+
 }
