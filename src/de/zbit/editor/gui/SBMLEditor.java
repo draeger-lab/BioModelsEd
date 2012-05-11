@@ -17,8 +17,11 @@
 
 package de.zbit.editor.gui;
 
+import java.util.Locale;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -29,12 +32,11 @@ import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstant;
 
-import de.zbit.graph.gui.SBGNEditMode;
-import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
-
 import y.view.EditMode;
 import y.view.Graph2DView;
 import y.view.ViewMode;
+import de.zbit.graph.gui.SBGNEditMode;
+import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 /**
  * @author Jakob Matthes
@@ -42,23 +44,33 @@ import y.view.ViewMode;
  */
 public class SBMLEditor {
 
-  /**
-   * @param args
-   * @throws Throwable
-   */
-  public static void main(String[] args) throws Throwable {
-    int level = 3, version = 1;
-    System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-        "SBMLeditor");
+  private static final String PROGRAM_NAME = "SBMLeditor";
+  private static final int sbmlLevel = 3;
+  private static final int sbmlVersion = 1;
+  private JFrame frame;
+  private CommandController commandController;
+  private TabManager tabManager;
 
-    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    JFrame f = new JFrame("SBML Editor");
+  public SBMLEditor() {
+    // Create controller
+    commandController = new CommandController(this);
+    
+    // Tab Manager
+    tabManager = new TabManager(this);
+    
+    // Resources
+//    ResourceBundle resources = ResourceBundle.getBundle("SBMLeditor", Locale.getDefault());
+//    resources.getString("FILE_ADD");
+    
+    try {
+      setUpGUI();
+    } catch (Throwable e) {
+      e.printStackTrace();
+    }
 
-    f.setJMenuBar(new EditorMenu());
-    f.add(new EditorToolbar(), BorderLayout.NORTH);
-
+    // Aus Beispiel:
     // Model: SBMLDocument
-    SBMLDocument doc = new SBMLDocument(level, version);
+    SBMLDocument doc = new SBMLDocument(sbmlLevel, sbmlVersion);
     Model model = doc.createModel("m1");
 
     // Layout
@@ -74,13 +86,41 @@ public class SBMLEditor {
     editMode.showNodeTips(true);
     view.addViewMode(editMode);
 
-    f.getContentPane().add(panel);
+    frame.getContentPane().add(panel);
+  }
 
-    f.setMinimumSize(new Dimension(640, 480));
-    f.pack();
-    f.setLocationRelativeTo(null);
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    f.setVisible(true);
+  /**
+   * 
+   * @return
+   * @throws Throwable
+   */
+  private void setUpGUI() throws Throwable {
+    System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+        PROGRAM_NAME);
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    
+    frame = new JFrame(PROGRAM_NAME);
+    frame.setJMenuBar(new EditorMenu(commandController));
+    frame.add(new EditorToolbar(commandController), BorderLayout.NORTH);
+    
+    frame.setMinimumSize(new Dimension(640, 480));
+    frame.pack();
+    frame.setLocationRelativeTo(null);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setVisible(true);
+  }
+
+  /**
+   * @param args
+   * @throws Throwable
+   */
+  public static void main(String[] args) {
+    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        new SBMLEditor();
+      }
+    });
   }
 
 }
