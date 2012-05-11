@@ -17,8 +17,12 @@
 
 package de.zbit.editor.gui;
 
+import java.beans.EventHandler;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+
+import java.awt.event.ActionListener;
 
 /**
  * @author Jakob Matthes
@@ -30,9 +34,10 @@ public class EditorMenu extends JMenuBar {
    */
   private static final long serialVersionUID = -3245574503778953826L;
 
-  public EditorMenu() {
+  public EditorMenu(CommandController commandController) {
     JMenu menuFile = GUIFactory.createMenu(this, "File");
-    GUIFactory.createMenuItem(menuFile, "New", "ctrl N");
+    GUIFactory.createMenuItem(menuFile, "New", "ctrl N",
+        EventHandler.create(ActionListener.class, commandController, "fileNew"));
     menuFile.addSeparator();
     GUIFactory.createMenuItem(menuFile, "Open", "ctrl O");
     GUIFactory.createMenuItem(menuFile, "Close", "ctrl W");

@@ -17,8 +17,6 @@
 
 package de.zbit.editor.gui;
 
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
@@ -29,9 +27,13 @@ import javax.swing.JToolBar;
  */
 public class EditorToolbar extends JToolBar {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 6956292884109141097L;
   private ToolbarListener toolbarListener = new ToolbarListener();
 
-  public EditorToolbar() {
+  public EditorToolbar(CommandController commandController) {
     addButton("Unspecified");
     addButton("Simple Chemical");
     addButton("Macromolecule");
