@@ -1,6 +1,6 @@
 /*
- * $Id:  CommandController.java 13:06:28 jakob $
- * $URL: CommandController.java $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -38,8 +38,22 @@ public class CommandController {
     return editorInstance;
   }
 
+  //Create new file
   public void fileNew() {
     System.out.println("fileNew");
+    editorInstance.fileNew();
+  }
+  
+//Open file
+  public void fileOpen() {
+    System.out.println("fileOpen");
+    editorInstance.fileOpen();
+  }
+  
+//Save file
+  public void fileSave() {
+    System.out.println("fileSave");
+    editorInstance.fileSave();
   }
   
 }

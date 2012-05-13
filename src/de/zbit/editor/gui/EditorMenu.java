@@ -35,34 +35,36 @@ public class EditorMenu extends JMenuBar {
   private static final long serialVersionUID = -3245574503778953826L;
 
   public EditorMenu(CommandController commandController) {
-    JMenu menuFile = GUIFactory.createMenu(this, "File");
-    GUIFactory.createMenuItem(menuFile, "New", "ctrl N",
+    JMenu menuFile = GUIFactory.createMenu(this, Resources.getString("MENU_FILE"));
+    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_NEW"), "ctrl N",
         EventHandler.create(ActionListener.class, commandController, "fileNew"));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, "Open", "ctrl O");
-    GUIFactory.createMenuItem(menuFile, "Close", "ctrl W");
+    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_OPEN"), "ctrl O",
+    	EventHandler.create(ActionListener.class, commandController, "fileOpen"));
+    GUIFactory.createMenuItem(menuFile,Resources.getString("MENU_FILE_CLOSE"), "ctrl W");
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, "Save", "ctrl S");
-    GUIFactory.createMenuItem(menuFile, "Save as...");
-    GUIFactory.createMenuItem(menuFile, "Export");
+    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_SAVE"), "ctrl S",
+    	EventHandler.create(ActionListener.class, commandController, "fileSave"));
+    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_SAVEAS"));
+    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_EXPORT"));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, "Quit", "ctrl Q");
+    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_QUIT"), "ctrl Q");
 
-    JMenu menuEdit = GUIFactory.createMenu(this, "Edit");
-    GUIFactory.createMenuItem(menuEdit, "Undo", "ctrl Z");
-    GUIFactory.createMenuItem(menuEdit, "Redo", "ctrl Y");
-    GUIFactory.createMenuItem(menuEdit, "Delete", "DELETE");
-    GUIFactory.createMenuItem(menuEdit, "Copy", "ctrl C");
-    GUIFactory.createMenuItem(menuEdit, "Cut", "ctrl X");
-    GUIFactory.createMenuItem(menuEdit, "Paste", "ctrl V");
+    JMenu menuEdit = GUIFactory.createMenu(this, Resources.getString("MENU_EDIT"));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_UNDO"), "ctrl Z");
+    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_REDO"), "ctrl Y");
+    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_DELETE"), "DELETE");
+    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_COPY"), "ctrl C");
+    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_CUT"), "ctrl X");
+    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_PASTE"), "ctrl V");
 
-    JMenu menuLayout = GUIFactory.createMenu(this, "Layout");
-    GUIFactory.createMenuItem(menuLayout, "New", "alt N");
-    GUIFactory.createMenuItem(menuLayout, "Clone", "alt C");
-    GUIFactory.createMenuItem(menuLayout, "Delete", "alt D");
+    JMenu menuLayout = GUIFactory.createMenu(this, Resources.getString("MENU_LAYOUT"));
+    GUIFactory.createMenuItem(menuLayout,  Resources.getString("MENU_LAYOUT_NEW"), "alt N");
+    GUIFactory.createMenuItem(menuLayout, Resources.getString("MENU_LAYOUT_CLONE"), "alt C");
+    GUIFactory.createMenuItem(menuLayout, Resources.getString("MENU_LAYOUT_DELETE"), "alt D");
 
-    JMenu menuHelp = GUIFactory.createMenu(this, "Help");
-    GUIFactory.createMenuItem(menuHelp, "About");
+    JMenu menuHelp = GUIFactory.createMenu(this, Resources.getString("MENU_HELP"));
+    GUIFactory.createMenuItem(menuHelp, Resources.getString("MENU_HELP_ABOUT"));
   }
 
 }
