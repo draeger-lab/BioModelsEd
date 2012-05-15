@@ -17,8 +17,6 @@
 
 package de.zbit.editor.gui;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
 /**
@@ -27,35 +25,32 @@ import javax.swing.JToolBar;
  */
 public class EditorToolbar extends JToolBar {
 
+  private static final long serialVersionUID = 4238837776010510727L;
+
   /**
    * 
+   * @param commandController
    */
-  private static final long serialVersionUID = 6956292884109141097L;
-  private ToolbarListener toolbarListener = new ToolbarListener();
-
   public EditorToolbar(CommandController commandController) {
-    addButton("Unspecified");
-    addButton("Simple Chemical");
-    addButton("Macromolecule");
-    addButton("Sink");
-    addSeparator();
-    addButton("Reaction");
-    addButton("Catalysis");
-    addButton("Inhibition");
-    addSeparator();
+    GUIFactory.addButton(this, "Unspecified");
+    GUIFactory.addButton(this, "Simple Chemical");
+    GUIFactory.addButton(this, "Macromolecule");
+    GUIFactory.addButton(this, "Sink");
+    GUIFactory.addSeparator(this);
+    GUIFactory.addButton(this, "Reaction");
+    GUIFactory.addButton(this, "Catalysis");
+    GUIFactory.addButton(this, "Inhibition");
+    GUIFactory.addSeparator(this);
 
-    String[] layoutArray = { "A", "B", "C" };
-    JComboBox layoutComboBox = new JComboBox(layoutArray);
-    layoutComboBox.setSelectedIndex(0);
-    layoutComboBox.addActionListener(toolbarListener);
-    add(layoutComboBox);
-    addButton("open");
-    addButton("open in new tab");
+//    String[] layoutArray = { "A", "B", "C" };
+//    JComboBox layoutComboBox = new JComboBox(layoutArray);
+//    layoutComboBox.setSelectedIndex(0);
+//    layoutComboBox.addActionListener(toolbarListener);
+//    add(layoutComboBox);
+    
+    GUIFactory.addButton(this, "open");
+    GUIFactory.addButton(this, "open in new tab");
   }
 
-  private void addButton(String name) {
-    JButton button = new JButton(name);
-    button.addActionListener(toolbarListener);
-    add(button);
-  }
+
 }

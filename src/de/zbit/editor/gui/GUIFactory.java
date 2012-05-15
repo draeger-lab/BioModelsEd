@@ -18,9 +18,11 @@ package de.zbit.editor.gui;
 
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 /**
@@ -42,7 +44,7 @@ public class GUIFactory {
   }
   
   /**
-   * Adding new item with keystroke to given menu.
+   * Add a new item with keystroke to given menu.
    * @param menu
    * @param label
    * @param key
@@ -55,7 +57,7 @@ public class GUIFactory {
   }
 
   /**
-   * Adding new item to given menu.
+   * Add a new item to given menu.
    * @param menu
    * @param label
    * @param key
@@ -69,5 +71,30 @@ public class GUIFactory {
     }
     menu.add(item);
     return item;
+  }
+  
+  /**
+   * Add a button to given toolbar.
+   * @param toolbar
+   * @param name
+   * @param l
+   * @return
+   */
+  public static JButton addButton(JToolBar toolbar, String name, ActionListener ... l) {
+    JButton button = new JButton(name);
+    if (l != null) {
+      for (ActionListener listener : l){
+        button.addActionListener(listener);        
+      }
+    }
+    toolbar.add(button);
+    return button;
+  }
+  
+  /**
+   * Add separator to given toolbar.
+   */
+  public static void addSeparator(JToolBar toolbar) {
+    toolbar.addSeparator();
   }
 }
