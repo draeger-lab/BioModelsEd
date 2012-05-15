@@ -50,8 +50,9 @@ public class TabManager extends JTabbedPane {
   /**
    * @param doc
    */
-  public void closeTab(OpenedDocument doc) {
-    removeTabAt(tabMap.indexOf(doc));
+  private void closeTab(int index) {
+	removeTabAt(index);
+	tabMap.remove(index);
   }
 
   /**
@@ -75,23 +76,39 @@ public class TabManager extends JTabbedPane {
    * Return the currently opened document.
    * @return
    */
-  public OpenedDocument getCurrentDocument() {
-    TranslatorSBMLgraphPanel current = (TranslatorSBMLgraphPanel) getSelectedComponent();
-    
-    for (OpenedDocument opened : tabMap) {
-      if (opened.getSbmlDocument() == current.getDocument()) {
-        return opened;
-      }
-    }
-    
-    return null;
+  
+  private OpenedDocument getCurrentDocument() {
+	  return tabMap.get(getSelectedIndex());
   }
 
   /**
    * Close the currently visible tab.
    */
   public void closeCurrentTab() {
-    closeTab(getCurrentDocument());
+	  if(isAnySelected()){
+		  closeTab(getSelectedIndex());
+	  }
+  }
+    
+  public boolean isAnySelected(){
+	  return getSelectedIndex()!=-1;
+  }
+
+  public void fileSave() {
+	  if(isAnySelected()){
+		  getCurrentDocument().fileSave();
+	  }
+  }
+  
+  public void fileSaveAs(String filename) {
+	  if(isAnySelected()){
+		  getCurrentDocument().fileSaveAs(filename);
+		  setTitleAt(getSelectedIndex(), filename);
+	  }
+  }
+  
+  public boolean hasAssociatedFilepath() {
+	  return getCurrentDocument().hasAssociatedFilepath();
   }
   
 }

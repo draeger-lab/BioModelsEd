@@ -16,7 +16,13 @@
  */
 package de.zbit.editor.gui;
 
+import java.io.FileNotFoundException;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
+import org.sbml.jsbml.SBMLWriter;
 
 /**
  * @author Jakob Matthes
@@ -69,5 +75,30 @@ public class OpenedDocument {
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
   }
-  
+
+public void fileSave() {
+		  try {
+			  new SBMLWriter().write(getSbmlDocument(), getAssociatedFilepath());
+		  } catch (SBMLException e) {
+			  e.printStackTrace();
+		  } catch (FileNotFoundException e) {
+			  e.printStackTrace();
+		  } catch (XMLStreamException e) {
+			  e.printStackTrace();
+		  }
+}
+
+public void fileSaveAs(String filename) {
+	try {
+		  new SBMLWriter().write(getSbmlDocument(), filename);
+	  } catch (SBMLException e) {
+		  e.printStackTrace();
+	  } catch (FileNotFoundException e) {
+		  e.printStackTrace();
+	  } catch (XMLStreamException e) {
+		  e.printStackTrace();
+	  }
+	
+}
+
 }

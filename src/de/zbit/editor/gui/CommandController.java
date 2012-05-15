@@ -17,16 +17,13 @@
 package de.zbit.editor.gui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.SBMLWriter;
 
 
 /**
@@ -83,39 +80,28 @@ public class CommandController {
   }
   
   public void fileSave() {
-    OpenedDocument currentDocument = editorInstance.getTabManager().getCurrentDocument();
-    if (currentDocument.hasAssociatedFilepath()) {
-      try {
-        new SBMLWriter().write(currentDocument.getSbmlDocument(),
-            currentDocument.getAssociatedFilepath());
-      } catch (SBMLException e) {
-        e.printStackTrace();
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      } catch (XMLStreamException e) {
-        e.printStackTrace();
-      }
-    }
-    else {
-      fileSaveAs();
-    }
+	  TabManager tabmanager = editorInstance.getTabManager();
+	  if(tabmanager.isAnySelected()){
+		  if(tabmanager.hasAssociatedFilepath()){
+			  tabmanager.fileSave();
+		  }
+		  else{
+			  fileSaveAs();
+		  }
+	  }
   }
   
   public void fileSaveAs() {
+	  TabManager tabmanager = editorInstance.getTabManager(); 
+	if(tabmanager.isAnySelected()){
     JFileChooser fc = new JFileChooser();
     int returnVal = fc.showSaveDialog(editorInstance.getFrame());
     
     if(returnVal == JFileChooser.APPROVE_OPTION) {
-      try {
-        OpenedDocument currentDocument = editorInstance.getTabManager().getCurrentDocument();
-        SBMLDocument doc = currentDocument.getSbmlDocument();
-        new SBMLWriter().write(doc, fc.getSelectedFile());  
-      } catch (XMLStreamException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
-        e.printStackTrace();
-     }
+    	
+    	tabmanager.fileSaveAs(fc.getSelectedFile().getAbsolutePath());
     }
+	}
   }
   
   public void fileClose() {

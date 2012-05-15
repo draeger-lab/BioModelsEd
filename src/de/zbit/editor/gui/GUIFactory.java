@@ -1,6 +1,6 @@
 /*
- * $Id:  GUIFactory.java 23:46:16 jakob $
- * $URL: GUIFactory.java $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
