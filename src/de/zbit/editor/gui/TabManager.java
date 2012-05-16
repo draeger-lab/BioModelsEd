@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import javax.swing.JTabbedPane;
 
+import de.zbit.editor.control.OpenedDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 /**
@@ -79,7 +80,7 @@ public class TabManager extends JTabbedPane {
    * @return
    */
   
-  private OpenedDocument getCurrentDocument() {
+  public OpenedDocument getCurrentDocument() {
 	  return tabMap.get(getSelectedIndex());
   }
 
@@ -96,19 +97,21 @@ public class TabManager extends JTabbedPane {
 	  return getSelectedIndex()!=-1;
   }
 
+  /*
   public void fileSave() {
 	  if(isAnySelected()){
 		  getCurrentDocument().fileSave();
 	  }
-  }
+  }*/
   
+  /*
   public void fileSaveAs(String filename) {
 	  // TODO: Respect Java coding conventions.
 	  if(isAnySelected()){
 		  getCurrentDocument().fileSaveAs(filename);
 		  setTitleAt(getSelectedIndex(), filename);
 	  }
-  }
+  }*/
   
   public boolean hasAssociatedFilepath() {
 	  return getCurrentDocument().hasAssociatedFilepath();

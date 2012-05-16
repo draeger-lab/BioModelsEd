@@ -17,12 +17,13 @@
 
 package de.zbit.editor.gui;
 
+import java.awt.event.ActionListener;
 import java.beans.EventHandler;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
-import java.awt.event.ActionListener;
+import de.zbit.editor.control.CommandController;
 
 /**
  * @author Jakob Matthes
@@ -33,22 +34,25 @@ public class EditorMenu extends JMenuBar {
    * 
    */
   private static final long serialVersionUID = -3245574503778953826L;
+  
+  private CommandController commandController;
+  private SBMLEditor parent;
 
   // TODO: better use a variable for "ctrl" because on Mac it is different. You could initialize the variable depending on the OS information.
-  public EditorMenu(CommandController commandController) {
+  public EditorMenu(CommandController commandController, SBMLEditor parent) {
     JMenu menuFile = GUIFactory.createMenu(this, Resources.getString("MENU_FILE"));
     GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_NEW"), "ctrl N",
-        EventHandler.create(ActionListener.class, commandController, "fileNew"));
+        EventHandler.create(ActionListener.class, parent, "fileNew"));
     menuFile.addSeparator();
     GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_OPEN"), "ctrl O",
-    	EventHandler.create(ActionListener.class, commandController, "fileOpen"));
+    	EventHandler.create(ActionListener.class, parent, "fileOpen"));
     GUIFactory.createMenuItem(menuFile,Resources.getString("MENU_FILE_CLOSE"), "ctrl W",
-        EventHandler.create(ActionListener.class, commandController, "fileClose"));
+        EventHandler.create(ActionListener.class, parent, "fileClose"));
     menuFile.addSeparator();
     GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_SAVE"), "ctrl S",
-    	EventHandler.create(ActionListener.class, commandController, "fileSave"));
+    	EventHandler.create(ActionListener.class, parent, "fileSave"));
     GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_SAVEAS"),
-        EventHandler.create(ActionListener.class, commandController, "fileSaveAs"));
+        EventHandler.create(ActionListener.class, parent, "fileSaveAs"));
     GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_EXPORT"),
         EventHandler.create(ActionListener.class, commandController, "fileExport"));
     menuFile.addSeparator();
@@ -80,6 +84,9 @@ public class EditorMenu extends JMenuBar {
     JMenu menuHelp = GUIFactory.createMenu(this, Resources.getString("MENU_HELP"));
     GUIFactory.createMenuItem(menuHelp, Resources.getString("MENU_HELP_ABOUT"),
         EventHandler.create(ActionListener.class, commandController, "helpAbout"));
+    
+    this.commandController = commandController;
+    this.parent = parent;
   }
-
+  
 }

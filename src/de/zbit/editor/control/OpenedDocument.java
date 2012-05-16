@@ -14,8 +14,9 @@
  * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  * ---------------------------------------------------------------------
  */
-package de.zbit.editor.gui;
+package de.zbit.editor.control;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.xml.stream.XMLStreamException;
@@ -93,10 +94,11 @@ public void fileSave() {
 }
 
 // TODO: Indent
-public void fileSaveAs(String filename) {
+public void fileSaveAs(File file) {
 	// TODO: use SwingWorker!
 	try {
-		  new SBMLWriter().write(getSbmlDocument(), filename);
+		  new SBMLWriter().write(getSbmlDocument(), file.getAbsolutePath());
+		  this.associatedFilepath = file.getAbsolutePath();
 	  } catch (SBMLException e) {
 		  e.printStackTrace();
 	  } catch (FileNotFoundException e) {

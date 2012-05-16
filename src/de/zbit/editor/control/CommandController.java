@@ -14,12 +14,11 @@
  * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  * ---------------------------------------------------------------------
  */
-package de.zbit.editor.gui;
+package de.zbit.editor.control;
 
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
 import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.SBMLDocument;
@@ -31,44 +30,39 @@ import org.sbml.jsbml.SBMLReader;
  * @version $Rev$
  */
 public class CommandController {
-  private SBMLEditor editorInstance;
+  private SBMLView view;
 
   /**
    * @param editorInstance
    */
-  public CommandController(SBMLEditor editorInstance) {
-    this.editorInstance = editorInstance;
+  public CommandController(SBMLView editorInstance) {
+    this.view = editorInstance;
   }
   
   /**
    * @return the editorInstance
    */
-  public SBMLEditor getEditorInstance() {
-    return editorInstance;
+  public SBMLView getEditorInstance() {
+    return view;
   }
 
-  public void fileNew() {
-    SBMLDocument sbmlDocument = new SBMLDocument(SBMLEditor.sbmlLevel, SBMLEditor.sbmlVersion);
+  public void fileNew(String name) {
+    SBMLDocument sbmlDocument = new SBMLDocument(SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV() );
     // TODO name of model
     sbmlDocument.createModel("untitled");
     OpenedDocument doc = new OpenedDocument(sbmlDocument);
-    editorInstance.addDocument(doc);
-    editorInstance.getTabManager().addTab(doc);
+    view.addDocument(doc);
   }
   
-  public void fileOpen() {
+  public boolean fileOpen(File file) {
 	  // TODO: Create a factory method for creating JFileChoosers in GUIFactory. This is too simple.
-    JFileChooser fc = new JFileChooser();
-    int returnVal = fc.showOpenDialog(editorInstance.getFrame());
-    
-    if(returnVal == JFileChooser.APPROVE_OPTION) {
-      File file = fc.getSelectedFile();
+	  if(file != null){
       try {
         //Read file
         SBMLDocument sbmlDoc = SBMLReader.read(file);
         OpenedDocument doc = new OpenedDocument(sbmlDoc, file.getPath());
-        editorInstance.addDocument(doc);
-        editorInstance.getTabManager().addTab(doc);
+        view.addDocument(doc);
+        return true;
         // TODO: Find a way to display user messages not on the command-line interface.
       } catch (XMLStreamException e) {
         //e.printStackTrace();
@@ -76,37 +70,26 @@ public class CommandController {
       } catch (IOException e) {
         //e.printStackTrace();
         System.err.println( e );
-     }
+     }      
     }
+	  return false;
   }
   
   public void fileSave() {
-	  TabManager tabmanager = editorInstance.getTabManager();
-	  if(tabmanager.isAnySelected()){
-		  if(tabmanager.hasAssociatedFilepath()){
-			  tabmanager.fileSave();
-		  }
-		  else{
-			  fileSaveAs();
-		  }
+	  OpenedDocument od = this.view.getSelectedDoc();
+	  if(od.hasAssociatedFilepath()){
+		  od.fileSave();
+	  } else {
+		  view.fileSaveAs();
 	  }
   }
   
-  public void fileSaveAs() {
-	  TabManager tabmanager = editorInstance.getTabManager(); 
-	if(tabmanager.isAnySelected()){
-    JFileChooser fc = new JFileChooser();
-    int returnVal = fc.showSaveDialog(editorInstance.getFrame());
-    // TODO: respect standard Java code convention
-    if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	
-    	tabmanager.fileSaveAs(fc.getSelectedFile().getAbsolutePath());
-    }
-	}
+  public void fileSaveAs(File file) {
+	  this.view.getSelectedDoc().fileSaveAs(file);	
   }
   
   public void fileClose() {
-    editorInstance.getTabManager().closeCurrentTab();
+    view.getTabManager().closeCurrentTab();
   }
   
   public void fileQuit() {

@@ -19,16 +19,23 @@ package de.zbit.editor.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+
+import de.zbit.editor.control.CommandController;
+import de.zbit.editor.control.OpenedDocument;
+import de.zbit.editor.control.SBMLView;
 
 /**
  * @author Jakob Matthes
  * @version $Rev$
  */
-public class SBMLEditor {
+public class SBMLEditor implements SBMLView {
 
   public static final String PROGRAM_NAME = "SBMLeditor";
   // TODO: Re-naming: DEFAULT_SBML_LEVEL and DEFAULT_SBML_VERSION
@@ -71,6 +78,7 @@ public class SBMLEditor {
    */
   public void addDocument(OpenedDocument doc) {
     openedDocuments.add(doc);
+    getTabManager().addTab(doc);
   }
   
   /**
@@ -87,7 +95,7 @@ public class SBMLEditor {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     
     frame = new JFrame(PROGRAM_NAME);
-    frame.setJMenuBar(new EditorMenu(commandController));
+    frame.setJMenuBar(new EditorMenu(commandController, this));
     frame.add(new EditorToolbar(commandController), BorderLayout.NORTH);
     frame.add(tabManager);
     
@@ -122,5 +130,55 @@ public class SBMLEditor {
       }
     });
   }
+
+public void fileSaveAs() {
+	  TabManager tabmanager = getTabManager(); 
+		if(tabmanager.isAnySelected()){
+			JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showSaveDialog(getFrame());
+			// TODO: respect standard Java code convention
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+	    	
+	    	commandController.fileSaveAs(fc.getSelectedFile());
+			}
+		}	
+}
+
+public OpenedDocument getSelectedDoc() {
+	return tabManager.getCurrentDocument();
+}
+
+
+public void fileNew() {
+	String name = JOptionPane.showInputDialog("Name", "FileNew");
+	if (name != null) {
+		if (!name.isEmpty()) {
+			commandController.fileNew(name);
+		} else {
+			fileNew();
+		}
+	}
+}
+
+public boolean fileOpen() {
+	JFileChooser fc = new JFileChooser();
+    int returnVal = fc.showOpenDialog(this.frame);
+    
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      File file = fc.getSelectedFile();
+      return commandController.fileOpen(file);      
+    }
+    return false;
+}
+
+
+public void fileSave() {
+	commandController.fileSave();	
+}
+
+public void fileClose() {
+	commandController.fileClose();
+}
+
 
 }
