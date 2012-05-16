@@ -39,5 +39,6 @@ public interface SBMLView {
 	public void fileNew();
 	public boolean fileOpen();
 	public void fileClose();
+	// TODO: Remove this here: The View does not necessarily have a TabManager.
 	public TabManager getTabManager();
 }
