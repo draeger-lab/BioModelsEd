@@ -19,6 +19,8 @@ package de.zbit.editor.gui;
 
 import javax.swing.JToolBar;
 
+import de.zbit.editor.control.CommandController;
+
 /**
  * @author Jakob Matthes
  * @version $Rev$

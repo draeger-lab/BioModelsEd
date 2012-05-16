@@ -20,6 +20,8 @@ package de.zbit.editor.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -133,13 +135,12 @@ public class SBMLEditor implements SBMLView {
 
 public void fileSaveAs() {
 	  TabManager tabmanager = getTabManager(); 
-		if(tabmanager.isAnySelected()){
+		if (tabmanager.isAnySelected()){
 			JFileChooser fc = new JFileChooser();
 			int returnVal = fc.showSaveDialog(getFrame());
 			// TODO: respect standard Java code convention
-			if(returnVal == JFileChooser.APPROVE_OPTION) {
-	    	
-	    	commandController.fileSaveAs(fc.getSelectedFile());
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+	  	    	commandController.fileSaveAs(fc.getSelectedFile());
 			}
 		}	
 }
@@ -164,10 +165,24 @@ public boolean fileOpen() {
 	JFileChooser fc = new JFileChooser();
     int returnVal = fc.showOpenDialog(this.frame);
     
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      File file = fc.getSelectedFile();
-      return commandController.fileOpen(file);      
-    }
+    if (returnVal == JFileChooser.APPROVE_OPTION)
+		try {
+			{
+			  File file = fc.getSelectedFile();
+			  try {
+				SBMLReadingTask task = new SBMLReadingTask(new FileInputStream(file), this.frame);
+				task.addPropertyChangeListener(commandController);
+				task.execute();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  //return commandController.fileOpen(file);      
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     return false;
 }
 

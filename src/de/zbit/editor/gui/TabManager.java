@@ -17,6 +17,7 @@
 package de.zbit.editor.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JTabbedPane;
 
@@ -34,6 +35,7 @@ public class TabManager extends JTabbedPane {
   private SBMLEditor editorInstance;
   // TODO: Do not declare variables of type ArrayList -> not flexible enough.
   private ArrayList<OpenedDocument> tabMap = new ArrayList<OpenedDocument>();
+  private HashMap<String, Integer> openedFilenames = new HashMap<String, Integer>();
   
 
   /**
@@ -65,10 +67,16 @@ public class TabManager extends JTabbedPane {
     tabMap.add(doc);
     String title;
     if (doc.hasAssociatedFilepath()) {
-      title = doc.getAssociatedFilepath();      
-    }
-    else {
+    	title = doc.getAssociatedFilename();
+    } else {
       title = Resources.getString("UNSAVED_FILE");
+    }
+    if(openedFilenames.containsKey(title)){
+    	int count = openedFilenames.get(title);
+    	openedFilenames.put(title, ++count);
+    	title += " (" + (count-1) + ")";
+    } else {
+    	openedFilenames.put(title, 1);
     }
     TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(doc.getSbmlDocument(), false);
     addTab(title, panel);
@@ -115,6 +123,10 @@ public class TabManager extends JTabbedPane {
   
   public boolean hasAssociatedFilepath() {
 	  return getCurrentDocument().hasAssociatedFilepath();
+  }
+  
+  public void refreshTitle(){
+	  setTitleAt(getSelectedIndex(), tabMap.get(getSelectedIndex()).getAssociatedFilename());
   }
   
 }

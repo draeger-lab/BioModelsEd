@@ -39,14 +39,17 @@ public class OpenedDocument {
    * associated filepath of the openedDocument, can be unset
    */
   private String associatedFilepath;
-  
-  public OpenedDocument(SBMLDocument sbmlDocument) {
+  private String associatedFilename;
+
+
+public OpenedDocument(SBMLDocument sbmlDocument) {
     this.sbmlDocument = sbmlDocument;
   }
   
   public OpenedDocument(SBMLDocument sbmlDocument, String associatedFilepath) {
     this.sbmlDocument = sbmlDocument;
     this.associatedFilepath = associatedFilepath;
+    this.associatedFilename = new File(associatedFilepath).getName();
   }
 
   /**
@@ -63,11 +66,15 @@ public class OpenedDocument {
     return associatedFilepath;
   }
   
+  public String getAssociatedFilename() {
+	return associatedFilename;
+  }
   /**
    * @param associatedFilepath the associatedFilepath to set
    */
   public void setAssociatedFilepath(String associatedFilepath) {
     this.associatedFilepath = associatedFilepath;
+    this.associatedFilename = new File(associatedFilepath).getName();
   }
   
   /**
@@ -95,10 +102,10 @@ public void fileSave() {
 
 // TODO: Indent
 public void fileSaveAs(File file) {
-	// TODO: use SwingWorker!
 	try {
 		  new SBMLWriter().write(getSbmlDocument(), file.getAbsolutePath());
-		  this.associatedFilepath = file.getAbsolutePath();
+		  this.setAssociatedFilepath(file.getAbsolutePath());
+		  
 	  } catch (SBMLException e) {
 		  e.printStackTrace();
 	  } catch (FileNotFoundException e) {

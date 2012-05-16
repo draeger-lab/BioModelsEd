@@ -16,6 +16,8 @@
  */
 package de.zbit.editor.control;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,7 +31,7 @@ import org.sbml.jsbml.SBMLReader;
  * @author Jakob Matthes
  * @version $Rev$
  */
-public class CommandController {
+public class CommandController implements PropertyChangeListener {
   private SBMLView view;
 
   /**
@@ -48,8 +50,7 @@ public class CommandController {
 
   public void fileNew(String name) {
     SBMLDocument sbmlDocument = new SBMLDocument(SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV() );
-    // TODO name of model
-    sbmlDocument.createModel("untitled");
+    sbmlDocument.createModel(name);
     OpenedDocument doc = new OpenedDocument(sbmlDocument);
     view.addDocument(doc);
   }
@@ -86,6 +87,7 @@ public class CommandController {
   
   public void fileSaveAs(File file) {
 	  this.view.getSelectedDoc().fileSaveAs(file);	
+	  view.getTabManager().refreshTitle();
   }
   
   public void fileClose() {
@@ -95,5 +97,15 @@ public class CommandController {
   public void fileQuit() {
     System.exit(0);
   }
+
+
+public void propertyChange(PropertyChangeEvent evt) {
+	// TODO Auto-generated method stub
+	if (evt.getPropertyName().equals("done")){
+		//TODO add path
+		OpenedDocument doc = new OpenedDocument((SBMLDocument) evt.getNewValue(), "");
+        view.addDocument(doc);
+	}
+}
   
 }
