@@ -1,5 +1,5 @@
 /*
- * $Id: SB_2GraphML.java 908 2012-04-24 15:15:41Z wrzodek $
+ * $Id: SB_2GraphML.java 934 2012-05-10 14:06:52Z wrzodek $
  * $URL: https://rarepos.cs.uni-tuebingen.de/svn-path/SysBio/trunk/src/de/zbit/graph/io/SB_2GraphML.java $
  * ---------------------------------------------------------------------
  * This file is part of KEGGtranslator, a program to convert KGML files
@@ -20,11 +20,15 @@
  */
 package de.zbit.graph.io;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import org.sbml.jsbml.SBO;
 
 import y.base.DataMap;
 import y.base.Edge;
@@ -46,6 +50,8 @@ import de.zbit.graph.io.def.SBGNVisualizationProperties;
 import de.zbit.graph.sbgn.ComplexGroupNode;
 import de.zbit.graph.sbgn.ComplexNode;
 import de.zbit.graph.sbgn.ReactionNodeRealizer;
+import de.zbit.util.ResourceManager;
+import de.zbit.util.StringUtil;
 
 /**
  * This is an abstract superclass for various systems biology formats to create
@@ -55,13 +61,22 @@ import de.zbit.graph.sbgn.ReactionNodeRealizer;
  * <p>This generic superclass should NOT use ANY SBML or SBGN, etc. classes.
  * Only generic java classes and yFiles should be imported.
  * @author Clemens Wrzodek
- * @version $Rev: 908 $
+ * @version $Rev: 934 $
  */
 public abstract class SB_2GraphML <T> {
-  public static final Logger log = Logger.getLogger(SB_2GraphML.class.getName());
   
   /**
-   * Use this hashmap to map every graph-object
+   * A {@link Logger} for this class.
+   */
+  private static final Logger log = Logger.getLogger(SB_2GraphML.class.getName());
+  
+  /**
+   * Localization support.
+   */
+  private static final transient ResourceBundle bundle = ResourceManager.getBundle("de.zbit.graph.locales.Labels");
+  
+  /**
+   * Use this {@link HashMap} to map every graph-object
    * to an SBML-identifier.
    */
   protected Map<Object, String> GraphElement2SBid = new HashMap<Object, String>();
@@ -110,8 +125,8 @@ public abstract class SB_2GraphML <T> {
   public boolean isSplitEnzymesToOnlyOccurOnceInAnyReaction() {
     return splitEnzymesToOnlyOccurOnceInAnyReaction;
   }
-
-
+  
+  
   /**
    * @param <code>TRUE</code> if every enzyme should be splitted for
    * every reaction.
@@ -120,8 +135,8 @@ public abstract class SB_2GraphML <T> {
     boolean splitEnzymesToOnlyOccurOnceInAnyReaction) {
     this.splitEnzymesToOnlyOccurOnceInAnyReaction = splitEnzymesToOnlyOccurOnceInAnyReaction;
   }
-
-
+  
+  
   /**
    * Returns a map from every graph element ({@link Node} or
    * {@link Edge}) to the corresponding ID of the SB-document.
@@ -130,8 +145,8 @@ public abstract class SB_2GraphML <T> {
   public Map<Object, String> getGraphElement2SBid() {
     return GraphElement2SBid;
   }
-
-
+  
+  
   /**
    * Returns a map from every ID of the SB-document to the corresponding graph
    * element ({@link Node}.
@@ -141,8 +156,8 @@ public abstract class SB_2GraphML <T> {
   public Map<String, Node> getId2node() {
     return id2node;
   }
-
-
+  
+  
   /**
    * Returns the last result of the last call to {@link #createGraph(Object)}.
    * @return Graph
@@ -150,7 +165,7 @@ public abstract class SB_2GraphML <T> {
   public Graph2D getSimpleGraph() {
     return simpleGraph;
   }
-
+  
   /**
    * Creates a new {@link Graph2D} instance of {@link #simpleGraph}.
    * This should be called by all extending classes to initialize
@@ -167,8 +182,8 @@ public abstract class SB_2GraphML <T> {
     // Convert each species to a graph node
     unlayoutedNodes = new HashSet<Node>();
   }
-
-
+  
+  
   public Graph2D createGraph(T document) {
     // Reset all variables and create the graph instance
     crateNewGraph();
@@ -176,7 +191,7 @@ public abstract class SB_2GraphML <T> {
     // Create the real graph objects
     createNodesAndEdges(document);
     
-
+    
     // Apply a layouting algorithm to unlayouted nodes
     if (unlayoutedNodes.size()>0) {
       GraphTools tools = new GraphTools(simpleGraph);
@@ -192,7 +207,7 @@ public abstract class SB_2GraphML <T> {
     }
     
     moveComplexNodesToBackground();
-        
+    
     // Fix ReactionNode nodes (determines 90° rotatable node orientation)
     /* TODO: These reaction nodes are not nice and
      * require still massive improvements!
@@ -215,8 +230,8 @@ public abstract class SB_2GraphML <T> {
       }
     }
   }
-
-
+  
+  
   /**
    * Please implement this method that should perform the main part of the
    * conversion. The graph (and all other variable) are already setup. Use
@@ -229,10 +244,10 @@ public abstract class SB_2GraphML <T> {
    * You may implement this method to perform a post-processing
    * on the complete graph, i.e., to enhance the reaction node layout.
    */
-  protected void improveReactionNodeLayout() {
+  public void improveReactionNodeLayout() {
     // OPTIONALLY
   }
-
+  
   /**
    * Shoudl return <code>TRUE</code> if and only if any layout information
    * of at least one node was available, during the translation (should one
@@ -240,7 +255,7 @@ public abstract class SB_2GraphML <T> {
    * @return
    */
   protected abstract boolean isAnyLayoutInformationAvailable();
-
+  
   /**
    * 
    * @param id
@@ -286,18 +301,26 @@ public abstract class SB_2GraphML <T> {
     // Set Node shape (and color) based on SBO-terms
     NodeRealizer nr;
     if (sboTerm <= 0) {
-      nr = simpleGraph.getRealizer(n);
-    } else {
-      
-      nr = SBGNVisualizationProperties.getNodeRealizer(sboTerm);
-      nr = nr.createCopy(); // TODO: does this also copy pre-defined labels? (it should!)
-      simpleGraph.setRealizer(n, nr);
-      nodeShouldBeACircle = SBGNVisualizationProperties.isCircleShape(sboTerm);
-    }
+      // Default shape:
+      sboTerm = SBO.getSimpleMolecule();
+      // TODO: Localize
+      log.warning(MessageFormat.format(
+        bundle.getString("USING_DEFAULT_SBO_TERM"), 
+        SBO.getTerm(sboTerm).getName(), label));
+    } 
+    
+    nr = SBGNVisualizationProperties.getNodeRealizer(sboTerm);
+    nr = nr.createCopy(); // TODO: does this also copy pre-defined labels? (it should!)
+    simpleGraph.setRealizer(n, nr);
+    nodeShouldBeACircle = SBGNVisualizationProperties.isCircleShape(sboTerm);
     
     // Setup node properties
     if ((label != null) && !(nr instanceof ReactionNodeRealizer) &&
-        !label.equalsIgnoreCase("undefined")) {
+        !label.equalsIgnoreCase("undefined") && !SBO.isChildOf(sboTerm, SBO.getEmptySet())) {
+      if (height>30) {
+        // Height is enough to insert a second line.
+        label = StringUtil.insertLineBreaks(label,(int)(width/6), "\n");
+      }
       nr.setLabelText(label);
     }
     
@@ -305,8 +328,8 @@ public abstract class SB_2GraphML <T> {
     if (Double.isNaN(x) || Double.isNaN(y)) {
       int nodesWithoutCoordinates = unlayoutedNodes.size();
       // Make a simple grid-layout to set some initial coords
-      x = (nodesWithoutCoordinates%COLUMNS)*(width+width/2);
-      y = (nodesWithoutCoordinates/COLUMNS)*(height+height);
+      x = (nodesWithoutCoordinates % COLUMNS) * (width + width / 2);
+      y = (nodesWithoutCoordinates / COLUMNS) * (height + height);
       
       nodesWithoutCoordinates++;
       unlayoutedNodes.add(n);
@@ -349,7 +372,7 @@ public abstract class SB_2GraphML <T> {
   public static NodeRealizer setupGroupNode(NodeLabel nl) {
     GroupNodeRealizer nr = new ComplexGroupNode();
     ((GroupNodeRealizer)nr).setGroupClosed(false);
-//    nr.setTransparent(true);
+    //    nr.setTransparent(true);
     
     // Eliminate the expanding/ collapsing icons
     nr.setClosedGroupIcon(null);
@@ -357,12 +380,12 @@ public abstract class SB_2GraphML <T> {
     
     nr.setMinimalInsets(new YInsets(7, 7, 7, 7)); // top, left, bottom, right
     nr.setAutoBoundsEnabled(true);
-//    nl.setPosition(NodeLabel.TOP);
-//    nl.setBackgroundColor(new Color((float)0.8,(float)0.8,(float)0.8,(float)0.5));
-//    nl.setFontSize(10);
-//    nl.setAutoSizePolicy(NodeLabel.AUTOSIZE_NODE_WIDTH);
-//    
-//    nr.setLabel(nl);
+    //    nl.setPosition(NodeLabel.TOP);
+    //    nl.setBackgroundColor(new Color((float)0.8,(float)0.8,(float)0.8,(float)0.5));
+    //    nl.setFontSize(10);
+    //    nl.setAutoSizePolicy(NodeLabel.AUTOSIZE_NODE_WIDTH);
+    //    
+    //    nr.setLabel(nl);
     
     return nr;
   }
@@ -381,7 +404,7 @@ public abstract class SB_2GraphML <T> {
     NodeRealizer nr = setupGroupNode(null);
     simpleGraph.setRealizer(n, nr);
     simpleGraph.getHierarchyManager().convertToGroupNode(n);
-
+    
     
     // Add children
     //////////////////////////////////////

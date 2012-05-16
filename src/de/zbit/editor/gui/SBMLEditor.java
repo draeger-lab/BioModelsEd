@@ -31,11 +31,13 @@ import javax.swing.UIManager;
 public class SBMLEditor {
 
   public static final String PROGRAM_NAME = "SBMLeditor";
+  // TODO: Re-naming: DEFAULT_SBML_LEVEL and DEFAULT_SBML_VERSION
   public static final int sbmlLevel = 3;
   public static final int sbmlVersion = 1;
   private JFrame frame;
   private CommandController commandController;
   private TabManager tabManager;
+  // TODO: Do not declare variables of type ArrayList -> use the List interface or some other abstraction level.
   private ArrayList<OpenedDocument> openedDocuments = new ArrayList<OpenedDocument>();
   //private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
 
@@ -77,6 +79,7 @@ public class SBMLEditor {
    * @throws Throwable
    */
   private void setUpGUI() throws Throwable {
+	  // TODO: This is already too late, doesn't work anymore.
     if (onMac()) {
       System.setProperty("com.apple.mrj.application.apple.menu.about.name",
           PROGRAM_NAME);
@@ -92,6 +95,7 @@ public class SBMLEditor {
     frame.setMinimumSize(new Dimension(640, 480));
     frame.pack();
     frame.setLocationRelativeTo(null);
+    // TODO: This will cause that program closes immediately. You may want to ask users if they want to save their work before closing the program. 
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);
   }
@@ -100,6 +104,7 @@ public class SBMLEditor {
    * Detect if system is a Mac OS
    * @return
    */
+  // TODO: This could be a public method in some new class GUITools.
   private static boolean onMac() {
     return (System.getProperty("os.name").toLowerCase().contains("mac")
         || System.getProperty("mrj.version") != null);

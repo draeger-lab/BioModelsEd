@@ -26,10 +26,12 @@ import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
  * @author Jakob Matthes
  * @version $Rev$
  */
+//TODO: Set SVN properties
 public class TabManager extends JTabbedPane {
 
   private static final long serialVersionUID = -905908829761611472L;
   private SBMLEditor editorInstance;
+  // TODO: Do not declare variables of type ArrayList -> not flexible enough.
   private ArrayList<OpenedDocument> tabMap = new ArrayList<OpenedDocument>();
   
 
@@ -101,6 +103,7 @@ public class TabManager extends JTabbedPane {
   }
   
   public void fileSaveAs(String filename) {
+	  // TODO: Respect Java coding conventions.
 	  if(isAnySelected()){
 		  getCurrentDocument().fileSaveAs(filename);
 		  setTitleAt(getSelectedIndex(), filename);

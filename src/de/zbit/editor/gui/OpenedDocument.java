@@ -28,6 +28,7 @@ import org.sbml.jsbml.SBMLWriter;
  * @author Jakob Matthes
  * @version $Rev$
  */
+// TODO: Set SVN properties
 public class OpenedDocument {
   /**
    * SBML Document of the openedDocument
@@ -76,7 +77,10 @@ public class OpenedDocument {
     return (getAssociatedFilepath() != null);
   }
 
+  // TODO: Indent
 public void fileSave() {
+	// TODO: use SwingWorker!
+	// TODO: Why does this meethod not call fileSaveAs?
 		  try {
 			  new SBMLWriter().write(getSbmlDocument(), getAssociatedFilepath());
 		  } catch (SBMLException e) {
@@ -88,7 +92,9 @@ public void fileSave() {
 		  }
 }
 
+// TODO: Indent
 public void fileSaveAs(String filename) {
+	// TODO: use SwingWorker!
 	try {
 		  new SBMLWriter().write(getSbmlDocument(), filename);
 	  } catch (SBMLException e) {

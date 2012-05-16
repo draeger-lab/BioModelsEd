@@ -95,6 +95,7 @@ public class GUIFactory {
    * Add separator to given toolbar.
    */
   public static void addSeparator(JToolBar toolbar) {
+	  // TODO: Unnecessary method -> remove
     toolbar.addSeparator();
   }
 }

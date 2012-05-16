@@ -32,6 +32,7 @@ public class EditorToolbar extends JToolBar {
    * @param commandController
    */
   public EditorToolbar(CommandController commandController) {
+	  // TODO: Create a very simple icon for each button, use Tooltips, remove the String Label.
     GUIFactory.addButton(this, "Unspecified");
     GUIFactory.addButton(this, "Simple Chemical");
     GUIFactory.addButton(this, "Macromolecule");

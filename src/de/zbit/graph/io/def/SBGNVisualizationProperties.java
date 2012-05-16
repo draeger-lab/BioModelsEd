@@ -1,5 +1,5 @@
 /*
- * $Id: SBGNVisualizationProperties.java 895 2012-04-16 16:36:17Z wrzodek $
+ * $Id: SBGNVisualizationProperties.java 943 2012-05-15 07:28:41Z draeger $
  * $URL: https://rarepos.cs.uni-tuebingen.de/svn-path/SysBio/trunk/src/de/zbit/graph/io/def/SBGNVisualizationProperties.java $
  * ---------------------------------------------------------------------
  * This file is part of KEGGtranslator, a program to convert KGML files
@@ -28,9 +28,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.sbml.jsbml.SBO;
+
 import y.view.NodeRealizer;
 import y.view.ShapeNodeRealizer;
 import de.zbit.graph.sbgn.ComplexNode;
+import de.zbit.graph.sbgn.EmptySetNode;
 import de.zbit.graph.sbgn.NucleicAcidFeatureNode;
 import de.zbit.graph.sbgn.ReactionNodeRealizer;
 import de.zbit.graph.sbgn.ShapeNodeRealizerSupportingCloneMarker;
@@ -41,7 +44,7 @@ import de.zbit.graph.sbgn.ShapeNodeRealizerSupportingCloneMarker;
  * 
  * @author Finja B&uuml;chel
  * @author Clemens Wrzodek
- * @version $Rev: 895 $
+ * @version $Rev: 943 $
  */
 public class SBGNVisualizationProperties {
 
@@ -52,45 +55,22 @@ public class SBGNVisualizationProperties {
    */
   public static Map<Integer, NodeRealizer> sbo2shape;
   
-  
   /**
    * default shape is an Ellipse
    */
   private final static ShapeNodeRealizer defaultShape = new ShapeNodeRealizerSupportingCloneMarker(ShapeNodeRealizer.ELLIPSE);
   
   /**
-   * Examples of macromolecules include proteins, nucleic acids (RNA, DNA), and
-   * polysaccharides (glycogen, cellulose, starch, etc.).
-   * => Also use this for enzymes (as they are proteins)!
-   */
-  public static final int macromolecule = 245;
-  /**
-   * Other SBO terms that should be visualized in the same manner as {@link #macromolecule}.
+   * Other SBO terms that should be visualized in the same manner as {@link SBO#getMacromolecule()}.
    */
   private static final int[] macromolecule_synonyms = new int[]{248, 249, 246, 251, 252, 250};
-  
+
   /**
-   * Simple chemicals (Ca2+,ATP, etc.)
-   */
-  public static final int simpleChemical = 247;
-  
-  /**
-   * Other SBO terms that should be visualized in the same manner as {@link #simpleChemical}s.
+   * Other SBO terms that should be visualized in the same manner as {@link SBO#getSimpleMolecule()}s.
    * 327 = non-macromolecular ion
    * 328 = non-macromolecular radical
    */
   private static final int[] simpleChemical_synonyms = new int[]{327, 328};
-  
-  
-  /**
-   * = informational molecule segment
-   * The Nucleic acid feature construct in SBGN is meant to represent a fragment
-   * of a macro- molecule carrying genetic information. A common use for this
-   * construct is to represent a gene or transcript. The label of this EPN and
-   * its units of information are often important for making the purpose clear
-   * to the reader of a map.
-   */
-  public static final int gene = 354;
   
   public static final int materialEntityOfUnspecifiedNature = 285;
   
@@ -100,14 +80,12 @@ public class SBGNVisualizationProperties {
   public static final int map = 552;
   public static final int submap = 395;
   
-  public static final int nonCovalentComplex = 253;
-  
   public static final int process = 375;
   public static final int omittedProcess = 397;
   public static final int uncertainProcess = 396;
   
   /**
-   * Other SBO terms that should be visualized in the same manner as {@link #nonCovalentComplex}s.
+   * Other SBO terms that should be visualized in the same manner as {@link SBO#getNonCovalentComplex()}s.
    * TODO: These complexes below are actually not correct. But Linking them to
    * ComplexNode is better than the default. But still, the real SBGN-conform
    * specification differs!
@@ -133,24 +111,26 @@ public class SBGNVisualizationProperties {
      */
     sbo2shape = new HashMap<Integer, NodeRealizer>();
    
-    sbo2shape.put(macromolecule, getEnzymeRelizerRaw()); // macromolecule - enzyme
+    sbo2shape.put(SBO.getMacromolecule(), getEnzymeRelizerRaw()); // macromolecule - enzyme
     // Sub-branches in the macromolecule-SBO-tree
+       
     for (int sbo:macromolecule_synonyms) {
-      sbo2shape.put(sbo, sbo2shape.get(macromolecule));
+      sbo2shape.put(sbo, sbo2shape.get(SBO.getMacromolecule()));
     }
     
-    sbo2shape.put(simpleChemical, new ShapeNodeRealizerSupportingCloneMarker(ShapeNodeRealizer.ELLIPSE)); // simple chemical - simple chemical
+    sbo2shape.put(SBO.getSimpleMolecule(), new ShapeNodeRealizerSupportingCloneMarker(ShapeNodeRealizer.ELLIPSE)); // simple chemical - simple chemical
     // Sub-branches in the simpleChemical-SBO-tree
     for (int sbo:simpleChemical_synonyms) {
-      sbo2shape.put(sbo, sbo2shape.get(simpleChemical));
+      sbo2shape.put(sbo, sbo2shape.get(SBO.getSimpleMolecule()));
     }
     
-    sbo2shape.put(gene, new NucleicAcidFeatureNode()); // nucleic acid feature - gene
+    sbo2shape.put(SBO.getGene(), new NucleicAcidFeatureNode()); // nucleic acid feature - gene
     sbo2shape.put(materialEntityOfUnspecifiedNature, new ShapeNodeRealizerSupportingCloneMarker(ShapeNodeRealizer.ELLIPSE)); // unspecified - material entity of unspecified nature
     
-    sbo2shape.put(nonCovalentComplex, new ComplexNode()); // complex - non-covalent complex
-    for (int sbo:nonCovalentComplex_synonyms) {
-      sbo2shape.put(sbo, sbo2shape.get(nonCovalentComplex));
+    sbo2shape.put(SBO.getEmptySet(), new EmptySetNode()); // empty set
+    sbo2shape.put(SBO.getNonCovalentComplex(), new ComplexNode()); // complex - non-covalent complex
+    for (int sbo : nonCovalentComplex_synonyms) {
+      sbo2shape.put(sbo, sbo2shape.get(SBO.getNonCovalentComplex()));
     }
     
     sbo2shape.put(map, new ShapeNodeRealizerSupportingCloneMarker(ShapeNodeRealizer.RECT)); // unspecified - empty set
@@ -174,22 +154,21 @@ public class SBGNVisualizationProperties {
   }
   
   /**
-   * @return the color of the appropriate shabe
+   * @return the color of the appropriate shape
    */
   private static Color getColor(int sboTerm) {
-    if (sboTerm == nonCovalentComplex ||
-        Arrays.binarySearch(nonCovalentComplex_synonyms, sboTerm)>=0) {
+    if (SBO.isChildOf(sboTerm, SBO.getNonCovalentComplex())){
       return new Color(24,116,205);    // DodgerBlue3
-    } else if (sboTerm == gene) {
-      return new Color( 255,255,0);    // Yellow
-    } else if (sboTerm == macromolecule ||
-        Arrays.binarySearch(macromolecule_synonyms, sboTerm)>=0) {
+    } else if (SBO.isChildOf(sboTerm, SBO.getGene())){ 
+      return new Color(255,255,0);    // Yellow
+    } else if (SBO.isChildOf(sboTerm, SBO.getMacromolecule())){
       return new Color(0,205,0);       // Green 3
-    } else if (sboTerm == simpleChemical ||
-        Arrays.binarySearch(simpleChemical_synonyms, sboTerm)>=0) {
+    } else if (SBO.isChildOf(sboTerm, SBO.getSimpleMolecule())){
       return new Color(176,226,255);   // LightSkyBlue1
-    } else if (sboTerm == map || sboTerm == submap) {
+    } else if ((sboTerm == map) || (sboTerm == submap)) {
       return new Color(224,238,238);   // azure2
+    } else if (SBO.isChildOf(sboTerm, SBO.getEmptySet())) {
+    	return new Color(255, 204, 204); // Pink
     } else {
       return new Color(144,238,144);   // LightGreen
     }
@@ -226,12 +205,8 @@ public class SBGNVisualizationProperties {
    * @return
    */
   public static boolean isCircleShape(int sboTerm) {
-    if (sboTerm == simpleChemical ||
-        Arrays.binarySearch(simpleChemical_synonyms, sboTerm)>=0) {
-      return true;
-    } else {
-      return false;
-    }
+		return SBO.isChildOf(sboTerm, SBO.getSimpleMolecule())
+				|| SBO.isChildOf(sboTerm, SBO.getEmptySet());
   }
   
   /**

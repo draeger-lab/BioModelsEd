@@ -57,6 +57,7 @@ public class CommandController {
   }
   
   public void fileOpen() {
+	  // TODO: Create a factory method for creating JFileChoosers in GUIFactory. This is too simple.
     JFileChooser fc = new JFileChooser();
     int returnVal = fc.showOpenDialog(editorInstance.getFrame());
     
@@ -68,7 +69,7 @@ public class CommandController {
         OpenedDocument doc = new OpenedDocument(sbmlDoc, file.getPath());
         editorInstance.addDocument(doc);
         editorInstance.getTabManager().addTab(doc);
-        
+        // TODO: Find a way to display user messages not on the command-line interface.
       } catch (XMLStreamException e) {
         //e.printStackTrace();
         System.err.println( e );
@@ -96,7 +97,7 @@ public class CommandController {
 	if(tabmanager.isAnySelected()){
     JFileChooser fc = new JFileChooser();
     int returnVal = fc.showSaveDialog(editorInstance.getFrame());
-    
+    // TODO: respect standard Java code convention
     if(returnVal == JFileChooser.APPROVE_OPTION) {
     	
     	tabmanager.fileSaveAs(fc.getSelectedFile().getAbsolutePath());

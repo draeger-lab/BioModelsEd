@@ -34,6 +34,7 @@ public class EditorMenu extends JMenuBar {
    */
   private static final long serialVersionUID = -3245574503778953826L;
 
+  // TODO: better use a variable for "ctrl" because on Mac it is different. You could initialize the variable depending on the OS information.
   public EditorMenu(CommandController commandController) {
     JMenu menuFile = GUIFactory.createMenu(this, Resources.getString("MENU_FILE"));
     GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_NEW"), "ctrl N",
