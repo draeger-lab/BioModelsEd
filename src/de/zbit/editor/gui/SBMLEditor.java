@@ -19,11 +19,10 @@ package de.zbit.editor.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -37,17 +36,16 @@ import de.zbit.editor.control.SBMLView;
  * @author Jakob Matthes
  * @version $Rev$
  */
-public class SBMLEditor implements SBMLView {
+public class SBMLEditor extends WindowAdapter implements SBMLView  {
 
-  public static final String PROGRAM_NAME = "SBMLeditor";
-  // TODO: Re-naming: DEFAULT_SBML_LEVEL and DEFAULT_SBML_VERSION
-  public static final int sbmlLevel = 3;
-  public static final int sbmlVersion = 1;
+  public static final String PROGRAM_NAME = "SBML Editor";
+  
   private JFrame frame;
   private CommandController commandController;
   private TabManager tabManager;
+  
   // TODO: Do not declare variables of type ArrayList -> use the List interface or some other abstraction level.
-  private ArrayList<OpenedDocument> openedDocuments = new ArrayList<OpenedDocument>();
+  //private ArrayList<OpenedDocument> openedDocuments = new ArrayList<OpenedDocument>();
   //private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
 
   public SBMLEditor() {
@@ -74,15 +72,7 @@ public class SBMLEditor implements SBMLView {
   public TabManager getTabManager() {
     return tabManager;
   }
-
-  /**
-   * @param doc
-   */
-  public void addDocument(OpenedDocument doc) {
-    openedDocuments.add(doc);
-    getTabManager().addTab(doc);
-  }
-  
+    
   /**
    * 
    * @return
@@ -90,7 +80,7 @@ public class SBMLEditor implements SBMLView {
    */
   private void setUpGUI() throws Throwable {
 	  // TODO: This is already too late, doesn't work anymore.
-    if (onMac()) {
+    if (GUITools.onMac()) {
       System.setProperty("com.apple.mrj.application.apple.menu.about.name",
           PROGRAM_NAME);
     }
@@ -98,7 +88,7 @@ public class SBMLEditor implements SBMLView {
     
     frame = new JFrame(PROGRAM_NAME);
     frame.setJMenuBar(new EditorMenu(commandController, this));
-    frame.add(new EditorToolbar(commandController), BorderLayout.NORTH);
+    frame.add(new EditorToolbar(this), BorderLayout.NORTH);
     frame.add(tabManager);
     
     
@@ -106,20 +96,13 @@ public class SBMLEditor implements SBMLView {
     frame.pack();
     frame.setLocationRelativeTo(null);
     // TODO: This will cause that program closes immediately. You may want to ask users if they want to save their work before closing the program. 
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    frame.addWindowListener(this);
     frame.setVisible(true);
   }
-
-  /**
-   * Detect if system is a Mac OS
-   * @return
-   */
+  
   // TODO: This could be a public method in some new class GUITools.
-  private static boolean onMac() {
-    return (System.getProperty("os.name").toLowerCase().contains("mac")
-        || System.getProperty("mrj.version") != null);
-  }
-
+  
   /**
    * @param args
    * @throws Throwable
@@ -132,68 +115,102 @@ public class SBMLEditor implements SBMLView {
       }
     });
   }
+  
+  @Override
+  public void fileNew() {
+  	String name = JOptionPane.showInputDialog("Name", "FileNew");
+  	if (name != null) {
+  		if (!name.isEmpty()) {
+  			commandController.fileNew(name);
+  		} else {
+  			fileNew();
+  		}
+  	}
+  }
+  
+  @Override
+  public boolean fileOpen() {
+  	JFileChooser fc = GUIFactory.createFileChooser();
+      int returnVal = fc.showOpenDialog(this.frame);
+      
+      if (returnVal == JFileChooser.APPROVE_OPTION)
+  		try {
+  			{
+  			  File file = fc.getSelectedFile();
+  			  try {
+  				SBMLReadingTask task = new SBMLReadingTask(file, this.frame);
+  				task.addPropertyChangeListener(commandController);
+  				task.execute();
+  			} catch (FileNotFoundException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  			}
+  			  //return commandController.fileOpen(file);      
+  			}
+  		} catch (Exception e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}
+      return false;
+  }
+  
+  @Override
+  public void fileClose() {
+  	tabManager.closeCurrentTab();
+  }
+  
+  @Override
+  public void fileSave() {
+  	commandController.fileSave();	
+  }
 
-public void fileSaveAs() {
-	  TabManager tabmanager = getTabManager(); 
-		if (tabmanager.isAnySelected()){
-			JFileChooser fc = new JFileChooser();
-			int returnVal = fc.showSaveDialog(getFrame());
-			// TODO: respect standard Java code convention
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-	  	    	commandController.fileSaveAs(fc.getSelectedFile());
-			}
-		}	
-}
+  @Override
+  public void fileSaveAs() {
+  	  TabManager tabmanager = getTabManager(); 
+  		if (tabmanager.isAnySelected()){
+  			JFileChooser fc = GUIFactory.createFileChooser();
+  			int returnVal = fc.showSaveDialog(getFrame());
+  			// TODO: respect standard Java code convention
+  			if (returnVal == JFileChooser.APPROVE_OPTION) {
+  				File file = fc.getSelectedFile();
+  				if (!GUIFactory.createFilterXML().accept(file)){
+  					file = new File(file.getAbsolutePath()+".xml");
+  				}
+  	  	    	commandController.fileSaveAs(file);
+  			}
+  		}	
+  }
 
-public OpenedDocument getSelectedDoc() {
-	return tabManager.getCurrentDocument();
-}
+  @Override
+  public void fileQuit(){
+  	int returnVal = GUIFactory.createQuestionClose(frame);
+  	if(returnVal == JOptionPane.YES_OPTION){
+  	    System.exit(0);
+  	}
+  }
 
+  /**
+   * @param doc
+   */
+  @Override
+  public void addDocument(OpenedDocument doc) {
+    //openedDocuments.add(doc);
+    getTabManager().addTab(doc);
+  }
+  
+  @Override
+  public OpenedDocument getSelectedDoc() {
+  	return tabManager.getCurrentDocument();
+  }
 
-public void fileNew() {
-	String name = JOptionPane.showInputDialog("Name", "FileNew");
-	if (name != null) {
-		if (!name.isEmpty()) {
-			commandController.fileNew(name);
-		} else {
-			fileNew();
-		}
-	}
-}
+  @Override
+  public void refreshTitle() {
+  	tabManager.refreshTitle();
+  	
+  }
 
-public boolean fileOpen() {
-	JFileChooser fc = new JFileChooser();
-    int returnVal = fc.showOpenDialog(this.frame);
-    
-    if (returnVal == JFileChooser.APPROVE_OPTION)
-		try {
-			{
-			  File file = fc.getSelectedFile();
-			  try {
-				SBMLReadingTask task = new SBMLReadingTask(new FileInputStream(file), this.frame);
-				task.addPropertyChangeListener(commandController);
-				task.execute();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			  //return commandController.fileOpen(file);      
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    return false;
-}
-
-
-public void fileSave() {
-	commandController.fileSave();	
-}
-
-public void fileClose() {
-	commandController.fileClose();
-}
-
-
+  @Override
+  public void windowClosing(WindowEvent e){
+  	fileQuit();
+  }
 }

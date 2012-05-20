@@ -17,13 +17,20 @@
 package de.zbit.editor.gui;
 
 import java.awt.event.ActionListener;
+import java.beans.EventHandler;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * @author Jakob Matthes
@@ -55,6 +62,12 @@ public class GUIFactory {
     item.setAccelerator(KeyStroke.getKeyStroke(keystroke));
     return item;
   }
+  
+  public static JMenuItem createMenuItem(JMenu menu, String label, Integer ctrl, int keyCode, ActionListener ... l) {
+	    JMenuItem item = createMenuItem(menu, label, l);
+	    item.setAccelerator(KeyStroke.getKeyStroke(keyCode,ctrl));
+	    return item;
+  }
 
   /**
    * Add a new item to given menu.
@@ -73,6 +86,7 @@ public class GUIFactory {
     return item;
   }
   
+  
   /**
    * Add a button to given toolbar.
    * @param toolbar
@@ -90,12 +104,37 @@ public class GUIFactory {
     toolbar.add(button);
     return button;
   }
-  
-  /**
-   * Add separator to given toolbar.
-   */
-  public static void addSeparator(JToolBar toolbar) {
-	  // TODO: Unnecessary method -> remove
-    toolbar.addSeparator();
+   
+  public static JFileChooser createFileChooser(){
+	JFileChooser fc = new JFileChooser();
+	FileFilter filter = createFilterXML();
+	fc.addChoosableFileFilter(filter);
+	fc.setFileFilter(filter);
+
+	fc.setAcceptAllFileFilterUsed(false);
+	return fc;
   }
+  
+  public static FileNameExtensionFilter createFilterXML(){
+	  return new FileNameExtensionFilter("XML Datei", "xml", "XML");
+  }
+  
+  public static int createQuestionClose(JFrame frame){
+	  return JOptionPane.showConfirmDialog(frame, Resources.getString("DIALOG_QUIT_QUESTION"), Resources.getString("DIALOG_QUIT_TITLE"), JOptionPane.YES_NO_OPTION);
+  }
+  
+  public static JPopupMenu createTabPopupMenu(TabComponent component) {
+      JMenuItem menuItem;
+
+      //Create the popup menu.
+      JPopupMenu popup = new JPopupMenu();
+      menuItem = new JMenuItem(Resources.getString("TAB_CLOSE"));
+      menuItem.addActionListener(EventHandler.create(ActionListener.class, component, "close"));
+      popup.add(menuItem);
+      menuItem = new JMenuItem(Resources.getString("TAB_CLOSE_ALL"));
+      menuItem.addActionListener(EventHandler.create(ActionListener.class, component, "closeAll"));
+      popup.add(menuItem);
+      return popup;
+  }
+  
 }

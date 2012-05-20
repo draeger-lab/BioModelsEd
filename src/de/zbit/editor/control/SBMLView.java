@@ -18,8 +18,6 @@ package de.zbit.editor.control;
 
 import org.sbml.jsbml.util.ValuePair;
 
-import de.zbit.editor.gui.TabManager;
-
 
 /**
  * @author Eugen Netz
@@ -28,17 +26,18 @@ import de.zbit.editor.gui.TabManager;
  */
 public interface SBMLView {
 
-	public void addDocument(OpenedDocument doc);
 	
-	public OpenedDocument getSelectedDoc();
-
 	public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(3, 1);
 
-	public void fileSaveAs();
-	public void fileSave();
 	public void fileNew();
 	public boolean fileOpen();
 	public void fileClose();
-	// TODO: Remove this here: The View does not necessarily have a TabManager.
-	public TabManager getTabManager();
+	public void fileSave();
+	public void fileSaveAs();
+	void fileQuit();
+	
+	public void addDocument(OpenedDocument doc);
+	public OpenedDocument getSelectedDoc();
+	public void refreshTitle();
+	
 }

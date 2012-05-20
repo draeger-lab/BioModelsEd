@@ -19,12 +19,11 @@ package de.zbit.editor.control;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
+import java.io.FileNotFoundException;
 
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLReader;
+
+import de.zbit.editor.gui.SBMLWritingTask;
 
 
 /**
@@ -54,57 +53,47 @@ public class CommandController implements PropertyChangeListener {
     OpenedDocument doc = new OpenedDocument(sbmlDocument);
     view.addDocument(doc);
   }
-  
-  public boolean fileOpen(File file) {
-	  // TODO: Create a factory method for creating JFileChoosers in GUIFactory. This is too simple.
-	  if(file != null){
-      try {
-        //Read file
-        SBMLDocument sbmlDoc = SBMLReader.read(file);
-        OpenedDocument doc = new OpenedDocument(sbmlDoc, file.getPath());
-        view.addDocument(doc);
-        return true;
-        // TODO: Find a way to display user messages not on the command-line interface.
-      } catch (XMLStreamException e) {
-        //e.printStackTrace();
-        System.err.println( e );
-      } catch (IOException e) {
-        //e.printStackTrace();
-        System.err.println( e );
-     }      
-    }
-	  return false;
-  }
-  
+    
   public void fileSave() {
 	  OpenedDocument od = this.view.getSelectedDoc();
 	  if(od.hasAssociatedFilepath()){
-		  od.fileSave();
+		try {
+			SBMLWritingTask task = new SBMLWritingTask(new File(od.getAssociatedFilepath()), od.getSbmlDocument());
+			task.addPropertyChangeListener(this);
+			task.execute();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	  } else {
 		  view.fileSaveAs();
 	  }
   }
   
   public void fileSaveAs(File file) {
-	  this.view.getSelectedDoc().fileSaveAs(file);	
-	  view.getTabManager().refreshTitle();
+	  OpenedDocument od = this.view.getSelectedDoc();
+	  od.setAssociatedFilepath(file.getAbsolutePath());
+	  view.refreshTitle();
+	  try {
+			SBMLWritingTask task = new SBMLWritingTask(new File(od.getAssociatedFilepath()), od.getSbmlDocument());
+			task.addPropertyChangeListener(this);
+			task.execute();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
   }
-  
-  public void fileClose() {
-    view.getTabManager().closeCurrentTab();
-  }
-  
-  public void fileQuit() {
-    System.exit(0);
-  }
-
+    
 
 public void propertyChange(PropertyChangeEvent evt) {
 	// TODO Auto-generated method stub
-	if (evt.getPropertyName().equals("done")){
+	if (evt.getPropertyName().equals("doneopening")){
 		//TODO add path
-		OpenedDocument doc = new OpenedDocument((SBMLDocument) evt.getNewValue(), "");
+		OpenedDocument doc = (OpenedDocument) evt.getNewValue();// new OpenedDocument((SBMLDocument) evt.getNewValue(), "");
         view.addDocument(doc);
+	}
+	if (evt.getPropertyName().equals("donesaveing")){
+		System.out.println("Speichern fertig...");
 	}
 }
   

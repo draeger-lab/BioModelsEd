@@ -20,37 +20,39 @@ import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.ProgressMonitorInputStream;
 import javax.swing.SwingWorker;
 
-import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
+
+import de.zbit.editor.control.OpenedDocument;
 
 /**
  * @author Eugen Netz
  * @since 1.0
  * @version $Rev$
  */
-public class SBMLReadingTask extends SwingWorker<SBMLDocument, Void>{
+public class SBMLReadingTask extends SwingWorker<OpenedDocument, Void>{
 	private ProgressMonitorInputStream stream;
+	private File file;
 	
-	public SBMLReadingTask(FileInputStream stream, Component parent) throws FileNotFoundException{
+	public SBMLReadingTask(File file, Component parent) throws FileNotFoundException{
 		//TODO localize
-		this.stream = new ProgressMonitorInputStream(parent, "Reading", stream);
+		this.file = file;
+		this.stream = new ProgressMonitorInputStream(parent, "Reading", new FileInputStream(file));
 	}
 	
-	protected SBMLDocument doInBackground() throws Exception {
-		return SBMLReader.read(stream);
+	protected OpenedDocument doInBackground() throws Exception {
+		return new OpenedDocument(SBMLReader.read(stream), file.getAbsolutePath());
 	}
 
 	@Override
 	protected void done() {
 		try {
-			SBMLDocument doc = get();
-			firePropertyChange("done", null, doc);
+			OpenedDocument doc = get();
+			firePropertyChange("doneopening", null, doc);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +61,4 @@ public class SBMLReadingTask extends SwingWorker<SBMLDocument, Void>{
 			e.printStackTrace();
 		}
 	}
-	
-	
-
 }

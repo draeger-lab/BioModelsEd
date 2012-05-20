@@ -17,9 +17,11 @@
 
 package de.zbit.editor.gui;
 
+import java.awt.event.ActionListener;
+import java.beans.EventHandler;
+
 import javax.swing.JToolBar;
 
-import de.zbit.editor.control.CommandController;
 
 /**
  * @author Jakob Matthes
@@ -33,17 +35,15 @@ public class EditorToolbar extends JToolBar {
    * 
    * @param commandController
    */
-  public EditorToolbar(CommandController commandController) {
+  public EditorToolbar(SBMLEditor parent) {
 	  // TODO: Create a very simple icon for each button, use Tooltips, remove the String Label.
-    GUIFactory.addButton(this, "Unspecified");
+    GUIFactory.addButton(this, "Unspecified",EventHandler.create(ActionListener.class, parent, "fileNew"));
     GUIFactory.addButton(this, "Simple Chemical");
     GUIFactory.addButton(this, "Macromolecule");
     GUIFactory.addButton(this, "Sink");
-    GUIFactory.addSeparator(this);
     GUIFactory.addButton(this, "Reaction");
     GUIFactory.addButton(this, "Catalysis");
     GUIFactory.addButton(this, "Inhibition");
-    GUIFactory.addSeparator(this);
 
 //    String[] layoutArray = { "A", "B", "C" };
 //    JComboBox layoutComboBox = new JComboBox(layoutArray);

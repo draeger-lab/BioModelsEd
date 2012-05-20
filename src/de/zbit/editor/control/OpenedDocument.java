@@ -17,13 +17,7 @@
 package de.zbit.editor.control;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLWriter;
 
 /**
  * @author Jakob Matthes
@@ -84,36 +78,5 @@ public OpenedDocument(SBMLDocument sbmlDocument) {
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
   }
-
-  // TODO: Indent
-public void fileSave() {
-	// TODO: use SwingWorker!
-	// TODO: Why does this meethod not call fileSaveAs?
-		  try {
-			  new SBMLWriter().write(getSbmlDocument(), getAssociatedFilepath());
-		  } catch (SBMLException e) {
-			  e.printStackTrace();
-		  } catch (FileNotFoundException e) {
-			  e.printStackTrace();
-		  } catch (XMLStreamException e) {
-			  e.printStackTrace();
-		  }
-}
-
-// TODO: Indent
-public void fileSaveAs(File file) {
-	try {
-		  new SBMLWriter().write(getSbmlDocument(), file.getAbsolutePath());
-		  this.setAssociatedFilepath(file.getAbsolutePath());
-		  
-	  } catch (SBMLException e) {
-		  e.printStackTrace();
-	  } catch (FileNotFoundException e) {
-		  e.printStackTrace();
-	  } catch (XMLStreamException e) {
-		  e.printStackTrace();
-	  }
-	
-}
 
 }
