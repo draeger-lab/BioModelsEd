@@ -26,18 +26,33 @@ import org.sbml.jsbml.util.ValuePair;
  */
 public interface SBMLView {
 
-	
-	public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(3, 1);
+  public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(
+                                                                          3, 1);
 
-	public void fileNew();
-	public boolean fileOpen();
-	public void fileClose();
-	public void fileSave();
-	public void fileSaveAs();
-	void fileQuit();
-	
-	public void addDocument(OpenedDocument doc);
-	public OpenedDocument getSelectedDoc();
-	public void refreshTitle();
-	
+
+  public void fileNew();
+
+
+  public boolean fileOpen();
+
+
+  public void fileClose();
+
+
+  public void fileSave();
+
+
+  public void fileSaveAs();
+
+
+  void fileQuit();
+
+
+  public void addDocument(OpenedDocument doc);
+
+
+  public OpenedDocument getSelectedDoc();
+
+
+  public void refreshTitle();
 }

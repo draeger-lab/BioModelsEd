@@ -1,6 +1,6 @@
 /*
- * $Id:  OpenedDocument.java 19:34:25 jakob $
- * $URL: OpenedDocument.java $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -23,8 +23,8 @@ import org.sbml.jsbml.SBMLDocument;
  * @author Jakob Matthes
  * @version $Rev$
  */
-// TODO: Set SVN properties
 public class OpenedDocument {
+
   /**
    * SBML Document of the openedDocument
    */
@@ -32,19 +32,21 @@ public class OpenedDocument {
   /**
    * associated filepath of the openedDocument, can be unset
    */
-  private String associatedFilepath;
-  private String associatedFilename;
+  private String       associatedFilepath;
+  private String       associatedFilename;
 
 
-public OpenedDocument(SBMLDocument sbmlDocument) {
+  public OpenedDocument(SBMLDocument sbmlDocument) {
     this.sbmlDocument = sbmlDocument;
   }
-  
+
+
   public OpenedDocument(SBMLDocument sbmlDocument, String associatedFilepath) {
     this.sbmlDocument = sbmlDocument;
     this.associatedFilepath = associatedFilepath;
     this.associatedFilename = new File(associatedFilepath).getName();
   }
+
 
   /**
    * @return the sbmlDocument
@@ -52,31 +54,37 @@ public OpenedDocument(SBMLDocument sbmlDocument) {
   public SBMLDocument getSbmlDocument() {
     return sbmlDocument;
   }
-  
+
+
   /**
    * @return the associatedFilepath
    */
   public String getAssociatedFilepath() {
     return associatedFilepath;
   }
-  
+
+
   public String getAssociatedFilename() {
-	return associatedFilename;
+    return associatedFilename;
   }
+
+
   /**
-   * @param associatedFilepath the associatedFilepath to set
+   * @param associatedFilepath
+   *        the associatedFilepath to set
    */
   public void setAssociatedFilepath(String associatedFilepath) {
     this.associatedFilepath = associatedFilepath;
     this.associatedFilename = new File(associatedFilepath).getName();
   }
-  
+
+
   /**
    * Check if filepath is set
+   * 
    * @return
    */
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
   }
-
 }

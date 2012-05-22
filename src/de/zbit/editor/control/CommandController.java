@@ -31,7 +31,9 @@ import de.zbit.editor.gui.SBMLWritingTask;
  * @version $Rev$
  */
 public class CommandController implements PropertyChangeListener {
+
   private SBMLView view;
+
 
   /**
    * @param editorInstance
@@ -39,7 +41,8 @@ public class CommandController implements PropertyChangeListener {
   public CommandController(SBMLView editorInstance) {
     this.view = editorInstance;
   }
-  
+
+
   /**
    * @return the editorInstance
    */
@@ -47,54 +50,58 @@ public class CommandController implements PropertyChangeListener {
     return view;
   }
 
+
   public void fileNew(String name) {
-    SBMLDocument sbmlDocument = new SBMLDocument(SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV() );
+    SBMLDocument sbmlDocument = new SBMLDocument(
+      SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+      SBMLView.DEFAULT_LEVEL_VERSION.getV());
     sbmlDocument.createModel(name);
     OpenedDocument doc = new OpenedDocument(sbmlDocument);
     view.addDocument(doc);
   }
-    
-  public void fileSave() {
-	  OpenedDocument od = this.view.getSelectedDoc();
-	  if(od.hasAssociatedFilepath()){
-		try {
-			SBMLWritingTask task = new SBMLWritingTask(new File(od.getAssociatedFilepath()), od.getSbmlDocument());
-			task.addPropertyChangeListener(this);
-			task.execute();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	  } else {
-		  view.fileSaveAs();
-	  }
-  }
-  
-  public void fileSaveAs(File file) {
-	  OpenedDocument od = this.view.getSelectedDoc();
-	  od.setAssociatedFilepath(file.getAbsolutePath());
-	  view.refreshTitle();
-	  try {
-			SBMLWritingTask task = new SBMLWritingTask(new File(od.getAssociatedFilepath()), od.getSbmlDocument());
-			task.addPropertyChangeListener(this);
-			task.execute();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-  }
-    
 
-public void propertyChange(PropertyChangeEvent evt) {
-	// TODO Auto-generated method stub
-	if (evt.getPropertyName().equals("doneopening")){
-		//TODO add path
-		OpenedDocument doc = (OpenedDocument) evt.getNewValue();// new OpenedDocument((SBMLDocument) evt.getNewValue(), "");
-        view.addDocument(doc);
-	}
-	if (evt.getPropertyName().equals("donesaveing")){
-		System.out.println("Speichern fertig...");
-	}
-}
-  
+
+  public void fileSave() {
+    OpenedDocument od = this.view.getSelectedDoc();
+    if (od.hasAssociatedFilepath()) {
+      try {
+        SBMLWritingTask task = new SBMLWritingTask(new File(
+          od.getAssociatedFilepath()), od.getSbmlDocument());
+        task.addPropertyChangeListener(this);
+        task.execute();
+      } catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    } else {
+      view.fileSaveAs();
+    }
+  }
+
+
+  public void fileSaveAs(File file) {
+    OpenedDocument od = this.view.getSelectedDoc();
+    od.setAssociatedFilepath(file.getAbsolutePath());
+    view.refreshTitle();
+    try {
+      SBMLWritingTask task = new SBMLWritingTask(new File(
+        od.getAssociatedFilepath()), od.getSbmlDocument());
+      task.addPropertyChangeListener(this);
+      task.execute();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+
+  public void propertyChange(PropertyChangeEvent evt) {
+    if (evt.getPropertyName().equals("doneopening")) {
+      OpenedDocument doc = (OpenedDocument) evt.getNewValue();
+      view.addDocument(doc);
+    }
+    if (evt.getPropertyName().equals("donesaveing")) {
+      System.out.println("Speichern fertig...");
+    }
+  }
 }

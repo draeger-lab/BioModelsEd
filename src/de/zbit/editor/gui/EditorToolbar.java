@@ -31,29 +31,33 @@ public class EditorToolbar extends JToolBar {
 
   private static final long serialVersionUID = 4238837776010510727L;
 
+
   /**
-   * 
    * @param commandController
    */
   public EditorToolbar(SBMLEditor parent) {
-	  // TODO: Create a very simple icon for each button, use Tooltips, remove the String Label.
-    GUIFactory.addButton(this, "Unspecified",EventHandler.create(ActionListener.class, parent, "fileNew"));
-    GUIFactory.addButton(this, "Simple Chemical");
-    GUIFactory.addButton(this, "Macromolecule");
-    GUIFactory.addButton(this, "Sink");
-    GUIFactory.addButton(this, "Reaction");
-    GUIFactory.addButton(this, "Catalysis");
-    GUIFactory.addButton(this, "Inhibition");
-
-//    String[] layoutArray = { "A", "B", "C" };
-//    JComboBox layoutComboBox = new JComboBox(layoutArray);
-//    layoutComboBox.setSelectedIndex(0);
-//    layoutComboBox.addActionListener(toolbarListener);
-//    add(layoutComboBox);
-    
-    GUIFactory.addButton(this, "open");
-    GUIFactory.addButton(this, "open in new tab");
+    // TODO: Create a very simple icon for each button, use Tooltips, remove the
+    // String Label.
+    GUIFactory.addButton(this, Resources.getString("UNSPECIFIED"),
+      EventHandler.create(ActionListener.class, parent, "addUnspecified"));
+    GUIFactory.addButton(this, Resources.getString("SIMPLE_CHEMICAL"),
+      EventHandler.create(ActionListener.class, parent, "addSimpleChemical"));
+    GUIFactory.addButton(this, Resources.getString("MACROMOLECULE"),
+      EventHandler.create(ActionListener.class, parent, "addMacromolecule"));
+    GUIFactory.addButton(this, Resources.getString("SINK"),
+      EventHandler.create(ActionListener.class, parent, "addSink"));
+    GUIFactory.addButton(this, Resources.getString("REACTION"),
+      EventHandler.create(ActionListener.class, parent, "addReaction"));
+    GUIFactory.addButton(this, Resources.getString("CATALYSIS"),
+      EventHandler.create(ActionListener.class, parent, "addCatalysis"));
+    GUIFactory.addButton(this, Resources.getString("INHIBITION"),
+      EventHandler.create(ActionListener.class, parent, "addInhibition"));
+    // String[] layoutArray = { "A", "B", "C" };
+    // JComboBox layoutComboBox = new JComboBox(layoutArray);
+    // layoutComboBox.setSelectedIndex(0);
+    // layoutComboBox.addActionListener(toolbarListener);
+    // add(layoutComboBox);
+    GUIFactory.addButton(this,  Resources.getString("MENU_TAB_OPEN"));
+    GUIFactory.addButton(this,  Resources.getString("MENU_TAB_OPEN_NEW"));
   }
-
-
 }

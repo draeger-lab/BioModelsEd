@@ -1,6 +1,6 @@
 /*
- * $Id:  TabManager.java 14:14:01 jakob $
- * $URL: TabManager.java $
+ * $$Id${file_name} ${time} ${user}$$
+ * $$URL${file_name}$$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -21,6 +21,8 @@ import java.util.HashMap;
 
 import javax.swing.JTabbedPane;
 
+import y.view.Graph2DView;
+
 import de.zbit.editor.control.OpenedDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
@@ -28,15 +30,14 @@ import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
  * @author Jakob Matthes
  * @version $Rev$
  */
-//TODO: Set SVN properties
 public class TabManager extends JTabbedPane {
 
-  private static final long serialVersionUID = -905908829761611472L;
-  private SBMLEditor editorInstance;
+  private static final long         serialVersionUID = -905908829761611472L;
+  private SBMLEditor                editorInstance;
   // TODO: Do not declare variables of type ArrayList -> not flexible enough.
-  private ArrayList<OpenedDocument> tabMap = new ArrayList<OpenedDocument>();
-  private HashMap<String, Integer> openedFilenames = new HashMap<String, Integer>();
-  
+  private ArrayList<OpenedDocument> tabMap           = new ArrayList<OpenedDocument>();
+  private HashMap<String, Integer>  openedFilenames  = new HashMap<String, Integer>();
+
 
   /**
    * @param editorInstance
@@ -44,7 +45,8 @@ public class TabManager extends JTabbedPane {
   public TabManager(SBMLEditor editorInstance) {
     this.editorInstance = editorInstance;
   }
-  
+
+
   /**
    * @return the editorInstance
    */
@@ -52,18 +54,21 @@ public class TabManager extends JTabbedPane {
     return editorInstance;
   }
 
+
   /**
    * @param doc
    */
   public void closeTab(int index) {
-	removeTabAt(index);
-	tabMap.remove(index);
+    removeTabAt(index);
+    tabMap.remove(index);
   }
-  
-  public void closeAllTabs(){
-	  removeAll();
-	  tabMap.clear();
+
+
+  public void closeAllTabs() {
+    removeAll();
+    tabMap.clear();
   }
+
 
   /**
    * @param doc
@@ -72,52 +77,86 @@ public class TabManager extends JTabbedPane {
     tabMap.add(doc);
     String title;
     if (doc.hasAssociatedFilepath()) {
-    	title = doc.getAssociatedFilename();
+      title = doc.getAssociatedFilename();
     } else {
       title = Resources.getString("UNSAVED_FILE");
     }
-    if(openedFilenames.containsKey(title)){
-    	int count = openedFilenames.get(title);
-    	openedFilenames.put(title, ++count);
-    	title += " (" + (count-1) + ")";
+    if (openedFilenames.containsKey(title)) {
+      int count = openedFilenames.get(title);
+      openedFilenames.put(title, ++count);
+      title += " (" + (count - 1) + ")";
     } else {
-    	openedFilenames.put(title, 1);
+      openedFilenames.put(title, 1);
     }
-    TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(doc.getSbmlDocument(), false);
+    TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
+      doc.getSbmlDocument(), false);
+    SBMLEditMode editMode = new SBMLEditMode(panel.getConverter(), this);
+    Graph2DView view = panel.getGraph2DView();
+    view.addViewMode(editMode);
+    this.addPropertyChangeListener(editMode);
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
   }
 
+
   /**
    * Return the currently opened document.
+   * 
    * @return
    */
-  
   public OpenedDocument getCurrentDocument() {
-	  return tabMap.get(getSelectedIndex());
+    return tabMap.get(getSelectedIndex());
   }
+
 
   /**
    * Close the currently visible tab.
    */
   public void closeCurrentTab() {
-	  if(isAnySelected()){
-		  closeTab(getSelectedIndex());
-	  }
+    if (isAnySelected()) {
+      closeTab(getSelectedIndex());
+    }
   }
-    
-  public boolean isAnySelected(){
-	  return getSelectedIndex()!=-1;
+
+
+  public boolean isAnySelected() {
+    return getSelectedIndex() != -1;
   }
-  
+
+
   public boolean hasAssociatedFilepath() {
-	  return getCurrentDocument().hasAssociatedFilepath();
+    return getCurrentDocument().hasAssociatedFilepath();
   }
-  
-  public void refreshTitle(){
-	  String title = tabMap.get(getSelectedIndex()).getAssociatedFilename();
-	  ((TabComponent) getTabComponentAt(getSelectedIndex())).setTitle(title);
+
+
+  public void refreshTitle() {
+    String title = tabMap.get(getSelectedIndex()).getAssociatedFilename();
+    ((TabComponent) getTabComponentAt(getSelectedIndex())).setTitle(title);
   }
-  
+
+
+  public void addUnspecified() {
+    this.firePropertyChange("Unspecified", false, true);
+  }
+
+
+  public void addSimpleChemical() {
+    this.firePropertyChange("SimpleChemical", false, true);
+  }
+
+
+  public void addMacromolecule() {
+    this.firePropertyChange("Macromolecule", false, true);
+  }
+
+
+  public void addSink() {
+    this.firePropertyChange("Sink", false, true);
+  }
+
+
+  public void normalState() {
+    this.firePropertyChange("Normal", false, true);
+  }
 }

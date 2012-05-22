@@ -34,31 +34,37 @@ import de.zbit.editor.control.OpenedDocument;
  * @since 1.0
  * @version $Rev$
  */
-public class SBMLReadingTask extends SwingWorker<OpenedDocument, Void>{
-	private ProgressMonitorInputStream stream;
-	private File file;
-	
-	public SBMLReadingTask(File file, Component parent) throws FileNotFoundException{
-		//TODO localize
-		this.file = file;
-		this.stream = new ProgressMonitorInputStream(parent, "Reading", new FileInputStream(file));
-	}
-	
-	protected OpenedDocument doInBackground() throws Exception {
-		return new OpenedDocument(SBMLReader.read(stream), file.getAbsolutePath());
-	}
+public class SBMLReadingTask extends SwingWorker<OpenedDocument, Void> {
 
-	@Override
-	protected void done() {
-		try {
-			OpenedDocument doc = get();
-			firePropertyChange("doneopening", null, doc);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+  private ProgressMonitorInputStream stream;
+  private File                       file;
+
+
+  public SBMLReadingTask(File file, Component parent)
+    throws FileNotFoundException {
+    // TODO localize
+    this.file = file;
+    this.stream = new ProgressMonitorInputStream(parent, "Reading",
+      new FileInputStream(file));
+  }
+
+
+  protected OpenedDocument doInBackground() throws Exception {
+    return new OpenedDocument(SBMLReader.read(stream), file.getAbsolutePath());
+  }
+
+
+  @Override
+  protected void done() {
+    try {
+      OpenedDocument doc = get();
+      firePropertyChange("doneopening", null, doc);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (ExecutionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 }
