@@ -74,6 +74,9 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return tabManager;
   }
 
+  public CommandController getController(){
+    return this.commandController;
+  }
 
   /**
    * @return
@@ -215,21 +218,31 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   public void addUnspecified() {
-    this.getTabManager().addUnspecified();
+    //this.getTabManager().addUnspecified();
+    this.commandController.stateUnspecified();
   }
 
 
   public void addSimpleChemical() {
-    this.getTabManager().addSimpleChemical();
+    this.commandController.stateSimpleChemical();
   }
 
 
   public void addMacromolecule() {
-    this.getTabManager().addMacromolecule();
+    this.commandController.stateMacromolecule();
   }
 
 
   public void addSink() {
-    this.getTabManager().addSink();
+    this.commandController.stateSink();
+  }
+  
+  public String nameDialogue(int counter) {
+    return JOptionPane.showInputDialog("Enter name:", "s" + counter);
+  }
+  
+  public void refresh() {
+    //TODO How to refresh the view, using the changed model?
+    this.tabManager.refresh();
   }
 }

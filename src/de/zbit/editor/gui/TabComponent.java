@@ -1,6 +1,6 @@
 /*
- * $$Id:  ${file_name} ${time} ${user}$$
- * $$URL: ${file_name}$$
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -23,7 +23,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.EventHandler;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

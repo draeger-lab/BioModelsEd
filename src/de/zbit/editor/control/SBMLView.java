@@ -55,4 +55,10 @@ public interface SBMLView {
 
 
   public void refreshTitle();
+  
+  
+  public String nameDialogue(int counter);
+  
+  
+  public void refresh();
 }

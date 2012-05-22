@@ -16,18 +16,10 @@
  */
 package de.zbit.editor.gui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.JOptionPane;
-
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBO;
 
-import y.base.GraphEvent;
-import y.base.Node;
 import y.view.EditMode;
-import y.view.Graph2D;
+import de.zbit.editor.control.CommandController;
 import de.zbit.graph.io.SB_2GraphML;
 
 /**
@@ -35,11 +27,11 @@ import de.zbit.graph.io.SB_2GraphML;
  * @since 1.0
  * @version $Rev$
  */
-public class SBMLEditMode extends EditMode implements PropertyChangeListener {
+public class SBMLEditMode extends EditMode  {
 
   private int                       counter = 0;
   private SB_2GraphML<SBMLDocument> converter;
-  private states                    state   = states.normal;
+ /* private states                    state   = states.normal;
   private TabManager                tabMan;
 
   private enum states {
@@ -48,21 +40,21 @@ public class SBMLEditMode extends EditMode implements PropertyChangeListener {
     simpleChemical,
     macromolecule,
     sink,
-  }
+  } */
 
 
-  public SBMLEditMode(SB_2GraphML<SBMLDocument> converter, TabManager tabMan) {
+  public SBMLEditMode(SB_2GraphML<SBMLDocument> converter, CommandController controller) {
     super();
     this.converter = converter;
     this.allowNodeCreation(true);
     this.allowEdgeCreation(true);
-    this.tabMan = tabMan;
+    this.addPropertyChangeListener(controller);
   }
 
 
   @Override
   public void mousePressedLeft(double x, double y) {
-    if (this.state != states.normal) {
+    /*if (this.state != states.normal) {
       String name = JOptionPane.showInputDialog("Enter name:", "s" + ++counter);
       if ((name != null) && (name.length() > 0)
         && !name.equalsIgnoreCase("undefined")) {
@@ -71,11 +63,12 @@ public class SBMLEditMode extends EditMode implements PropertyChangeListener {
         graph.updateViews();
         this.tabMan.normalState();
       }
-    }
+    }*/
+    firePropertyChange("EditModeMPLeft", x, y);
   }
 
 
-  private void createNode(double x, double y, String name) {
+  /*private void createNode(double x, double y, String name) {
     Integer current = null;
     if (this.state == states.unspecified) {
       current = SBO.getUnknownMolecule();
@@ -88,10 +81,10 @@ public class SBMLEditMode extends EditMode implements PropertyChangeListener {
     }
     // TODO Apply changes to model
     Node n = converter.createNode("s" + counter, name, current, x, y);
-  }
+  }*/
 
 
-  @Override
+ /* @Override
   public void propertyChange(PropertyChangeEvent event) {
     if (event.getPropertyName().equals("Unspecified")) {
       this.state = states.unspecified;
@@ -104,5 +97,5 @@ public class SBMLEditMode extends EditMode implements PropertyChangeListener {
     } else if (event.getPropertyName().equals("Normal")) {
       this.state = states.normal;
     }
-  }
+  }*/
 }

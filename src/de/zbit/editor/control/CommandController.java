@@ -21,7 +21,10 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBO;
+import org.sbml.jsbml.Species;
 
 import de.zbit.editor.gui.SBMLWritingTask;
 
@@ -33,13 +36,23 @@ import de.zbit.editor.gui.SBMLWritingTask;
 public class CommandController implements PropertyChangeListener {
 
   private SBMLView view;
+  private int fileCounter;
+  private states   state;
 
+  private enum states {
+    normal,
+    unspecified,
+    simpleChemical,
+    macromolecule,
+    sink,
+  }
 
   /**
    * @param editorInstance
    */
   public CommandController(SBMLView editorInstance) {
     this.view = editorInstance;
+    this.state = states.normal;
   }
 
 
@@ -103,5 +116,61 @@ public class CommandController implements PropertyChangeListener {
     if (evt.getPropertyName().equals("donesaveing")) {
       System.out.println("Speichern fertig...");
     }
+    if (evt.getPropertyName().equals("EditModeMPLeft")) {
+      if (this.state != states.normal) {
+        ++this.fileCounter;
+        String name = this.getEditorInstance().nameDialogue(this.fileCounter);
+        if ((name != null) && (name.length() > 0)
+            && !name.equalsIgnoreCase("undefined")) {
+            Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
+            Species s = model.createSpecies("id" + this.fileCounter);
+            s.setName(name);
+            this.chooseSpecies(s);
+            //TODO How to add new species to model and set coordinates?
+            model.addSpecies(s);
+            //TODO How to refresh the view, using the changed model?
+            this.view.refresh();
+            this.state = states.normal;
+          }
+      }
+    }
+  }
+  
+  private void chooseSpecies(Species s) {
+    Integer current = null;
+    if (this.state == states.unspecified) {
+      current = SBO.getUnknownMolecule();
+    } else if (this.state == states.simpleChemical) {
+      current = SBO.getSimpleMolecule();
+    } else if (this.state == states.macromolecule) {
+      current = SBO.getMacromolecule();
+    } else if (this.state == states.sink) {
+      current = SBO.getEmptySet();
+    }
+    s.setSBOTerm(current);
+  }
+  
+  public void stateUnspecified() {
+    this.state = states.unspecified;
+  }
+
+
+  public void stateSimpleChemical() {
+    this.state = states.simpleChemical;
+  }
+
+
+  public void stateMacromolecule() {
+    this.state = states.macromolecule;
+  }
+
+
+  public void stateSink() {
+    this.state = states.sink;
+  }
+
+
+  public void stateNormal() {
+    this.state = state.normal;
   }
 }

@@ -1,6 +1,6 @@
 /*
- * $$Id${file_name} ${time} ${user}$$
- * $$URL${file_name}$$
+ * $Id: TabManager.java 31 2012-05-22 12:10:55Z se-ss-12.netz$
+ * $URL: https://cis.informatik.uni-tuebingen.de/svn/R4f8845abdec88/trunk/src/de/zbit/editor/gui/TabManager.java$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JTabbedPane;
+
+import org.sbml.jsbml.SBMLDocument;
 
 import y.view.Graph2DView;
 
@@ -90,10 +92,10 @@ public class TabManager extends JTabbedPane {
     }
     TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
       doc.getSbmlDocument(), false);
-    SBMLEditMode editMode = new SBMLEditMode(panel.getConverter(), this);
+    SBMLEditMode editMode = new SBMLEditMode(panel.getConverter(), this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
-    this.addPropertyChangeListener(editMode);
+    //this.addPropertyChangeListener(editMode);
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
@@ -136,7 +138,7 @@ public class TabManager extends JTabbedPane {
   }
 
 
-  public void addUnspecified() {
+ /* public void addUnspecified() {
     this.firePropertyChange("Unspecified", false, true);
   }
 
@@ -158,5 +160,15 @@ public class TabManager extends JTabbedPane {
 
   public void normalState() {
     this.firePropertyChange("Normal", false, true);
+  }
+  */
+  
+  public void refresh() {
+    //TODO How to refresh the view, using the changed model?
+    TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.getSelectedComponent();
+    SBMLDocument doc = this.getCurrentDocument().getSbmlDocument();
+    //SBMLEditMode view = (SBMLEditMode) panel.getGraph2DView().getCurrentView();
+    //panel.update(panel.getConverter().createGraph(doc));
+    //panel.getConverter().createNode(id, label, sboTerm, x, y);
   }
 }
