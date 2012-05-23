@@ -1,10 +1,10 @@
 /*
- * $$Id:  ${file_name} ${time} ${user}$$
- * $$URL: ${file_name}$$
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
- * Copyright (C) ${year} by the University of Tuebingen, Germany.
+ * Copyright (C) 2012 by the University of Tuebingen, Germany.
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as

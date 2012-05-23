@@ -8,6 +8,12 @@ import y.view.CreateEdgeMode;
 import y.view.EdgeRealizer;
 import y.view.Graph2D;
 
+/**
+ * 
+ * @author Andreas Dr&aum;ger
+ * @since 1.0
+ * @version $Rev$
+ */
 public class CreateReactionEdgeMode extends CreateEdgeMode {
 	
 	/* (non-Javadoc)
