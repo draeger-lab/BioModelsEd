@@ -16,16 +16,12 @@
  */
 package de.zbit.editor.gui;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JTabbedPane;
 
-import org.sbml.jsbml.SBMLDocument;
-
 import y.view.Graph2DView;
-
 import de.zbit.editor.control.OpenedDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 import de.zbit.graph.io.SBML2GraphML;

@@ -58,6 +58,7 @@ public class SBMLReadingTask extends SwingWorker<OpenedDocument, Void> {
   protected void done() {
     try {
       OpenedDocument doc = get();
+      // TODO: Create an interface with public static final entries for these property keys.
       firePropertyChange("doneopening", null, doc);
     } catch (InterruptedException e) {
       // TODO Auto-generated catch block

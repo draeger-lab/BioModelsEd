@@ -27,6 +27,8 @@ import org.sbml.jsbml.Species;
  * @version $Rev$
  */
 public class OpenedDocument {
+	
+	// TODO: Memorize if something has been changed
 
   /**
    * SBML Document of the openedDocument

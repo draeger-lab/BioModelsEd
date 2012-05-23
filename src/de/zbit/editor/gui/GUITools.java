@@ -26,6 +26,7 @@ import java.awt.event.KeyEvent;
  * @since 1.0
  * @version $Rev$
  */
+// TODO: Correct header, set SVN properties.
 public class GUITools {
 
   /**
@@ -46,4 +47,5 @@ public class GUITools {
       return KeyEvent.CTRL_MASK;
     }
   }
+
 }

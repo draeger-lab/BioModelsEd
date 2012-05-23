@@ -17,6 +17,7 @@
 package de.zbit.editor.gui;
 
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,6 +35,7 @@ import javax.swing.JPopupMenu;
  * @since 1.0
  * @version $Rev$
  */
+//TODO: Set SVN properties.
 public class TabComponent extends JPanel {
 
   private static final long serialVersionUID = -8179219783406520882L;
@@ -42,16 +44,19 @@ public class TabComponent extends JPanel {
 
 
   public TabComponent(TabManager tabManager) {
+	super(new BorderLayout());
     this.tabManager = tabManager;
     setOpaque(false);
     String title = tabManager.getTitleAt(tabManager.getSelectedIndex());
     this.label = new JLabel(title);
-    add(this.label);
+    add(this.label, BorderLayout.CENTER);
     JButton button = new JButton("x");
     button.addActionListener(EventHandler.create(ActionListener.class, this,
       "close"));
-    button.setSize(10, 10);
-    add(button);
+//    button.setSize(10, 10);
+//    button.setOpaque(false);
+    button.setBorderPainted(false);
+    add(button, BorderLayout.EAST);
     MouseListener tabListener = new TabListener(
       GUIFactory.createTabPopupMenu(this));
     addMouseListener(tabListener);

@@ -31,6 +31,7 @@ import org.sbml.jsbml.SBMLWriter;
  * @since 1.0
  * @version $Rev$
  */
+// TODO: Correct header, set SVN properties.
 public class SBMLWritingTask extends SwingWorker<Void, Void> {
 
   private OutputStream stream;

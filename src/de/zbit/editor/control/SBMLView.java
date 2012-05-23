@@ -18,8 +18,6 @@ package de.zbit.editor.control;
 
 import org.sbml.jsbml.util.ValuePair;
 
-import de.zbit.editor.gui.SBMLEditMode;
-
 
 /**
  * @author Eugen Netz
@@ -30,7 +28,7 @@ public interface SBMLView {
 
   public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(
                                                                           3, 1);
-
+//TODO: let all actions return a boolean value (success/failure)
 
   public void fileNew();
 
@@ -46,7 +44,7 @@ public interface SBMLView {
 
   public void fileSaveAs();
 
-
+// TODO: modifier public
   void fileQuit();
 
 

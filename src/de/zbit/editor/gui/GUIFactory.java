@@ -120,15 +120,16 @@ public class GUIFactory {
   public static JFileChooser createFileChooser() {
     JFileChooser fc = new JFileChooser();
     FileFilter filter = createFilterXML();
-    fc.addChoosableFileFilter(filter);
-    fc.setFileFilter(filter);
     fc.setAcceptAllFileFilterUsed(false);
+    fc.setFileFilter(filter);
+    // TODO: create also a file filter for extension *.sbml.
+//  fc.addChoosableFileFilter(filter);
     return fc;
   }
 
 
   public static FileNameExtensionFilter createFilterXML() {
-    return new FileNameExtensionFilter("XML Datei", "xml", "XML");
+    return new FileNameExtensionFilter("XML-Datei", "xml", "XML");
   }
 
 

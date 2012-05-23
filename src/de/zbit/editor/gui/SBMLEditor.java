@@ -38,6 +38,8 @@ import de.zbit.editor.control.SBMLView;
  * @version $Rev$
  */
 public class SBMLEditor extends WindowAdapter implements SBMLView {
+	
+	// TODO: Do not annoy the user in any case with the question if he/she really wants to close the program, only if at least one model is opened with unsaved changes.
 
   public static final String PROGRAM_NAME = "SBML Editor";
   private JFrame             frame;
@@ -105,6 +107,12 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     if (GUITools.onMac()) {
       System.setProperty("com.apple.mrj.application.apple.menu.about.name",
         PROGRAM_NAME);
+      System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+      System.setProperty("apple.laf.useScreenMenuBar", "true");
+      System.setProperty("com.apple.macos.smallTabs", "true");
+      System.setProperty("com.apple.macos.useScreenMenuBar", "true");
+      System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
+      System.setProperty("com.apple.mrj.application.live-resize", "true");
     }
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
 

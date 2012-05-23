@@ -32,7 +32,7 @@ public class Resources {
 	
 	// TODO: Avoid loading and initializing ResourceBundles multiple times. This will consume too many resources.
 	
-	private final static ResourceBundle bundleDefault = ResourceBundle.getBundle("de.zbit.editor.gui.SBMLEditor",Locale.getDefault());
+	private final static ResourceBundle bundleDefault = ResourceBundle.getBundle("de.zbit.editor.gui.SBMLEditor", Locale.getDefault());
 	
 	//Get localized String in default language
 	public static String getString(String key){

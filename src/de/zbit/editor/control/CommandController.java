@@ -21,12 +21,13 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.test.gui.JSBMLvisualizer;
 
-import de.zbit.editor.gui.SBMLEditMode;
 import de.zbit.editor.gui.SBMLWritingTask;
 
 
@@ -40,6 +41,7 @@ public class CommandController implements PropertyChangeListener {
   private int fileCounter;
   private states   state;
 
+  // TODO: Use upper-case first letter (Java convention)
   private enum states {
     normal,
     unspecified,
@@ -98,6 +100,8 @@ public class CommandController implements PropertyChangeListener {
     od.setAssociatedFilepath(file.getAbsolutePath());
     view.refreshTitle();
     try {
+    	// TODO: Just for tests:
+    	new JSBMLvisualizer(od.getSbmlDocument());
       SBMLWritingTask task = new SBMLWritingTask(new File(
         od.getAssociatedFilepath()), od.getSbmlDocument());
       task.addPropertyChangeListener(this);
@@ -138,6 +142,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   private Integer chooseSpecies() {
+	  // TODO: better use switch statement here
     Integer current = null;
     if (this.state == states.unspecified) {
       current = SBO.getUnknownMolecule();
