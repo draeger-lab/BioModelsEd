@@ -68,10 +68,7 @@ public class SBMLEditMode extends EditMode  {
         this.tabMan.normalState();
       }
     }*/	  
-    //firePropertyChange("EditModeMPLeft", x, y);
-    this.controller.addNode(x,y);
-    Graph2D graph = getGraph2D();
-    graph.updateViews();
+    firePropertyChange("EditModeMPLeft", x, y);
   }
 
   /*private void createNode(double x, double y, String name) {
