@@ -19,6 +19,7 @@ package de.zbit.editor.gui;
 import org.sbml.jsbml.SBMLDocument;
 
 import y.view.EditMode;
+import y.view.Graph2D;
 import de.zbit.editor.control.CommandController;
 import de.zbit.graph.io.SB_2GraphML;
 
@@ -31,6 +32,7 @@ public class SBMLEditMode extends EditMode  {
 
   private int                       counter = 0;
   private SB_2GraphML<SBMLDocument> converter;
+  private CommandController controller;
  /* private states                    state   = states.normal;
   private TabManager                tabMan;
 
@@ -48,10 +50,12 @@ public class SBMLEditMode extends EditMode  {
     this.converter = converter;
     this.allowNodeCreation(true);
     this.allowEdgeCreation(true);
+    this.controller = controller;
     this.addPropertyChangeListener(controller);
   }
 
-
+   
+  
   @Override
   public void mousePressedLeft(double x, double y) {
     /*if (this.state != states.normal) {
@@ -63,10 +67,12 @@ public class SBMLEditMode extends EditMode  {
         graph.updateViews();
         this.tabMan.normalState();
       }
-    }*/
-    firePropertyChange("EditModeMPLeft", x, y);
+    }*/	  
+    //firePropertyChange("EditModeMPLeft", x, y);
+    this.controller.addNode(x,y);
+    Graph2D graph = getGraph2D();
+    graph.updateViews();
   }
-
 
   /*private void createNode(double x, double y, String name) {
     Integer current = null;

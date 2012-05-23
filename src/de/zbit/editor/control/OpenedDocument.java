@@ -17,7 +17,10 @@
 package de.zbit.editor.control;
 
 import java.io.File;
+
+import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.Species;
 
 /**
  * @author Jakob Matthes
@@ -87,4 +90,19 @@ public class OpenedDocument {
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
   }
+
+
+/**
+ * @param id
+ * @param name
+ * @param x
+ * @param y
+ */
+public void addNode(String id, String name, int term, double x, double y) {
+	Model model = sbmlDocument.getModel();
+	Species s = model.createSpecies(id);
+	s.setName(name);
+	s.setSBOTerm(term);
+	//model.addSpecies(s);
+}
 }

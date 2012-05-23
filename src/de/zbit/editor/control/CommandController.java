@@ -26,6 +26,7 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 
+import de.zbit.editor.gui.SBMLEditMode;
 import de.zbit.editor.gui.SBMLWritingTask;
 
 
@@ -125,18 +126,18 @@ public class CommandController implements PropertyChangeListener {
             Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
             Species s = model.createSpecies("id" + this.fileCounter);
             s.setName(name);
-            this.chooseSpecies(s);
+            //this.chooseSpecies(s);
             //TODO How to add new species to model and set coordinates?
             model.addSpecies(s);
             //TODO How to refresh the view, using the changed model?
-            this.view.refresh();
+            //this.view.refresh();
             this.state = states.normal;
           }
       }
     }
   }
   
-  private void chooseSpecies(Species s) {
+  private Integer chooseSpecies() {
     Integer current = null;
     if (this.state == states.unspecified) {
       current = SBO.getUnknownMolecule();
@@ -147,7 +148,7 @@ public class CommandController implements PropertyChangeListener {
     } else if (this.state == states.sink) {
       current = SBO.getEmptySet();
     }
-    s.setSBOTerm(current);
+    return current;
   }
   
   public void stateUnspecified() {
@@ -172,5 +173,28 @@ public class CommandController implements PropertyChangeListener {
 
   public void stateNormal() {
     this.state = state.normal;
+  }
+
+  public void addNode(double x, double y) {
+	  if (this.state != states.normal) {
+	        ++this.fileCounter;
+	        String name = this.getEditorInstance().nameDialogue(this.fileCounter);
+	        if ((name != null) && (name.length() > 0)
+	            && !name.equalsIgnoreCase("undefined")) {
+	            OpenedDocument od = this.view.getSelectedDoc();
+	            String id = "id" + this.fileCounter;
+	            Integer sboTerm = this.chooseSpecies();
+	            od.addNode(id,name, sboTerm, x, y);
+	            
+	           // s.setName(name);
+	            //this.chooseSpecies(s);
+	            //TODO How to add new species to model and set coordinates?
+	            //model.addSpecies(s);
+	            //TODO How to refresh the view, using the changed model?
+	           this.view.refresh(id, name, sboTerm, x, y);
+	           
+	            this.state = states.normal;
+	          }
+	      }
   }
 }

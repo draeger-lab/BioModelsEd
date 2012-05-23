@@ -16,6 +16,7 @@
  */
 package de.zbit.editor.gui;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,6 +28,7 @@ import y.view.Graph2DView;
 
 import de.zbit.editor.control.OpenedDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
+import de.zbit.graph.io.SBML2GraphML;
 
 /**
  * @author Jakob Matthes
@@ -136,39 +138,11 @@ public class TabManager extends JTabbedPane {
     String title = tabMap.get(getSelectedIndex()).getAssociatedFilename();
     ((TabComponent) getTabComponentAt(getSelectedIndex())).setTitle(title);
   }
-
-
- /* public void addUnspecified() {
-    this.firePropertyChange("Unspecified", false, true);
-  }
-
-
-  public void addSimpleChemical() {
-    this.firePropertyChange("SimpleChemical", false, true);
-  }
-
-
-  public void addMacromolecule() {
-    this.firePropertyChange("Macromolecule", false, true);
-  }
-
-
-  public void addSink() {
-    this.firePropertyChange("Sink", false, true);
-  }
-
-
-  public void normalState() {
-    this.firePropertyChange("Normal", false, true);
-  }
-  */
   
-  public void refresh() {
-    //TODO How to refresh the view, using the changed model?
-    TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.getSelectedComponent();
-    SBMLDocument doc = this.getCurrentDocument().getSbmlDocument();
-    //SBMLEditMode view = (SBMLEditMode) panel.getGraph2DView().getCurrentView();
-    //panel.update(panel.getConverter().createGraph(doc));
-    //panel.getConverter().createNode(id, label, sboTerm, x, y);
+  public void refresh(String id, String name, int sboTerm, double x, double y) {	  
+    
+    TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) getComponentAt(getSelectedIndex());
+    SBML2GraphML converter = panel.getConverter();
+    converter.createNode(id, name, sboTerm, x, y);   
   }
 }

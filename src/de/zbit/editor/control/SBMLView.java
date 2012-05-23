@@ -18,6 +18,8 @@ package de.zbit.editor.control;
 
 import org.sbml.jsbml.util.ValuePair;
 
+import de.zbit.editor.gui.SBMLEditMode;
+
 
 /**
  * @author Eugen Netz
@@ -60,5 +62,5 @@ public interface SBMLView {
   public String nameDialogue(int counter);
   
   
-  public void refresh();
+  public void refresh(String id, String name, int sboTerm, double x, double y);
 }

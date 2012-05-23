@@ -240,9 +240,9 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   public String nameDialogue(int counter) {
     return JOptionPane.showInputDialog("Enter name:", "s" + counter);
   }
-  
-  public void refresh() {
+  @Override
+  public void refresh(String id, String name, int sboTerm, double x, double y) {
     //TODO How to refresh the view, using the changed model?
-    this.tabManager.refresh();
+    this.tabManager.refresh(id, name, sboTerm, x, y);
   }
 }
