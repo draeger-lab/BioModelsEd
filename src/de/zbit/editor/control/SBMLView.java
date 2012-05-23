@@ -18,6 +18,8 @@ package de.zbit.editor.control;
 
 import org.sbml.jsbml.util.ValuePair;
 
+import de.zbit.editor.gui.TabManager;
+
 
 /**
  * @author Eugen Netz
@@ -61,4 +63,7 @@ public interface SBMLView {
   
   
   public void refresh(String id, String name, int sboTerm, double x, double y);
+  
+  
+  public TabManager getTabManager();
 }
