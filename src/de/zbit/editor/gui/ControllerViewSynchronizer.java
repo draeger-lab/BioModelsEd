@@ -21,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.tree.TreeNode;
 
 import org.sbml.jsbml.util.TreeNodeChangeListener;
+import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 
 /**
@@ -38,15 +39,13 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     // TODO Auto-generated method stub
   }
 
-
   /* (non-Javadoc)
-   * @see org.sbml.jsbml.util.TreeNodeChangeListener#nodeRemoved(javax.swing.tree.TreeNode)
+   * @see org.sbml.jsbml.util.TreeNodeChangeListener#nodeRemoved(org.sbml.jsbml.util.TreeNodeRemovedEvent)
    */
   @Override
-  public void nodeRemoved(TreeNode node) {
+  public void nodeRemoved(TreeNodeRemovedEvent node) {
     // TODO Auto-generated method stub
   }
-
 
   /* (non-Javadoc)
    * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
@@ -55,4 +54,5 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   public void propertyChange(PropertyChangeEvent arg0) {
     // TODO Auto-generated method stub
   }
+
 }
