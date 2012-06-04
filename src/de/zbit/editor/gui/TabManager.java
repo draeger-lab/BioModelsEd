@@ -93,7 +93,7 @@ public class TabManager extends JTabbedPane {
     SBMLEditMode editMode = new SBMLEditMode(panel.getConverter(), this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
-    //this.addPropertyChangeListener(editMode);
+    doc.getSbmlDocument().addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));

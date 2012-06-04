@@ -20,8 +20,10 @@ import java.beans.PropertyChangeEvent;
 
 import javax.swing.tree.TreeNode;
 
+import org.sbml.jsbml.Species;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
-import org.sbml.jsbml.util.TreeNodeRemovedEvent;
+
+import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 
 /**
@@ -31,28 +33,44 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
  */
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
+  private TranslatorSBMLgraphPanel panel;
+  
+  public ControllerViewSynchronizer(TranslatorSBMLgraphPanel panel){
+    this.panel = panel;
+  }
+  
   /* (non-Javadoc)
    * @see org.sbml.jsbml.util.TreeNodeChangeListener#nodeAdded(javax.swing.tree.TreeNode)
    */
   @Override
   public void nodeAdded(TreeNode node) {
-    // TODO Auto-generated method stub
+    // TODO Other cases
+    if (node instanceof Species){
+      Species s = (Species) node;
+      panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
+    /*  
+      ExtendedLayoutModel layout = (ExtendedLayoutModel) s.getExtension("http://www.sbml.org/sbml/level3/version1/layout/version1");
+      ExtendedRenderModel render = (ExtendedRenderModel) s.getExtension("http://www.sbml.org/sbml/level3/version1/render/version1");
+      panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm(), x, y, width, height)
+    */  
+    }  
   }
+  
 
-  /* (non-Javadoc)
-   * @see org.sbml.jsbml.util.TreeNodeChangeListener#nodeRemoved(org.sbml.jsbml.util.TreeNodeRemovedEvent)
-   */
   @Override
-  public void nodeRemoved(TreeNodeRemovedEvent node) {
-    // TODO Auto-generated method stub
+  public void nodeRemoved(TreeNode node) {
+   // TODO
+    
   }
 
   /* (non-Javadoc)
    * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
    */
   @Override
-  public void propertyChange(PropertyChangeEvent arg0) {
-    // TODO Auto-generated method stub
+  public void propertyChange(PropertyChangeEvent evt) {
+    // TODO
+    
   }
+
 
 }
