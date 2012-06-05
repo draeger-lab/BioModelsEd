@@ -246,9 +246,22 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     this.commandController.stateSink();
   }
   
+  public void addReaction() {
+    this.commandController.stateReaction();
+  }
+  
+  public void addCatalysis() {
+    this.commandController.stateCatalysis();
+  }
+  
+  public void addInhibition() {
+    this.commandController.stateInhibition();
+  }
+  
   public String nameDialogue(int counter) {
     return JOptionPane.showInputDialog("Enter name:", "s" + counter);
   }
+  
   @Override
   public void refresh(String id, String name, int sboTerm, double x, double y) {
     //TODO How to refresh the view, using the changed model?

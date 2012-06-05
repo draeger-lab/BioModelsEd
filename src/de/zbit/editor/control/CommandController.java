@@ -25,6 +25,7 @@ import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.gui.SBMLWritingTask;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
@@ -39,6 +40,7 @@ public class CommandController implements PropertyChangeListener {
   private SBMLView view;
   private int fileCounter;
   private states   state;
+  private ValuePair<Double, Double> pos;
 
   private enum states {
     normal,
@@ -46,6 +48,12 @@ public class CommandController implements PropertyChangeListener {
     simpleChemical,
     macromolecule,
     sink,
+    reaction,
+    catalysis,
+    inhibition,
+    mousePressedReaction,
+    mousePressedCatalysis,
+    mousePressedInhibition,
   }
 
   /**
@@ -117,31 +125,43 @@ public class CommandController implements PropertyChangeListener {
     if (evt.getPropertyName().equals("donesaveing")) {
       System.out.println("Speichern fertig...");
     }
-    if (evt.getPropertyName().equals("EditModeMPLeft")) {
+    if (evt.getPropertyName().equals("EditModeMouseClicked")) {
       if (this.state != states.normal) {
         ++this.fileCounter;
         String name = this.getEditorInstance().nameDialogue(this.fileCounter);
         if ((name != null) && (name.length() > 0)
           && !name.equalsIgnoreCase("undefined")) {
           Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
-          Species s = model.createSpecies("id" + this.fileCounter);
+          //Species s = model.createSpecies("id" + this.fileCounter);
+          Species s = new Species("id" + this.fileCounter);
           s.setName(name);
-          TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
-          this.chooseSpecies(s, (Double) evt.getOldValue(),
-            (Double) evt.getNewValue(), panel);
-          // TODO How to add new species to model and set coordinates?
-          //model.addSpecies(s);
-          // TODO How to refresh the view, using the changed model?
-          //this.view.refresh();
-          panel.getGraph2DView().getCurrentView().updateView();
-          this.state = states.normal;
+          s.setLevel(model.getLevel());
+          s.setVersion(model.getVersion());
+          //TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
+          s.setSBOTerm(this.chooseSpecies(s, (Double) evt.getOldValue(),
+            (Double) evt.getNewValue()));
+          model.addSpecies(s);
         }
       }
     }
+    /*if (evt.getPropertyName().equals("EditModeMPLeft")) {
+      if (this.state == states.reaction) {
+        this.state = states.mousePressedReaction;
+        this.pos.setL((Double) evt.getOldValue());
+        this.pos.setV((Double) evt.getNewValue());
+      }
+    }
+    if (evt.getPropertyName().equals("EditModeMRLeft")) {
+      if(this.state == states.mousePressedReaction) {
+        Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
+        this.fileCounter++;
+        model.createReaction("id" + this.fileCounter);
+        model.getReaction("id" + this.fileCounter).addReactant(specref);
+      }
+    }*/
   }
   
-  private void chooseSpecies(Species s, double x, double y,
-    TranslatorSBMLgraphPanel panel) {
+  private int chooseSpecies(Species s, double x, double y) {
     Integer current = null;
     if (this.state == states.unspecified) {
       current = SBO.getUnknownMolecule();
@@ -152,10 +172,8 @@ public class CommandController implements PropertyChangeListener {
     } else if (this.state == states.sink) {
       current = SBO.getEmptySet();
     }
-    s.setSBOTerm(current);
-    // TODO Not sure if right
-    panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm(), x,
-      y);
+    this.state = states.normal;
+    return current;
   }
   
   public void stateUnspecified() {
@@ -180,5 +198,17 @@ public class CommandController implements PropertyChangeListener {
 
   public void stateNormal() {
     this.state = state.normal;
+  }
+  
+  public void stateReaction() {
+    this.state = states.reaction;
+  }
+  
+  public void stateCatalysis() {
+    this.state = states.catalysis;
+  }
+  
+  public void stateInhibition() {
+    this.state = states.inhibition;
   }
 }

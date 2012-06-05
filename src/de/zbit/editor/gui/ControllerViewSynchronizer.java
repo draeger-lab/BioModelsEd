@@ -21,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.tree.TreeNode;
 
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.util.TreeNodeChangeEvent;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
@@ -44,10 +45,12 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void nodeAdded(TreeNode node) {
-    // TODO Other cases
+    //TODO
     if (node instanceof Species){
       Species s = (Species) node;
       panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
+      panel.getGraph2DView().updateView();
+      
     /*  
       ExtendedLayoutModel layout = (ExtendedLayoutModel) s.getExtension("http://www.sbml.org/sbml/level3/version1/layout/version1");
       ExtendedRenderModel render = (ExtendedRenderModel) s.getExtension("http://www.sbml.org/sbml/level3/version1/render/version1");
@@ -68,7 +71,9 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    // TODO
+    //TreeNodeChangeEvent event = (TreeNodeChangeEvent) evt;
+    //TODO Paint anew with new Doc?
+    //panel.getConverter().createGraph(panel.getDocument());
     
   }
 

@@ -17,9 +17,11 @@
 package de.zbit.editor.gui;
 
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.util.ValuePair;
 
 import y.view.EditMode;
 import y.view.Graph2D;
+import y.view.HitInfo;
 import de.zbit.editor.control.CommandController;
 import de.zbit.graph.io.SB_2GraphML;
 
@@ -33,16 +35,6 @@ public class SBMLEditMode extends EditMode  {
   private int                       counter = 0;
   private SB_2GraphML<SBMLDocument> converter;
   private CommandController controller;
- /* private states                    state   = states.normal;
-  private TabManager                tabMan;
-
-  private enum states {
-    normal,
-    unspecified,
-    simpleChemical,
-    macromolecule,
-    sink,
-  } */
 
 
   public SBMLEditMode(SB_2GraphML<SBMLDocument> converter, CommandController controller) {
@@ -58,47 +50,20 @@ public class SBMLEditMode extends EditMode  {
   
   @Override
   public void mousePressedLeft(double x, double y) {
-    /*if (this.state != states.normal) {
-      String name = JOptionPane.showInputDialog("Enter name:", "s" + ++counter);
-      if ((name != null) && (name.length() > 0)
-        && !name.equalsIgnoreCase("undefined")) {
-        Graph2D graph = getGraph2D();
-        createNode(x, y, name);
-        graph.updateViews();
-        this.tabMan.normalState();
-      }
-    }*/	  
+    //TODO set Source Node for edge
     firePropertyChange("EditModeMPLeft", x, y);
   }
-
-  /*private void createNode(double x, double y, String name) {
-    Integer current = null;
-    if (this.state == states.unspecified) {
-      current = SBO.getUnknownMolecule();
-    } else if (this.state == states.simpleChemical) {
-      current = SBO.getSimpleMolecule();
-    } else if (this.state == states.macromolecule) {
-      current = SBO.getMacromolecule();
-    } else if (this.state == states.sink) {
-      current = SBO.getEmptySet();
-    }
-    // TODO Apply changes to model
-    Node n = converter.createNode("s" + counter, name, current, x, y);
-  }*/
-
-
- /* @Override
-  public void propertyChange(PropertyChangeEvent event) {
-    if (event.getPropertyName().equals("Unspecified")) {
-      this.state = states.unspecified;
-    } else if (event.getPropertyName().equals("SimpleChemical")) {
-      this.state = states.simpleChemical;
-    } else if (event.getPropertyName().equals("Macromolecule")) {
-      this.state = states.macromolecule;
-    } else if (event.getPropertyName().equals("Sink")) {
-      this.state = states.sink;
-    } else if (event.getPropertyName().equals("Normal")) {
-      this.state = states.normal;
-    }
-  }*/
+  
+  @Override
+  public void mouseReleasedLeft(double x, double y) {
+    //TODO set Target Node for edge, create edge
+    firePropertyChange("EditModeMRLeft", x, y);
+  } 
+  
+  @Override
+  public void mouseClicked(double x, double y) {
+    // TODO Left/Right Unterscheidung?
+    firePropertyChange("EditModeMouseClicked", x, y);
+  }
+  
 }
