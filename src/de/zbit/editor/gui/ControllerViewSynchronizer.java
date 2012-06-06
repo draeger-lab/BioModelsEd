@@ -24,8 +24,8 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.LayoutConstant;
-import org.sbml.jsbml.util.TreeNodeChangeEvent;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
+import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
@@ -66,13 +66,6 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       
     }  
   }
-  
-
-  @Override
-  public void nodeRemoved(TreeNode node) {
-   // TODO
-    
-  }
 
   /* (non-Javadoc)
    * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
@@ -83,6 +76,12 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     //TODO Paint anew with new Doc?
     //panel.getConverter().createGraph(panel.getDocument());
     
+  }
+
+  @Override
+  public void nodeRemoved(TreeNodeRemovedEvent evt) {
+	  // TODO Auto-generated method stub
+
   }
 
 
