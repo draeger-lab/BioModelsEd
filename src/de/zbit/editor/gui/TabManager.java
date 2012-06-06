@@ -25,6 +25,7 @@ import y.view.Graph2DView;
 import de.zbit.editor.control.OpenedDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 import de.zbit.graph.io.SBML2GraphML;
+import de.zbit.util.objectwrapper.ValuePairUncomparable;
 
 /**
  * @author Jakob Matthes
