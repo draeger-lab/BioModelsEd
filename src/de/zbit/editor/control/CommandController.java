@@ -31,6 +31,7 @@ import org.sbml.jsbml.ext.layout.LayoutConstant;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.ValuePair;
 
+import de.zbit.editor.gui.ControllerViewSynchronizer;
 import de.zbit.editor.gui.SBMLWritingTask;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
@@ -44,7 +45,6 @@ public class CommandController implements PropertyChangeListener {
   private SBMLView view;
   private int fileCounter;
   private states   state;
-  private ValuePair<Double, Double> pos;
 
   private enum states {
     normal,
@@ -147,11 +147,15 @@ public class CommandController implements PropertyChangeListener {
           s.setSBOTerm(this.chooseSpecies(s));
           
           ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+          //TODO Will Id nicht registrieren
           Layout layout = extLayout.createLayout();
           SpeciesGlyph sGlyph = layout.createSpeciesGlyph(s.getId());
-          sGlyph.createBoundingBox(50, 50, 0, x, y, 0);
+          sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
+          layout.add(sGlyph);
           model.addExtension(LayoutConstant.namespaceURI, extLayout);
+          TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
 
+          s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
           model.addSpecies(s);
         }
       }

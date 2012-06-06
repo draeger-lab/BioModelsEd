@@ -48,7 +48,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void nodeAdded(TreeNode node) {
-    //TODO
+    //TODO Reagiert nicht, oder funktioniert nicht
     if (node instanceof Species){
       Species s = (Species) node;
       //panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
