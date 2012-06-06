@@ -25,6 +25,10 @@ import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.gui.SBMLWritingTask;
@@ -131,6 +135,8 @@ public class CommandController implements PropertyChangeListener {
         String name = this.getEditorInstance().nameDialogue(this.fileCounter);
         if ((name != null) && (name.length() > 0)
           && !name.equalsIgnoreCase("undefined")) {
+          Double x = (Double) evt.getOldValue();
+          Double y = (Double) evt.getNewValue();
           Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
           //Species s = model.createSpecies("id" + this.fileCounter);
           Species s = new Species("id" + this.fileCounter);
@@ -138,8 +144,14 @@ public class CommandController implements PropertyChangeListener {
           s.setLevel(model.getLevel());
           s.setVersion(model.getVersion());
           //TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
-          s.setSBOTerm(this.chooseSpecies(s, (Double) evt.getOldValue(),
-            (Double) evt.getNewValue()));
+          s.setSBOTerm(this.chooseSpecies(s));
+          
+          ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+          Layout layout = extLayout.createLayout();
+          SpeciesGlyph sGlyph = layout.createSpeciesGlyph(s.getId());
+          sGlyph.createBoundingBox(50, 50, 0, x, y, 0);
+          model.addExtension(LayoutConstant.namespaceURI, extLayout);
+
           model.addSpecies(s);
         }
       }
@@ -161,7 +173,7 @@ public class CommandController implements PropertyChangeListener {
     }*/
   }
   
-  private int chooseSpecies(Species s, double x, double y) {
+  private int chooseSpecies(Species s) {
     Integer current = null;
     if (this.state == states.unspecified) {
       current = SBO.getUnknownMolecule();

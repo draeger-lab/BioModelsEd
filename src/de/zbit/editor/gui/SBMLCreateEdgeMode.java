@@ -16,8 +16,10 @@
  */
 package de.zbit.editor.gui;
 
+import de.zbit.graph.sbgn.ReactionNodeRealizer;
 import y.base.Edge;
 import y.base.Node;
+import y.view.Arrow;
 import y.view.CreateEdgeMode;
 import y.view.EdgeRealizer;
 import y.view.Graph2D;
@@ -36,7 +38,20 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
   
   @Override
   public Edge createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer) {
-    firePropertyChange("EdgeCreated", start, target);
-    return graph.createEdge(start, target, realizer);
+    if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
+      Edge e = super.createEdge(graph, start, target, realizer);
+      return e;
+    }
+    
+    ReactionNodeRealizer nre = new ReactionNodeRealizer();
+    Node reactionNode = graph.createNode(nre);
+
+    Edge e1 = graph.createEdge(start, reactionNode);
+    Edge e2 = graph.createEdge(reactionNode, target);;
+
+    nre.setCenter((graph.getRealizer(start).getCenterX() + graph.getRealizer(target).getCenterX())/2d, (graph.getRealizer(start).getCenterY() + graph.getRealizer(target).getCenterY())/2d);
+    ((EdgeRealizer)graph.getRealizer(e2)).setArrow(Arrow.DELTA);
+
+    return e2;
   }
 }

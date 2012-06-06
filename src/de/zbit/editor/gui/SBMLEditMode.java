@@ -17,11 +17,8 @@
 package de.zbit.editor.gui;
 
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.util.ValuePair;
 
 import y.view.EditMode;
-import y.view.Graph2D;
-import y.view.HitInfo;
 import de.zbit.editor.control.CommandController;
 import de.zbit.graph.io.SB_2GraphML;
 
@@ -32,7 +29,6 @@ import de.zbit.graph.io.SB_2GraphML;
  */
 public class SBMLEditMode extends EditMode  {
 
-  private int                       counter = 0;
   private SB_2GraphML<SBMLDocument> converter;
   private CommandController controller;
 
@@ -41,6 +37,7 @@ public class SBMLEditMode extends EditMode  {
     super();
     this.converter = converter;
     this.allowNodeCreation(true);
+    this.setCreateEdgeMode(new SBMLCreateEdgeMode());
     this.allowEdgeCreation(true);
     this.controller = controller;
     this.addPropertyChangeListener(controller);

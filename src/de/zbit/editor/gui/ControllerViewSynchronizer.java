@@ -21,6 +21,9 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.tree.TreeNode;
 
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.LayoutConstant;
 import org.sbml.jsbml.util.TreeNodeChangeEvent;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 
@@ -48,14 +51,19 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     //TODO
     if (node instanceof Species){
       Species s = (Species) node;
-      panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
+      //panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
+      
+      
+      ExtendedLayoutModel extLayout = (ExtendedLayoutModel) s.getExtension(LayoutConstant.namespaceURI);
+      BoundingBox b = extLayout.getListOfLayouts().get(0).getListOfSpeciesGlyphs().get(s.getId()).getBoundingBox();
+      double x = b.getPosition().getX();
+      double y = b.getPosition().getY();
+      double width = b.getDimensions().getWidth();
+      double height = b.getDimensions().getHeight();
+      
+      panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm(), x, y, width, height);
       panel.getGraph2DView().updateView();
       
-    /*  
-      ExtendedLayoutModel layout = (ExtendedLayoutModel) s.getExtension("http://www.sbml.org/sbml/level3/version1/layout/version1");
-      ExtendedRenderModel render = (ExtendedRenderModel) s.getExtension("http://www.sbml.org/sbml/level3/version1/render/version1");
-      panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm(), x, y, width, height)
-    */  
     }  
   }
   
