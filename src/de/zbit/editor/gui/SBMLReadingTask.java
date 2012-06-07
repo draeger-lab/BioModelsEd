@@ -27,14 +27,14 @@ import javax.swing.SwingWorker;
 
 import org.sbml.jsbml.SBMLReader;
 
-import de.zbit.editor.control.OpenedDocument;
+import de.zbit.editor.control.OpenedSBMLDocument;
 
 /**
  * @author Eugen Netz
  * @since 1.0
  * @version $Rev$
  */
-public class SBMLReadingTask extends SwingWorker<OpenedDocument, Void> {
+public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
 
   private ProgressMonitorInputStream stream;
   private File                       file;
@@ -49,15 +49,15 @@ public class SBMLReadingTask extends SwingWorker<OpenedDocument, Void> {
   }
 
 
-  protected OpenedDocument doInBackground() throws Exception {
-    return new OpenedDocument(SBMLReader.read(stream), file.getAbsolutePath());
+  protected OpenedSBMLDocument doInBackground() throws Exception {
+    return new OpenedSBMLDocument(SBMLReader.read(stream), file.getAbsolutePath());
   }
 
 
   @Override
   protected void done() {
     try {
-      OpenedDocument doc = get();
+      OpenedSBMLDocument doc = get();
       // TODO: Create an interface with public static final entries for these property keys.
       firePropertyChange("doneopening", null, doc);
     } catch (InterruptedException e) {

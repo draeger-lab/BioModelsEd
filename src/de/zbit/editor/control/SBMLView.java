@@ -50,16 +50,16 @@ public interface SBMLView {
   void fileQuit();
 
 
-  public void addDocument(OpenedDocument doc);
+  public void addDocument(OpenedSBMLDocument doc);
 
 
-  public OpenedDocument getSelectedDoc();
+  public OpenedSBMLDocument getSelectedDoc();
 
 
   public void refreshTitle();
   
   
-  public String nameDialogue(int counter);
+  public String nameDialogue(String id);
   
   
   public void refresh(String id, String name, int sboTerm, double x, double y);

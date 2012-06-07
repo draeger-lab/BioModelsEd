@@ -23,6 +23,7 @@ import javax.swing.JTabbedPane;
 
 import y.view.Graph2DView;
 import de.zbit.editor.control.OpenedDocument;
+import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 import de.zbit.graph.io.SBML2GraphML;
 import de.zbit.util.objectwrapper.ValuePairUncomparable;
@@ -36,7 +37,7 @@ public class TabManager extends JTabbedPane {
   private static final long         serialVersionUID = -905908829761611472L;
   private SBMLEditor                editorInstance;
   // TODO: Do not declare variables of type ArrayList -> not flexible enough.
-  private ArrayList<OpenedDocument> tabMap           = new ArrayList<OpenedDocument>();
+  private ArrayList<OpenedSBMLDocument> tabMap           = new ArrayList<OpenedSBMLDocument>();
   private HashMap<String, Integer>  openedFilenames  = new HashMap<String, Integer>();
 
 
@@ -74,7 +75,7 @@ public class TabManager extends JTabbedPane {
   /**
    * @param doc
    */
-  public void addTab(OpenedDocument doc) {
+  public void addTab(OpenedSBMLDocument doc) {
     tabMap.add(doc);
     String title;
     if (doc.hasAssociatedFilepath()) {
@@ -90,11 +91,11 @@ public class TabManager extends JTabbedPane {
       openedFilenames.put(title, 1);
     }
     TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
-      doc.getSbmlDocument(), false);
+      doc.getDocument(), false);
     SBMLEditMode editMode = new SBMLEditMode(panel.getConverter(), this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
-    doc.getSbmlDocument().getModel().addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+    doc.getDocument().getModel().addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
@@ -106,7 +107,7 @@ public class TabManager extends JTabbedPane {
    * 
    * @return
    */
-  public OpenedDocument getCurrentDocument() {
+  public OpenedSBMLDocument getCurrentDocument() {
     return tabMap.get(getSelectedIndex());
   }
 

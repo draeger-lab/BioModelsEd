@@ -20,6 +20,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
@@ -31,6 +33,7 @@ import org.sbml.jsbml.ext.layout.LayoutConstant;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.ValuePair;
 
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.ControllerViewSynchronizer;
 import de.zbit.editor.gui.SBMLWritingTask;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
@@ -42,16 +45,21 @@ import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
  */
 public class CommandController implements PropertyChangeListener {
 
+  public static final Object LAYOUT_LINK_KEY = null;
   private SBMLView view;
-  private int fileCounter;
   private states   state;
+  private Logger logger = Logger.getLogger(CommandController.class.getName());
 
+  /**
+   *  TODO maybe rethink states an hold SBOTerm instead
+   *  this would simplify species creation
+   */
   private enum states {
     normal,
-    unspecified,
-    simpleChemical,
+    unknownMolecule,
+    simpleMolecule,
     macromolecule,
-    sink,
+    emptySet,
     reaction,
     catalysis,
     inhibition,
@@ -66,6 +74,7 @@ public class CommandController implements PropertyChangeListener {
   public CommandController(SBMLView editorInstance) {
     this.view = editorInstance;
     this.state = states.normal;
+    this.logger.setLevel(Level.CONFIG);
   }
 
 
@@ -82,17 +91,17 @@ public class CommandController implements PropertyChangeListener {
       SBMLView.DEFAULT_LEVEL_VERSION.getL(),
       SBMLView.DEFAULT_LEVEL_VERSION.getV());
     sbmlDocument.createModel(name);
-    OpenedDocument doc = new OpenedDocument(sbmlDocument);
+    OpenedSBMLDocument doc = new OpenedSBMLDocument(sbmlDocument);
     view.addDocument(doc);
   }
 
 
   public void fileSave() {
-    OpenedDocument od = this.view.getSelectedDoc();
+    OpenedSBMLDocument od = this.view.getSelectedDoc();
     if (od.hasAssociatedFilepath()) {
       try {
         SBMLWritingTask task = new SBMLWritingTask(new File(
-          od.getAssociatedFilepath()), od.getSbmlDocument());
+          od.getAssociatedFilepath()), (SBMLDocument) od.getDocument());
         task.addPropertyChangeListener(this);
         task.execute();
       } catch (FileNotFoundException e) {
@@ -106,12 +115,12 @@ public class CommandController implements PropertyChangeListener {
 
 
   public void fileSaveAs(File file) {
-    OpenedDocument od = this.view.getSelectedDoc();
+    OpenedSBMLDocument od = this.view.getSelectedDoc();
     od.setAssociatedFilepath(file.getAbsolutePath());
     view.refreshTitle();
     try {
       SBMLWritingTask task = new SBMLWritingTask(new File(
-        od.getAssociatedFilepath()), od.getSbmlDocument());
+        od.getAssociatedFilepath()), (SBMLDocument) od.getDocument());
       task.addPropertyChangeListener(this);
       task.execute();
     } catch (FileNotFoundException e) {
@@ -122,109 +131,129 @@ public class CommandController implements PropertyChangeListener {
 
 
   public void propertyChange(PropertyChangeEvent evt) {
+    logger.info(evt.getPropertyName());
     if (evt.getPropertyName().equals("doneopening")) {
-      OpenedDocument doc = (OpenedDocument) evt.getNewValue();
+      OpenedSBMLDocument doc = (OpenedSBMLDocument) evt.getNewValue();
       view.addDocument(doc);
     }
-    if (evt.getPropertyName().equals("donesaveing")) {
-      System.out.println("Speichern fertig...");
+    if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMousePressedLeft)) {
+      if (this.state == states.unknownMolecule) {
+        createUnknownMolecule(evt);
+      } else if (this.state == states.simpleMolecule) {
+        createSimpleMolecule(evt);
+      } else if (this.state == states.macromolecule) {
+        createMacromolecule(evt);
+      } else if (this.state == states.emptySet) {
+        createEmptySet(evt);
+      }
     }
-    if (evt.getPropertyName().equals("EditModeMouseClicked")) {
-      if (this.state != states.normal) {
-        ++this.fileCounter;
-        String name = this.getEditorInstance().nameDialogue(this.fileCounter);
-        if ((name != null) && (name.length() > 0)
-          && !name.equalsIgnoreCase("undefined")) {
-          Double x = (Double) evt.getOldValue();
-          Double y = (Double) evt.getNewValue();
-          Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
-          //Species s = model.createSpecies("id" + this.fileCounter);
-          Species s = new Species("id" + this.fileCounter);
-          s.setName(name);
-          s.setLevel(model.getLevel());
-          s.setVersion(model.getVersion());
-          //TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
-          s.setSBOTerm(this.chooseSpecies(s));
-          
-          ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
-          //TODO Will Id nicht registrieren
-          Layout layout = extLayout.createLayout();
-          SpeciesGlyph sGlyph = layout.createSpeciesGlyph(s.getId());
-          sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
-          layout.add(sGlyph);
-          model.addExtension(LayoutConstant.namespaceURI, extLayout);
-          TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
+  }
 
-          s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
-          model.addSpecies(s);
-        }
-      }
+
+  private void createEmptySet(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getEmptySet());
+  }
+
+
+  private void createMacromolecule(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getMacromolecule());
+    
+  }
+
+
+  private void createSimpleMolecule(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getSimpleMolecule());
+    
+  }
+
+
+  private void createUnknownMolecule(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getEmptySet());
+  }
+
+
+  /**
+   * @param evt
+   * @param sboTerm TODO
+   */
+  private void createSpecies(PropertyChangeEvent evt, int sboTerm) {
+    OpenedSBMLDocument selectedDoc = this.view.getSelectedDoc();
+
+    // generate generic id
+    String genericId = selectedDoc.getGenericId();
+    String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
+    // use name as id if possible
+    String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup : genericId;
+
+    if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
+      createSpecies(evt, sboTerm);
     }
-    /*if (evt.getPropertyName().equals("EditModeMPLeft")) {
-      if (this.state == states.reaction) {
-        this.state = states.mousePressedReaction;
-        this.pos.setL((Double) evt.getOldValue());
-        this.pos.setV((Double) evt.getNewValue());
-      }
-    }
-    if (evt.getPropertyName().equals("EditModeMRLeft")) {
-      if(this.state == states.mousePressedReaction) {
-        Model model = this.view.getSelectedDoc().getSbmlDocument().getModel();
-        this.fileCounter++;
-        model.createReaction("id" + this.fileCounter);
-        model.getReaction("id" + this.fileCounter).addReactant(specref);
-      }
-    }*/
+    // is there any possibility in java to correctly check types before casting?
+    ValuePair<Double, Double> newMousePosition = (ValuePair<Double, Double>) evt.getNewValue();
+    Double x = newMousePosition.getL();
+    Double y = newMousePosition.getV();
+    Model model = selectedDoc.getDocument().getModel();
+    Species s = new Species(id);
+    s.setName(nameFromPopup);
+    s.setLevel(model.getLevel());
+    s.setVersion(model.getVersion());
+    //TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
+    s.setSBOTerm(sboTerm);
+
+    ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+    //TODO wont register id
+    Layout layout = extLayout.createLayout();
+    SpeciesGlyph sGlyph = layout.createSpeciesGlyph(s.getId());
+    sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
+    layout.add(sGlyph);
+    model.addExtension(LayoutConstant.namespaceURI, extLayout);
+    TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
+
+    s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+    model.addSpecies(s);
   }
   
-  private int chooseSpecies(Species s) {
-    Integer current = null;
-    if (this.state == states.unspecified) {
-      current = SBO.getUnknownMolecule();
-    } else if (this.state == states.simpleChemical) {
-      current = SBO.getSimpleMolecule();
-    } else if (this.state == states.macromolecule) {
-      current = SBO.getMacromolecule();
-    } else if (this.state == states.sink) {
-      current = SBO.getEmptySet();
-    }
-    this.state = states.normal;
-    return current;
-  }
-  
-  public void stateUnspecified() {
-    this.state = states.unspecified;
+  public void stateUnknownMolecule() {
+    this.state = states.unknownMolecule;
+    logger.info(this.state.toString());
   }
 
 
-  public void stateSimpleChemical() {
-    this.state = states.simpleChemical;
+  public void stateSimpleMolecule() {
+    this.state = states.simpleMolecule;
+    logger.info(this.state.toString());
   }
 
 
   public void stateMacromolecule() {
     this.state = states.macromolecule;
+    logger.info(this.state.toString());
   }
 
 
-  public void stateSink() {
-    this.state = states.sink;
+  public void stateEmptySet() {
+    this.state = states.emptySet;
+    logger.info(this.state.toString());
   }
 
 
   public void stateNormal() {
-    this.state = state.normal;
+    this.state = states.normal;
+    logger.info(this.state.toString());
   }
   
   public void stateReaction() {
     this.state = states.reaction;
+    logger.info(this.state.toString());
   }
   
   public void stateCatalysis() {
     this.state = states.catalysis;
+    logger.info(this.state.toString());
   }
   
   public void stateInhibition() {
     this.state = states.inhibition;
+    logger.info(this.state.toString());
   }
 }

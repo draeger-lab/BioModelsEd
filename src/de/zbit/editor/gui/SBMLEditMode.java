@@ -17,8 +17,10 @@
 package de.zbit.editor.gui;
 
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.util.ValuePair;
 
 import y.view.EditMode;
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.graph.io.SB_2GraphML;
 
@@ -31,6 +33,7 @@ public class SBMLEditMode extends EditMode  {
 
   private SB_2GraphML<SBMLDocument> converter;
   private CommandController controller;
+  private ValuePair<Double, Double> lastPositionMouseClicked;
 
 
   public SBMLEditMode(SB_2GraphML<SBMLDocument> converter, CommandController controller) {
@@ -47,20 +50,25 @@ public class SBMLEditMode extends EditMode  {
   
   @Override
   public void mousePressedLeft(double x, double y) {
-    //TODO set Source Node for edge
-    firePropertyChange("EditModeMPLeft", x, y);
+	  //TODO set Source Node for edge
+	ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+    firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, lastPositionMouseClicked, newPositionMouseClicked);
+    lastPositionMouseClicked = newPositionMouseClicked;
   }
   
   @Override
   public void mouseReleasedLeft(double x, double y) {
     //TODO set Target Node for edge, create edge
-    firePropertyChange("EditModeMRLeft", x, y);
+		ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
+    firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, lastPositionMouseClicked, positionMouseReleased);
   } 
   
   @Override
   public void mouseClicked(double x, double y) {
     // TODO Left/Right Unterscheidung?
-    firePropertyChange("EditModeMouseClicked", x, y);
+		ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+    firePropertyChange(SBMLEditorConstants.EditModeMouseClicked, lastPositionMouseClicked, newPositionMouseClicked);
+    lastPositionMouseClicked = newPositionMouseClicked;
   }
   
 }

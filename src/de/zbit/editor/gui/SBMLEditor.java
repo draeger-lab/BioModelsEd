@@ -31,6 +31,7 @@ import javax.swing.UIManager;
 
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.OpenedDocument;
+import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.editor.control.SBMLView;
 
 /**
@@ -201,7 +202,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
    * @param doc
    */
   @Override
-  public void addDocument(OpenedDocument doc) {
+  public void addDocument(OpenedSBMLDocument doc) {
     // openedDocuments.add(doc);
     getTabManager().addTab(doc);
     //doc.getSbmlDocument().addTreeNodeChangeListener(new ControllerViewSynchronizer());
@@ -209,7 +210,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   @Override
-  public OpenedDocument getSelectedDoc() {
+  public OpenedSBMLDocument getSelectedDoc() {
     return tabManager.getCurrentDocument();
   }
 
@@ -226,14 +227,14 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  public void addUnspecified() {
+  public void addUnknownMolecule() {
     //this.getTabManager().addUnspecified();
-    this.commandController.stateUnspecified();
+    this.commandController.stateUnknownMolecule();
   }
 
 
-  public void addSimpleChemical() {
-    this.commandController.stateSimpleChemical();
+  public void addSimpleMolecule() {
+    this.commandController.stateSimpleMolecule();
   }
 
 
@@ -242,8 +243,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  public void addSink() {
-    this.commandController.stateSink();
+  public void addEmptySet() {
+    this.commandController.stateEmptySet();
   }
   
   public void addReaction() {
@@ -258,8 +259,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     this.commandController.stateInhibition();
   }
   
-  public String nameDialogue(int counter) {
-    return JOptionPane.showInputDialog("Enter name:", "s" + counter);
+  public String nameDialogue(String id) {
+    return JOptionPane.showInputDialog("Enter name:", id);
   }
   
   @Override

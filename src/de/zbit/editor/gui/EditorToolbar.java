@@ -38,14 +38,14 @@ public class EditorToolbar extends JToolBar {
   public EditorToolbar(SBMLEditor parent) {
     // TODO: Create a very simple icon for each button, use Tooltips, remove the
     // String Label.
-    GUIFactory.addButton(this, Resources.getString("UNSPECIFIED"),
-      EventHandler.create(ActionListener.class, parent, "addUnspecified"));
-    GUIFactory.addButton(this, Resources.getString("SIMPLE_CHEMICAL"),
-      EventHandler.create(ActionListener.class, parent, "addSimpleChemical"));
+    GUIFactory.addButton(this, Resources.getString("UNKNOWN_MOLECULE"),
+      EventHandler.create(ActionListener.class, parent, "addUnknownMolecule"));
+    GUIFactory.addButton(this, Resources.getString("SIMPLE_MOLECULE"),
+      EventHandler.create(ActionListener.class, parent, "addSimpleMOLECULE"));
     GUIFactory.addButton(this, Resources.getString("MACROMOLECULE"),
       EventHandler.create(ActionListener.class, parent, "addMacromolecule"));
-    GUIFactory.addButton(this, Resources.getString("SINK"),
-      EventHandler.create(ActionListener.class, parent, "addSink"));
+    GUIFactory.addButton(this, Resources.getString("EMPTY_SET"),
+      EventHandler.create(ActionListener.class, parent, "addEmptySet"));
     GUIFactory.addButton(this, Resources.getString("REACTION"),
       EventHandler.create(ActionListener.class, parent, "addReaction"));
     GUIFactory.addButton(this, Resources.getString("CATALYSIS"),

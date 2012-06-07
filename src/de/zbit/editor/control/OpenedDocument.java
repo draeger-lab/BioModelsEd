@@ -26,14 +26,14 @@ import org.sbml.jsbml.Species;
  * @author Jakob Matthes
  * @version $Rev$
  */
-public class OpenedDocument {
+public class OpenedDocument<T> {
 	
 	// TODO: Memorize if something has been changed
 
   /**
    * SBML Document of the openedDocument
    */
-  private SBMLDocument sbmlDocument;
+  protected T document;
   /**
    * associated filepath of the openedDocument, can be unset
    */
@@ -41,13 +41,13 @@ public class OpenedDocument {
   private String       associatedFilename;
 
 
-  public OpenedDocument(SBMLDocument sbmlDocument) {
-    this.sbmlDocument = sbmlDocument;
+  public OpenedDocument(T document) {
+    this.document = document;
   }
 
 
-  public OpenedDocument(SBMLDocument sbmlDocument, String associatedFilepath) {
-    this.sbmlDocument = sbmlDocument;
+  public OpenedDocument(T document, String associatedFilepath) {
+    this.document = document;
     this.associatedFilepath = associatedFilepath;
     this.associatedFilename = new File(associatedFilepath).getName();
   }
@@ -56,8 +56,8 @@ public class OpenedDocument {
   /**
    * @return the sbmlDocument
    */
-  public SBMLDocument getSbmlDocument() {
-    return sbmlDocument;
+  public T getDocument() {
+    return document;
   }
 
 
@@ -92,19 +92,4 @@ public class OpenedDocument {
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
   }
-
-
-/**
- * @param id
- * @param name
- * @param x
- * @param y
- */
-public void addNode(String id, String name, int term, double x, double y) {
-	Model model = sbmlDocument.getModel();
-	Species s = model.createSpecies(id);
-	s.setName(name);
-	s.setSBOTerm(term);
-	//model.addSpecies(s);
-}
 }
