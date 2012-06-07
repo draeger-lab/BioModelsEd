@@ -1,6 +1,6 @@
 /*
- * $Id
- * $URL
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -28,8 +28,8 @@ import org.sbml.jsbml.ext.layout.LayoutConstant;
 import de.zbit.editor.SBMLEditorConstants;
 
 /**
- * @author jan
- *
+ * @author Jan Rudolph
+ * @version $Rev$
  */
 public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> {
 
