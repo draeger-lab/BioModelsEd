@@ -49,7 +49,6 @@ public class CommandController implements PropertyChangeListener {
   private SBMLView view;
   private states   state;
   private Logger logger = Logger.getLogger(CommandController.class.getName());
-
   /**
    *  TODO maybe rethink states an hold SBOTerm instead
    *  this would simplify species creation
@@ -168,7 +167,7 @@ public class CommandController implements PropertyChangeListener {
 
 
   private void createUnknownMolecule(PropertyChangeEvent evt) {
-    createSpecies(evt, SBO.getEmptySet());
+    createSpecies(evt, SBO.getUnknownMolecule());
   }
 
 
@@ -184,7 +183,7 @@ public class CommandController implements PropertyChangeListener {
     String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
     // use name as id if possible
     String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup : genericId;
-
+    
     if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
       createSpecies(evt, sboTerm);
     }

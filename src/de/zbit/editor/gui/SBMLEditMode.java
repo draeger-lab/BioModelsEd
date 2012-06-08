@@ -31,18 +31,14 @@ import de.zbit.graph.io.SB_2GraphML;
  */
 public class SBMLEditMode extends EditMode  {
 
-  private SB_2GraphML<SBMLDocument> converter;
-  private CommandController controller;
   private ValuePair<Double, Double> lastPositionMouseClicked;
 
 
-  public SBMLEditMode(SB_2GraphML<SBMLDocument> converter, CommandController controller) {
+  public SBMLEditMode(CommandController controller) {
     super();
-    this.converter = converter;
     this.allowNodeCreation(true);
     this.setCreateEdgeMode(new SBMLCreateEdgeMode());
     this.allowEdgeCreation(true);
-    this.controller = controller;
     this.addPropertyChangeListener(controller);
   }
 
