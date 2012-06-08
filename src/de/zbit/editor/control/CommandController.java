@@ -203,7 +203,7 @@ public class CommandController implements PropertyChangeListener {
     ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
     //TODO wont register id
     Layout layout = extLayout.createLayout();
-    SpeciesGlyph sGlyph = layout.createSpeciesGlyph(s.getId());
+    SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(), s.getId());
     sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
     layout.add(sGlyph);
     model.addExtension(LayoutConstant.namespaceURI, extLayout);

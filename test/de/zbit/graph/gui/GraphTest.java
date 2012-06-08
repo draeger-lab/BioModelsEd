@@ -68,7 +68,7 @@ public class GraphTest {
 		
 		ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
 		Layout layout = extLayout.createLayout();
-		SpeciesGlyph sGlyph = layout.createSpeciesGlyph(s1.getId());
+		SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s1.getId(), s1.getId());
 		sGlyph.createBoundingBox(60, 60, 10);
 		model.addExtension(LayoutConstant.namespaceURI, extLayout);
 		
