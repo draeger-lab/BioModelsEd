@@ -51,14 +51,15 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   @Override
   public void nodeAdded(TreeNode node) {
     //TODO Reagiert nicht, oder funktioniert nicht
-    if (node instanceof SpeciesGlyph){
+    if (node instanceof Species) {
       Species s = (Species) node;
       //panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
       SpeciesGlyph sg = (SpeciesGlyph) s.getUserObject(CommandController.LAYOUT_LINK_KEY);
       
       ExtendedLayoutModel extLayout = (ExtendedLayoutModel) s.getExtension(LayoutConstant.namespaceURI);
-      // TODO: what happens if there  has not yet been a layout for the
-      BoundingBox b = sg.getBoundingBox();
+      // TODO layout always 0
+      // bad getListOfSpeciesGlyph.get method! will be removed
+      BoundingBox b = extLayout.getListOfLayouts().get(0).getListOfSpeciesGlyphs().get(s.getId()).getBoundingBox();
       double x = b.getPosition().getX();
       double y = b.getPosition().getY();
       double width = b.getDimensions().getWidth();
