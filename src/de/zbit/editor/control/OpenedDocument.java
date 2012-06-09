@@ -18,18 +18,12 @@ package de.zbit.editor.control;
 
 import java.io.File;
 
-import org.sbml.jsbml.Model;
-import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.Species;
-
 /**
  * @author Jakob Matthes
  * @version $Rev$
  */
 public class OpenedDocument<T> {
 	
-	// TODO: Memorize if something has been changed
-
   /**
    * SBML Document of the openedDocument
    */
@@ -37,8 +31,9 @@ public class OpenedDocument<T> {
   /**
    * associated filepath of the openedDocument, can be unset
    */
-  private String       associatedFilepath;
-  private String       associatedFilename;
+  private String associatedFilepath;
+  private String associatedFilename;
+  private boolean fileModified = false;
 
 
   public OpenedDocument(T document) {
@@ -86,10 +81,26 @@ public class OpenedDocument<T> {
 
   /**
    * Check if filepath is set
-   * 
+   *
    * @return
    */
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
+  }
+
+
+  /**
+   * @return the fileModified
+   */
+  public boolean isFileModified() {
+    return fileModified;
+  }
+
+
+  /**
+   * @param fileModified the fileModified to set
+   */
+  public void setFileModified(boolean fileModified) {
+    this.fileModified = fileModified;
   }
 }

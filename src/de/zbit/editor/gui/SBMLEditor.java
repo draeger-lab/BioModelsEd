@@ -33,8 +33,6 @@ import javax.swing.UIManager;
 import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.control.CommandController;
-import de.zbit.editor.control.OpenedDocument;
-import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.editor.control.SBMLView;
 
 /**
@@ -43,15 +41,15 @@ import de.zbit.editor.control.SBMLView;
  */
 public class SBMLEditor extends WindowAdapter implements SBMLView {
 	
-	// TODO: Do not annoy the user in any case with the question if he/she really wants to close the program, only if at least one model is opened with unsaved changes.
-
   public static final String PROGRAM_NAME = "SBML Editor";
-  private JFrame             frame;
-  private CommandController  commandController;
-  private TabManager         tabManager;
+  private JFrame frame;
+  private CommandController commandController;
+  private TabManager tabManager;
   private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
   
-  
+  /**
+   * 
+   */
   public SBMLEditor() {
     commandController = new CommandController(this);
     tabManager = new TabManager(this);
@@ -187,52 +185,46 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
   @Override
   public void fileSaveAs() {
-    TabManager tabmanager = getTabManager();
-    if (tabmanager.isAnySelected()) {
-      JFileChooser fc = GUIFactory.createFileChooser();
-      int returnVal = fc.showSaveDialog(getFrame());
-      // TODO: respect standard Java code convention
-      if (returnVal == JFileChooser.APPROVE_OPTION) {
-        File file = fc.getSelectedFile();
-        if (!GUIFactory.createFilterXML().accept(file)) {
-          file = new File(file.getAbsolutePath() + ".xml");
-        }
-        commandController.fileSaveAs(file);
-      }
-    }
+    commandController.fileSaveAs();
   }
 
 
   @Override
   public void fileQuit() {
-    int returnVal = GUIFactory.createQuestionClose(frame);
-    if (returnVal == JOptionPane.YES_OPTION) {
-      System.exit(0);
-    }
+    commandController.fileQuit();
   }
 
 
-  /**
-   * @param doc
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#addDocument(de.zbit.editor.control.OpenedSBMLDocument)
    */
   @Override
-  public void addDocument(OpenedSBMLDocument doc) {
-    getTabManager().addTab(doc);
+  public void addLayout(Layout layout) {
+    getTabManager().addTab(layout);
   }
 
 
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#getSelectedLayout()
+   */
   @Override
   public Layout getCurrentLayout() {
     return tabManager.getCurrentLayout();
   }
 
 
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#refreshTitle()
+   */
   @Override
   public void refreshTitle() {
     tabManager.refreshTitle();
   }
 
 
+  /* (non-Javadoc)
+   * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
+   */
   @Override
   public void windowClosing(WindowEvent e) {
     fileQuit();

@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.sbml.jsbml.SBMLDocument;
 
-
 import de.zbit.editor.gui.SBMLReadingTask;
 import de.zbit.editor.gui.SBMLWritingTask;
 
@@ -124,6 +123,15 @@ public class FileManager {
 		return false;
 	}
 	
-	
-	
+	/**
+	 * check if any file has been modified
+	 * @return
+	 */
+	public boolean anyFileIsModified() {
+	  boolean anyModified = false;
+    for (OpenedDocument<?> doc : listOfOpenedDocuments) {
+      anyModified = anyModified || doc.isFileModified();
+    }
+    return anyModified;
+	}
 }

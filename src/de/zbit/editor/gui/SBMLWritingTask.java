@@ -1,10 +1,10 @@
 /*
- * $$Id:  ${file_name} ${time} ${user}$$
- * $$URL: ${file_name}$$
+ * $$Id${file_name} ${time} ${user}$$
+ * $$URL${file_name}$$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
- * Copyright (C) ${year} by the University of Tuebingen, Germany.
+ * Copyright (C) 2012 by the University of Tuebingen, Germany.
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,10 +20,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+
 import javax.swing.SwingWorker;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLWriter;
+
+import de.zbit.editor.SBMLEditorConstants;
 
 /**
  * @author Alexander Diamantikos
@@ -31,14 +34,17 @@ import org.sbml.jsbml.SBMLWriter;
  * @since 1.0
  * @version $Rev$
  */
-// TODO: Correct header, set SVN properties.
 public class SBMLWritingTask extends SwingWorker<Void, Void> {
 
   private OutputStream stream;
-  private File         file;
+  private File file;
   private SBMLDocument doc;
 
-
+  /**
+   * @param file
+   * @param doc
+   * @throws FileNotFoundException
+   */
   public SBMLWritingTask(File file, SBMLDocument doc)
     throws FileNotFoundException {
     this.file = file;
@@ -47,14 +53,20 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
   }
 
 
+  /* (non-Javadoc)
+   * @see javax.swing.SwingWorker#doInBackground()
+   */
   protected Void doInBackground() throws Exception {
     new SBMLWriter().write(doc, stream);
     return null;
   }
 
 
+  /* (non-Javadoc)
+   * @see javax.swing.SwingWorker#done()
+   */
   @Override
   protected void done() {
-    firePropertyChange("donesaveing", null, null);
+    firePropertyChange(SBMLEditorConstants.savingDone, null, null);
   }
 }

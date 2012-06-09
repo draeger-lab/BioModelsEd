@@ -23,12 +23,13 @@ import javax.swing.tree.TreeNode;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstant;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
-import de.zbit.editor.control.CommandController;
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 
@@ -40,9 +41,11 @@ import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
   private TranslatorSBMLgraphPanel panel;
+  private Layout layout;
   
-  public ControllerViewSynchronizer(TranslatorSBMLgraphPanel panel){
+  public ControllerViewSynchronizer(TranslatorSBMLgraphPanel panel, Layout layout) {
     this.panel = panel;
+    this.layout = layout;
   }
   
   /* (non-Javadoc)
@@ -52,21 +55,20 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   public void nodeAdded(TreeNode node) {
     if (node instanceof Species) {
       Species s = (Species) node;
-      //panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm());
-      SpeciesGlyph sg = (SpeciesGlyph) s.getUserObject(CommandController.LAYOUT_LINK_KEY);
+      SpeciesGlyph sg = (SpeciesGlyph) s.getUserObject(SBMLEditorConstants.LAYOUT_LINK_KEY);
       
-      ExtendedLayoutModel extLayout = (ExtendedLayoutModel) s.getExtension(LayoutConstant.namespaceURI);
-      // TODO layout always 0
-      // bad getListOfSpeciesGlyph.get method! will be removed
-      BoundingBox b = extLayout.getListOfLayouts().get(0).getListOfSpeciesGlyphs().get(s.getId()).getBoundingBox();
-      double x = b.getPosition().getX();
-      double y = b.getPosition().getY();
-      double width = b.getDimensions().getWidth();
-      double height = b.getDimensions().getHeight();
+      ExtendedLayoutModel extendedLayoutModel = (ExtendedLayoutModel) s.getExtension(LayoutConstant.namespaceURI);
+      BoundingBox boundingBox = extendedLayoutModel.getListOfLayouts()
+          .get(this.layout.getId()).getSpeciesGlyph(sg.getId())
+          .getBoundingBox();
+      
+      double x = boundingBox.getPosition().getX();
+      double y = boundingBox.getPosition().getY();
+      double width = boundingBox.getDimensions().getWidth();
+      double height = boundingBox.getDimensions().getHeight();
       
       panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm(), x, y, width, height);
       panel.getGraph2DView().updateView();
-      
     }  
   }
 

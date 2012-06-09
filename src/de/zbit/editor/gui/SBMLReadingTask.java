@@ -27,6 +27,7 @@ import javax.swing.SwingWorker;
 
 import org.sbml.jsbml.SBMLReader;
 
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
 
 /**
@@ -37,34 +38,41 @@ import de.zbit.editor.control.OpenedSBMLDocument;
 public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
 
   private ProgressMonitorInputStream stream;
-  private File                       file;
+  private File file;
 
-
+  
+  /**
+   * @param file
+   * @param parent
+   * @throws FileNotFoundException
+   */
   public SBMLReadingTask(File file, Component parent)
-    throws FileNotFoundException {
-    // TODO localize
+      throws FileNotFoundException {
     this.file = file;
-    this.stream = new ProgressMonitorInputStream(parent, "Reading",
-      new FileInputStream(file));
+    this.stream = new ProgressMonitorInputStream(parent, Resources.getString("READING"),
+        new FileInputStream(file));
   }
 
 
+  /* (non-Javadoc)
+   * @see javax.swing.SwingWorker#doInBackground()
+   */
   protected OpenedSBMLDocument doInBackground() throws Exception {
     return new OpenedSBMLDocument(SBMLReader.read(stream), file.getAbsolutePath());
   }
 
 
+  /* (non-Javadoc)
+   * @see javax.swing.SwingWorker#done()
+   */
   @Override
   protected void done() {
     try {
       OpenedSBMLDocument doc = get();
-      // TODO: Create an interface with public static final entries for these property keys.
-      firePropertyChange("doneopening", null, doc);
+      firePropertyChange(SBMLEditorConstants.openingDone, null, doc);
     } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (ExecutionException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

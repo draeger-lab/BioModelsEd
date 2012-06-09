@@ -16,13 +16,14 @@
  */
 package de.zbit.editor.control;
 
-import java.awt.Frame;
 import java.io.File;
 
+import javax.swing.JFrame;
+
+import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.gui.TabManager;
-
 
 /**
  * @author Eugen Netz
@@ -32,47 +33,36 @@ import de.zbit.editor.gui.TabManager;
 public interface SBMLView {
 
   public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(
-                                                                          3, 1);
-//TODO: let all actions return a boolean value (success/failure)
+      3, 1);
+
+  // TODO: let all actions return a boolean value (success/failure)
 
   public void fileNew();
 
-
   public boolean fileOpen();
-
 
   public void fileClose();
 
-
   public void fileSave();
-
 
   public void fileSaveAs();
 
-// TODO: modifier public
-  void fileQuit();
+  public void fileQuit();
 
+  public void addLayout(Layout layout);
 
-  public void addDocument(OpenedSBMLDocument doc);
-
-
-  public OpenedSBMLDocument getCurrentLayout();
-
+  public Layout getCurrentLayout();
 
   public void refreshTitle();
-  
-  
+
   public String nameDialogue(String id);
-  
-  
+
   public void refresh(String id, String name, int sboTerm, double x, double y);
-  
-  
+
   public TabManager getTabManager();
 
 
   public File getSelectedFile();
 
-
-  public Frame getFrame();
+  public JFrame getFrame();
 }

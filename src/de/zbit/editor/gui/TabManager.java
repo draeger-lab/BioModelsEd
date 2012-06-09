@@ -17,16 +17,13 @@
 package de.zbit.editor.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
 
 import org.sbml.jsbml.ext.layout.Layout;
 
-import y.view.Graph2D;
 import y.view.Graph2DView;
-import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 import de.zbit.graph.io.SBML2GraphML;
 
@@ -36,21 +33,19 @@ import de.zbit.graph.io.SBML2GraphML;
  */
 public class TabManager extends JTabbedPane {
 
-  private static final long         serialVersionUID = -905908829761611472L;
-  private SBMLEditor                editorInstance;
+  private static final long serialVersionUID = -905908829761611472L;
+  private SBMLEditor editorInstance;
   /**
    * we keep a list of all viewable graphs
    */
-  private List<Layout> tabList           = new ArrayList<Layout>();
+  private List<Layout> tabList = new ArrayList<Layout>();
 
-  
   /**
    * @param editorInstance
    */
   public TabManager(SBMLEditor editorInstance) {
     this.editorInstance = editorInstance;
   }
-
 
   /**
    * @return the editorInstance
@@ -59,21 +54,21 @@ public class TabManager extends JTabbedPane {
     return editorInstance;
   }
 
-
   /**
-   * @param doc
+   * @param index
    */
   public void closeTab(int index) {
     removeTabAt(index);
     tabList.remove(index);
   }
 
-
+  /**
+   * 
+   */
   public void closeAllTabs() {
     removeAll();
     tabList.clear();
   }
-
 
   /**
    * @param doc
@@ -82,16 +77,17 @@ public class TabManager extends JTabbedPane {
     tabList.add(layout);
     String title = layout.getName();
     TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
-      layout.getSBMLDocument(), false);
-    SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
+        layout.getSBMLDocument(), false);
+    SBMLEditMode editMode = new SBMLEditMode(
+        this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
-    layout.getSBMLDocument().getModel().addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+    layout.getSBMLDocument().getModel()
+        .addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, layout));
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
   }
-
 
   /**
    * Return the currently opened document.
@@ -102,7 +98,6 @@ public class TabManager extends JTabbedPane {
     return tabList.get(getSelectedIndex());
   }
 
-
   /**
    * Close the currently visible tab.
    */
@@ -112,21 +107,19 @@ public class TabManager extends JTabbedPane {
     }
   }
 
-
   public boolean isAnySelected() {
     return getSelectedIndex() != -1;
   }
-
 
   public void refreshTitle() {
     String title = tabList.get(getSelectedIndex()).getName();
     ((TabComponent) getTabComponentAt(getSelectedIndex())).setTitle(title);
   }
-  
-  public void refresh(String id, String name, int sboTerm, double x, double y) {	  
-    
+
+  public void refresh(String id, String name, int sboTerm, double x, double y) {
+
     TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) getComponentAt(getSelectedIndex());
     SBML2GraphML converter = panel.getConverter();
-    converter.createNode(id, name, sboTerm, x, y);   
+    converter.createNode(id, name, sboTerm, x, y);
   }
 }

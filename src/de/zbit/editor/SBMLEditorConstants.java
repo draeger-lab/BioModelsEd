@@ -23,9 +23,18 @@ package de.zbit.editor;
  */
 public class SBMLEditorConstants {
 
-	public static final String EditModeMouseClicked = "mouseClicked in EditMode";
-	public static final String EditModeMousePressedLeft = "mousePressedLeft in EditMode";
-	public static final String EditModeMouseReleasedLeft = "mouseReleasedLeft in EditMode";
-	public static String genericId = "s";
+  public static final String associatedOpenedSBMLDocument = "associatedOpenedSBMLDocument";
+  public static final String EditModeMouseClicked = "mouseClicked in EditMode";
+  public static final String EditModeMousePressedLeft = "mousePressedLeft in EditMode";
+  public static final String EditModeMouseReleasedLeft = "mouseReleasedLeft in EditMode";
+  public static final String genericId = "s";
+  public static final int glyphDefaultDepth = 0;
+  public static final int glyphDefaultHeight = 100;
+  public static final int glyphDefaultWidth = 100;
+  public static final int glyphDefaultZ = 0;
+  public static final String LAYOUT_LINK_KEY = "LAYOUT_LINK_KEY";
+  public static final String layoutDefaultName = "layoutDefault";
+  public static final String openingDone = "openingDone";
+  public static final String savingDone = "savingDone";
 
 }
