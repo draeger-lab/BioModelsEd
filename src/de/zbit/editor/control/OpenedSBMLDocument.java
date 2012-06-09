@@ -16,14 +16,21 @@
  */
 package de.zbit.editor.control;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.tree.TreeNode;
+
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.util.TreeNodeChangeEvent;
+import org.sbml.jsbml.util.TreeNodeChangeListener;
+import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import de.zbit.editor.SBMLEditorConstants;
 
@@ -31,7 +38,7 @@ import de.zbit.editor.SBMLEditorConstants;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> {
+public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements TreeNodeChangeListener {
 
 	List<Layout> listOfLayouts = new ArrayList<Layout>();
 	List<String> listOfUsedIds = new ArrayList<String>();
@@ -60,7 +67,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> {
 	 */
 	private void initializeLayoutList() {
 		Model model = this.document.getModel();
-		ExtendedLayoutModel layout = (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstant.namespaceURI);
+		ExtendedLayoutModel layout = (ExtendedLayoutModel) model.getExtension(LayoutConstant.namespaceURI);
 		if (layout != null) {
 			listOfLayouts.addAll(layout.getListOfLayouts());
 		}
@@ -86,7 +93,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> {
 		int count = 0;
 		String genericId = SBMLEditorConstants.genericId;
 		// search for first avalible id
-		while(count < listOfUsedIds.size() && 
+		while(count <= listOfUsedIds.size() && 
 				!listOfUsedIds.contains(genericId + count)) {
 			count++;
 		}
@@ -98,6 +105,32 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> {
 	 */
 	public boolean isIdAvailable(String id) {
 	  return !this.listOfUsedIds.contains(id);
+	}
+
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO track changed ids (is this possible?)
+	}
+
+	/**
+	 * add id of added species to usedIds
+	 */
+	@Override
+	public void nodeAdded(TreeNode node) {
+		if (node instanceof Species) {
+			Species s = (Species) node;
+			this.listOfUsedIds.add(s.getId());
+		}
+	}
+
+	/**
+	 * remove id of removed species from usedIds
+	 */
+	@Override
+	public void nodeRemoved(TreeNodeRemovedEvent evt) {
+		// TODO get Id of removed node
+		initializeIds();
 	}
 	
 }

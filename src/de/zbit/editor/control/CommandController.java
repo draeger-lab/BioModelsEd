@@ -172,6 +172,10 @@ public class CommandController implements PropertyChangeListener {
 
 
   /**
+   * get user input -> id
+   * create species-glyph -> add to layout (check for current layout, create default if necessary)
+   * create species -> add to model
+   * 
    * @param evt
    * @param sboTerm TODO
    */
@@ -181,35 +185,36 @@ public class CommandController implements PropertyChangeListener {
     // generate generic id
     String genericId = selectedDoc.getGenericId();
     String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
+    logger.info("popup: " + nameFromPopup);
     // use name as id if possible
     String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup : genericId;
-    
+    logger.info("id: " + id);
     if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
-      createSpecies(evt, sboTerm);
+    	// is there any possibility in java to correctly check types before casting?
+    	ValuePair<Double, Double> newMousePosition = (ValuePair<Double, Double>) evt.getNewValue();
+    	Double x = newMousePosition.getL();
+    	Double y = newMousePosition.getV();
+    	Model model = selectedDoc.getDocument().getModel();
+    	Species s = new Species(id);
+    	s.setName(nameFromPopup);
+    	s.setLevel(model.getLevel());
+    	s.setVersion(model.getVersion());
+    	//TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
+    	s.setSBOTerm(sboTerm);
+    	logger.info(s.toString());
+    	ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+    	//TODO wont register id
+    	Layout layout = extLayout.createLayout();
+    	SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(), s.getId());
+    	sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
+    	layout.add(sGlyph);
+    	model.addExtension(LayoutConstant.namespaceURI, extLayout);
+    	TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
+
+    	s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+    	model.addSpecies(s);
     }
-    // is there any possibility in java to correctly check types before casting?
-    ValuePair<Double, Double> newMousePosition = (ValuePair<Double, Double>) evt.getNewValue();
-    Double x = newMousePosition.getL();
-    Double y = newMousePosition.getV();
-    Model model = selectedDoc.getDocument().getModel();
-    Species s = new Species(id);
-    s.setName(nameFromPopup);
-    s.setLevel(model.getLevel());
-    s.setVersion(model.getVersion());
-    //TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
-    s.setSBOTerm(sboTerm);
-
-    ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
-    //TODO wont register id
-    Layout layout = extLayout.createLayout();
-    SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(), s.getId());
-    sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
-    layout.add(sGlyph);
-    model.addExtension(LayoutConstant.namespaceURI, extLayout);
-    TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
-
-    s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
-    model.addSpecies(s);
+    this.state = states.normal;
   }
   
   public void stateUnknownMolecule() {

@@ -41,7 +41,7 @@ public class EditorToolbar extends JToolBar {
     GUIFactory.addButton(this, Resources.getString("UNKNOWN_MOLECULE"),
       EventHandler.create(ActionListener.class, parent, "addUnknownMolecule"));
     GUIFactory.addButton(this, Resources.getString("SIMPLE_MOLECULE"),
-      EventHandler.create(ActionListener.class, parent, "addSimpleMOLECULE"));
+      EventHandler.create(ActionListener.class, parent, "addSimpleMolecule"));
     GUIFactory.addButton(this, Resources.getString("MACROMOLECULE"),
       EventHandler.create(ActionListener.class, parent, "addMacromolecule"));
     GUIFactory.addButton(this, Resources.getString("EMPTY_SET"),
