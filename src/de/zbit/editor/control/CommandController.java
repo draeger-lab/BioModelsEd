@@ -201,10 +201,9 @@ public class CommandController implements PropertyChangeListener {
     	s.setVersion(model.getVersion());
     	//TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)this.view.getTabManager().getSelectedComponent();
     	s.setSBOTerm(sboTerm);
-    	logger.info(s.toString());
     	ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
-    	//TODO wont register id
     	Layout layout = extLayout.createLayout();
+    	logger.info(Boolean.toString(layout != null));
     	SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(), s.getId());
     	sGlyph.setBoundingBox(sGlyph.createBoundingBox(100, 100, 0, x, y, 0));
     	layout.add(sGlyph);

@@ -203,15 +203,13 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
    */
   @Override
   public void addDocument(OpenedSBMLDocument doc) {
-    // openedDocuments.add(doc);
     getTabManager().addTab(doc);
-    //doc.getSbmlDocument().addTreeNodeChangeListener(new ControllerViewSynchronizer());
   }
 
 
   @Override
   public OpenedSBMLDocument getSelectedDoc() {
-    return tabManager.getCurrentDocument();
+    return tabManager.getCurrentLayout();
   }
 
 

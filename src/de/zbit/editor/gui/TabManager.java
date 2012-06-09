@@ -22,6 +22,9 @@ import java.util.List;
 
 import javax.swing.JTabbedPane;
 
+import org.sbml.jsbml.ext.layout.Layout;
+
+import y.view.Graph2D;
 import y.view.Graph2DView;
 import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
@@ -35,7 +38,10 @@ public class TabManager extends JTabbedPane {
 
   private static final long         serialVersionUID = -905908829761611472L;
   private SBMLEditor                editorInstance;
-  private List<OpenedSBMLDocument> tabList           = new ArrayList<OpenedSBMLDocument>();
+  /**
+   * we keep a list of all viewable graphs
+   */
+  private List<Layout> tabList           = new ArrayList<Layout>();
   private HashMap<String, Integer>  openedFilenames  = new HashMap<String, Integer>();
 
 
@@ -73,27 +79,15 @@ public class TabManager extends JTabbedPane {
   /**
    * @param doc
    */
-  public void addTab(OpenedSBMLDocument doc) {
-    tabList.add(doc);
-    String title;
-    if (doc.hasAssociatedFilepath()) {
-      title = doc.getAssociatedFilename();
-    } else {
-      title = Resources.getString("UNSAVED_FILE");
-    }
-    if (openedFilenames.containsKey(title)) {
-      int count = openedFilenames.get(title);
-      openedFilenames.put(title, ++count);
-      title += " (" + (count - 1) + ")";
-    } else {
-      openedFilenames.put(title, 1);
-    }
+  public void addTab(Layout layout) {
+    tabList.add(layout);
+    String title = layout.getName();
     TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
-      doc.getDocument(), false);
+      layout.getSBMLDocument(), false);
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
-    doc.getDocument().getModel().addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+    layout.getSBMLDocument().getModel().addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
@@ -105,7 +99,7 @@ public class TabManager extends JTabbedPane {
    * 
    * @return
    */
-  public OpenedSBMLDocument getCurrentDocument() {
+  public Layout getCurrentLayout() {
     return tabList.get(getSelectedIndex());
   }
 
@@ -125,13 +119,8 @@ public class TabManager extends JTabbedPane {
   }
 
 
-  public boolean hasAssociatedFilepath() {
-    return getCurrentDocument().hasAssociatedFilepath();
-  }
-
-
   public void refreshTitle() {
-    String title = tabList.get(getSelectedIndex()).getAssociatedFilename();
+    String title = tabList.get(getSelectedIndex()).getName();
     ((TabComponent) getTabComponentAt(getSelectedIndex())).setTitle(title);
   }
   
