@@ -29,7 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -118,18 +117,22 @@ public class GUIFactory {
 
 
   public static JFileChooser createFileChooser() {
-    JFileChooser fc = new JFileChooser();
-    FileFilter filter = createFilterXML();
-    fc.setAcceptAllFileFilterUsed(false);
-    fc.setFileFilter(filter);
-    // TODO: create also a file filter for extension *.sbml.
-//  fc.addChoosableFileFilter(filter);
-    return fc;
-  }
-
-
-  public static FileNameExtensionFilter createFilterXML() {
-    return new FileNameExtensionFilter("XML-Datei", "xml", "XML");
+    JFileChooser fileChooser = new JFileChooser();
+    
+    /*
+     * no filtering
+     */
+    fileChooser.setAcceptAllFileFilterUsed(true);
+    
+    /*
+     * *.sbml and *.xml filter
+     */
+    FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter(
+        Resources.getString("FILENAME_FILTER"), "xml", "sbml");
+    fileChooser.addChoosableFileFilter(extensionFilter);
+    fileChooser.setFileFilter(extensionFilter);
+    
+    return fileChooser;
   }
 
 
