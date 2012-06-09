@@ -1,0 +1,49 @@
+digraph g {
+	node [shape = box];
+	label = "program structure";
+#view:
+	subgraph cluster_view {
+		Editor [label = "SBMLEditor"];
+		TabM [label = "TabManager"];
+		label = "view";
+		Editor -> TabM [dir = "both", label = ""];
+		TabM -> Y;
+		style = filled
+		color = papayawhip;
+	}
+
+#controller
+	subgraph cluster_cc {
+		CVS [label = "ControllerViewSynchronizer"];
+		CC [label = "CommandController"];
+		label = "controller";
+		style = filled;
+		color = lightgrey;
+	}
+	
+
+#model
+	subgraph cluster_model {
+	FM [label = "FileManager"];
+		label = "model";
+		FM -> OSD [label = "handles Documents"];
+		style = filled;
+		color = lightblue;
+	}	OSD [label = "OpenedSBMLDocument"];
+	
+
+#system
+	Y [label = "yFiles"];
+	System;
+
+#dependencies
+	System -> Editor [label = "user input"];
+
+	Editor -> CC [label = "sends commands"];
+
+	CC -> Editor [label = "requests information"];
+
+	CC -> FM [dir = "both", label = ""];
+
+	FM -> System [dir = "both", label = "reads/writes to file system"];
+}
