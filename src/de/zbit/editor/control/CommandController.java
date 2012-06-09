@@ -96,7 +96,7 @@ public class CommandController implements PropertyChangeListener {
 
 
   public void fileSave() {
-    OpenedSBMLDocument od = this.view.getSelectedDoc();
+    OpenedSBMLDocument od = this.view.getCurrentLayout();
     if (od.hasAssociatedFilepath()) {
       try {
         SBMLWritingTask task = new SBMLWritingTask(new File(
@@ -114,7 +114,7 @@ public class CommandController implements PropertyChangeListener {
 
 
   public void fileSaveAs(File file) {
-    OpenedSBMLDocument od = this.view.getSelectedDoc();
+    OpenedSBMLDocument od = this.view.getCurrentLayout();
     od.setAssociatedFilepath(file.getAbsolutePath());
     view.refreshTitle();
     try {
@@ -180,7 +180,7 @@ public class CommandController implements PropertyChangeListener {
    * @param sboTerm TODO
    */
   private void createSpecies(PropertyChangeEvent evt, int sboTerm) {
-    OpenedSBMLDocument selectedDoc = this.view.getSelectedDoc();
+    OpenedSBMLDocument selectedDoc = this.view.getCurrentLayout();
 
     // generate generic id
     String genericId = selectedDoc.getGenericId();
@@ -259,4 +259,9 @@ public class CommandController implements PropertyChangeListener {
     this.state = states.inhibition;
     logger.info(this.state.toString());
   }
+
+
+public File getSelectedFile() {
+	return view.getSelectedFile();
+}
 }

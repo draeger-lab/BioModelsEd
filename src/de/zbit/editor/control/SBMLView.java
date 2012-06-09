@@ -16,6 +16,9 @@
  */
 package de.zbit.editor.control;
 
+import java.awt.Frame;
+import java.io.File;
+
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.gui.TabManager;
@@ -53,7 +56,7 @@ public interface SBMLView {
   public void addDocument(OpenedSBMLDocument doc);
 
 
-  public OpenedSBMLDocument getSelectedDoc();
+  public OpenedSBMLDocument getCurrentLayout();
 
 
   public void refreshTitle();
@@ -66,4 +69,10 @@ public interface SBMLView {
   
   
   public TabManager getTabManager();
+
+
+  public File getSelectedFile();
+
+
+  public Frame getFrame();
 }

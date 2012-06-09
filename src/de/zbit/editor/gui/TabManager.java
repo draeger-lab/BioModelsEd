@@ -42,9 +42,8 @@ public class TabManager extends JTabbedPane {
    * we keep a list of all viewable graphs
    */
   private List<Layout> tabList           = new ArrayList<Layout>();
-  private HashMap<String, Integer>  openedFilenames  = new HashMap<String, Integer>();
 
-
+  
   /**
    * @param editorInstance
    */

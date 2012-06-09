@@ -23,11 +23,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+
+import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.OpenedDocument;
@@ -46,11 +49,9 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   private JFrame             frame;
   private CommandController  commandController;
   private TabManager         tabManager;
-
-
-  // TODO
-  // private static Logger logger =
-  // Logger.getLogger(SBMLEditor.class.toString());
+  private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
+  
+  
   public SBMLEditor() {
     commandController = new CommandController(this);
     tabManager = new TabManager(this);
@@ -136,7 +137,20 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
       }
     }
   }
-
+  
+  /**
+   * create popup to request File Input
+   */
+  @Override
+  public File getSelectedFile() {
+	  JFileChooser fc = GUIFactory.createFileChooser();
+	  int returnVal = fc.showOpenDialog(this.frame);
+	  File file = null;
+	  if (returnVal == JFileChooser.APPROVE_OPTION) {
+		  file = fc.getSelectedFile();
+	  }
+	  return file;
+  }
 
   @Override
   public boolean fileOpen() {
@@ -208,7 +222,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   @Override
-  public OpenedSBMLDocument getSelectedDoc() {
+  public Layout getCurrentLayout() {
     return tabManager.getCurrentLayout();
   }
 
@@ -266,4 +280,6 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     //TODO How to refresh the view, using the changed model?
     this.tabManager.refresh(id, name, sboTerm, x, y);
   }
+
+
 }
