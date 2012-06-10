@@ -123,4 +123,20 @@ public class TabManager extends JTabbedPane {
     SBML2GraphML converter = panel.getConverter();
     converter.createNode(id, name, sboTerm, x, y);
   }
+
+  /**
+   * closes tab with layout if existing
+   * @param layout
+   * @return
+   */
+  public boolean closeTab(Layout layout) {
+    int index = this.tabList.indexOf(layout);
+    if (index == -1) {
+      return true;
+    }
+    else {
+      closeTab(index);
+      return true;
+    }
+  }
 }

@@ -32,6 +32,7 @@ import javax.swing.UIManager;
 
 import org.sbml.jsbml.ext.layout.Layout;
 
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 
@@ -162,7 +163,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
   
   @Override
-  public boolean fileOpen() {
+  public boolean fileOpen() throws FileNotFoundException {
     return commandController.fileOpen();
   }
 
@@ -269,5 +270,28 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     this.tabManager.refresh(id, name, sboTerm, x, y);
   }
 
+
+  @Override
+  public boolean closeTab(Layout layout) {
+    return this.tabManager.closeTab(layout);
+  }
+
+
+  @Override
+  public void showWarning(String warning) {
+    JOptionPane.showMessageDialog(
+      frame, 
+      Resources.getString(warning), 
+      Resources.getString(SBMLEditorConstants.warningTitle), 
+      JOptionPane.WARNING_MESSAGE);
+  }
+  @Override
+  public void showError(String error) {
+    JOptionPane.showMessageDialog(
+      frame, 
+      Resources.getString(error), 
+      Resources.getString(SBMLEditorConstants.errorTitle), 
+      JOptionPane.ERROR_MESSAGE);
+  }
 
 }

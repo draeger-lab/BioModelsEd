@@ -17,6 +17,7 @@
 package de.zbit.editor.control;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.JFrame;
 
@@ -39,7 +40,7 @@ public interface SBMLView {
 
   public boolean fileNew();
 
-  public boolean fileOpen();
+  public boolean fileOpen() throws FileNotFoundException;
 
   public boolean fileClose();
 
@@ -68,4 +69,9 @@ public interface SBMLView {
   public JFrame getFrame();
 
   public String askUserFileNew();
+
+  public boolean closeTab(Layout layout);
+
+  public void showWarning(String warning);
+  public void showError(String error);
 }

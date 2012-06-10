@@ -36,5 +36,8 @@ public class SBMLEditorConstants {
   public static final String layoutDefaultName = "layoutDefault";
   public static final String openingDone = "openingDone";
   public static final String savingDone = "savingDone";
+  public static final String fileNotFound = "FILE_NOT_FOUND";
+  public static String warningTitle = "WARNING_TITLE";
+  public static String errorTitle = "ERROR_TITLE";
 
 }

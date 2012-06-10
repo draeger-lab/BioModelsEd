@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.gui.SBMLReadingTask;
 import de.zbit.editor.gui.SBMLWritingTask;
@@ -135,15 +136,43 @@ public class FileManager {
     }
     return anyModified;
 	}
-
-  public boolean fileOpen() {
-    // TODO Auto-generated method stub
-    return false;
+	
+	/**
+	 * open File
+	 * @return true if successful
+	 */
+  public boolean fileOpen() throws FileNotFoundException {
+    File file = this.commandController.askUserOpenDialog();
+    if (file == null) {
+      return false;
+    }
+    else {
+      try {
+        SBMLReadingTask task = new SBMLReadingTask(file, this.commandController.getFrame());
+        task.addPropertyChangeListener(commandController);
+        task.execute();
+        return true;
+      } catch (FileNotFoundException e) {
+        commandController.fileNotFound();
+        return false;
+      }
+    }
   }
 
-  public boolean fileClose() {
-    // TODO Auto-generated method stub
-    return false;
+  /**
+   * closes all tabs assoc to this doc
+   * @param doc 
+   * @return
+   */
+  public boolean fileClose(OpenedSBMLDocument doc) {
+    boolean success = true;
+    for (Layout layout : doc.listOfLayouts) {
+      success &= commandController.closeTab(layout);
+    }
+    if(success) {
+      this.listOfOpenedDocuments.remove(doc);
+    }
+    return success;
   }
 
   public boolean fileSave(OpenedSBMLDocument doc) {
@@ -151,7 +180,7 @@ public class FileManager {
       String associatedFilename = doc.getAssociatedFilename();
       // check for Filename set, if not ask user
       File file = doc.getAssociatedFilename() == null ? 
-          commandController.askUserOpenDialog() : new File(associatedFilename);
+          commandController.askUserSaveDialog() : new File(associatedFilename);
       SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
       task.addPropertyChangeListener(commandController);
       task.execute();
@@ -167,6 +196,7 @@ public class FileManager {
     try {
       File file = commandController.askUserSaveDialog();
       doc.setAssociatedFilepath(file.getAbsolutePath());
+      commandController.askUserSaveDialog();
       SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
       task.addPropertyChangeListener(commandController);
       task.execute();

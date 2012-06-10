@@ -16,9 +16,11 @@
  */
 package de.zbit.editor.control;
 
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -235,9 +237,10 @@ public class CommandController implements PropertyChangeListener {
   /**
    * forwards fileOpen request to file manager
    * @return true if successful
+   * @throws FileNotFoundException 
    */
-  public boolean fileOpen() {
-    return fileManager.fileOpen();
+  public boolean fileOpen() throws FileNotFoundException {
+      return fileManager.fileOpen();
   }
   
   /**
@@ -245,7 +248,10 @@ public class CommandController implements PropertyChangeListener {
    * @return true if successful
    */
   public boolean fileClose() {
-    return fileManager.fileClose();
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) this.view
+        .getCurrentLayout().getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    return fileManager.fileClose(doc);
   }
   
   /**
@@ -349,5 +355,17 @@ public class CommandController implements PropertyChangeListener {
   public void stateUnknownMolecule() {
     this.state = States.unknownMolecule;
     logger.info(this.state.toString());
+  }
+
+  public boolean closeTab(Layout layout) {
+    return this.view.closeTab(layout);
+  }
+
+  public Component getFrame() {
+    return this.view.getFrame();
+  }
+
+  public void fileNotFound() {
+    view.showError(SBMLEditorConstants.fileNotFound);
   }
 }
