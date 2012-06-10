@@ -75,7 +75,7 @@ public class FileManager {
 			return false;
 		}
 		else {
-			File file = commandController.getSelectedFile();
+			File file = commandController.askUserOpenDialog();
 			Frame frame = commandController.getEditorInstance().getFrame();
 			if(file != null) {
 				try {
@@ -99,10 +99,11 @@ public class FileManager {
 			String associatedFilename = doc.getAssociatedFilename();
 			// check for Filename set, if not ask user
 			File file = doc.getAssociatedFilename() == null ? 
-					commandController.getSelectedFile() : new File(associatedFilename);
+					commandController.askUserOpenDialog() : new File(associatedFilename);
 			SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
 			task.addPropertyChangeListener(commandController);
 			task.execute();
+			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -134,4 +135,46 @@ public class FileManager {
     }
     return anyModified;
 	}
+
+  public boolean fileOpen() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public boolean fileClose() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public boolean fileSave(OpenedSBMLDocument doc) {
+    try {
+      String associatedFilename = doc.getAssociatedFilename();
+      // check for Filename set, if not ask user
+      File file = doc.getAssociatedFilename() == null ? 
+          commandController.askUserOpenDialog() : new File(associatedFilename);
+      SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
+      task.addPropertyChangeListener(commandController);
+      task.execute();
+      doc.setFileModified(false);
+      return true;
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  public boolean fileSaveAs(OpenedSBMLDocument doc) {
+    try {
+      File file = commandController.askUserSaveDialog();
+      doc.setAssociatedFilepath(file.getAbsolutePath());
+      SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
+      task.addPropertyChangeListener(commandController);
+      task.execute();
+      doc.setFileModified(false);
+      return true;
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 }

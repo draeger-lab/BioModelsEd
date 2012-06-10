@@ -164,7 +164,14 @@ public class CommandController implements PropertyChangeListener {
     createSpecies(evt, SBO.getUnknownMolecule());
   }
 
-  public void fileNew(String name) {
+  /**
+   * opens empty sbml document
+   * @param name of new file
+   * @return true if successful
+   */
+  public boolean fileNew() {
+    String name = view.askUserFileNew();
+    boolean success = true;
     /*
      * first, create a new SBMLDocument
      */
@@ -178,17 +185,19 @@ public class CommandController implements PropertyChangeListener {
      * fileManager about it
      */
     OpenedSBMLDocument doc = new OpenedSBMLDocument(sbmlDocument);
-    this.fileManager.addDocument(doc);
+    success &= this.fileManager.addDocument(doc);
 
     /*
      * create a new default layout and tell the view to display it
      */
     Layout layout = doc.createDefaultLayout();
-    this.view.addLayout(layout);
+    success &= this.view.addLayout(layout);
+    
+    return success;
   }
 
   /**
-   * 
+   * quits program
    */
   public void fileQuit() {
     if (this.fileManager.anyFileIsModified()) {
@@ -202,46 +211,65 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
-   * 
+   * gets currently selected doc from view and forwards it to filemanager for saving
+   * @return true if successful 
    */
-  public void fileSave() {
+  public boolean fileSave() {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    fileManager.save(selectedDoc);
-    /*
-     * if (od.hasAssociatedFilepath()) { try { SBMLWritingTask task = new
-     * SBMLWritingTask(new File( od.getAssociatedFilepath()), (SBMLDocument)
-     * od.getDocument()); task.addPropertyChangeListener(this); task.execute();
-     * } catch (FileNotFoundException e) { e.printStackTrace(); } } else {
-     * view.fileSaveAs(); }
-     */
+    return fileManager.fileSave(selectedDoc);
   }
 
   /**
-   * @param file
+   * gets currently selected doc from view and forwards it to filemanager for saving
+   * @return true if successful 
    */
-  public void fileSaveAs() {
-    fileSave();
-    /*
-     * OpenedSBMLDocument od = this.view.getCurrentLayout();
-     * od.setAssociatedFilepath(file.getAbsolutePath()); view.refreshTitle();
-     * try { SBMLWritingTask task = new SBMLWritingTask(new File(
-     * od.getAssociatedFilepath()), (SBMLDocument) od.getDocument());
-     * task.addPropertyChangeListener(this); task.execute(); } catch
-     * (FileNotFoundException e) { e.printStackTrace(); }
-     */
+  public boolean fileSaveAs() {
+    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+        .getCurrentLayout().getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    return fileManager.fileSaveAs(selectedDoc);
   }
-
+  
+  /**
+   * forwards fileOpen request to file manager
+   * @return true if successful
+   */
+  public boolean fileOpen() {
+    return fileManager.fileOpen();
+  }
+  
+  /**
+   * forwards fileClose request to file manager
+   * @return true if successful
+   */
+  public boolean fileClose() {
+    return fileManager.fileClose();
+  }
+  
+  /**
+   * forwards OpenDialog request to view
+   * @return file chosen by user
+   */
+  public File askUserOpenDialog() {
+    return view.askUserOpenDialog();
+  }
+  
+  /**
+   * forwards save dialog request to view
+   * @return chosen filepath
+   */
+  public File askUserSaveDialog() {
+    return view.askUserSaveDialog();
+  }
+  
+  
   /**
    * @return the editorInstance
    */
   public SBMLView getEditorInstance() {
     return view;
-  }
-
-  public File getSelectedFile() {
-    return view.getSelectedFile();
   }
 
   /*

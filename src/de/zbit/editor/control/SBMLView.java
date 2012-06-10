@@ -37,19 +37,19 @@ public interface SBMLView {
 
   // TODO: let all actions return a boolean value (success/failure)
 
-  public void fileNew();
+  public boolean fileNew();
 
   public boolean fileOpen();
 
-  public void fileClose();
+  public boolean fileClose();
 
-  public void fileSave();
+  public boolean fileSave();
 
-  public void fileSaveAs();
+  public boolean fileSaveAs();
 
   public void fileQuit();
 
-  public void addLayout(Layout layout);
+  public boolean addLayout(Layout layout);
 
   public Layout getCurrentLayout();
 
@@ -62,7 +62,10 @@ public interface SBMLView {
   public TabManager getTabManager();
 
 
-  public File getSelectedFile();
+  public File askUserOpenDialog();
+  public File askUserSaveDialog();
 
   public JFrame getFrame();
+
+  public String askUserFileNew();
 }

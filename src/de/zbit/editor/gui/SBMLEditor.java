@@ -125,22 +125,15 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   @Override
-  public void fileNew() {
-    String name = JOptionPane.showInputDialog("Name", "FileNew");
-    if (name != null) {
-      if (!name.isEmpty()) {
-        commandController.fileNew(name);
-      } else {
-        fileNew();
-      }
-    }
+  public boolean fileNew() {
+    return commandController.fileNew();
   }
   
   /**
-   * create popup to request File Input
+   * create popup to request File Open Input
    */
   @Override
-  public File getSelectedFile() {
+  public File askUserOpenDialog() {
 	  JFileChooser fc = GUIFactory.createFileChooser();
 	  int returnVal = fc.showOpenDialog(this.frame);
 	  File file = null;
@@ -149,43 +142,46 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 	  }
 	  return file;
   }
-
+  
+  /**
+   * create popup to request File Save Input
+   */
+  @Override
+  public File askUserSaveDialog() {
+    JFileChooser fc = GUIFactory.createFileChooser();
+    int returnVal = fc.showSaveDialog(this.frame);
+    File file = null;
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      file = fc.getSelectedFile();
+    }
+    return file;
+  }
+  
+  public String askUserFileNew() {
+    return JOptionPane.showInputDialog(Resources.getString("NEW_FILE"), Resources.getString("GENERIC_FILE_NAME"));
+  }
+  
   @Override
   public boolean fileOpen() {
-    JFileChooser fc = GUIFactory.createFileChooser();
-    int returnVal = fc.showOpenDialog(this.frame);
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      File file = fc.getSelectedFile();
-      try {
-        SBMLReadingTask task = new SBMLReadingTask(file, this.frame);
-        task.addPropertyChangeListener(commandController);
-        task.execute();
-        return true;
-      } catch (FileNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
-    // return commandController.fileOpen(file);
-    return false;
+    return commandController.fileOpen();
   }
 
 
   @Override
-  public void fileClose() {
-    tabManager.closeCurrentTab();
+  public boolean fileClose() {
+	  return commandController.fileClose();
   }
 
 
   @Override
-  public void fileSave() {
-    commandController.fileSave();
+  public boolean fileSave() {
+	  return commandController.fileSave();
   }
 
 
   @Override
-  public void fileSaveAs() {
-    commandController.fileSaveAs();
+  public boolean fileSaveAs() {
+    return commandController.fileSaveAs();
   }
 
 
@@ -199,8 +195,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
    * @see de.zbit.editor.control.SBMLView#addDocument(de.zbit.editor.control.OpenedSBMLDocument)
    */
   @Override
-  public void addLayout(Layout layout) {
-    getTabManager().addTab(layout);
+  public boolean addLayout(Layout layout) {
+    return getTabManager().addTab(layout);
   }
 
 

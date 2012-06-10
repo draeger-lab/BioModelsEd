@@ -73,7 +73,7 @@ public class TabManager extends JTabbedPane {
   /**
    * @param doc
    */
-  public void addTab(Layout layout) {
+  public boolean addTab(Layout layout) {
     tabList.add(layout);
     String title = layout.getName();
     TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
@@ -87,6 +87,7 @@ public class TabManager extends JTabbedPane {
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
+    return true;
   }
 
   /**
