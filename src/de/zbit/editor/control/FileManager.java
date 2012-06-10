@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -39,6 +40,7 @@ public class FileManager {
 	 */
 	List<OpenedDocument<?>> listOfOpenedDocuments = new ArrayList<OpenedDocument<?>>();
 	CommandController commandController;
+	Logger logger = Logger.getLogger(FileManager.class.getName());
 
 	/**
 	 * @param listOfOpenedDocuments
@@ -159,11 +161,13 @@ public class FileManager {
   public boolean fileSave(OpenedSBMLDocument doc) {
     try {
       String associatedFilename = doc.getAssociatedFilename();
+      logger.info("assoc filename: " + associatedFilename);
       // check for Filename set, if not ask user
-      File file = doc.getAssociatedFilename() == null ? 
-        commandController.askUserSaveDialog() : new File(associatedFilename);
-
+      File file = associatedFilename == null ? 
+        commandController.askUserSaveDialog() : new File(doc.getAssociatedFilepath());
+      logger.info("chosen file: " + file.getAbsolutePath());
       doc.setAssociatedFilepath(file.getAbsolutePath());
+      assert doc.getAssociatedFilepath() != null;
       SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
       task.addPropertyChangeListener(commandController);
       task.execute();
@@ -176,18 +180,8 @@ public class FileManager {
   }
 
   public boolean fileSaveAs(OpenedSBMLDocument doc) {
-    try {
-      File file = commandController.askUserSaveDialog();
-      doc.setAssociatedFilepath(file.getAbsolutePath());
-      commandController.askUserSaveDialog();
-      SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
-      task.addPropertyChangeListener(commandController);
-      task.execute();
-      doc.setFileModified(false);
-      return true;
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-    return false;
+    File file = commandController.askUserSaveDialog();
+    doc.setAssociatedFilepath(file.getAbsolutePath());
+    return fileSave(doc);
   }
 }

@@ -41,6 +41,7 @@ import org.sbml.jsbml.util.ValuePair;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.ControllerViewSynchronizer;
 import de.zbit.editor.gui.GUIFactory;
+import de.zbit.editor.gui.Resources;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 /**
@@ -188,7 +189,12 @@ public class CommandController implements PropertyChangeListener {
    */
   public boolean fileNew() {
     String name = view.askUserFileNew();
-    boolean success = true;
+    if (name == null) {
+      return false;
+    }
+    if (name.isEmpty()) {
+      name = Resources.getString(SBMLEditorConstants.genericFileName);
+    }
     /*
      * first, create a new SBMLDocument
      */
@@ -202,15 +208,20 @@ public class CommandController implements PropertyChangeListener {
      * fileManager about it
      */
     OpenedSBMLDocument doc = new OpenedSBMLDocument(sbmlDocument);
-    success &= this.fileManager.addDocument(doc);
+    doc.setFileModified(true);
+    if(!this.fileManager.addDocument(doc)) {
+      return false;
+    }
 
     /*
      * create a new default layout and tell the view to display it
      */
     Layout layout = doc.createDefaultLayout();
-    success &= this.view.addLayout(layout);
+    if (!this.view.addLayout(layout)) {
+      return false;
+    }
     
-    return success;
+    return true;
   }
 
   /**
