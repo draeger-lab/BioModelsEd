@@ -27,7 +27,7 @@ import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 import de.zbit.editor.SBMLEditorConstants;
@@ -44,7 +44,7 @@ public class GlyphTest {
     Model model = doc.createModel("myModel");
 
     ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
-    model.addExtension(LayoutConstant.namespaceURI, extendedLayoutModel);
+    model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
     Layout layout = extendedLayoutModel.createLayout("defaultLayout");
     
     Compartment compartment = model.createCompartment("c1");

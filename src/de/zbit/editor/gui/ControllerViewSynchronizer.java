@@ -24,7 +24,7 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
@@ -57,7 +57,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       Species s = (Species) node;
       SpeciesGlyph sg = (SpeciesGlyph) s.getUserObject(SBMLEditorConstants.LAYOUT_LINK_KEY);
       
-      ExtendedLayoutModel extendedLayoutModel = (ExtendedLayoutModel) s.getExtension(LayoutConstant.namespaceURI);
+      ExtendedLayoutModel extendedLayoutModel = (ExtendedLayoutModel) s.getExtension(LayoutConstants.namespaceURI);
       BoundingBox boundingBox = extendedLayoutModel.getListOfLayouts()
           .get(this.layout.getId()).getSpeciesGlyph(sg.getId())
           .getBoundingBox();

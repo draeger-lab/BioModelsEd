@@ -28,7 +28,7 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
@@ -78,7 +78,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	 */
 	private void initializeLayoutList() {
 		Model model = this.document.getModel();
-		ExtendedLayoutModel layout = (ExtendedLayoutModel) model.getExtension(LayoutConstant.namespaceURI);
+		ExtendedLayoutModel layout = (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
 		if (layout != null) {
 			listOfLayouts.addAll(layout.getListOfLayouts());
 		}
@@ -146,11 +146,10 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
-	  ExtendedLayoutModel extendedLayoutModel =
-	      new ExtendedLayoutModel(model);
+	  ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
 	  // TODO check layout id conflict
 	  Layout layout = extendedLayoutModel.createLayout(SBMLEditorConstants.layoutDefaultName);
-	  model.addExtension(LayoutConstant.namespaceURI, extendedLayoutModel);
+	  model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
 	  return layout;
 	}
 
@@ -160,7 +159,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
    */
   public Layout getFirstLayoutOrNew() {
     ExtendedLayoutModel extendedLayoutModel =
-        (ExtendedLayoutModel) this.document.getExtension(LayoutConstant.namespaceURI);
+        (ExtendedLayoutModel) this.document.getExtension(LayoutConstants.namespaceURI);
     
     if (extendedLayoutModel != null &&
         extendedLayoutModel.getListOfLayouts() != null &&
@@ -173,7 +172,5 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       return this.createDefaultLayout();
     }
   }
-	
+  
 }
-		
-		

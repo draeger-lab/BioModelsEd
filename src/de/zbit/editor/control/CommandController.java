@@ -41,19 +41,31 @@ import de.zbit.editor.gui.GUIFactory;
  */
 public class CommandController implements PropertyChangeListener {
 
-  private SBMLView view;
-  private States state;
-  private FileManager fileManager;
-
-  private Logger logger = Logger.getLogger(CommandController.class.getName());
-
   /**
    * TODO maybe rethink states an hold SBOTerm instead this would simplify
    * species creation
    */
   private enum States {
-    normal, unknownMolecule, simpleMolecule, macromolecule, emptySet, reaction, catalysis, inhibition, mousePressedReaction, mousePressedCatalysis, mousePressedInhibition,
+    catalysis, emptySet, inhibition, macromolecule, mousePressedCatalysis, mousePressedInhibition, mousePressedReaction, normal, reaction, simpleMolecule, unknownMolecule,
   }
+//  private enum States {
+//    /*
+//     * normal mode, view graph
+//     */
+//    MODE_VIEW,
+//    /*
+//     * insert a SBOTerm object
+//     */
+//    MODE_SBO,
+//    /*
+//     * insert a render object
+//     */
+//    MODE_RENDER
+//  }
+  private FileManager fileManager;
+  private Logger logger = Logger.getLogger(CommandController.class.getName());
+  private States state;
+  private SBMLView view;
 
   /**
    * @param editorInstance
@@ -66,10 +78,90 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
-   * @return the editorInstance
+   * @param evt
+   * @param sboTerm
    */
-  public SBMLView getEditorInstance() {
-    return view;
+  private void createSpecies(PropertyChangeEvent evt, int sboTerm) {
+    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+        .getCurrentLayout().getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+  
+    // generate generic id
+    String genericId = selectedDoc.getGenericId();
+    String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
+    logger.info("popup: " + nameFromPopup);
+  
+    // use name as id if possible
+    String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup
+        : genericId;
+    logger.info("id: " + id);
+  
+    if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
+      // is there any possibility in java to correctly check types before
+      // casting?
+      ValuePair<Double, Double> newMousePosition =
+          (ValuePair<Double, Double>) evt.getNewValue();
+      Double x = newMousePosition.getL();
+      Double y = newMousePosition.getV();
+  
+      /*
+       * layout and model references
+       */
+      Layout layout = this.view.getCurrentLayout();
+      Model model = layout.getModel();
+  
+      /*
+       * create species (not in model)
+       */
+      Species s = new Species(id);
+      s.setName(nameFromPopup);
+      s.setLevel(model.getLevel());
+      s.setVersion(model.getVersion());
+      s.setSBOTerm(sboTerm);
+  
+      /*
+       * create species glyph
+       */
+      SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(),
+          s.getId());
+      sGlyph.setBoundingBox(sGlyph.createBoundingBox(
+          SBMLEditorConstants.glyphDefaultWidth,
+          SBMLEditorConstants.glyphDefaultHeight,
+          SBMLEditorConstants.glyphDefaultDepth,
+          x,
+          y,
+          SBMLEditorConstants.glyphDefaultZ));
+      layout.add(sGlyph);
+  
+      /*
+       * add created species
+       */
+      model.addSpecies(s);
+  
+      // TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)
+      // this.view.getTabManager().getSelectedComponent();
+      // s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+    }
+  
+    this.state = States.normal;
+  }
+
+  private void createEmptySet(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getEmptySet());
+  }
+
+  private void createMacromolecule(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getMacromolecule());
+
+  }
+
+  private void createSimpleMolecule(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getSimpleMolecule());
+
+  }
+
+  private void createUnknownMolecule(PropertyChangeEvent evt) {
+    createSpecies(evt, SBO.getUnknownMolecule());
   }
 
   public void fileNew(String name) {
@@ -93,6 +185,20 @@ public class CommandController implements PropertyChangeListener {
      */
     Layout layout = doc.createDefaultLayout();
     this.view.addLayout(layout);
+  }
+
+  /**
+   * 
+   */
+  public void fileQuit() {
+    if (this.fileManager.anyFileIsModified()) {
+      int returnVal = GUIFactory.createQuestionClose(this.view.getFrame());
+      if (returnVal == JOptionPane.YES_OPTION) {
+        System.exit(0);
+      }
+    } else {
+      System.exit(0);
+    }
   }
 
   /**
@@ -125,6 +231,17 @@ public class CommandController implements PropertyChangeListener {
      * task.addPropertyChangeListener(this); task.execute(); } catch
      * (FileNotFoundException e) { e.printStackTrace(); }
      */
+  }
+
+  /**
+   * @return the editorInstance
+   */
+  public SBMLView getEditorInstance() {
+    return view;
+  }
+
+  public File getSelectedFile() {
+    return view.getSelectedFile();
   }
 
   /*
@@ -166,110 +283,23 @@ public class CommandController implements PropertyChangeListener {
     }
   }
 
-  private void createEmptySet(PropertyChangeEvent evt) {
-    createSpecies(evt, SBO.getEmptySet());
-  }
-
-  private void createMacromolecule(PropertyChangeEvent evt) {
-    createSpecies(evt, SBO.getMacromolecule());
-
-  }
-
-  private void createSimpleMolecule(PropertyChangeEvent evt) {
-    createSpecies(evt, SBO.getSimpleMolecule());
-
-  }
-
-  private void createUnknownMolecule(PropertyChangeEvent evt) {
-    createSpecies(evt, SBO.getUnknownMolecule());
-  }
-
-  /**
-   * @param evt
-   * @param sboTerm
-   */
-  private void createSpecies(PropertyChangeEvent evt, int sboTerm) {
-    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
-        .getCurrentLayout().getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-
-    // generate generic id
-    String genericId = selectedDoc.getGenericId();
-    String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
-    logger.info("popup: " + nameFromPopup);
-
-    // use name as id if possible
-    String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup
-        : genericId;
-    logger.info("id: " + id);
-
-    if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
-      // is there any possibility in java to correctly check types before
-      // casting?
-      ValuePair<Double, Double> newMousePosition =
-          (ValuePair<Double, Double>) evt.getNewValue();
-      Double x = newMousePosition.getL();
-      Double y = newMousePosition.getV();
-
-      /*
-       * layout and model references
-       */
-      Layout layout = selectedDoc.createDefaultLayout();
-      Model model = layout.getModel();
-
-      /*
-       * create species (not in model)
-       */
-      Species s = new Species(id);
-      s.setName(nameFromPopup);
-      s.setLevel(model.getLevel());
-      s.setVersion(model.getVersion());
-      s.setSBOTerm(sboTerm);
-
-      /*
-       * create species glyph
-       */
-      SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(),
-          s.getId());
-      sGlyph.setBoundingBox(sGlyph.createBoundingBox(
-          SBMLEditorConstants.glyphDefaultWidth,
-          SBMLEditorConstants.glyphDefaultHeight,
-          SBMLEditorConstants.glyphDefaultDepth,
-          x,
-          y,
-          SBMLEditorConstants.glyphDefaultZ));
-      layout.add(sGlyph);
-
-      /*
-       * add created species
-       */
-      model.addSpecies(s);
-
-      // TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)
-      // this.view.getTabManager().getSelectedComponent();
-      // s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
-    }
-
-    this.state = States.normal;
-  }
-
-  public void stateUnknownMolecule() {
-    this.state = States.unknownMolecule;
-    logger.info(this.state.toString());
-  }
-
-  public void stateSimpleMolecule() {
-    this.state = States.simpleMolecule;
-    logger.info(this.state.toString());
-  }
-
-  public void stateMacromolecule() {
-    this.state = States.macromolecule;
+  public void stateCatalysis() {
+    this.state = States.catalysis;
     logger.info(this.state.toString());
   }
 
   public void stateEmptySet() {
     this.state = States.emptySet;
+    logger.info(this.state.toString());
+  }
+
+  public void stateInhibition() {
+    this.state = States.inhibition;
+    logger.info(this.state.toString());
+  }
+
+  public void stateMacromolecule() {
+    this.state = States.macromolecule;
     logger.info(this.state.toString());
   }
 
@@ -283,31 +313,13 @@ public class CommandController implements PropertyChangeListener {
     logger.info(this.state.toString());
   }
 
-  public void stateCatalysis() {
-    this.state = States.catalysis;
+  public void stateSimpleMolecule() {
+    this.state = States.simpleMolecule;
     logger.info(this.state.toString());
   }
 
-  public void stateInhibition() {
-    this.state = States.inhibition;
+  public void stateUnknownMolecule() {
+    this.state = States.unknownMolecule;
     logger.info(this.state.toString());
-  }
-
-  public File getSelectedFile() {
-    return view.getSelectedFile();
-  }
-
-  /**
-   * 
-   */
-  public void fileQuit() {
-    if (this.fileManager.anyFileIsModified()) {
-      int returnVal = GUIFactory.createQuestionClose(this.view.getFrame());
-      if (returnVal == JOptionPane.YES_OPTION) {
-        System.exit(0);
-      }
-    } else {
-      System.exit(0);
-    }
   }
 }

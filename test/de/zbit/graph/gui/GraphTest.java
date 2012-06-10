@@ -29,8 +29,10 @@ import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.render.RenderConstants;
+import org.sbml.jsbml.ext.render.RenderModelPlugin;
 
 import y.view.EditMode;
 import y.view.Graph2DView;
@@ -68,12 +70,14 @@ public class GraphTest {
 		
 		ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
 		Layout layout = extLayout.createLayout();
+		
+		RenderModelPlugin render = new RenderModelPlugin(extLayout.getListOfLayouts());
+		extLayout.getListOfLayouts().addExtension(RenderConstants.namespaceURI, render);
 		SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s1.getId(), s1.getId());
 		sGlyph.createBoundingBox(60, 60, 10);
-		model.addExtension(LayoutConstant.namespaceURI, extLayout);
+		model.addExtension(LayoutConstants.namespaceURI, extLayout);
 		
 		SBMLWriter.write(doc, System.out, ' ', (short) 2);
-		
 		
 		TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(doc, false);
 		Graph2DView view = panel.getGraph2DView();

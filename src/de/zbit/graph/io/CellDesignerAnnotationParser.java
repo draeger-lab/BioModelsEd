@@ -38,7 +38,7 @@ import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstant;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
@@ -114,9 +114,9 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 */
 	private void initializeLayout(SBMLDocument doc) {
 		Model m = doc.getModel();
-		if ((m != null) && (m.getExtension(LayoutConstant.namespaceURI) == null)) {
+		if ((m != null) && (m.getExtension(LayoutConstants.namespaceURI) == null)) {
 			ExtendedLayoutModel layoutExt = new ExtendedLayoutModel(m);
-			m.addExtension(LayoutConstant.namespaceURI, layoutExt);
+			m.addExtension(LayoutConstants.namespaceURI, layoutExt);
 			layout = layoutExt.createLayout();
 		}
 	}
@@ -128,7 +128,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 */
 	private void readCDLayout(BufferedReader inputStream) throws XMLStreamException {
 		initializeLayout(sbmlDocument);
-		if (!sbmlDocument.isSetModel() || (sbmlDocument.getModel().getExtension(LayoutConstant.namespaceURI) == null)) {
+		if (!sbmlDocument.isSetModel() || (sbmlDocument.getModel().getExtension(LayoutConstants.namespaceURI) == null)) {
 			logger.info("SBMLDocument didn't contain any model.");
 			return;
 		}
