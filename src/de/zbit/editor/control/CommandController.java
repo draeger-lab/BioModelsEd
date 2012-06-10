@@ -21,6 +21,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,7 +39,9 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.gui.ControllerViewSynchronizer;
 import de.zbit.editor.gui.GUIFactory;
+import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 /**
  * @author Jakob Matthes
@@ -133,16 +139,25 @@ public class CommandController implements PropertyChangeListener {
           x,
           y,
           SBMLEditorConstants.glyphDefaultZ));
-      layout.add(sGlyph);
+
+      /*
+       * keep a list of all glyphs which are associated with the species
+       */
+      List<String> glyphList = new ArrayList<String>();
+      glyphList.add(sGlyph.getId());
+
+      Map<String, List<String>> layoutGlyphMap = new HashMap<String, List<String>>();
+      layoutGlyphMap.put(layout.getId(), glyphList);
+
+      s.putUserObject(SBMLEditorConstants.GLYPH_LINK_KEY, layoutGlyphMap);
   
       /*
        * add created species
        */
       model.addSpecies(s);
   
-      // TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel)
-      // this.view.getTabManager().getSelectedComponent();
-      // s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel));
+      TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
+      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
     }
   
     this.state = States.normal;

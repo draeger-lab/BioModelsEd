@@ -35,9 +35,6 @@ public class TabManager extends JTabbedPane {
 
   private static final long serialVersionUID = -905908829761611472L;
   private SBMLEditor editorInstance;
-  /**
-   * we keep a list of all viewable graphs
-   */
   private List<Layout> tabList = new ArrayList<Layout>();
 
   /**
@@ -76,14 +73,17 @@ public class TabManager extends JTabbedPane {
   public boolean addTab(Layout layout) {
     tabList.add(layout);
     String title = layout.getName();
-    TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(
-        layout.getSBMLDocument(), false);
-    SBMLEditMode editMode = new SBMLEditMode(
-        this.editorInstance.getController());
+    
+    TranslatorSBMLgraphPanel panel = new TranslatorSBMLgraphPanel(layout.getSBMLDocument(),
+        false);
+
+    SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
+    
     layout.getSBMLDocument().getModel()
         .addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, layout));
+    
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
@@ -91,7 +91,7 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * Return the currently opened document.
+   * Return the currently opened layout.
    * 
    * @return
    */

@@ -17,6 +17,9 @@
 package de.zbit.editor.gui;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
@@ -42,6 +45,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
   private TranslatorSBMLgraphPanel panel;
   private Layout layout;
+  private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
   
   public ControllerViewSynchronizer(TranslatorSBMLgraphPanel panel, Layout layout) {
     this.panel = panel;
@@ -55,21 +59,28 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   public void nodeAdded(TreeNode node) {
     if (node instanceof Species) {
       Species s = (Species) node;
-      SpeciesGlyph sg = (SpeciesGlyph) s.getUserObject(SBMLEditorConstants.LAYOUT_LINK_KEY);
+      // TODO get correct species glyph
+      Map<String, List<String>> layoutGlyphMap = (Map<String, List<String>>) s.getUserObject(SBMLEditorConstants.GLYPH_LINK_KEY);
+      // TODO check != null, has 0
+      String sgId = layoutGlyphMap.get(this.layout.getId()).get(0);
+      SpeciesGlyph sg = (SpeciesGlyph) this.layout.getSpeciesGlyph(sgId);
       
-      ExtendedLayoutModel extendedLayoutModel = (ExtendedLayoutModel) s.getExtension(LayoutConstants.namespaceURI);
-      BoundingBox boundingBox = extendedLayoutModel.getListOfLayouts()
-          .get(this.layout.getId()).getSpeciesGlyph(sg.getId())
-          .getBoundingBox();
+      ExtendedLayoutModel extendedLayoutModel = (ExtendedLayoutModel) s.getModel().getExtension(LayoutConstants.namespaceURI);
       
-      double x = boundingBox.getPosition().getX();
-      double y = boundingBox.getPosition().getY();
-      double width = boundingBox.getDimensions().getWidth();
-      double height = boundingBox.getDimensions().getHeight();
+//      BoundingBox boundingBox = extendedLayoutModel.getListOfLayouts()
+//          .get(this.layout.getId()).getSpeciesGlyph(sg.getId())
+//          .getBoundingBox();
+      BoundingBox boundingBox = sg.getBoundingBox();
       
-      panel.getConverter().createNode(s.getId(), s.getName(), s.getSBOTerm(), x, y, width, height);
+      panel.getConverter().createNode(s.getId(),
+          s.getName(),
+          s.getSBOTerm(),
+          boundingBox.getPosition().getX(),
+          boundingBox.getPosition().getY(),
+          boundingBox.getDimensions().getWidth(),
+          boundingBox.getDimensions().getHeight());
       panel.getGraph2DView().updateView();
-    }  
+    }
   }
 
   /* (non-Javadoc)

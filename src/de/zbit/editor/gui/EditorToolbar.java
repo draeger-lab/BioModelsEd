@@ -20,6 +20,7 @@ package de.zbit.editor.gui;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
 
+import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
 
@@ -52,11 +53,10 @@ public class EditorToolbar extends JToolBar {
       EventHandler.create(ActionListener.class, parent, "addCatalysis"));
     GUIFactory.addButton(this, Resources.getString("INHIBITION"),
       EventHandler.create(ActionListener.class, parent, "addInhibition"));
-    // String[] layoutArray = { "A", "B", "C" };
-    // JComboBox layoutComboBox = new JComboBox(layoutArray);
-    // layoutComboBox.setSelectedIndex(0);
-    // layoutComboBox.addActionListener(toolbarListener);
-    // add(layoutComboBox);
+     String[] layoutArray = { "A", "B", "C" };
+     JComboBox layoutComboBox = new JComboBox(layoutArray);
+     layoutComboBox.setSelectedIndex(0);
+     add(layoutComboBox);
     GUIFactory.addButton(this,  Resources.getString("MENU_TAB_OPEN"));
     GUIFactory.addButton(this,  Resources.getString("MENU_TAB_OPEN_NEW"));
   }

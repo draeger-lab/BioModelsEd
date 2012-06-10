@@ -93,25 +93,6 @@ public class FileManager {
 	}
 	
 	/**
-	 * save file
-	 */
-	public boolean save(OpenedDocument<?> doc) {
-		try {
-			String associatedFilename = doc.getAssociatedFilename();
-			// check for Filename set, if not ask user
-			File file = doc.getAssociatedFilename() == null ? 
-					commandController.askUserOpenDialog() : new File(associatedFilename);
-			SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
-			task.addPropertyChangeListener(commandController);
-			task.execute();
-			return true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	/**
 	 * check if filePath is already in use
 	 * @param filePath
 	 * @return

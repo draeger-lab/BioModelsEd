@@ -37,6 +37,7 @@ public class SBMLEditorConstants {
   public static final String openingDone = "openingDone";
   public static final String savingDone = "savingDone";
   public static final String fileNotFound = "FILE_NOT_FOUND";
+  public static final Object GLYPH_LINK_KEY = "GLYPH_LINK_KEY";
   public static String warningTitle = "WARNING_TITLE";
   public static String errorTitle = "ERROR_TITLE";
 

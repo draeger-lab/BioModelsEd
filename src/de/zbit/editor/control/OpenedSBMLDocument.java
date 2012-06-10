@@ -159,7 +159,10 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
    */
   public Layout getFirstLayoutOrNew() {
     ExtendedLayoutModel extendedLayoutModel =
-        (ExtendedLayoutModel) this.document.getExtension(LayoutConstants.namespaceURI);
+        (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
+
+//    assert extendedLayoutModel != null;
+//    assert extendedLayoutModel.getListOfLayouts() != null;
     
     if (extendedLayoutModel != null &&
         extendedLayoutModel.getListOfLayouts() != null &&
