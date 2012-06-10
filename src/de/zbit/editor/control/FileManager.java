@@ -180,7 +180,9 @@ public class FileManager {
       String associatedFilename = doc.getAssociatedFilename();
       // check for Filename set, if not ask user
       File file = doc.getAssociatedFilename() == null ? 
-          commandController.askUserSaveDialog() : new File(associatedFilename);
+        commandController.askUserSaveDialog() : new File(associatedFilename);
+
+      doc.setAssociatedFilepath(file.getAbsolutePath());
       SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
       task.addPropertyChangeListener(commandController);
       task.execute();
