@@ -1,5 +1,5 @@
 /*
- * $Id: SBGNVisualizationProperties.java 943 2012-05-15 07:28:41Z draeger $
+ * $Id: SBGNVisualizationProperties.java 970 2012-06-13 08:07:42Z draeger $
  * $URL: https://rarepos.cs.uni-tuebingen.de/svn-path/SysBio/trunk/src/de/zbit/graph/io/def/SBGNVisualizationProperties.java $
  * ---------------------------------------------------------------------
  * This file is part of KEGGtranslator, a program to convert KGML files
@@ -44,7 +44,7 @@ import de.zbit.graph.sbgn.ShapeNodeRealizerSupportingCloneMarker;
  * 
  * @author Finja B&uuml;chel
  * @author Clemens Wrzodek
- * @version $Rev: 943 $
+ * @version $Rev: 970 $
  */
 public class SBGNVisualizationProperties {
 
@@ -156,7 +156,7 @@ public class SBGNVisualizationProperties {
   /**
    * @return the color of the appropriate shape
    */
-  private static Color getColor(int sboTerm) {
+  public static Color getFillColor(int sboTerm) {
     if (SBO.isChildOf(sboTerm, SBO.getNonCovalentComplex())){
       return new Color(24,116,205);    // DodgerBlue3
     } else if (SBO.isChildOf(sboTerm, SBO.getGene())){ 
@@ -169,9 +169,24 @@ public class SBGNVisualizationProperties {
       return new Color(224,238,238);   // azure2
     } else if (SBO.isChildOf(sboTerm, SBO.getEmptySet())) {
     	return new Color(255, 204, 204); // Pink
+    } else if (SBO.isChildOf(sboTerm, SBO.getCompartment())) {
+    	return new Color(243, 243, 191);
     } else {
       return new Color(144,238,144);   // LightGreen
     }
+  }
+  
+  /**
+   * 
+   * @param sboTerm
+   * @return
+   */
+  public static Color getLineColor(int sboTerm) {
+  	if (SBO.isChildOf(sboTerm, SBO.getCompartment())) {
+  		// dark yellow
+  		return new Color(204, 204, 0);
+  	}
+  	return Color.BLACK;
   }
 
   /**
@@ -191,7 +206,7 @@ public class SBGNVisualizationProperties {
     }
     
     // Set a common color
-    ret.setFillColor(getColor(sboTerm));
+    ret.setFillColor(getFillColor(sboTerm));
     
     return ret;
   }

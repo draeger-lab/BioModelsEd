@@ -1,5 +1,5 @@
 /*
- * $Id: SB_2GraphML.java 934 2012-05-10 14:06:52Z wrzodek $
+ * $Id: SB_2GraphML.java 970 2012-06-13 08:07:42Z draeger $
  * $URL: https://rarepos.cs.uni-tuebingen.de/svn-path/SysBio/trunk/src/de/zbit/graph/io/SB_2GraphML.java $
  * ---------------------------------------------------------------------
  * This file is part of KEGGtranslator, a program to convert KGML files
@@ -61,7 +61,7 @@ import de.zbit.util.StringUtil;
  * <p>This generic superclass should NOT use ANY SBML or SBGN, etc. classes.
  * Only generic java classes and yFiles should be imported.
  * @author Clemens Wrzodek
- * @version $Rev: 934 $
+ * @version $Rev: 970 $
  */
 public abstract class SB_2GraphML <T> {
   
@@ -317,7 +317,7 @@ public abstract class SB_2GraphML <T> {
     // Setup node properties
     if ((label != null) && !(nr instanceof ReactionNodeRealizer) &&
         !label.equalsIgnoreCase("undefined") && !SBO.isChildOf(sboTerm, SBO.getEmptySet())) {
-      if (height>30) {
+      if (height > 30) {
         // Height is enough to insert a second line.
         label = StringUtil.insertLineBreaks(label,(int)(width/6), "\n");
       }
@@ -371,7 +371,7 @@ public abstract class SB_2GraphML <T> {
    */
   public static NodeRealizer setupGroupNode(NodeLabel nl) {
     GroupNodeRealizer nr = new ComplexGroupNode();
-    ((GroupNodeRealizer)nr).setGroupClosed(false);
+    ((GroupNodeRealizer) nr).setGroupClosed(false);
     //    nr.setTransparent(true);
     
     // Eliminate the expanding/ collapsing icons
@@ -390,13 +390,19 @@ public abstract class SB_2GraphML <T> {
     return nr;
   }
   
+  /**
+   * 
+   * @param id
+   * @param label
+   * @param sboTerm
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param childrenID
+   * @return
+   */
   protected Node createGroupNode(String id, String label, int sboTerm, double x, double y, double width, double height, String... childrenID) {
-    HierarchyManager hm = simpleGraph.getHierarchyManager();
-    if (hm==null) {
-      hm = new HierarchyManager(simpleGraph);
-      simpleGraph.setHierarchyManager(hm);
-    }
-    
     // First, create a plain node.
     Node n = createNode(id, label, sboTerm, x, y, width, height);
     
@@ -406,13 +412,28 @@ public abstract class SB_2GraphML <T> {
     simpleGraph.getHierarchyManager().convertToGroupNode(n);
     
     
-    // Add children
+    addChildren(n, childrenID);
+    
+    return n;
+  }
+
+  /**
+   * 
+   * @param n
+   * @param childrenID
+   */
+	protected void addChildren(Node n, String... childrenID) {
+		if (childrenID == null) {
+			return;
+		}
+		
+	// Add children
     //////////////////////////////////////
     NodeList nl = new NodeList();
-    double x2=Double.MAX_VALUE,y2=Double.MAX_VALUE,width2=0,height2=0;
-    for (int i=0; i<childrenID.length; i++) {
+    double x2 = Double.MAX_VALUE,y2=Double.MAX_VALUE, width2 = 0, height2 = 0;
+    for (int i = 0; i < childrenID.length; i++) {
       Node twoNode = id2node.get(childrenID[i]);
-      if (twoNode==null) {
+      if (twoNode == null) {
         // Below info, because KEGGtranslator creates only one group node
         // for qualitative and core models. Thus, there are always missing
         // components (because they are duplicated) in group nodes...
@@ -422,26 +443,41 @@ public abstract class SB_2GraphML <T> {
       NodeRealizer nr2 = simpleGraph.getRealizer(twoNode);
       x2 = Math.min(x2, nr2.getX());
       y2 = Math.min(y2, nr2.getY());
-      width2=Math.max(width2, (nr2.getWidth()+nr2.getX()));
-      height2=Math.max(height2, (nr2.getHeight()+nr2.getY()));
+      width2 = Math.max(width2, (nr2.getWidth() + nr2.getX()));
+      height2 = Math.max(height2, (nr2.getHeight() + nr2.getY()));
       
       nl.add(twoNode);
     }
     
     // Reposition group node to fit content
-    if (nl.size()>0) {
+    if (nl.size() > 0) {
       int offset = 5;
-      simpleGraph.setLocation(n, x2-offset, y2-offset-14);
-      simpleGraph.setSize(n, width2-x2+2*offset, height2-y2+2*offset+11);
+      simpleGraph.setLocation(n, x2 - offset, y2 - offset - 14);
+      simpleGraph.setSize(n, width2 - x2 + 2 * offset, height2 - y2 + 2 * offset + 11);
       
       // Set hierarchy
-      simpleGraph.getHierarchyManager().setParentNode(nl, n);
+      HierarchyManager hm = simpleGraph.getHierarchyManager();
+      if (hm == null) {
+        hm = new HierarchyManager(simpleGraph);
+        simpleGraph.setHierarchyManager(hm);
+      }
+      hm.setParentNode(nl, n);
+      
+//      for (int i = 0; i < nl.size(); i++) {
+//      	Node node = (Node) nl.get(i);
+//      	EdgeCursor ec = node.edges();
+//      	for (int j = 0; j < ec.size(); j++, ec.next()) {
+//      		Edge edge = ec.edge();
+//      		if ((hm.getParentNode(edge.source()) == n) || (hm.getParentNode(edge.target()) == n)) {
+//      			hm.convertToInterEdge(edge, edge.source(), edge.target());
+//      		}
+//      	}
+//      }
       
       // Reposition group node to fit content (2nd time is necessary. Maybe yFiles bug...)
-      simpleGraph.setLocation(n, x2-offset, y2-offset-14);
-      simpleGraph.setSize(n, width2-x2+2*offset, height2-y2+2*offset+11);
+      simpleGraph.setLocation(n, x2 - offset, y2 - offset - 14);
+      simpleGraph.setSize(n, width2 - x2 + 2 * offset, height2 - y2 + 2 * offset + 11);
     }
-    
-    return n;
-  } 
+	}
+
 }
