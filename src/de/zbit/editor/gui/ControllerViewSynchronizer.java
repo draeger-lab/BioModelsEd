@@ -57,10 +57,12 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void nodeAdded(TreeNode node) {
+    // React only if *glyphs are added
     if (node instanceof Species) {
       Species s = (Species) node;
       // TODO get correct species glyph
-      Map<String, List<String>> layoutGlyphMap = (Map<String, List<String>>) s.getUserObject(SBMLEditorConstants.GLYPH_LINK_KEY);
+      Map<String, List<String>> layoutGlyphMap = 
+          (Map<String, List<String>>) s.getUserObject(SBMLEditorConstants.GLYPH_LINK_KEY);
       // TODO check != null, has 0
       String sgId = layoutGlyphMap.get(this.layout.getId()).get(0);
       SpeciesGlyph sg = (SpeciesGlyph) this.layout.getSpeciesGlyph(sgId);

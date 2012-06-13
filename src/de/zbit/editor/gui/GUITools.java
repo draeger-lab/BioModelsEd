@@ -19,6 +19,9 @@ package de.zbit.editor.gui;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JMenuBar;
+import javax.swing.JToolBar;
+
 /**
  * 
  * @author Alexander Diamantikos
@@ -47,5 +50,16 @@ public class GUITools {
       return KeyEvent.CTRL_MASK;
     }
   }
-
+  
+  /**
+   * Enable Button/MenuItem for user interaction
+   * @param isEnabled
+   * @param command
+   * @param menuBar
+   * @param toolBars
+   */
+  public static void setEnabled(boolean isEnabled, String command, 
+    JMenuBar menuBar, JToolBar... toolBars) {
+    //TODO set command in menu bar and tool bar recursively
+  }
 }

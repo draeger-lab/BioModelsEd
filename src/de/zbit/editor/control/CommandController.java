@@ -131,6 +131,8 @@ public class CommandController implements PropertyChangeListener {
       /*
        * create species glyph
        */
+      // FIXME createSpeciesGlyphe should not be used here -> listeners get notfied to early
+      // TODO write factory class
       SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(),
           s.getId());
       sGlyph.setBoundingBox(sGlyph.createBoundingBox(

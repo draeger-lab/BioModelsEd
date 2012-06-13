@@ -53,7 +53,7 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	 * @param layout
 	 */
 	public GraphLayoutPanel(Layout layout) {
-		super(null, null, null, layout);
+		super(null, null, null, layout, false);
 		try {
 			createTabContent();
 		} catch (Throwable e) {

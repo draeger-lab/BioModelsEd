@@ -140,10 +140,14 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	 */
 	@Override
 	public void nodeRemoved(TreeNodeRemovedEvent evt) {
-		// TODO get Id of removed node
-		initializeIds();
+	  TreeNode removedNode = evt.getSource();
+	  if (removedNode instanceof Species) {
+	    Species s = (Species) removedNode;
+	    this.listOfUsedIds.remove(s.getId());
+	  }
 	}
 	
+	// TODO add comment JAKOB!
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
 	  ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
