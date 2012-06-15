@@ -72,6 +72,10 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	    return converter.createGraph(layout);
 	}
 
+  public Layout2GraphML getConverter() {
+    return this.converter;
+  }
+
 	
 	//======================================================================================
 	

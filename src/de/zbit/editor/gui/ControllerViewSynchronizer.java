@@ -17,23 +17,18 @@
 package de.zbit.editor.gui;
 
 import java.beans.PropertyChangeEvent;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstants;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
-
-import de.zbit.editor.SBMLEditorConstants;
-import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 
 /**
@@ -43,11 +38,11 @@ import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
  */
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
-  private TranslatorSBMLgraphPanel panel;
+  private GraphLayoutPanel panel;
   private Layout layout;
   private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
   
-  public ControllerViewSynchronizer(TranslatorSBMLgraphPanel panel, Layout layout) {
+  public ControllerViewSynchronizer(GraphLayoutPanel panel, Layout layout) {
     this.panel = panel;
     this.layout = layout;
   }
@@ -57,22 +52,11 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void nodeAdded(TreeNode node) {
-    // React only if *glyphs are added
-    if (node instanceof Species) {
-      Species s = (Species) node;
-      // TODO get correct species glyph
-      Map<String, List<String>> layoutGlyphMap = 
-          (Map<String, List<String>>) s.getUserObject(SBMLEditorConstants.GLYPH_LINK_KEY);
-      // TODO check != null, has 0
-      String sgId = layoutGlyphMap.get(this.layout.getId()).get(0);
-      SpeciesGlyph sg = (SpeciesGlyph) this.layout.getSpeciesGlyph(sgId);
-      
-      ExtendedLayoutModel extendedLayoutModel = (ExtendedLayoutModel) s.getModel().getExtension(LayoutConstants.namespaceURI);
-      
-//      BoundingBox boundingBox = extendedLayoutModel.getListOfLayouts()
-//          .get(this.layout.getId()).getSpeciesGlyph(sg.getId())
-//          .getBoundingBox();
-      BoundingBox boundingBox = sg.getBoundingBox();
+    // React only if *Glyphs are added
+    if (node instanceof SpeciesGlyph) {
+      SpeciesGlyph speciesGlyph = (SpeciesGlyph) node;
+      BoundingBox boundingBox = speciesGlyph.getBoundingBox();
+      Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
       panel.getConverter().createNode(s.getId(),
           s.getName(),
@@ -82,6 +66,12 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
           boundingBox.getDimensions().getWidth(),
           boundingBox.getDimensions().getHeight());
       panel.getGraph2DView().updateView();
+    }
+    else if (node instanceof ReactionGlyph) {
+      ReactionGlyph reactionGlyph = (ReactionGlyph) node;
+    }
+    else if (node instanceof TextGlyph) {
+      TextGlyph textGlyph = (TextGlyph) node;
     }
   }
 

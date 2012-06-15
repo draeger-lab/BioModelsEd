@@ -41,8 +41,8 @@ import org.sbml.jsbml.util.ValuePair;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.ControllerViewSynchronizer;
 import de.zbit.editor.gui.GUIFactory;
+import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
-import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
 
 /**
  * @author Jakob Matthes
@@ -131,10 +131,10 @@ public class CommandController implements PropertyChangeListener {
       /*
        * create species glyph
        */
-      // FIXME createSpeciesGlyphe should not be used here -> listeners get notfied to early
       // TODO write factory class
-      SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s.getId(),
-          s.getId());
+      SpeciesGlyph sGlyph = new SpeciesGlyph("glyph_" + s.getId(),
+        model.getLevel(), model.getVersion());
+      sGlyph.setSpecies(s.getId());
       sGlyph.setBoundingBox(sGlyph.createBoundingBox(
           SBMLEditorConstants.glyphDefaultWidth,
           SBMLEditorConstants.glyphDefaultHeight,
@@ -158,8 +158,9 @@ public class CommandController implements PropertyChangeListener {
        * add created species
        */
       model.addSpecies(s);
+      layout.addSpeciesGlyph(sGlyph);
   
-      TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) this.view.getTabManager().getSelectedComponent();
+      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
       s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
     }
   
