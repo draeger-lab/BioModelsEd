@@ -39,9 +39,7 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.SBMLEditorConstants;
-import de.zbit.editor.gui.ControllerViewSynchronizer;
 import de.zbit.editor.gui.GUIFactory;
-import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
 
 /**
@@ -108,6 +106,7 @@ public class CommandController implements PropertyChangeListener {
     if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
       // is there any possibility in java to correctly check types before
       // casting?
+      @SuppressWarnings("unchecked")
       ValuePair<Double, Double> newMousePosition =
           (ValuePair<Double, Double>) evt.getNewValue();
       Double x = newMousePosition.getL();
@@ -119,22 +118,8 @@ public class CommandController implements PropertyChangeListener {
       Layout layout = this.view.getCurrentLayout();
       Model model = layout.getModel();
   
-      /*
-       * create species (not in model)
-       */
-      Species s = new Species(id);
-      s.setName(nameFromPopup);
-      s.setLevel(model.getLevel());
-      s.setVersion(model.getVersion());
-      s.setSBOTerm(sboTerm);
-  
-      /*
-       * create species glyph
-       */
-      // TODO write factory class
-      SpeciesGlyph sGlyph = new SpeciesGlyph("glyph_" + s.getId(),
-        model.getLevel(), model.getVersion());
-      sGlyph.setSpecies(s.getId());
+      Species s = SBMLFactory.createSpecies(id, nameFromPopup, sboTerm, model.getLevel(), model.getVersion());
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph("glyph_" + s.getId(), model.getLevel(), model.getVersion(), s.getId());
       sGlyph.setBoundingBox(sGlyph.createBoundingBox(
           SBMLEditorConstants.glyphDefaultWidth,
           SBMLEditorConstants.glyphDefaultHeight,
@@ -142,6 +127,9 @@ public class CommandController implements PropertyChangeListener {
           x,
           y,
           SBMLEditorConstants.glyphDefaultZ));
+  
+      model.addSpecies(s);
+      layout.addSpeciesGlyph(sGlyph);
 
       /*
        * keep a list of all glyphs which are associated with the species
@@ -154,14 +142,8 @@ public class CommandController implements PropertyChangeListener {
 
       s.putUserObject(SBMLEditorConstants.GLYPH_LINK_KEY, layoutGlyphMap);
   
-      /*
-       * add created species
-       */
-      model.addSpecies(s);
-      layout.addSpeciesGlyph(sGlyph);
-  
-      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
-      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
+//      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
+//      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
     }
   
     this.state = States.normal;

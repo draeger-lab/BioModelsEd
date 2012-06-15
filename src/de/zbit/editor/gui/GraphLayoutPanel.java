@@ -18,7 +18,9 @@ package de.zbit.editor.gui;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -49,11 +51,18 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	private Layout2GraphML converter = null;
 	
 	/**
+	 * Maps a element id to a list of graphical objects associated
+	 * with that element.
+	 */
+	private Map<String, List<String>> idMap;
+	
+	/**
 	 * 
 	 * @param layout
 	 */
 	public GraphLayoutPanel(Layout layout) {
 		super(null, null, null, layout, false);
+	  this.idMap = new HashMap<String, List<String>>();
 		try {
 			createTabContent();
 		} catch (Throwable e) {
