@@ -16,7 +16,17 @@
  */
 package de.zbit.graph.io;
 
+import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.Point;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+
+import de.zbit.editor.SBMLEditorConstants;
+
+import y.base.Node;
 
 /**
  * @author Andreas Dr&aum;ger
@@ -38,7 +48,53 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 */
 	@Override
 	protected void createNodesAndEdges(Layout layout) {
+		initCompartments(layout);
+		initSpeciesGlyphs(layout);
+		initReactionGlyphs(layout);
+		initTextGlyphs(layout);
+	}
+
+	/**
+	 * @param layout
+	 */
+	private void initTextGlyphs(Layout layout) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @param layout
+	 */
+	private void initReactionGlyphs(Layout layout) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @param layout
+	 */
+	private void initSpeciesGlyphs(Layout layout) {
+		ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
+		for(SpeciesGlyph glyph: list){
+		
+		String id = glyph.getSpecies();
+		
+		Species species = layout.getModel().getSpecies(id);
+		
+		String name = species.getName();
+		BoundingBox bb = glyph.getBoundingBox();
+		Dimensions dimensions = bb.getDimensions();
+		Point point = bb.getPosition();
+		Node n = createNode(id, name, species.getSBOTerm(), point.getX(), point.getY(), dimensions.getWidth(), dimensions.getHeight());
+		glyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+		}
+	}
+
+	/**
+	 * @param layout
+	 */
+	private void initCompartments(Layout layout) {
+			
 	}
 
 	/* (non-Javadoc)

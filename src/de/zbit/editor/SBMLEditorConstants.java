@@ -33,13 +33,14 @@ public class SBMLEditorConstants {
   public static final int glyphDefaultWidth = 100;
   public static final int glyphDefaultZ = 0;
   public static final String LAYOUT_LINK_KEY = "LAYOUT_LINK_KEY";
+  public static final String GLYPH_NODE_KEY = "GLYPH_NODE_KEY";
   public static final String layoutDefaultName = "layoutDefault";
   public static final String openingDone = "openingDone";
   public static final String savingDone = "savingDone";
   public static final String fileNotFound = "FILE_NOT_FOUND";
   public static final String genericFileName = "GENERIC_FILE_NAME";
-  public static final Object GLYPH_LINK_KEY = "GLYPH_LINK_KEY";
-  public static String warningTitle = "WARNING_TITLE";
-  public static String errorTitle = "ERROR_TITLE";
+  public static final String GLYPH_LINK_KEY = "GLYPH_LINK_KEY";
+  public static final String warningTitle = "WARNING_TITLE";
+  public static final String errorTitle = "ERROR_TITLE";
 
 }
