@@ -35,11 +35,13 @@ import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
+import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.Point;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 
@@ -72,6 +74,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 * 
 	 */
 	private Map<String, Integer> idCounts = new HashMap<String, Integer>();
+	private int ReactionCounter = 0;
 	
 	/**
 	 * Direct link to the layout.
@@ -135,11 +138,17 @@ public class CellDesignerAnnotationParser implements Runnable {
 		
 		boolean newSpeciesAlias = false;
 		boolean newCompartmentAlias = false;
+		boolean newReactant = false;
+		
 		Double actualX = null;
 		Double actualY = null;
 		Double actualHeight = null;
 		Double actualWidth = null;
 		String actualId = null;
+		
+		SpeciesGlyph bR = null;
+		SpeciesGlyph bP = null;
+		
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader streamReader = inputFactory.createXMLStreamReader(inputStream);
 		
@@ -168,6 +177,26 @@ public class CellDesignerAnnotationParser implements Runnable {
 					}
 					logger.fine("compartment alias " + actualId);
 				}
+				else if (streamReader.getLocalName().equals("baseReactant")) {
+				  newReactant = true;
+				  for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+				    logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+				    if (streamReader.getAttributeLocalName(i).equals("alias")) {
+				      bR = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
+				    }
+				  }
+				}
+        else if (newReactant && streamReader.getLocalName().equals("baseProduct")) {
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              bP = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
+              writeReactionLayout(bR, bP);
+              bR = null;
+              bP = null;
+              newReactant = false;
+            }
+          }
+        }			
 				else if ((newSpeciesAlias || newCompartmentAlias) && streamReader.getLocalName().equals("bounds")) {
 					for (int i = 0; i < streamReader.getAttributeCount(); i++) {
 						logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
@@ -253,6 +282,33 @@ public class CellDesignerAnnotationParser implements Runnable {
 			BoundingBox bb = go.createBoundingBox(width, height, 0);
 			bb.setPosition(new Point(x, y, 0));
 		}
+	}
+	
+	private void writeReactionLayout(SpeciesGlyph bR,  SpeciesGlyph bP) {
+	  BoundingBox bbR = bR.getBoundingBox();
+	  BoundingBox bbP = bP.getBoundingBox();
+	  if ((bbR != null) && (bbP != null) && bbR.isSetPosition() && bbP.isSetPosition()) {
+	    double x1 = bbR.getPosition().getX();
+	    double y1 = bbR.getPosition().getY();
+	    double x2 = bbP.getPosition().getX();
+	    double y2 = bbP.getPosition().getY();
+	    double x = (x1 + x2) / 2;
+	    double y = (y1 + y2) / 2;
+	    
+	    BoundingBox ReactionGlyphBB = new BoundingBox();
+	    Point p = new Point();
+	    p.setX(x);
+	    p.setY(y);
+	    ReactionGlyphBB.setPosition(p);
+	    Dimensions dim = new Dimensions();
+	    dim.setWidth(10);
+	    dim.setHeight(10);
+	    ReactionGlyphBB.setDimensions(dim);
+	    
+	    ReactionGlyph RG = new ReactionGlyph("r_" + ++ReactionCounter);
+	    RG.setBoundingBox(ReactionGlyphBB);
+	    layout.add(RG);
+	  }
 	}
 	
 }
