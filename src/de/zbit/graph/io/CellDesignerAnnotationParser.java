@@ -43,6 +43,8 @@ import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 
 
 
@@ -284,9 +286,9 @@ public class CellDesignerAnnotationParser implements Runnable {
 		}
 	}
 	
-	private void writeReactionLayout(SpeciesGlyph bR,  SpeciesGlyph bP) {
-	  BoundingBox bbR = bR.getBoundingBox();
-	  BoundingBox bbP = bP.getBoundingBox();
+	private void writeReactionLayout(SpeciesGlyph baseR,  SpeciesGlyph baseP) {
+	  BoundingBox bbR = baseR.getBoundingBox();
+	  BoundingBox bbP = baseP.getBoundingBox();
 	  if ((bbR != null) && (bbP != null) && bbR.isSetPosition() && bbP.isSetPosition()) {
 	    double x1 = bbR.getPosition().getX();
 	    double y1 = bbR.getPosition().getY();
@@ -300,6 +302,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	    p.setX(x);
 	    p.setY(y);
 	    ReactionGlyphBB.setPosition(p);
+	    //TODO Check size
 	    Dimensions dim = new Dimensions();
 	    dim.setWidth(10);
 	    dim.setHeight(10);
@@ -307,6 +310,17 @@ public class CellDesignerAnnotationParser implements Runnable {
 	    
 	    ReactionGlyph RG = new ReactionGlyph("r_" + ++ReactionCounter);
 	    RG.setBoundingBox(ReactionGlyphBB);
+	    
+	    SpeciesReferenceGlyph reactant = new SpeciesReferenceGlyph();
+	    reactant.setSpeciesGlyph(baseR.getId());
+	    reactant.setRole(SpeciesReferenceRole.SUBSTRATE);
+	    RG.addSpeciesReferenceGlyph(reactant);
+	    
+	    SpeciesReferenceGlyph product = new SpeciesReferenceGlyph();
+      reactant.setSpeciesGlyph(baseP.getId());
+      reactant.setRole(SpeciesReferenceRole.PRODUCT);
+      RG.addSpeciesReferenceGlyph(product);
+      
 	    layout.add(RG);
 	  }
 	}
