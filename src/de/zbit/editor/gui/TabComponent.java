@@ -77,11 +77,6 @@ public class TabComponent extends JPanel {
     tabManager.closeAllTabs();
   }
 
-
-  public void select() {
-    tabManager.setSelectedIndex(tabManager.indexOfTabComponent(this));
-  }
-
   class TabListener extends MouseAdapter {
 
     JPopupMenu popup;
@@ -106,7 +101,8 @@ public class TabComponent extends JPanel {
       if (e.isPopupTrigger()) {
         popup.show(e.getComponent(), e.getX(), e.getY());
       } else {
-        ((TabComponent) e.getComponent()).select();
+        TabComponent tabComponent = ((TabComponent) e.getComponent());
+        tabManager.showTab(tabManager.indexOfTabComponent(tabComponent));       
       }
     }
   }

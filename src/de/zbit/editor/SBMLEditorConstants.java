@@ -42,5 +42,82 @@ public class SBMLEditorConstants {
   public static final String GLYPH_LINK_KEY = "GLYPH_LINK_KEY";
   public static final String warningTitle = "WARNING_TITLE";
   public static final String errorTitle = "ERROR_TITLE";
-
+  
+  //EditorMenu
+   //Menu File
+  //Resource Strings
+  public static final String MENU_FILE = "MENU_FILE";
+  public static final String MENU_FILE_NEW = "MENU_FILE_NEW";
+  public static final String MENU_FILE_OPEN = "MENU_FILE_OPEN";
+  public static final String MENU_FILE_CLOSE = "MENU_FILE_CLOSE";
+  public static final String MENU_FILE_SAVE = "MENU_FILE_SAVE";
+  public static final String MENU_FILE_SAVEAS = "MENU_FILE_SAVEAS";
+  public static final String MENU_FILE_EXPORT = "MENU_FILE_EXPORT";
+  public static final String MENU_FILE_QUIT = "MENU_FILE_QUIT";
+  //Actions
+  public static final String fileNew = "fileNew";
+  public static final String fileOpen = "fileOpen";
+  public static final String fileClose = "fileClose";
+  public static final String fileSave = "fileSave";
+  public static final String fileSaveAs = "fileSaveAs";
+  public static final String fileExport = "fileExport";
+  public static final String fileQuit = "fileQuit";
+  //Menu Edit
+  //Resource Strings
+  public static final String MENU_EDIT = "MENU_EDIT";
+  public static final String MENU_EDIT_UNDO = "MENU_EDIT_UNDO";
+  public static final String MENU_EDIT_REDO = "MENU_EDIT_REDO";
+  public static final String MENU_EDIT_CUT = "MENU_EDIT_CUT";
+  public static final String MENU_EDIT_COPY = "MENU_EDIT_COPY";
+  public static final String MENU_EDIT_PASTE = "MENU_EDIT_PASTE";
+  public static final String MENU_EDIT_DELETE = "MENU_EDIT_DELETE";
+  //Actions
+  public static final String editUndo = "editUndo";
+  public static final String editRedo = "editRedo";
+  public static final String editCut = "editCut";
+  public static final String editCopy = "editCopy";
+  public static final String editPaste = "editPaste";
+  public static final String editDelete = "editDelete";
+   //Menu Layout
+  //Resource Strings
+  public static final String MENU_LAYOUT = "MENU_LAYOUT";
+  public static final String MENU_LAYOUT_NEW = "MENU_LAYOUT_NEW";
+  public static final String MENU_LAYOUT_CLONE = "MENU_LAYOUT_CLONE";
+  public static final String MENU_LAYOUT_DELETE = "MENU_LAYOUT_DELETE";
+  //Actions
+  public static final String layoutNew = "layoutNew";
+  public static final String layoutClone = "layoutClone";
+  public static final String layoutDelete = "layoutDelete";
+  //Keystrokes
+  public static final String MENU_LAYOUT_NEW_KEYSTROKE = "alt N";
+  public static final String MENU_LAYOUT_CLONE_KEYSTROKE = "alt C";
+  public static final String MENU_LAYOUT_DELETE_KEYSTROKE = "alt D";
+  //Menu Help
+  //Resource Strings
+  public static final String MENU_HELP = "MENU_HELP";
+  public static final String MENU_HELP_ABOUT = "MENU_HELP_ABOUT";
+  //Actions
+  public static final String helpAbout = "helpAbout";
+  
+  //EditorToolbar
+  //Resource Strings
+  public static final String UNKNOWN_MOLECULE = "UNKNOWN_MOLECULE";
+  public static final String SIMPLE_MOLECULE = "SIMPLE_MOLECULE";
+  public static final String MACROMOLECULE = "MACROMOLECULE";
+  public static final String EMPTY_SET = "EMPTY_SET";
+  public static final String CATALYSIS = "CATALYSIS";
+  public static final String REACTION = "REACTION";
+  public static final String INHIBITION = "INHIBITION";
+  public static final String MENU_TAB_OPEN_NEW = "MENU_TAB_OPEN_NEW";
+  public static final String MENU_TAB_OPEN = "MENU_TAB_OPEN";
+  //Actions
+  public static final String addMacromolecule = "addMacromolecule";
+  public static final String addInhibition = "addInhibition";
+  public static final String addCatalysis = "addCatalysis";
+  public static final String addReaction = "addReaction";
+  public static final String addUnknownMolecule = "addUnknownMolecule";
+  public static final String addSimpleMolecule = "addSimpleMolecule";
+  public static final String addEmptySet = "addEmptySet";
+  public static final String openSelectedLayout = "openSelectedLayout";
+    
 }

@@ -9,7 +9,7 @@
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation. A copy of the license
- * agreement is provided in the file named "LICENSE.txt" included with
+ * agreement is provided in the file named LICENSE.txt included with
  * this software distribution and also available online as
  * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  * ---------------------------------------------------------------------
@@ -24,6 +24,7 @@ import java.beans.EventHandler;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 
@@ -41,68 +42,68 @@ public class EditorMenu extends JMenuBar {
 
   public EditorMenu(CommandController commandcontroller, SBMLView parent) {
     JMenu menuFile = GUIFactory.createMenu(this,
-      Resources.getString("MENU_FILE"));
+      Resources.getString(SBMLEditorConstants.MENU_FILE));
     int ctrl = GUITools.getControlKey();
-    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_NEW"),
+    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_NEW),
       ctrl, KeyEvent.VK_N, EventHandler.create(ActionListener.class, parent,
-        "fileNew"));
+        SBMLEditorConstants.fileNew));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_OPEN"),
+    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_OPEN),
       ctrl, KeyEvent.VK_O, EventHandler.create(ActionListener.class, parent,
-        "fileOpen"));
-    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_CLOSE"),
+          SBMLEditorConstants.fileOpen));
+    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_CLOSE),
       ctrl, KeyEvent.VK_W, EventHandler.create(ActionListener.class, parent,
-        "fileClose"));
+          SBMLEditorConstants.fileClose));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_SAVE"),
+    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_SAVE),
       ctrl, KeyEvent.VK_S, EventHandler.create(ActionListener.class, parent,
-        "fileSave"));
+          SBMLEditorConstants.fileSave));
     GUIFactory.createMenuItem(menuFile,
-      Resources.getString("MENU_FILE_SAVEAS"), EventHandler.create(
-        ActionListener.class, parent, "fileSaveAs"));
+      Resources.getString(SBMLEditorConstants.MENU_FILE_SAVEAS), EventHandler.create(
+        ActionListener.class, parent, SBMLEditorConstants.fileSaveAs));
     GUIFactory.createMenuItem(menuFile,
-      Resources.getString("MENU_FILE_EXPORT"), EventHandler.create(
-        ActionListener.class, parent, "fileExport"));
+      Resources.getString(SBMLEditorConstants.MENU_FILE_EXPORT), EventHandler.create(
+        ActionListener.class, parent, SBMLEditorConstants.fileExport));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, Resources.getString("MENU_FILE_QUIT"),
+    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_QUIT),
       ctrl, KeyEvent.VK_Q, EventHandler.create(ActionListener.class, parent,
-        "fileQuit"));
+          SBMLEditorConstants.fileQuit));
     JMenu menuEdit = GUIFactory.createMenu(this,
-      Resources.getString("MENU_EDIT"));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_UNDO"),
+      Resources.getString(SBMLEditorConstants.MENU_EDIT));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_UNDO),
       ctrl, KeyEvent.VK_Z, EventHandler.create(ActionListener.class,
-        parent, "editUndo"));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_REDO"),
+        parent, SBMLEditorConstants.editUndo));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_REDO),
       ctrl, KeyEvent.VK_Y, EventHandler.create(ActionListener.class,
-        parent, "editRedo"));
+        parent, SBMLEditorConstants.editRedo));
     GUIFactory.createMenuItem(menuEdit,
-      Resources.getString("MENU_EDIT_DELETE"), "DELETE", EventHandler.create(
-        ActionListener.class, parent, "editDelete"));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_COPY"),
+      Resources.getString(SBMLEditorConstants.MENU_EDIT_DELETE), "DELETE", EventHandler.create(
+        ActionListener.class, parent, SBMLEditorConstants.editDelete));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_COPY),
       ctrl, KeyEvent.VK_C, EventHandler.create(ActionListener.class,
-        parent, "editCopy"));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_CUT"),
+        parent, SBMLEditorConstants.editCopy));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_CUT),
       ctrl, KeyEvent.VK_X, EventHandler.create(ActionListener.class,
-        parent, "editCut"));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString("MENU_EDIT_PASTE"),
+        parent, SBMLEditorConstants.editCut));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_PASTE),
       ctrl, KeyEvent.VK_V, EventHandler.create(ActionListener.class,
-        parent, "editPaste"));
+        parent, SBMLEditorConstants.editPaste));
     JMenu menuLayout = GUIFactory.createMenu(this,
-      Resources.getString("MENU_LAYOUT"));
+      Resources.getString(SBMLEditorConstants.MENU_LAYOUT));
     GUIFactory.createMenuItem(menuLayout,
-      Resources.getString("MENU_LAYOUT_NEW"), "alt N", EventHandler.create(
-        ActionListener.class, parent, "layoutNew"));
+      Resources.getString(SBMLEditorConstants.MENU_LAYOUT_NEW), SBMLEditorConstants.MENU_LAYOUT_NEW_KEYSTROKE, EventHandler.create(
+        ActionListener.class, parent, SBMLEditorConstants.layoutNew));
     GUIFactory.createMenuItem(menuLayout,
-      Resources.getString("MENU_LAYOUT_CLONE"), "alt C", EventHandler.create(
-        ActionListener.class, parent, "layoutClone"));
+      Resources.getString(SBMLEditorConstants.MENU_LAYOUT_CLONE), SBMLEditorConstants.MENU_LAYOUT_CLONE_KEYSTROKE, EventHandler.create(
+        ActionListener.class, parent, SBMLEditorConstants.layoutClone));
     GUIFactory.createMenuItem(menuLayout,
-      Resources.getString("MENU_LAYOUT_DELETE"), "alt D", EventHandler.create(
-        ActionListener.class, parent, "layoutDelete"));
+      Resources.getString(SBMLEditorConstants.MENU_LAYOUT_DELETE), SBMLEditorConstants.MENU_LAYOUT_DELETE_KEYSTROKE, EventHandler.create(
+        ActionListener.class, parent, SBMLEditorConstants.layoutDelete));
     JMenu menuHelp = GUIFactory.createMenu(this,
-      Resources.getString("MENU_HELP"));
+      Resources.getString(SBMLEditorConstants.MENU_HELP));
     GUIFactory
-              .createMenuItem(menuHelp, Resources.getString("MENU_HELP_ABOUT"),
+              .createMenuItem(menuHelp, Resources.getString(SBMLEditorConstants.MENU_HELP_ABOUT),
                 EventHandler.create(ActionListener.class, parent,
-                  "helpAbout"));
+                    SBMLEditorConstants.helpAbout));
   }
 }

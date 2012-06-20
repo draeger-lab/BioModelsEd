@@ -9,7 +9,7 @@
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation. A copy of the license
- * agreement is provided in the file named "LICENSE.txt" included with
+ * agreement is provided in the file named LICENSE.txt included with
  * this software distribution and also available online as
  * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  * ---------------------------------------------------------------------
@@ -23,6 +23,11 @@ import java.beans.EventHandler;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
+import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.ext.layout.Layout;
+
+import de.zbit.editor.SBMLEditorConstants;
+
 
 /**
  * @author Jakob Matthes
@@ -31,7 +36,8 @@ import javax.swing.JToolBar;
 public class EditorToolbar extends JToolBar {
 
   private static final long serialVersionUID = 4238837776010510727L;
-
+  private JComboBox<String> layoutComboBox = new JComboBox<String>();
+  private ListOf<Layout> listOfLayouts = new ListOf<Layout>();
 
   /**
    * @param commandController
@@ -39,25 +45,40 @@ public class EditorToolbar extends JToolBar {
   public EditorToolbar(SBMLEditor parent) {
     // TODO: Create a very simple icon for each button, use Tooltips, remove the
     // String Label.
-    GUIFactory.addButton(this, Resources.getString("UNKNOWN_MOLECULE"),
-      EventHandler.create(ActionListener.class, parent, "addUnknownMolecule"));
-    GUIFactory.addButton(this, Resources.getString("SIMPLE_MOLECULE"),
-      EventHandler.create(ActionListener.class, parent, "addSimpleMolecule"));
-    GUIFactory.addButton(this, Resources.getString("MACROMOLECULE"),
-      EventHandler.create(ActionListener.class, parent, "addMacromolecule"));
-    GUIFactory.addButton(this, Resources.getString("EMPTY_SET"),
-      EventHandler.create(ActionListener.class, parent, "addEmptySet"));
-    GUIFactory.addButton(this, Resources.getString("REACTION"),
-      EventHandler.create(ActionListener.class, parent, "addReaction"));
-    GUIFactory.addButton(this, Resources.getString("CATALYSIS"),
-      EventHandler.create(ActionListener.class, parent, "addCatalysis"));
-    GUIFactory.addButton(this, Resources.getString("INHIBITION"),
-      EventHandler.create(ActionListener.class, parent, "addInhibition"));
-     String[] layoutArray = { "A", "B", "C" };
-     JComboBox layoutComboBox = new JComboBox(layoutArray);
-     layoutComboBox.setSelectedIndex(0);
-     add(layoutComboBox);
-    GUIFactory.addButton(this,  Resources.getString("MENU_TAB_OPEN"));
-    GUIFactory.addButton(this,  Resources.getString("MENU_TAB_OPEN_NEW"));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addUnknownMolecule));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.SIMPLE_MOLECULE),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addSimpleMolecule));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.MACROMOLECULE),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addMacromolecule));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.EMPTY_SET),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addEmptySet));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.REACTION),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addReaction));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.CATALYSIS),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addCatalysis));
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.INHIBITION),
+      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
+    add(layoutComboBox);
+    GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN));
+    GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN_NEW),
+        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openSelectedLayout));
+    
+  }
+
+
+  /**
+   * @param list
+   */
+  public void updateComboBox(ListOf<Layout> list) {
+    this.listOfLayouts = list;
+    layoutComboBox.removeAllItems();
+    for(Layout l: listOfLayouts){
+      layoutComboBox.addItem(l.getName());
+    }
+  }
+  
+  public Layout getSelectedLayout() {
+    return listOfLayouts.get(layoutComboBox.getSelectedIndex());
   }
 }

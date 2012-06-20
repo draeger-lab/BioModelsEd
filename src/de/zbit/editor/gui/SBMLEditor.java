@@ -30,10 +30,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
+import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.editor.control.SBMLView;
 
 /**
@@ -45,6 +47,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   public static final String PROGRAM_NAME = "SBML Editor";
   private JFrame frame;
   private CommandController commandController;
+  private EditorToolbar editorToolbar;
   private TabManager tabManager;
   private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
   
@@ -89,7 +92,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     frame = new JFrame(PROGRAM_NAME);
     frame.setJMenuBar(new EditorMenu(commandController, this));
-    frame.add(new EditorToolbar(this), BorderLayout.NORTH);
+    editorToolbar = new EditorToolbar(this);
+    frame.add(editorToolbar, BorderLayout.NORTH);
     frame.add(tabManager);
     frame.setMinimumSize(new Dimension(640, 480));
     frame.pack();
@@ -276,7 +280,6 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return this.tabManager.closeTab(layout);
   }
 
-
   @Override
   public void showWarning(String warning) {
     JOptionPane.showMessageDialog(
@@ -294,4 +297,29 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
       JOptionPane.ERROR_MESSAGE);
   }
 
+  /**
+   * @param list
+   */
+  public void updateComboBox(ListOf<Layout> list) {
+    editorToolbar.updateComboBox(list);    
+  }
+  
+  public void openSelectedLayout() {
+    Layout layout = editorToolbar.getSelectedLayout();
+    if(layout != null) {
+      if (tabManager.isLayoutOpen(layout)) {
+        tabManager.showTab(layout);
+      }
+      else {
+        addLayout(layout);
+      }
+    }
+  }
+  
+  public void layoutNew() {
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) getCurrentLayout().getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    Layout layout = doc.createNewLayout(askUserFileNew());
+    addLayout(layout);
+  }
 }

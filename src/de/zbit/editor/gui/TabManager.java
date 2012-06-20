@@ -21,7 +21,11 @@ import java.util.List;
 
 import javax.swing.JTabbedPane;
 
+import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 
 import y.view.Graph2DView;
 import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
@@ -57,6 +61,12 @@ public class TabManager extends JTabbedPane {
   public void closeTab(int index) {
     removeTabAt(index);
     tabList.remove(index);
+    if(getTabCount() == 0) {
+      closeAllTabs();
+    }
+    else {
+      showTab(getSelectedIndex());
+    }
   }
 
   /**
@@ -65,6 +75,7 @@ public class TabManager extends JTabbedPane {
   public void closeAllTabs() {
     removeAll();
     tabList.clear();
+    editorInstance.updateComboBox(new ListOf<Layout>());
   }
 
   /**
@@ -72,7 +83,7 @@ public class TabManager extends JTabbedPane {
    */
   public boolean addTab(Layout layout) {
     tabList.add(layout);
-    String title = layout.getName();
+    String title = layout.getModel().getName() +": "+ layout.getName();
     
     GraphLayoutPanel panel = new GraphLayoutPanel(layout);
     
@@ -86,6 +97,7 @@ public class TabManager extends JTabbedPane {
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
+    showTab(getSelectedIndex());
     return true;
   }
 
@@ -131,11 +143,32 @@ public class TabManager extends JTabbedPane {
   public boolean closeTab(Layout layout) {
     int index = this.tabList.indexOf(layout);
     if (index == -1) {
-      return true;
+      return false;
     }
     else {
       closeTab(index);
       return true;
     }
+  }
+
+  /**
+   * @param indexOfTabComponent
+   */
+  public void showTab(int index) {
+    setSelectedIndex(index);
+    Model model = this.getCurrentLayout().getModel();
+    ExtendedLayoutModel layout = (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
+    if (layout != null) {
+      ListOf<Layout> list = layout.getListOfLayouts();
+      editorInstance.updateComboBox(list);
+    }
+  }
+  
+  public void showTab(Layout layout) {
+    showTab(tabList.indexOf(layout));
+  }
+  
+  public boolean isLayoutOpen(Layout layout) {
+    return tabList.contains(layout);
   }
 }

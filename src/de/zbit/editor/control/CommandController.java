@@ -186,7 +186,8 @@ public class CommandController implements PropertyChangeListener {
     SBMLDocument sbmlDocument = new SBMLDocument(
         SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV());
-    sbmlDocument.createModel(name);
+    sbmlDocument.createModel(name).setName(name);
+    
 
     /*
      * embed the new SBMLDocument in an OpenedSBMLDocument and tell the

@@ -150,11 +150,12 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	// TODO add comment JAKOB!
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
-	  ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
-	  // TODO check layout id conflict
-	  Layout layout = extendedLayoutModel.createLayout(SBMLEditorConstants.layoutDefaultName);
-	  model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
-	  return layout;
+    ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
+    // TODO check layout id conflict
+    Layout layout = extendedLayoutModel.createLayout(SBMLEditorConstants.layoutDefaultName);
+    layout.setName(SBMLEditorConstants.layoutDefaultName);
+    model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
+    return layout; 
 	}
 
 
@@ -178,6 +179,15 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       logger.info("creating new layout");
       return this.createDefaultLayout();
     }
+  }
+  
+  public Layout createNewLayout(String name) {
+    ExtendedLayoutModel extendedLayoutModel =
+        (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
+    // TODO Create Valid ID
+    Layout layout = extendedLayoutModel.createLayout(name);
+    layout.setName(name);
+    return layout;
   }
   
 }
