@@ -69,6 +69,10 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	 * do all necessary initialisations
 	 */
 	private void initialize() {
+	  Model model = this.document.getModel();
+	  if (model != null) {
+	    model.addTreeNodeChangeListener(this);
+	  }
 		initializeLayoutList();
 		initializeIds();
 	}
@@ -100,11 +104,11 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	/**
 	 * get next generic species id
 	 */
-	public String getGenericId() {
+	public String nextGenericId() {
 		int count = 0;
 		String genericId = SBMLEditorConstants.genericId;
 		// search for first avalible id
-		while(count <= listOfUsedIds.size() && 
+		while (count <= listOfUsedIds.size() && 
 				!listOfUsedIds.contains(genericId + count)) {
 			count++;
 		}
@@ -119,9 +123,11 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO track changed ids (is this possible?)
 	}
 
 	/**
@@ -146,8 +152,11 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	    this.listOfUsedIds.remove(s.getId());
 	  }
 	}
+
 	
-	// TODO add comment JAKOB!
+	/**
+	 * @return
+	 */
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
     ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
@@ -166,9 +175,6 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     ExtendedLayoutModel extendedLayoutModel =
         (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
 
-//    assert extendedLayoutModel != null;
-//    assert extendedLayoutModel.getListOfLayouts() != null;
-    
     if (extendedLayoutModel != null &&
         extendedLayoutModel.getListOfLayouts() != null &&
         !extendedLayoutModel.getListOfLayouts().isEmpty()) {
@@ -182,10 +188,17 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
   }
   
   public Layout createNewLayout(String name) {
+    Model model = this.document.getModel();
     ExtendedLayoutModel extendedLayoutModel =
-        (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
+        (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
     // TODO Create Valid ID
-    Layout layout = extendedLayoutModel.createLayout(name);
+    String id = name;
+//    int count = 1;
+//    while (model.hasId(id)) {
+//      id = id + count;
+//      count++;
+//    }
+    Layout layout = extendedLayoutModel.createLayout(id);
     layout.setName(name);
     return layout;
   }

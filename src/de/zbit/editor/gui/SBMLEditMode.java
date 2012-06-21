@@ -16,13 +16,11 @@
  */
 package de.zbit.editor.gui;
 
-import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.view.EditMode;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
-import de.zbit.graph.io.SB_2GraphML;
 
 /**
  * @author Eugen Netz

@@ -35,7 +35,6 @@ import javax.swing.JPopupMenu;
  * @since 1.0
  * @version $Rev$
  */
-//TODO: Set SVN properties.
 public class TabComponent extends JPanel {
 
   private static final long serialVersionUID = -8179219783406520882L;

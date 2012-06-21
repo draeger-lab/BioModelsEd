@@ -24,9 +24,8 @@ import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
-import de.zbit.editor.SBMLEditorConstants;
-
 import y.base.Node;
+import de.zbit.editor.SBMLEditorConstants;
 
 /**
  * @author Andreas Dr&aum;ger
@@ -40,7 +39,6 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 */
 	public Layout2GraphML() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -48,6 +46,11 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 */
 	@Override
 	protected void createNodesAndEdges(Layout layout) {
+    if (layout == null
+        || layout.getSBMLDocument() == null
+        || !layout.getSBMLDocument().isSetModel()) {
+      return;
+    }
 		initCompartments(layout);
 		initSpeciesGlyphs(layout);
 		initReactionGlyphs(layout);

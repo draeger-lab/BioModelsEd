@@ -94,7 +94,7 @@ public class CommandController implements PropertyChangeListener {
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
   
     // generate generic id
-    String genericId = selectedDoc.getGenericId();
+    String genericId = selectedDoc.nextGenericId();
     String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
     logger.info("popup: " + nameFromPopup);
   
@@ -186,7 +186,9 @@ public class CommandController implements PropertyChangeListener {
     SBMLDocument sbmlDocument = new SBMLDocument(
         SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV());
-    sbmlDocument.createModel(name).setName(name);
+    Model model = sbmlDocument.createModel(name);
+    model.setName(name);
+    model.createCompartment(SBMLEditorConstants.compartmentDefaultName);
     
 
     /*

@@ -86,7 +86,6 @@ public class TabManager extends JTabbedPane {
     String title = layout.getModel().getName() +": "+ layout.getName();
     
     GraphLayoutPanel panel = new GraphLayoutPanel(layout);
-    
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);

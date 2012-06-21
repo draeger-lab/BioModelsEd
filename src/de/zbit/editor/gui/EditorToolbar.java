@@ -36,7 +36,7 @@ import de.zbit.editor.SBMLEditorConstants;
 public class EditorToolbar extends JToolBar {
 
   private static final long serialVersionUID = 4238837776010510727L;
-  private JComboBox<String> layoutComboBox = new JComboBox<String>();
+  private JComboBox layoutComboBox = new JComboBox();
   private ListOf<Layout> listOfLayouts = new ListOf<Layout>();
 
   /**
