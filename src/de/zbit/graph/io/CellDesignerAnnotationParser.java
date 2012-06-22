@@ -18,10 +18,12 @@ package de.zbit.graph.io;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.stream.XMLInputFactory;
@@ -63,6 +65,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 */
 	public static void main(String[] args) throws XMLStreamException, IOException {
 		logger.info("Reading file " + args[0]);
+		logger.setLevel(Level.FINEST);
 		CellDesignerAnnotationParser parser = new CellDesignerAnnotationParser(new File(args[0]));
 		parser.run();
 		if (args.length > 1) {
@@ -87,6 +90,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 * The document for which CellDesigner information should be parsed.
 	 */
 	private SBMLDocument sbmlDocument;
+	private File xmlFile;
 
 	/**
 	 * 
@@ -96,6 +100,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 */
 	public CellDesignerAnnotationParser(File xmlFile) throws XMLStreamException, IOException {
 		this.sbmlDocument = SBMLReader.read(xmlFile);
+		this.xmlFile = xmlFile;
 	}
 
 	/**
@@ -161,10 +166,12 @@ public class CellDesignerAnnotationParser implements Runnable {
 			
 			if (streamReader.getEventType() == XMLStreamConstants.START_ELEMENT) {
 				logger.fine(streamReader.getLocalName());
+				System.err.print(streamReader.getLocalName() + "\n");
 				if (streamReader.getLocalName().equals("speciesAlias")) {
 					newSpeciesAlias = true;
 					for (int i = 0; i < streamReader.getAttributeCount(); i++) {
 						logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+						System.err.print("testSpecies");
 						if (streamReader.getAttributeLocalName(i).equals("species")) {
 							actualId = streamReader.getAttributeValue(i);
 						}
@@ -175,6 +182,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 					newCompartmentAlias = true;
 					for (int i = 0; i < streamReader.getAttributeCount(); i++) {
 						logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+						System.err.print("testCompartment");
 						if (streamReader.getAttributeLocalName(i).equals("compartment")) {
 							actualId = streamReader.getAttributeValue(i);
 						}
@@ -213,6 +221,7 @@ public class CellDesignerAnnotationParser implements Runnable {
           newReaction = true;
           for (int i = 0; i < streamReader.getAttributeCount(); i++) {
             logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+            System.err.print("testReaction");
             if (streamReader.getAttributeLocalName(i).equals("id")) {
               reactionId = streamReader.getAttributeValue(i);
             }
@@ -229,6 +238,8 @@ public class CellDesignerAnnotationParser implements Runnable {
         else if ((streamReader.getLocalName().equals("baseProduct")) && newReaction) {
           for (int i = 0; i < streamReader.getAttributeCount(); i++) {
             if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+              System.err.print("testProduct");
               baseP = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
               writeReactionLayout(baseR, baseP, reactionId);
               baseR = null;
@@ -239,6 +250,7 @@ public class CellDesignerAnnotationParser implements Runnable {
         else if ((streamReader.getLocalName().equals("reactantLink")) && newReaction) {
           for (int i = 0; i < streamReader.getAttributeCount(); i++) {
             if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
               SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph();
               srGlyph.setSpeciesGlyph(streamReader.getAttributeValue(i));
               srGlyph.setRole(SpeciesReferenceRole.SIDESUBSTRATE);
@@ -249,6 +261,7 @@ public class CellDesignerAnnotationParser implements Runnable {
         else if ((streamReader.getLocalName().equals("productLink")) && newReaction) {
           for (int i = 0; i < streamReader.getAttributeCount(); i++) {
             if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
               SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph();
               srGlyph.setSpeciesGlyph(streamReader.getAttributeValue(i));
               srGlyph.setRole(SpeciesReferenceRole.SIDEPRODUCT);
@@ -263,6 +276,7 @@ public class CellDesignerAnnotationParser implements Runnable {
               modType = streamReader.getAttributeValue(i);
             }*/
             if (streamReader.getAttributeLocalName(i).equals("aliases")) {
+              logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
               SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph();
               srGlyph.setSpeciesGlyph(streamReader.getAttributeValue(i));
               srGlyph.setRole(SpeciesReferenceRole.MODIFIER);
@@ -289,14 +303,44 @@ public class CellDesignerAnnotationParser implements Runnable {
 			String annotation =
 					"<?xml version='1.0' encoding='UTF-8' standalone='no'?>" +
 					"<annotation xmlns:celldesigner=\"http://www.sbml.org/2001/ns/celldesigner\">" +
-					sbmlDocument.getModel().getAnnotation().getNonRDFannotation() +
+					//sbmlDocument.getModel().getAnnotation().getNonRDFannotation() +
+					readCellDesignerAnnotations() +
 					"</annotation>";
+			System.err.print(annotation);
 			try {
 				readCDLayout(new BufferedReader(new StringReader(annotation)));
 			} catch (XMLStreamException exc) {
 				throw new RuntimeException(exc);
 			}
 		}
+	}
+	
+	public String readCellDesignerAnnotations() {
+	  StringBuffer annotations = new StringBuffer();
+	  
+	  try {
+      BufferedReader bufferedReader = new BufferedReader(new FileReader(xmlFile));
+      String line;
+      
+      //TODO parse "<reaction " Tag
+      while((line = bufferedReader.readLine()) != null) {
+        while((line != null) && (!line.startsWith("<annotation>"))) {
+          line = bufferedReader.readLine();
+        }
+        line = bufferedReader.readLine();
+        
+        while((line != null) && (!line.startsWith("</annotation>"))) {
+          annotations.append(line + "\n");
+          line = bufferedReader.readLine();
+        }
+      }
+      
+      
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return annotations.toString();
 	}
 
 	/**
@@ -337,6 +381,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	}
 	
 	private void writeReactionLayout(SpeciesGlyph baseR,  SpeciesGlyph baseP, String reactionId) {
+	  //TODO Check if BB set
 	  BoundingBox boundingBoxR = baseR.getBoundingBox();
 	  BoundingBox boundingBoxP = baseP.getBoundingBox();
 	  if ((boundingBoxR != null) && (boundingBoxP != null) && boundingBoxR.isSetPosition() && boundingBoxP.isSetPosition()) {
