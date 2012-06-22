@@ -159,6 +159,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       file = fc.getSelectedFile();
     }
+    // add extension
+    if (! fc.getFileFilter().accept(file)) {
+      file = new File(file.getAbsolutePath() + ".sbml");
+    }
     return file;
   }
   
