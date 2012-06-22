@@ -140,7 +140,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 		
 		boolean newSpeciesAlias = false;
 		boolean newCompartmentAlias = false;
-		boolean newReactant = false;
+		boolean newReaction = false;
 		
 		Double actualX = null;
 		Double actualY = null;
@@ -148,8 +148,10 @@ public class CellDesignerAnnotationParser implements Runnable {
 		Double actualWidth = null;
 		String actualId = null;
 		
-		SpeciesGlyph bR = null;
-		SpeciesGlyph bP = null;
+		SpeciesGlyph baseR = null;
+		SpeciesGlyph baseP = null;
+		String reactionId = null;
+		String modType = null;
 		
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader streamReader = inputFactory.createXMLStreamReader(inputStream);
@@ -179,26 +181,6 @@ public class CellDesignerAnnotationParser implements Runnable {
 					}
 					logger.fine("compartment alias " + actualId);
 				}
-				else if (streamReader.getLocalName().equals("baseReactant")) {
-				  newReactant = true;
-				  for (int i = 0; i < streamReader.getAttributeCount(); i++) {
-				    logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
-				    if (streamReader.getAttributeLocalName(i).equals("alias")) {
-				      bR = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
-				    }
-				  }
-				}
-        else if (newReactant && streamReader.getLocalName().equals("baseProduct")) {
-          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
-            if (streamReader.getAttributeLocalName(i).equals("alias")) {
-              bP = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
-              writeReactionLayout(bR, bP);
-              bR = null;
-              bP = null;
-              newReactant = false;
-            }
-          }
-        }			
 				else if ((newSpeciesAlias || newCompartmentAlias) && streamReader.getLocalName().equals("bounds")) {
 					for (int i = 0; i < streamReader.getAttributeCount(); i++) {
 						logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
@@ -226,7 +208,75 @@ public class CellDesignerAnnotationParser implements Runnable {
 					actualWidth = null;
 					actualId = null;
 				}
+				//FIXME Check if reaction is STATE_TRANSITION
+				else if (streamReader.getLocalName().equals("reaction")) {
+          newReaction = true;
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+            if (streamReader.getAttributeLocalName(i).equals("id")) {
+              reactionId = streamReader.getAttributeValue(i);
+            }
+          }
+        }
+        else if ((streamReader.getLocalName().equals("baseReactant")) && newReaction) {
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            logger.finer(streamReader.getAttributeLocalName(i) + ": " + streamReader.getAttributeValue(i));
+            if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              baseR = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
+            }
+          }
+        }
+        else if ((streamReader.getLocalName().equals("baseProduct")) && newReaction) {
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              baseP = layout.getSpeciesGlyph(streamReader.getAttributeValue(i));
+              writeReactionLayout(baseR, baseP, reactionId);
+              baseR = null;
+              baseP = null;
+            }
+          }
+        }
+        else if ((streamReader.getLocalName().equals("reactantLink")) && newReaction) {
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph();
+              srGlyph.setSpeciesGlyph(streamReader.getAttributeValue(i));
+              srGlyph.setRole(SpeciesReferenceRole.SIDESUBSTRATE);
+              layout.getReactionGlyph(reactionId).addSpeciesReferenceGlyph(srGlyph);
+            }
+          }
+        }
+        else if ((streamReader.getLocalName().equals("productLink")) && newReaction) {
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            if (streamReader.getAttributeLocalName(i).equals("alias")) {
+              SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph();
+              srGlyph.setSpeciesGlyph(streamReader.getAttributeValue(i));
+              srGlyph.setRole(SpeciesReferenceRole.SIDEPRODUCT);
+              layout.getReactionGlyph(reactionId).addSpeciesReferenceGlyph(srGlyph);
+            }
+          }
+        }
+        else if ((streamReader.getLocalName().equals("modification")) && newReaction) {
+          for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            //TODO Distinction of CATALYSIS, INHIBITION and TRIGGER
+            /*if (streamReader.getAttributeLocalName(i).equals("type")) {
+              modType = streamReader.getAttributeValue(i);
+            }*/
+            if (streamReader.getAttributeLocalName(i).equals("aliases")) {
+              SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph();
+              srGlyph.setSpeciesGlyph(streamReader.getAttributeValue(i));
+              srGlyph.setRole(SpeciesReferenceRole.MODIFIER);
+              layout.getReactionGlyph(reactionId).addSpeciesReferenceGlyph(srGlyph);
+            }
+          }
+        }
 			}	
+			if (streamReader.getEventType() == XMLStreamConstants.END_ELEMENT) {
+			  if (streamReader.getLocalName().equals("reaction")) {
+			    newReaction = false;
+			    reactionId = null;
+			  }
+			}
 			streamReader.next();
 		}
 	}
@@ -286,14 +336,14 @@ public class CellDesignerAnnotationParser implements Runnable {
 		}
 	}
 	
-	private void writeReactionLayout(SpeciesGlyph baseR,  SpeciesGlyph baseP) {
-	  BoundingBox bbR = baseR.getBoundingBox();
-	  BoundingBox bbP = baseP.getBoundingBox();
-	  if ((bbR != null) && (bbP != null) && bbR.isSetPosition() && bbP.isSetPosition()) {
-	    double x1 = bbR.getPosition().getX();
-	    double y1 = bbR.getPosition().getY();
-	    double x2 = bbP.getPosition().getX();
-	    double y2 = bbP.getPosition().getY();
+	private void writeReactionLayout(SpeciesGlyph baseR,  SpeciesGlyph baseP, String reactionId) {
+	  BoundingBox boundingBoxR = baseR.getBoundingBox();
+	  BoundingBox boundingBoxP = baseP.getBoundingBox();
+	  if ((boundingBoxR != null) && (boundingBoxP != null) && boundingBoxR.isSetPosition() && boundingBoxP.isSetPosition()) {
+	    double x1 = boundingBoxR.getPosition().getX();
+	    double y1 = boundingBoxR.getPosition().getY();
+	    double x2 = boundingBoxP.getPosition().getX();
+	    double y2 = boundingBoxP.getPosition().getY();
 	    double x = (x1 + x2) / 2;
 	    double y = (y1 + y2) / 2;
 	    
@@ -302,6 +352,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	    p.setX(x);
 	    p.setY(y);
 	    ReactionGlyphBB.setPosition(p);
+	    ReactionGlyphBB.setId(reactionId);
 	    //TODO Check size
 	    Dimensions dim = new Dimensions();
 	    dim.setWidth(10);
