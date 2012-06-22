@@ -38,11 +38,13 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
  */
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
+  private TabManager tabmanager;
   private GraphLayoutPanel panel;
   private Layout layout;
   private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
   
-  public ControllerViewSynchronizer(GraphLayoutPanel panel, Layout layout) {
+  public ControllerViewSynchronizer(TabManager tabmanager, GraphLayoutPanel panel, Layout layout) {
+    this.tabmanager = tabmanager;
     this.panel = panel;
     this.layout = layout;
   }
@@ -55,6 +57,12 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     // React only if *Glyphs are added
     if (node instanceof SpeciesGlyph) {
       SpeciesGlyph speciesGlyph = (SpeciesGlyph) node;
+
+      if (this.layout != this.tabmanager.getCurrentLayout()) {
+        logger.info("glyph not relevant to this layout");
+        return;
+      }
+      
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
       Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
