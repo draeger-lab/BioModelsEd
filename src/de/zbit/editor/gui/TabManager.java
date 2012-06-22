@@ -91,7 +91,7 @@ public class TabManager extends JTabbedPane {
     view.addViewMode(editMode);
     
     layout.getSBMLDocument().getModel()
-        .addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, layout));
+        .addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout));
     
     addTab(title, panel);
     setSelectedComponent(panel);
