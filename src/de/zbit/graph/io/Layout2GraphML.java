@@ -16,9 +16,12 @@
  */
 package de.zbit.graph.io;
 
+import java.util.List;
+
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.Point;
@@ -97,7 +100,29 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 * @param layout
 	 */
 	private void initCompartments(Layout layout) {
-			
+			List<CompartmentGlyph> compartments = layout.getListOfCompartmentGlyphs();
+			if (compartments.size() == 1) {
+			  // found one compartment, the default compartment, do not draw it
+			  return;
+			}
+			else {
+			  // TODO order: outmost compartment -> innermost compartment
+			  // TODO skip outmoust compartment
+			  for (CompartmentGlyph c : compartments) {
+			    Node n;
+			    if (c.getBoundingBox() != null) {
+			      BoundingBox bb = c.getBoundingBox();
+			      Dimensions dimensions = bb.getDimensions();
+			      Point point = bb.getPosition();
+			      n = createNode(c.getId(), c.getName(), c.getSBOTerm(),
+			          point.getX(), point.getY(), dimensions.getWidth(), dimensions.getHeight());
+			    }
+			    else {
+			      n = createNode(c.getId(), c.getName(), c.getSBOTerm());
+			    }
+			    c.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+			  }
+			}
 	}
 
 	/* (non-Javadoc)
