@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
+import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
@@ -201,6 +203,34 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     Layout layout = extendedLayoutModel.createLayout(id);
     layout.setName(name);
     return layout;
+  }
+  
+  /**
+   * create layout information for every element of the model
+   * @return
+   */
+  public boolean createLayoutInformation() {
+    Model model = this.document.getModel();
+    ExtendedLayoutModel extendedLayoutModel =
+        (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
+    Layout layout = extendedLayoutModel.getLayout(0);
+    
+    List<Species> species = model.getListOfSpecies();
+    for (Species s : species) {
+      // TODO
+    }
+    
+    List<Reaction> reactions = model.getListOfReactions();
+    for (Reaction r : reactions) {
+      // TODO
+    }
+    
+    List<Compartment> compartments = model.getListOfCompartments();
+    for (Compartment c : compartments) {
+      // TODO
+    }
+    
+    return true;
   }
   
 }
