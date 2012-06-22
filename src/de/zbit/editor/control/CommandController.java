@@ -39,6 +39,7 @@ import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.render.AbstractRenderPlugin;
 import org.sbml.jsbml.ext.render.ColorDefinition;
 import org.sbml.jsbml.ext.render.GlobalRenderInformation;
 import org.sbml.jsbml.ext.render.RenderConstants;
@@ -321,22 +322,27 @@ public class CommandController implements PropertyChangeListener {
        * notify fileManager about newly opened document
        */
       
-      //FIXME Test to save and write Colors, Scan for existing RenderInformation needed
-      //this.fileManager.addDocument(doc);
-      if (this.fileManager.addDocument(doc)){
-        //TODO createDefaultRenderInformation in OpenedSBMLDocument needed
-        GlobalRenderInformation renderInfo = new GlobalRenderInformation("defaultGlobalRenderInformation", 3, 1);
-        renderInfo.setListOfColorDefinitions(renderInfo.getListOfColorDefinitions());
-        renderInfo.addColorDefinition(new ColorDefinition("RED", new Color(255, 0, 0)));
-        renderInfo.addColorDefinition(new ColorDefinition("GREEN", new Color(0, 255, 0)));
-        renderInfo.addColorDefinition(new ColorDefinition("BLUE", new Color(0, 0, 255)));
-        ExtendedLayoutModel extendedLayoutModel =
-          (ExtendedLayoutModel) doc.getDocument().getModel().getExtension(LayoutConstants.namespaceURI);
-        RenderModelPlugin renderPlugin = new RenderModelPlugin(extendedLayoutModel.getListOfLayouts());
-        renderPlugin.addGlobalRenderInformation(renderInfo);
-        doc.getDocument().getModel().addExtension(RenderConstants.namespaceURI, renderPlugin);
+      // FIXME Test to save and write Colors
+      // this.fileManager.addDocument(doc);
+      if (this.fileManager.addDocument(doc)) {
+        // TODO createDefaultRenderInformation in OpenedSBMLDocument needed
+        AbstractRenderPlugin absRenderPlugin = 
+          (AbstractRenderPlugin) doc.getDocument().getModel().getExtension(RenderConstants.namespaceURI);
+        
+        if (absRenderPlugin == null) {
+          GlobalRenderInformation renderInfo = new GlobalRenderInformation(
+            "defaultGlobalRenderInformation", 3, 1);
+          renderInfo.setListOfColorDefinitions(renderInfo.getListOfColorDefinitions());
+          renderInfo.addColorDefinition(new ColorDefinition("RED", new Color(255, 0, 0)));
+          renderInfo.addColorDefinition(new ColorDefinition("GREEN", new Color(0, 255, 0)));
+          renderInfo.addColorDefinition(new ColorDefinition("BLUE", new Color(0, 0, 255)));
+          ExtendedLayoutModel extendedLayoutModel = 
+            (ExtendedLayoutModel) doc.getDocument().getModel().getExtension(LayoutConstants.namespaceURI);
+          RenderModelPlugin renderPlugin = new RenderModelPlugin(extendedLayoutModel.getListOfLayouts());
+          renderPlugin.addGlobalRenderInformation(renderInfo);
+          doc.getDocument().getModel().addExtension(RenderConstants.namespaceURI, renderPlugin);
+        }
       }
-
     }
     else if (evt.getPropertyName().equals(
         SBMLEditorConstants.EditModeMousePressedLeft)) {
