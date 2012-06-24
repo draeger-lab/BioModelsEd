@@ -67,6 +67,10 @@ public class OpenedDocument<T> {
   public String getAssociatedFilename() {
     return associatedFilename;
   }
+  
+  public void setAssociatedFilename(String name) {
+    this.associatedFilename = name;
+  }
 
 
   /**

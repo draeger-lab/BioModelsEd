@@ -54,11 +54,7 @@ public interface SBMLView {
 
   public Layout getCurrentLayout();
 
-  public void refreshTitle();
-
   public String nameDialogue(String id);
-
-  public void refresh(String id, String name, int sboTerm, double x, double y);
 
   public TabManager getTabManager();
 
@@ -70,8 +66,8 @@ public interface SBMLView {
 
   public String askUserFileNew();
 
-  public boolean closeTab(Layout layout);
-
   public void showWarning(String warning);
   public void showError(String error);
+
+  boolean closeTab(Layout layout);
 }

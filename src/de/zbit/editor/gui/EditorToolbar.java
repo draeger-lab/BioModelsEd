@@ -19,6 +19,7 @@ package de.zbit.editor.gui;
 
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
+import java.util.logging.Logger;
 
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
@@ -36,8 +37,9 @@ import de.zbit.editor.SBMLEditorConstants;
 public class EditorToolbar extends JToolBar {
 
   private static final long serialVersionUID = 4238837776010510727L;
-  private JComboBox layoutComboBox = new JComboBox();
+  private JComboBox<ListItem> layoutComboBox = new JComboBox<ListItem>();
   private ListOf<Layout> listOfLayouts = new ListOf<Layout>();
+  private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
 
   /**
    * @param commandController
@@ -45,19 +47,19 @@ public class EditorToolbar extends JToolBar {
   public EditorToolbar(SBMLEditor parent) {
     // TODO: Create a very simple icon for each button, use Tooltips, remove the
     // String Label.
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addUnknownMolecule));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.SIMPLE_MOLECULE),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.SIMPLE_MOLECULE), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addSimpleMolecule));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.MACROMOLECULE),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.MACROMOLECULE), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addMacromolecule));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.EMPTY_SET),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.EMPTY_SET), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addEmptySet));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.REACTION),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.REACTION), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addReaction));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.CATALYSIS),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.CATALYSIS), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addCatalysis));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.INHIBITION),
+    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.INHIBITION), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
     add(layoutComboBox);
     GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN));
@@ -65,6 +67,18 @@ public class EditorToolbar extends JToolBar {
         EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openSelectedLayout));
     
   }
+  
+  private static class ListItem {
+    private final String text;
+
+    private ListItem(String text) {
+        this.text = text;
+    }
+
+    public String toString() {
+        return text;
+    }
+}
 
 
   /**
@@ -74,11 +88,18 @@ public class EditorToolbar extends JToolBar {
     this.listOfLayouts = list;
     layoutComboBox.removeAllItems();
     for(Layout l: listOfLayouts){
-      layoutComboBox.addItem(l.getName());
+      layoutComboBox.addItem(new ListItem(l.getName()));
     }
   }
   
   public Layout getSelectedLayout() {
-    return listOfLayouts.get(layoutComboBox.getSelectedIndex());
+    String msg = "";
+    for(Layout l: listOfLayouts){
+      msg += l.getId() +";";
+    }
+    
+    int sel = layoutComboBox.getSelectedIndex();
+    logger.info(msg + "selected index: " + sel);
+    return listOfLayouts.get(sel);
   }
 }

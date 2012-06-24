@@ -17,19 +17,16 @@
 package de.zbit.editor.gui;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
 
 import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.Model;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstants;
 
 import y.view.Graph2DView;
-import de.zbit.graph.gui.TranslatorSBMLgraphPanel;
-import de.zbit.graph.io.SBML2GraphML;
+import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.control.OpenedSBMLDocument;
 
 /**
  * @author Jakob Matthes
@@ -38,9 +35,10 @@ import de.zbit.graph.io.SBML2GraphML;
 public class TabManager extends JTabbedPane {
 
   private static final long serialVersionUID = -905908829761611472L;
+  private static Logger logger = Logger.getLogger(OpenedSBMLDocument.class.toString());
   private SBMLEditor editorInstance;
-  private List<Layout> tabList = new ArrayList<Layout>();
-
+  private ArrayList<Layout> listOfLayouts = new ArrayList<Layout>();
+  
   /**
    * @param editorInstance
    */
@@ -56,36 +54,19 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @param index
-   */
-  public void closeTab(int index) {
-    removeTabAt(index);
-    tabList.remove(index);
-    if(getTabCount() == 0) {
-      closeAllTabs();
-    }
-    else {
-      showTab(getSelectedIndex());
-    }
-  }
-
-  /**
-   * 
-   */
-  public void closeAllTabs() {
-    removeAll();
-    tabList.clear();
-    editorInstance.updateComboBox(new ListOf<Layout>());
-  }
-
-  /**
    * @param doc
    */
   public boolean addTab(Layout layout) {
-    tabList.add(layout);
-    String title = layout.getModel().getName() +": "+ layout.getName();
+    if(listOfLayouts.contains(layout)) {
+      logger.info("List contains layout: ID: "+ layout.getId() + " Name: " +layout.getName());
+    }
+    listOfLayouts.add(layout);
+    
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    String title = doc.getAssociatedFilename()+": "+ layout.getName();
     
     GraphLayoutPanel panel = new GraphLayoutPanel(layout);
+    
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
     view.addViewMode(editMode);
@@ -96,78 +77,78 @@ public class TabManager extends JTabbedPane {
     addTab(title, panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
-    showTab(getSelectedIndex());
+    
+    showTab(layout);
     return true;
   }
-
+  
   /**
-   * Return the currently opened layout.
-   * 
-   * @return
-   */
-  public Layout getCurrentLayout() {
-    return tabList.get(getSelectedIndex());
-  }
-
-  /**
-   * Close the currently visible tab.
-   */
-  public void closeCurrentTab() {
-    if (isAnySelected()) {
-      closeTab(getSelectedIndex());
-    }
-  }
-
-  public boolean isAnySelected() {
-    return getSelectedIndex() != -1;
-  }
-
-  public void refreshTitle() {
-    String title = tabList.get(getSelectedIndex()).getName();
-    ((TabComponent) getTabComponentAt(getSelectedIndex())).setTitle(title);
-  }
-
-  public void refresh(String id, String name, int sboTerm, double x, double y) {
-
-    TranslatorSBMLgraphPanel panel = (TranslatorSBMLgraphPanel) getComponentAt(getSelectedIndex());
-    SBML2GraphML converter = panel.getConverter();
-    converter.createNode(id, name, sboTerm, x, y);
-  }
-
-  /**
-   * closes tab with layout if existing
    * @param layout
    * @return
    */
   public boolean closeTab(Layout layout) {
-    int index = this.tabList.indexOf(layout);
-    if (index == -1) {
-      return false;
+    int index = this.listOfLayouts.indexOf(layout);
+    remove(index);
+    this.listOfLayouts.remove(index);
+    logger.info("ID: "+ layout.getId() + " Name: " +layout.getName() + " Tabindex: " + index);
+    showTab(getCurrentLayout());
+    return true;
+  }
+
+  /**
+   * @return
+   */
+  public Layout getCurrentLayout() {
+    if (isAnySelected()) {
+      return this.listOfLayouts.get(getSelectedIndex());
     }
     else {
-      closeTab(index);
-      return true;
+      return null;
+    }
+  }
+  
+  /**
+   * @param layout
+   */
+  public void showTab(Layout layout) {
+    if(layout == null) {
+      this.editorInstance.updateComboBox(new ListOf<Layout>());
+    }
+    else {
+      setSelectedIndex(this.listOfLayouts.indexOf(layout));
+      OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+      this.editorInstance.updateComboBox(doc.getListOfLayouts());
     }
   }
 
   /**
-   * @param indexOfTabComponent
+   * 
    */
-  public void showTab(int index) {
-    setSelectedIndex(index);
-    Model model = this.getCurrentLayout().getModel();
-    ExtendedLayoutModel layout = (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
-    if (layout != null) {
-      ListOf<Layout> list = layout.getListOfLayouts();
-      editorInstance.updateComboBox(list);
+  public void closeAllTabs() {
+    while (isAnySelected()) {
+      if(this.editorInstance.layoutClose(getCurrentLayout()) == false) {
+        break;
+      }
     }
   }
-  
-  public void showTab(Layout layout) {
-    showTab(tabList.indexOf(layout));
+
+  /**
+   * @param currentLayout
+   */
+  public void refreshTitle(Layout currentLayout) {
+    // TODO Auto-generated method stub
+    
   }
-  
+
+  /**
+   * @param l
+   * @return
+   */
   public boolean isLayoutOpen(Layout layout) {
-    return tabList.contains(layout);
+    return this.listOfLayouts.contains(layout);
+  }  
+  
+  public boolean isAnySelected() {
+    return getSelectedIndex() != -1;
   }
 }

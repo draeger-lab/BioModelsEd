@@ -184,13 +184,21 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
   @Override
   public boolean fileSave() {
-	  return commandController.fileSave();
+	  boolean b = commandController.fileSave();
+    if(b) {
+      this.tabManager.refreshTitle(getCurrentLayout());
+    }
+    return b;
   }
 
 
   @Override
   public boolean fileSaveAs() {
-    return commandController.fileSaveAs();
+    boolean b = commandController.fileSaveAs();
+    if(b) {
+      this.tabManager.refreshTitle(getCurrentLayout());
+    }
+    return b;
   }
 
 
@@ -216,16 +224,6 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   public Layout getCurrentLayout() {
     return tabManager.getCurrentLayout();
   }
-
-
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#refreshTitle()
-   */
-  @Override
-  public void refreshTitle() {
-    tabManager.refreshTitle();
-  }
-
 
   /* (non-Javadoc)
    * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
@@ -273,13 +271,6 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
   
   @Override
-  public void refresh(String id, String name, int sboTerm, double x, double y) {
-    //TODO How to refresh the view, using the changed model?
-    this.tabManager.refresh(id, name, sboTerm, x, y);
-  }
-
-
-  @Override
   public boolean closeTab(Layout layout) {
     return this.tabManager.closeTab(layout);
   }
@@ -310,6 +301,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   
   public void openSelectedLayout() {
     Layout layout = editorToolbar.getSelectedLayout();
+    logger.info("Try to Open Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
     if(layout != null) {
       if (tabManager.isLayoutOpen(layout)) {
         tabManager.showTab(layout);
@@ -324,6 +316,28 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) getCurrentLayout().getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
     Layout layout = doc.createNewLayout(askUserFileNew());
+    
     addLayout(layout);
   }
+  
+  public void layoutDelete() {
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) getCurrentLayout().getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    if( doc.getListOfLayouts().size() == 1) {
+      logger.info("Document doesn't have 2 or more layouts");
+    }
+    else {
+      Layout layout = getCurrentLayout();
+      logger.info("Try to delete Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
+      closeTab(getCurrentLayout());
+      doc.getListOfLayouts().remove(layout);
+      editorToolbar.updateComboBox(doc.getListOfLayouts());
+    }     
+  }
+  
+  
+  public boolean layoutClose(Layout layout) {
+    logger.info("ID: "+ layout.getId() + " Name: " +layout.getName());
+    return commandController.layoutClose(layout);
+  } 
 }

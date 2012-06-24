@@ -16,9 +16,11 @@
  */
 package de.zbit.editor.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -59,17 +61,17 @@ public class GUIFactory {
    * @param key
    * @param modifier
    */
-  public static JMenuItem createMenuItem(JMenu menu, String label,
+  public static JMenuItem createMenuItem(JMenu menu, String label, ImageIcon icon,
     String keystroke, ActionListener... l) {
-    JMenuItem item = createMenuItem(menu, label, l);
+    JMenuItem item = createMenuItem(menu, label, icon, l);
     item.setAccelerator(KeyStroke.getKeyStroke(keystroke));
     return item;
   }
 
 
-  public static JMenuItem createMenuItem(JMenu menu, String label,
+  public static JMenuItem createMenuItem(JMenu menu, String label, ImageIcon icon,
     Integer ctrl, int keyCode, ActionListener... l) {
-    JMenuItem item = createMenuItem(menu, label, l);
+    JMenuItem item = createMenuItem(menu, label, icon, l);
     item.setAccelerator(KeyStroke.getKeyStroke(keyCode, ctrl));
     return item;
   }
@@ -82,9 +84,9 @@ public class GUIFactory {
    * @param label
    * @param key
    */
-  public static JMenuItem createMenuItem(JMenu menu, String label,
+  public static JMenuItem createMenuItem(JMenu menu, String label, ImageIcon icon,
     ActionListener... l) {
-    JMenuItem item = new JMenuItem(label);
+    JMenuItem item = new JMenuItem(label, icon);
     if (l != null) {
       for (ActionListener listener : l) {
         item.addActionListener(listener);
@@ -95,6 +97,23 @@ public class GUIFactory {
   }
 
 
+  /**
+   * Add a button to given toolbar.
+   * 
+   * @param toolbar
+   * @param name
+   * @param l
+   * @param icon 
+   * @return
+   */
+  public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, int width, int height,
+    ActionListener... l) {
+    JButton button = createButtonIcon(icon, tooltip, width, height, l);
+    
+    toolbar.add(button);
+    return button;
+  }
+  
   /**
    * Add a button to given toolbar.
    * 
@@ -141,6 +160,12 @@ public class GUIFactory {
       Resources.getString("DIALOG_QUIT_QUESTION"),
       Resources.getString("DIALOG_QUIT_TITLE"), JOptionPane.YES_NO_OPTION);
   }
+  
+  public static int createQuestionSave(JFrame frame, String title) {
+    return JOptionPane.showConfirmDialog(frame,
+      Resources.getString("DIALOG_SAVE_QUESTION"),
+      title, JOptionPane.YES_NO_CANCEL_OPTION);
+  }
 
 
   public static JPopupMenu createTabPopupMenu(TabComponent component) {
@@ -156,5 +181,23 @@ public class GUIFactory {
       component, "closeAll"));
     popup.add(menuItem);
     return popup;
+  }
+  
+  public static JButton createButtonIcon(ImageIcon icon, String tooltip, int width, int height, ActionListener... l) {
+    JButton button = new JButton(icon);
+    if (l != null) {
+      for (ActionListener listener : l) {
+        button.addActionListener(listener);
+      }
+    }
+    if (width !=0 || height !=0) {
+      button.setPreferredSize(new Dimension(width, height));
+    }
+    button.setFocusPainted(false);
+    button.setFocusable(false);
+    button.setBorderPainted(false);
+    button.setRolloverEnabled(true);
+    button.setToolTipText(tooltip);
+    return button;
   }
 }

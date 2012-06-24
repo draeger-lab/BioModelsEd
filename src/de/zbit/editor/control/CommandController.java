@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
@@ -81,7 +82,7 @@ public class CommandController implements PropertyChangeListener {
   private Logger logger = Logger.getLogger(CommandController.class.getName());
   private States state;
   private SBMLView view;
-
+  
   /**
    * @param editorInstance
    */
@@ -194,7 +195,7 @@ public class CommandController implements PropertyChangeListener {
     SBMLDocument sbmlDocument = new SBMLDocument(
         SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV());
-    Model model = sbmlDocument.createModel(name);
+    Model model = sbmlDocument.createModel(Resources.createValidID("m"));
     model.setName(name);
     model.createCompartment(SBMLEditorConstants.compartmentDefaultName);
     
@@ -273,6 +274,21 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    if (doc.isFileModified()) {
+      int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
+      if (returnVal == JOptionPane.YES_OPTION) {
+        logger.info("User chose to save file");
+        fileSave();
+      }
+      else if (returnVal == JOptionPane.NO_OPTION) {
+        logger.info("User chose to not save file");
+      }
+      else {
+        logger.info("User canceled closing");
+        return false;
+      }
+    }
+    
     return fileManager.fileClose(doc);
   }
   
@@ -412,4 +428,29 @@ public class CommandController implements PropertyChangeListener {
   public void fileNotFound() {
     view.showError(SBMLEditorConstants.fileNotFound);
   }
+
+  /**
+   * @param layout
+   */
+  public boolean layoutClose(Layout layout) {
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    ListOf<Layout> list = doc.getListOfLayouts();
+    
+    boolean anyopen = false;
+    
+    for (Layout l : list) {
+      if (l.getId() != layout.getId()) {
+        anyopen |= view.getTabManager().isLayoutOpen(l);
+      }
+    }
+    
+    if (anyopen) {
+      return view.closeTab(layout);
+    }
+    else {
+      return view.fileClose();
+    }    
+  }
+  
 }

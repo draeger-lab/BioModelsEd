@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.tree.TreeNode;
 
 import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
@@ -35,6 +36,7 @@ import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.gui.Resources;
 
 /**
  * @author Jan Rudolph
@@ -43,7 +45,6 @@ import de.zbit.editor.SBMLEditorConstants;
 public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements TreeNodeChangeListener {
 
   private static Logger logger = Logger.getLogger(OpenedSBMLDocument.class.toString());
-	List<Layout> listOfLayouts = new ArrayList<Layout>();
 	List<String> listOfUsedIds = new ArrayList<String>();
 
 	
@@ -75,19 +76,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	  if (model != null) {
 	    model.addTreeNodeChangeListener(this);
 	  }
-		initializeLayoutList();
 		initializeIds();
-	}
-
-	/**
-	 * read out all layouts
-	 */
-	private void initializeLayoutList() {
-		Model model = this.document.getModel();
-		ExtendedLayoutModel layout = (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
-		if (layout != null) {
-			listOfLayouts.addAll(layout.getListOfLayouts());
-		}
 	}
 
 	/**
@@ -162,8 +151,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
     ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
-    // TODO check layout id conflict
-    Layout layout = extendedLayoutModel.createLayout(SBMLEditorConstants.layoutDefaultName);
+    Layout layout = extendedLayoutModel.createLayout(Resources.createValidID("l"));
     layout.setName(SBMLEditorConstants.layoutDefaultName);
     model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
     return layout; 
@@ -193,15 +181,10 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     Model model = this.document.getModel();
     ExtendedLayoutModel extendedLayoutModel =
         (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
-    // TODO Create Valid ID
-    String id = name;
-//    int count = 1;
-//    while (model.hasId(id)) {
-//      id = id + count;
-//      count++;
-//    }
-    Layout layout = extendedLayoutModel.createLayout(id);
+    
+    Layout layout = extendedLayoutModel.createLayout(Resources.createValidID("l"));
     layout.setName(name);
+    logger.info("Created Layout in Model: " + model.getId() + " Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
     return layout;
   }
   
@@ -233,4 +216,10 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     return true;
   }
   
+  public ListOf<Layout> getListOfLayouts() {
+    ExtendedLayoutModel extendedLayoutModel =
+        (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
+    return extendedLayoutModel.getListOfLayouts();
+  }
+    
 }

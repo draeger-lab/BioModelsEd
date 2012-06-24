@@ -16,8 +16,11 @@
  */
 package de.zbit.editor.gui;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.swing.ImageIcon;
 
 
 //TODO: Insert JavaDoc
@@ -30,13 +33,60 @@ import java.util.ResourceBundle;
  */
 public class Resources {
 	
-	// TODO: Avoid loading and initializing ResourceBundles multiple times. This will consume too many resources.
-	
+  private static ArrayList<String> usedIDs = new ArrayList<String>();
 	private final static ResourceBundle bundleDefault = ResourceBundle.getBundle("de.zbit.editor.gui.SBMLEditor", Locale.getDefault());
 	
+	//Icons
+	public static final ImageIcon iconButtonAbout = Resources.createImageIcon("images/ButtonAbout.png", null);
+	public static final ImageIcon iconButtonAdd = Resources.createImageIcon("images/ButtonAdd.png", null);
+  public static final ImageIcon iconButtonClose = Resources.createImageIcon("images/ButtonClose.png", null);
+  public static final ImageIcon iconButtonCopy = Resources.createImageIcon("images/ButtonCopy.png", null);
+  public static final ImageIcon iconButtonCut = Resources.createImageIcon("images/ButtonCut.png", null);
+  public static final ImageIcon iconButtonDelete = Resources.createImageIcon("images/ButtonDelete.png", null);
+  public static final ImageIcon iconButtonNew = Resources.createImageIcon("images/ButtonNew.png", null);
+  public static final ImageIcon iconButtonOpen = Resources.createImageIcon("images/ButtonOpen.png", null);
+  public static final ImageIcon iconButtonPaste = Resources.createImageIcon("images/ButtonPaste.png", null);
+  public static final ImageIcon iconButtonQuit = Resources.createImageIcon("images/ButtonQuit.png", null);
+  public static final ImageIcon iconButtonRedo = Resources.createImageIcon("images/ButtonRedo.png", null);
+  public static final ImageIcon iconButtonSave = Resources.createImageIcon("images/ButtonSave.png", null);
+  public static final ImageIcon iconButtonUndo = Resources.createImageIcon("images/ButtonUndo.png", null);
+  public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
+  
 	//Get localized String in default language
 	public static String getString(String key){
 		return bundleDefault.getString(key);
 	}
+	
+
+	/** Returns an ImageIcon, or null if the path was invalid. */
+
+	protected static ImageIcon createImageIcon(String path, String description) {
+
+	  java.net.URL imgURL = Resources.class.getResource(path);
+
+	  if (imgURL != null) {
+
+	    return new ImageIcon(imgURL, description);
+
+	  } else {
+
+	    System.err.println("Couldn't find file: " + path);
+
+	    return null;
+
+	  }
+
+	}
+	
+	public static String createValidID(String prefix) {
+    int i = 1;
+    String s = prefix+i;
+    while(usedIDs.contains(s)) {
+      i+=1;
+      s = prefix+i;
+    }
+    usedIDs.add(s);
+    return s;
+  }
 		 
 }

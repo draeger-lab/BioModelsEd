@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.EventHandler;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,28 +50,26 @@ public class TabComponent extends JPanel {
     String title = tabManager.getTitleAt(tabManager.getSelectedIndex());
     this.label = new JLabel(title);
     add(this.label, BorderLayout.CENTER);
-    JButton button = new JButton("x");
-    button.addActionListener(EventHandler.create(ActionListener.class, this,
-      "close"));
-//    button.setSize(10, 10);
-//    button.setOpaque(false);
-    button.setBorderPainted(false);
+    
+    label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+    JButton button = GUIFactory.createButtonIcon(Resources.iconButtonClose, "Close this tab", 16, 16, 
+        EventHandler.create(ActionListener.class, this, "close"));
+    
     add(button, BorderLayout.EAST);
     MouseListener tabListener = new TabListener(
       GUIFactory.createTabPopupMenu(this));
     addMouseListener(tabListener);
   }
 
-
   public void setTitle(String title) {
     this.label.setText(title);
   }
 
-
   public void close() {
-    tabManager.closeTab(tabManager.indexOfTabComponent(this));
+    GraphLayoutPanel panel = (GraphLayoutPanel) tabManager.getComponentAt(tabManager.indexOfTabComponent(this));
+    tabManager.showTab(panel.getDocument());
+    tabManager.getEditorInstance().layoutClose((panel.getDocument()));
   }
-
 
   public void closeAll() {
     tabManager.closeAllTabs();
@@ -101,7 +100,8 @@ public class TabComponent extends JPanel {
         popup.show(e.getComponent(), e.getX(), e.getY());
       } else {
         TabComponent tabComponent = ((TabComponent) e.getComponent());
-        tabManager.showTab(tabManager.indexOfTabComponent(tabComponent));       
+        GraphLayoutPanel panel = (GraphLayoutPanel) tabManager.getComponentAt(tabManager.indexOfTabComponent(tabComponent));
+        tabManager.showTab(panel.getDocument());
       }
     }
   }

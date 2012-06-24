@@ -16,7 +16,6 @@
  */
 package de.zbit.editor.control;
 
-import java.awt.Frame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -26,6 +25,8 @@ import java.util.logging.Logger;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
 
+import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLReadingTask;
 import de.zbit.editor.gui.SBMLWritingTask;
 
@@ -60,11 +61,24 @@ public class FileManager {
 	 * @return returns true if document was added successfully
 	 */
 	public boolean addDocument(OpenedDocument<?> openedDocument) {
+	  if (openedDocument.getAssociatedFilename() == null) {
+	    int i = 0;
+	    String name;
+      do {
+        logger.info("Filename: " + Resources.getString(SBMLEditorConstants.genericFileName) +" (" + i + ")" + " not availible.");
+	      i+=1;
+	      name = Resources.getString(SBMLEditorConstants.genericFileName) +" (" + i + ")";
+	    }while(isFileNameUsed(name));
+      
+      openedDocument.setAssociatedFilename(name);
+	  }
 		if (listOfOpenedDocuments.contains(openedDocument)) {
+		  logger.info("Failed to add: List already contains document");
 			return false;
 		}
 		else {
 			this.listOfOpenedDocuments.add(openedDocument);
+			logger.info("Succes");
 			return true;
 		}
 	}
@@ -73,6 +87,9 @@ public class FileManager {
 	 * open Document
 	 * @return returns true if document was added successfully
 	 */
+	//TODO: Not used
+	
+	/*
 	public boolean openDocument(String filePath) {
 		if (isFilePathUsed(filePath)) {
 			return false;
@@ -92,7 +109,7 @@ public class FileManager {
 			}
 			return true;
 		}
-	}
+	}*/
 	
 	/**
 	 * check if filePath is already in use
@@ -126,7 +143,7 @@ public class FileManager {
 	 */
   public boolean fileOpen() throws FileNotFoundException {
     File file = this.commandController.askUserOpenDialog();
-    if (file == null) {
+    if (file == null || isFilePathUsed(file.getAbsolutePath())) {
       return false;
     }
     else {
@@ -149,25 +166,36 @@ public class FileManager {
    */
   public boolean fileClose(OpenedSBMLDocument doc) {
     boolean success = true;
-    for (Layout layout : doc.listOfLayouts) {
-      success &= commandController.closeTab(layout);
+    logger.info(doc.getAssociatedFilename());
+    for (Layout layout : doc.getListOfLayouts()) {
+      boolean s = commandController.closeTab(layout);
+      logger.info(layout.getName() + " closing succes? : " + s);
+      success &= s;
     }
     if(success) {
       this.listOfOpenedDocuments.remove(doc);
     }
+    
     return success;
   }
 
   public boolean fileSave(OpenedSBMLDocument doc) {
     try {
-      String associatedFilename = doc.getAssociatedFilename();
+      
+      if(!doc.hasAssociatedFilepath()) {
+        return fileSaveAs(doc);
+      }
+      
+      /*String associatedFilename = doc.getAssociatedFilename();
       logger.info("assoc filename: " + associatedFilename);
       // check for Filename set, if not ask user
       File file = associatedFilename == null ? 
         commandController.askUserSaveDialog() : new File(doc.getAssociatedFilepath());
       logger.info("chosen file: " + file.getAbsolutePath());
       doc.setAssociatedFilepath(file.getAbsolutePath());
-      assert doc.getAssociatedFilepath() != null;
+      assert doc.getAssociatedFilepath() != null;*/
+      File file = new File(doc.getAssociatedFilepath());
+      
       SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
       task.addPropertyChangeListener(commandController);
       task.execute();
@@ -183,5 +211,14 @@ public class FileManager {
     File file = commandController.askUserSaveDialog();
     doc.setAssociatedFilepath(file.getAbsolutePath());
     return fileSave(doc);
+  }
+  
+  public boolean isFileNameUsed(String name) { 
+    for (OpenedDocument<?> doc : listOfOpenedDocuments) {
+      if(doc.getAssociatedFilename().equals(name)){
+        return true;
+      }
+    }
+    return false;
   }
 }
