@@ -119,7 +119,8 @@ public class SBMLEditorConstants {
   public static final String addUnknownMolecule = "addUnknownMolecule";
   public static final String addSimpleMolecule = "addSimpleMolecule";
   public static final String addEmptySet = "addEmptySet";
-  public static final String openSelectedLayout = "openSelectedLayout";
+  public static final String openLayoutInNewTab = "openLayoutInNewTab";
+  public static final String openLayoutInTab = "openLayoutInTab";
   
   
     

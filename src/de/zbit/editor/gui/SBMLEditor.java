@@ -292,22 +292,41 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
       JOptionPane.ERROR_MESSAGE);
   }
 
+  @Override
+  public void refreshTitle(Layout layout) {
+    this.tabManager.refreshTitle(layout);
+  }
+  
   /**
    * @param list
    */
+  @Override
   public void updateComboBox(ListOf<Layout> list) {
     editorToolbar.updateComboBox(list);    
   }
   
-  public void openSelectedLayout() {
+  public void openLayoutInNewTab() {
     Layout layout = editorToolbar.getSelectedLayout();
-    logger.info("Try to Open Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
+    logger.info("Try to Open Layout in new Tab ID: " + layout.getId() + " Layout Name: " + layout.getName());
     if(layout != null) {
       if (tabManager.isLayoutOpen(layout)) {
         tabManager.showTab(layout);
       }
       else {
         addLayout(layout);
+      }
+    }
+  }
+  
+  public void openLayoutInTab() {
+    Layout layout = editorToolbar.getSelectedLayout();
+    logger.info("Try to Open Layout in current Tab ID: " + layout.getId() + " Layout Name: " + layout.getName());
+    if(layout != null) {
+      if (tabManager.isLayoutOpen(layout)) {
+        tabManager.showTab(layout);
+      }
+      else {
+        tabManager.changeTab(getCurrentLayout(), layout);
       }
     }
   }
@@ -320,19 +339,19 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     addLayout(layout);
   }
   
-  public void layoutDelete() {
-    OpenedSBMLDocument doc = (OpenedSBMLDocument) getCurrentLayout().getSBMLDocument()
+  public void layoutClone() {
+    Layout layout = getCurrentLayout();
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    if( doc.getListOfLayouts().size() == 1) {
-      logger.info("Document doesn't have 2 or more layouts");
-    }
-    else {
-      Layout layout = getCurrentLayout();
-      logger.info("Try to delete Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
-      closeTab(getCurrentLayout());
-      doc.getListOfLayouts().remove(layout);
-      editorToolbar.updateComboBox(doc.getListOfLayouts());
-    }     
+    Layout layout2 = doc.addLayout(layout);
+    
+    logger.info("Cloning Layout ID: "+ layout.getId() + " Name: " +layout.getName() + " to  Layout ID: "+ layout2.getId() + " Name: " +layout2.getName());
+    addLayout(layout2);
+  }
+  
+  public void layoutDelete() {
+    commandController.layoutDelete(getCurrentLayout());
+    
   }
   
   

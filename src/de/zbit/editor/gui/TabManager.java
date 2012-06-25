@@ -61,24 +61,16 @@ public class TabManager extends JTabbedPane {
       logger.info("List contains layout: ID: "+ layout.getId() + " Name: " +layout.getName());
     }
     listOfLayouts.add(layout);
+      
+    GraphLayoutPanel panel = createPanelFromLayout(layout);
     
-    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    String title = doc.getAssociatedFilename()+": "+ layout.getName();
-    
-    GraphLayoutPanel panel = new GraphLayoutPanel(layout);
-    
-    SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
-    Graph2DView view = panel.getGraph2DView();
-    view.addViewMode(editMode);
-    
-    layout.getSBMLDocument().getModel()
-        .addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout));
-    
-    addTab(title, panel);
+    addTab("",panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
-    
+
+    refreshTitle(layout);
     showTab(layout);
+    
     return true;
   }
   
@@ -135,9 +127,19 @@ public class TabManager extends JTabbedPane {
   /**
    * @param currentLayout
    */
-  public void refreshTitle(Layout currentLayout) {
-    // TODO Auto-generated method stub
-    
+  public void refreshTitle(Layout layout) {
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+
+    for(Layout l : doc.getListOfLayouts()) {
+      if(isLayoutOpen(l)) {
+        TabComponent component = (TabComponent) getTabComponentAt(this.listOfLayouts.indexOf(l));
+        String title = doc.getAssociatedFilename()+": "+ l.getName();
+        if(doc.isFileModified()) {
+          title = "*"+title;
+        }
+        component.setTitle(title);
+      }
+    }
   }
 
   /**
@@ -150,5 +152,51 @@ public class TabManager extends JTabbedPane {
   
   public boolean isAnySelected() {
     return getSelectedIndex() != -1;
+  }
+  
+  public boolean isAnyOpenFromDocument(Layout layout) {
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    ListOf<Layout> list = doc.getListOfLayouts();
+    
+    boolean anyopen = false;
+    
+    for (Layout l : list) {
+      if (l.getId() != layout.getId()) {
+        anyopen |= isLayoutOpen(l);
+      }
+    }
+    return anyopen;
+  }
+
+  /**
+   * @param currentLayout
+   * @param layout
+   */
+  public void changeTab(Layout oldLayout, Layout newLayout) {
+    int index = listOfLayouts.indexOf(oldLayout);
+    
+    listOfLayouts.set(index, newLayout);
+
+    GraphLayoutPanel panel = createPanelFromLayout(newLayout);
+
+    setComponentAt(index, panel);
+    setSelectedComponent(panel);
+    setTabComponentAt(getSelectedIndex(), new TabComponent(this));
+    refreshTitle(newLayout);
+    showTab(newLayout);
+
+  }
+  
+  public GraphLayoutPanel createPanelFromLayout (Layout layout) { 
+    GraphLayoutPanel panel = new GraphLayoutPanel(layout);
+
+    SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
+    Graph2DView view = panel.getGraph2DView();
+    view.addViewMode(editMode);
+
+    layout.getSBMLDocument().getModel()
+    .addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout));
+    return panel;
   }
 }

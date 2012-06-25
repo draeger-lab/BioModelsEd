@@ -32,6 +32,7 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
@@ -97,15 +98,17 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	 */
 	public String nextGenericId() {
 		int count = 0;
-		String genericId = SBMLEditorConstants.genericId;
+		String s = SBMLEditorConstants.genericId + count;
 		// search for first avalible id
-		while (count <= listOfUsedIds.size() && 
-				!listOfUsedIds.contains(genericId + count)) {
-			count++;
-		}
-		return genericId + count;
+		while(listOfUsedIds.contains(s)) {
+      count+=1;
+      s = SBMLEditorConstants.genericId+count;
+    }
+    listOfUsedIds.add(s);
+    return s;
 	}
 	
+		
 	/**
 	 * check if given id is available
 	 */
@@ -185,6 +188,23 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     Layout layout = extendedLayoutModel.createLayout(Resources.createValidID("l"));
     layout.setName(name);
     logger.info("Created Layout in Model: " + model.getId() + " Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
+    setFileModified(true);
+    return layout;
+  }
+  
+  public Layout addLayout (Layout layout) {
+    Model model = this.document.getModel();
+    ExtendedLayoutModel extendedLayoutModel =
+        (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
+    layout = layout.clone();
+    layout.setId(Resources.createValidID("l"));
+    for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
+      glyph.setId(nextGenericId());
+    }
+    extendedLayoutModel.addLayout(layout);
+    
+    logger.info("Added Layout in Model: " + model.getId() + " Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
+    setFileModified(true);
     return layout;
   }
   

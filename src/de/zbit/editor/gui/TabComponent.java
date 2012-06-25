@@ -23,12 +23,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.EventHandler;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
+import de.zbit.editor.control.OpenedSBMLDocument;
 
 /**
  * @author Alexander Diamantikos
@@ -41,6 +44,7 @@ public class TabComponent extends JPanel {
   private static final long serialVersionUID = -8179219783406520882L;
   private TabManager        tabManager;
   private JLabel            label;
+  private static Logger logger = Logger.getLogger(OpenedSBMLDocument.class.toString());
 
 
   public TabComponent(TabManager tabManager) {
@@ -85,6 +89,10 @@ public class TabComponent extends JPanel {
     }
 
 
+    public void mouseDragged(MouseEvent e) {
+      logger.info("Dragged");
+    }
+    
     public void mousePressed(MouseEvent e) {
       maybeShowPopup(e);
     }

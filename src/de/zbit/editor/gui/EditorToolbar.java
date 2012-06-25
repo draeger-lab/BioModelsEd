@@ -62,9 +62,10 @@ public class EditorToolbar extends JToolBar {
     GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.INHIBITION), Resources.iconPositive, 0, 0,
       EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
     add(layoutComboBox);
-    GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN));
+    GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN),
+        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openLayoutInTab));
     GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN_NEW),
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openSelectedLayout));
+        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openLayoutInNewTab));
     
   }
   

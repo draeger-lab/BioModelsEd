@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 
 import javax.swing.JFrame;
 
+import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.util.ValuePair;
 
@@ -70,4 +71,14 @@ public interface SBMLView {
   public void showError(String error);
 
   boolean closeTab(Layout layout);
+
+  /**
+   * @param layout
+   */
+  void refreshTitle(Layout layout);
+
+  /**
+   * @param list
+   */
+  void updateComboBox(ListOf<Layout> list);
 }

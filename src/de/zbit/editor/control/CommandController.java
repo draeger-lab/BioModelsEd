@@ -107,7 +107,7 @@ public class CommandController implements PropertyChangeListener {
     String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
     logger.info("popup: " + nameFromPopup);
   
-    // use name as id if possible
+    /* use name as id if possible
     String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup
         : genericId;
     logger.info("id: " + id);
@@ -115,6 +115,8 @@ public class CommandController implements PropertyChangeListener {
     if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
       // is there any possibility in java to correctly check types before
       // casting?
+       * */
+       
       @SuppressWarnings("unchecked")
       ValuePair<Double, Double> newMousePosition =
           (ValuePair<Double, Double>) evt.getNewValue();
@@ -127,7 +129,7 @@ public class CommandController implements PropertyChangeListener {
       Layout layout = this.view.getCurrentLayout();
       Model model = layout.getModel();
   
-      Species s = SBMLFactory.createSpecies(id, nameFromPopup, sboTerm, model.getLevel(), model.getVersion());
+      Species s = SBMLFactory.createSpecies(genericId, nameFromPopup, sboTerm, model.getLevel(), model.getVersion());
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph("glyph_" + s.getId(), model.getLevel(), model.getVersion(), s.getId());
       sGlyph.setBoundingBox(sGlyph.createBoundingBox(
           SBMLEditorConstants.glyphDefaultWidth,
@@ -139,6 +141,8 @@ public class CommandController implements PropertyChangeListener {
   
       model.addSpecies(s);
       layout.addSpeciesGlyph(sGlyph);
+      selectedDoc.setFileModified(true);
+      view.refreshTitle(layout);
 
       /*
        * keep a list of all glyphs which are associated with the species
@@ -153,7 +157,7 @@ public class CommandController implements PropertyChangeListener {
   
 //      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
 //      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
-    }
+    
   
     this.state = States.normal;
   }
@@ -274,22 +278,13 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    if (doc.isFileModified()) {
-      int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
-      if (returnVal == JOptionPane.YES_OPTION) {
-        logger.info("User chose to save file");
-        fileSave();
-      }
-      else if (returnVal == JOptionPane.NO_OPTION) {
-        logger.info("User chose to not save file");
-      }
-      else {
-        logger.info("User canceled closing");
-        return false;
-      }
-    }
     
-    return fileManager.fileClose(doc);
+    if (askUserSave(doc)) {
+      return fileManager.fileClose(doc);
+    }
+    else {
+      return false;
+    }    
   }
   
   /**
@@ -433,24 +428,53 @@ public class CommandController implements PropertyChangeListener {
    * @param layout
    */
   public boolean layoutClose(Layout layout) {
-    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    ListOf<Layout> list = doc.getListOfLayouts();
-    
-    boolean anyopen = false;
-    
-    for (Layout l : list) {
-      if (l.getId() != layout.getId()) {
-        anyopen |= view.getTabManager().isLayoutOpen(l);
-      }
-    }
-    
-    if (anyopen) {
+    if (view.getTabManager().isAnyOpenFromDocument(layout)) {
       return view.closeTab(layout);
     }
     else {
       return view.fileClose();
     }    
   }
+
+  /**
+   * @param currentLayout
+   */
+  public void layoutDelete(Layout layout) {
+    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    if(doc.getListOfLayouts().size() == 1) {
+      logger.info("Document doesn't have 2 or more layouts");
+    }
+    else if (view.getTabManager().isAnyOpenFromDocument(layout)){
+      logger.info("Try to delete Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
+      doc.getListOfLayouts().remove(layout);
+      view.closeTab(layout);
+      //view.updateComboBox(doc.getListOfLayouts());
+    }
+    else {
+        logger.info("No other layout opened");
+      //TODO Ask user for Save
+    }
+  }
   
+  //Returns if User did not cancel saving progress 
+  public boolean askUserSave(OpenedSBMLDocument doc) {
+    if (doc.isFileModified()) {
+      int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
+      if (returnVal == JOptionPane.YES_OPTION) {
+        logger.info("User chose to save file");
+        fileSave();
+        return true;
+      }
+      else if (returnVal == JOptionPane.NO_OPTION) {
+        logger.info("User chose to not save file");
+        return true;
+      }
+      else {
+        logger.info("User canceled closing");
+        return false;
+      }
+    }
+    return true;
+  }
 }
