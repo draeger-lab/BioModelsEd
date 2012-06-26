@@ -61,7 +61,10 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	 * @param layout
 	 */
 	public GraphLayoutPanel(Layout layout) {
-		super(null, null, null, layout, false);
+	  super(null, null, null, layout, false);
+		if (layout == null)
+      System.out.print("Layout = null");
+		
 	  this.idMap = new HashMap<String, List<String>>();
 		try {
 			createTabContent();

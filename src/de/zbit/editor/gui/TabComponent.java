@@ -72,7 +72,7 @@ public class TabComponent extends JPanel {
   public void close() {
     GraphLayoutPanel panel = (GraphLayoutPanel) tabManager.getComponentAt(tabManager.indexOfTabComponent(this));
     tabManager.showTab(panel.getDocument());
-    tabManager.getEditorInstance().layoutClose((panel.getDocument()));
+    tabManager.getEditorInstance().layoutClose(panel.getDocument());
   }
 
   public void closeAll() {

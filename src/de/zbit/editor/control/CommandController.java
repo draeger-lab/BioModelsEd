@@ -140,6 +140,7 @@ public class CommandController implements PropertyChangeListener {
           SBMLEditorConstants.glyphDefaultZ));
   
       model.addSpecies(s);
+      //TODO sGlyph.setNamedSBase(); ???
       layout.addSpeciesGlyph(sGlyph);
       selectedDoc.setFileModified(true);
       view.refreshTitle(layout);

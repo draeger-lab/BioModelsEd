@@ -79,12 +79,16 @@ public class TabManager extends JTabbedPane {
    * @return
    */
   public boolean closeTab(Layout layout) {
-    int index = this.listOfLayouts.indexOf(layout);
-    remove(index);
-    this.listOfLayouts.remove(index);
-    logger.info("ID: "+ layout.getId() + " Name: " +layout.getName() + " Tabindex: " + index);
-    showTab(getCurrentLayout());
-    return true;
+    if (isLayoutOpen(layout)) {
+      int index = this.listOfLayouts.indexOf(layout);
+      remove(index);
+      this.listOfLayouts.remove(index);
+      logger.info("ID: " + layout.getId() + " Name: " + layout.getName()
+        + " Tabindex: " + index);
+      showTab(getCurrentLayout());
+      return true;
+    }
+    return false;
   }
 
   /**

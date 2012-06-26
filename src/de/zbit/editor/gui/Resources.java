@@ -50,6 +50,10 @@ public class Resources {
   public static final ImageIcon iconButtonRedo = Resources.createImageIcon("images/ButtonRedo.png", null);
   public static final ImageIcon iconButtonSave = Resources.createImageIcon("images/ButtonSave.png", null);
   public static final ImageIcon iconButtonUndo = Resources.createImageIcon("images/ButtonUndo.png", null);
+  public static final ImageIcon iconUnknown = Resources.createImageIcon("images/ButtonUnknown.png", null);
+  public static final ImageIcon iconSimpleMolecule = Resources.createImageIcon("images/ButtonSimpleMolecule.png", null);
+  public static final ImageIcon iconMacromolecule = Resources.createImageIcon("images/ButtonMacromolecule.png", null);
+  public static final ImageIcon iconEmptySet = Resources.createImageIcon("images/ButtonEmptySet.png", null);
   public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
   
 	//Get localized String in default language
