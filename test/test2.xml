@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model id="m1">
+    <listOfCompartments>
+      <compartment id="c1"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="s1" name="Species 1" sboTerm="SBO:0000253" compartment="c1"/>
+      <species id="s2" name="Species 2" compartment="c1"/>
+    </listOfSpecies>
+      <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1">
+      <layout:layout id="l1">
+                <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph layout:id="glyph_s1" layout:species="s1">
+            <layout:boundingBox>
+              <layout:dimensions layout:width="60" layout:height="60" layout:depth="10"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+              <render:listOfLocalRenderInformation xmlns:render="http://www.sbml.org/sbml/level3/version1/render/version1">
+          <render:localRenderInformation id="i1">
+            <render:listOfColorDefinitions>
+              <render:colorDefinition id="color_255" render:value="#0000FFFF"/>
+            </render:listOfColorDefinitions>
+          </render:localRenderInformation>
+        </render:listOfLocalRenderInformation>
+              </layout:layout>
+    </layout:listOfLayouts>
+  </model>
+</sbml>

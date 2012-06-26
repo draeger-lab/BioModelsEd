@@ -1,0 +1,1388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" xmlns:render="http://www.sbml.org/sbml/level3/version1/render/version1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" level="3" version="1" layout:required="false" render:required="false">
+  <model>
+    <layout:listOfLayouts>
+      <layout:layout id="layout_1">
+        <layout:dimensions width="1240" height="1037"/>
+        <layout:listOfCompartmentGlyphs>
+          <layout:compartmentGlyph id="layout_object_1">
+            <layout:boundingBox>
+              <layout:position x="10" y="100"/>
+              <layout:dimensions width="1180" height="880"/>
+            </layout:boundingBox>
+          </layout:compartmentGlyph>
+          <layout:compartmentGlyph id="layout_object_66">
+            <layout:boundingBox>
+              <layout:position x="10" y="10"/>
+              <layout:dimensions width="1180" height="80"/>
+            </layout:boundingBox>
+          </layout:compartmentGlyph>
+        </layout:listOfCompartmentGlyphs>
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph id="layout_object_2">
+            <layout:boundingBox>
+              <layout:position x="30" y="110"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_8">
+            <layout:boundingBox>
+              <layout:position x="170" y="252.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_9">
+            <layout:boundingBox>
+              <layout:position x="470" y="252.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_10">
+            <layout:boundingBox>
+              <layout:position x="280" y="182.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_11">
+            <layout:boundingBox>
+              <layout:position x="730" y="481.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_12">
+            <layout:boundingBox>
+              <layout:position x="845" y="721.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_13">
+            <layout:boundingBox>
+              <layout:position x="420" y="182.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_14">
+            <layout:boundingBox>
+              <layout:position x="880" y="481.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_15">
+            <layout:boundingBox>
+              <layout:position x="1015" y="721.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_22">
+            <layout:boundingBox>
+              <layout:position x="320" y="342.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_23">
+            <layout:boundingBox>
+              <layout:position x="620" y="342.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_28">
+            <layout:boundingBox>
+              <layout:position x="120" y="342.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_34">
+            <layout:boundingBox>
+              <layout:position x="85" y="676.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_35">
+            <layout:boundingBox>
+              <layout:position x="355" y="676.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_36">
+            <layout:boundingBox>
+              <layout:position x="155" y="736.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_37">
+            <layout:boundingBox>
+              <layout:position x="325" y="736.2"/>
+              <layout:dimensions width="50" height="50"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_46">
+            <layout:boundingBox>
+              <layout:position x="775" y="676.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_48">
+            <layout:boundingBox>
+              <layout:position x="650" y="551.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_49">
+            <layout:boundingBox>
+              <layout:position x="900" y="551.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_56">
+            <layout:boundingBox>
+              <layout:position x="765" y="791.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_57">
+            <layout:boundingBox>
+              <layout:position x="1035" y="791.2"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_64">
+            <layout:boundingBox>
+              <layout:position x="990" y="906.2"/>
+              <layout:dimensions width="190" height="60"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="layout_object_67">
+            <layout:boundingBox>
+              <layout:position x="30" y="23"/>
+              <layout:dimensions width="100" height="40"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph id="layout_object_4">
+            <layout:boundingBox>
+              <layout:position x="197.5" y="122.5"/>
+              <layout:dimensions width="45" height="15"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_5">
+                <layout:boundingBox>
+                  <layout:position x="120" y="30"/>
+                  <layout:dimensions width="67.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_6">
+                <layout:boundingBox>
+                  <layout:position x="120" y="-57"/>
+                  <layout:dimensions width="67.5" height="87"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_7">
+                <layout:boundingBox>
+                  <layout:position x="232.5" y="30"/>
+                  <layout:dimensions width="49.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="layout_object_16">
+            <layout:boundingBox>
+              <layout:position x="347.5" y="264.7"/>
+              <layout:dimensions width="45" height="15"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_17">
+                <layout:boundingBox>
+                  <layout:position x="270" y="172.2"/>
+                  <layout:dimensions width="67.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_18">
+                <layout:boundingBox>
+                  <layout:position x="382.5" y="172.2"/>
+                  <layout:dimensions width="59.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_19">
+                <layout:boundingBox>
+                  <layout:position x="307.5" y="132.2"/>
+                  <layout:dimensions width="30" height="40"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_20">
+                <layout:boundingBox>
+                  <layout:position x="382.5" y="139.7"/>
+                  <layout:dimensions width="28" height="32.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_21">
+                <layout:boundingBox>
+                  <layout:position x="360" y="57.2"/>
+                  <layout:dimensions width="0" height="82"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="layout_object_24">
+            <layout:boundingBox>
+              <layout:position x="497.5" y="354.7"/>
+              <layout:dimensions width="45" height="15"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_25">
+                <layout:boundingBox>
+                  <layout:position x="532.5" y="262.2"/>
+                  <layout:dimensions width="77.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_26">
+                <layout:boundingBox>
+                  <layout:position x="428" y="262.2"/>
+                  <layout:dimensions width="59.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_27">
+                <layout:boundingBox>
+                  <layout:position x="510" y="192.2"/>
+                  <layout:dimensions width="0" height="44.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="layout_object_30">
+            <layout:boundingBox>
+              <layout:position x="247.5" y="449.7"/>
+              <layout:dimensions width="45" height="15"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_31">
+                <layout:boundingBox>
+                  <layout:position x="160" y="282.2"/>
+                  <layout:dimensions width="100" height="52.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_32">
+                <layout:boundingBox>
+                  <layout:position x="260" y="292.2"/>
+                  <layout:dimensions width="100" height="42.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_33">
+                <layout:boundingBox>
+                  <layout:position x="260" y="364.7"/>
+                  <layout:dimensions width="0" height="49.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="layout_object_38">
+            <layout:boundingBox>
+              <layout:position x="247.5" y="688.7"/>
+              <layout:dimensions width="45" height="15"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_39">
+                <layout:boundingBox>
+                  <layout:position x="175" y="596.2"/>
+                  <layout:dimensions width="62.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_40">
+                <layout:boundingBox>
+                  <layout:position x="282.5" y="596.2"/>
+                  <layout:dimensions width="44.5" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_41">
+                <layout:boundingBox>
+                  <layout:position x="182.5" y="596.2"/>
+                  <layout:dimensions width="55" height="40"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_42">
+                <layout:boundingBox>
+                  <layout:position x="282.5" y="596.2"/>
+                  <layout:dimensions width="33" height="31"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_43">
+                <layout:boundingBox>
+                  <layout:position x="260" y="496.2"/>
+                  <layout:dimensions width="0" height="74.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="layout_object_50">
+            <layout:boundingBox>
+              <layout:position x="810" y="566.2"/>
+              <layout:dimensions width="30" height="10"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_51">
+                <layout:boundingBox>
+                  <layout:position x="750" y="471.2"/>
+                  <layout:dimensions width="50" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_52">
+                <layout:boundingBox>
+                  <layout:position x="830" y="471.2"/>
+                  <layout:dimensions width="42" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_53">
+                <layout:boundingBox>
+                  <layout:position x="757.5" y="431.2"/>
+                  <layout:dimensions width="42.5" height="40"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_54">
+                <layout:boundingBox>
+                  <layout:position x="830" y="440.2"/>
+                  <layout:dimensions width="53" height="28.5"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_55">
+                <layout:boundingBox>
+                  <layout:position x="815" y="495.2"/>
+                  <layout:dimensions width="0" height="81"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="layout_object_58">
+            <layout:boundingBox>
+              <layout:position x="935" y="806.2"/>
+              <layout:dimensions width="30" height="10"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="layout_object_59">
+                <layout:boundingBox>
+                  <layout:position x="865" y="711.2"/>
+                  <layout:dimensions width="60" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_60">
+                <layout:boundingBox>
+                  <layout:position x="955" y="711.2"/>
+                  <layout:dimensions width="52" height="0"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_61">
+                <layout:boundingBox>
+                  <layout:position x="872.5" y="671.2"/>
+                  <layout:dimensions width="52.5" height="40"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_62">
+                <layout:boundingBox>
+                  <layout:position x="955" y="680.2"/>
+                  <layout:dimensions width="50.5" height="31"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="layout_object_63">
+                <layout:boundingBox>
+                  <layout:position x="940" y="491.2"/>
+                  <layout:dimensions width="0" height="197"/>
+                </layout:boundingBox>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+        <layout:listOfAdditionalGraphicalObjects>
+          <layout:graphicalObject id="layout_object_3">
+            <layout:boundingBox>
+              <layout:position x="310" y="53.2"/>
+              <layout:dimensions width="120" height="104"/>
+            </layout:boundingBox>
+          </layout:graphicalObject>
+          <layout:graphicalObject id="layout_object_29">
+            <layout:boundingBox>
+              <layout:position x="155" y="532.2"/>
+              <layout:dimensions width="230" height="64"/>
+            </layout:boundingBox>
+          </layout:graphicalObject>
+          <layout:graphicalObject id="layout_object_44">
+            <layout:boundingBox>
+              <layout:position x="525" y="666.2"/>
+              <layout:dimensions width="180" height="60"/>
+            </layout:boundingBox>
+          </layout:graphicalObject>
+          <layout:graphicalObject id="layout_object_45">
+            <layout:boundingBox>
+              <layout:position x="445" y="596.2"/>
+              <layout:dimensions width="70" height="0"/>
+            </layout:boundingBox>
+          </layout:graphicalObject>
+          <layout:graphicalObject id="layout_object_47">
+            <layout:boundingBox>
+              <layout:position x="695" y="596.2"/>
+              <layout:dimensions width="70" height="0"/>
+            </layout:boundingBox>
+          </layout:graphicalObject>
+          <layout:graphicalObject id="layout_object_65">
+            <layout:boundingBox>
+              <layout:position x="1075" y="731.2"/>
+              <layout:dimensions width="0" height="57"/>
+            </layout:boundingBox>
+          </layout:graphicalObject>
+        </layout:listOfAdditionalGraphicalObjects>
+        <render:listOfRenderInformation versionMajor="1" versionMinor="0">
+          <render:renderInformation id="render_info_1" name="render info for SBGN diagram">
+            <render:listOfColorDefinitions>
+              <render:colorDefinition id="background" value="#ffffff"/>
+              <render:colorDefinition id="foreground" value="#000000"/>
+            </render:listOfColorDefinitions>
+            <render:listOfGradientDefinitions>
+              <render:linearGradient x1="50%" x2="50%" id="clone_gradient">
+                <render:stop offset="0" stop-color="background"/>
+                <render:stop offset="65%" stop-color="background"/>
+                <render:stop offset="65%" stop-color="foreground"/>
+                <render:stop offset="100%" stop-color="foreground"/>
+              </render:linearGradient>
+            </render:listOfGradientDefinitions>
+            <render:listOfLineEndings>
+              <render:lineEnding id="catalysisHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-7.5"/>
+                  <render:dimensions width="15" height="15"/>
+                </render:boundingBox>
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:ellipse cx="50%" cy="50%" cz="50%" rx="50%"/>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="inhibitionHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-7.5"/>
+                  <render:dimensions width="15" height="15"/>
+                </render:boundingBox>
+                <render:g stroke-width="1" fill="foreground">
+                  <render:rectangle x="0" y="0" width="100%" height="100%"/>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="modulationHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-7.5"/>
+                  <render:dimensions width="15" height="15"/>
+                </render:boundingBox>
+                <render:g stroke="foreground" fill="background">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="0"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="necessaryStimulationHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-7.5"/>
+                  <render:dimensions width="22" height="15"/>
+                </render:boundingBox>
+                <render:g stroke="foregound" stroke-width="3">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="30%" y="10%"/>
+                      <render:element xsi:type="RenderPoint" x="30%" y="90%"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="30%" y="50%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="stimulationHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-7.5"/>
+                  <render:dimensions width="15" height="15"/>
+                </render:boundingBox>
+                <render:g stroke="foreground">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="productionHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-7.5"/>
+                  <render:dimensions width="15" height="15"/>
+                </render:boundingBox>
+                <render:g fill="foreground">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:lineEnding>
+            </render:listOfLineEndings>
+            <render:listOfStyles>
+              <render:style id="render_object_1" idList="layout_object_1">
+                <render:g stroke="foreground" stroke-width="5" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="20.0" ry="20.0" />  
+                  <render:g>
+                    <render:text x="-30.0" y="30.0" font-family="monospaced" font-size="36" text-anchor="end" vtext-anchor="top">cytosol</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_2" idList="layout_object_2">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">IGFR</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_3" idList="layout_object_3">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="60" y="104"/>
+                      <render:element xsi:type="RenderPoint" x="108" y="104"/>
+                      <render:element xsi:type="RenderPoint" x="120" y="93.6"/>
+                      <render:element xsi:type="RenderPoint" x="120" y="10.4"/>
+                      <render:element xsi:type="RenderPoint" x="108" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="12" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="10.4"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="93.6"/>
+                      <render:element xsi:type="RenderPoint" x="12" y="104"/>
+                      <render:element xsi:type="RenderPoint" x="60" y="104"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:rectangle x="10.0" y="8.0" z="0.0" width="100.0" height="40.0" rx="10.0" ry="10.0" />  
+                    <render:g>
+                      <render:text x="0" y="12" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="top">IGF</render:text>
+                    </render:g>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:rectangle x="10.0" y="56.0" z="0.0" width="100.0" height="40.0" rx="10.0" ry="10.0" />  
+                    <render:g>
+                      <render:text x="0" y="60" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="top">IGFR</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_4" idList="layout_object_4">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="30" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="45" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:ellipse fill="foreground" cx="50%" cy="50%" rx="16.6667%" ry="50%"/>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_5" idList="layout_object_5">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="77.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_6" idList="layout_object_6">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="77.5" y="187"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_7" idList="layout_object_7">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="59.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_8" idList="layout_object_8">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">IRS1-4</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="100" cy="20" cz="50%" rx="10"/>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_9" idList="layout_object_9">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">IRS1-4</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="100" cy="20" cz="50%" rx="10"/>
+                    <render:g>
+                      <render:text x="96" y="14" font-family="monospaced" font-size="14" text-anchor="start" vtext-anchor="top">P</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_10" idList="layout_object_10 layout_object_11 layout_object_12">
+                <render:g stroke="foreground" stroke-width="3" fill="clone_gradient">
+                  <render:ellipse cx="25" cy="25" rx="25"/>
+                  <render:g>
+                    <render:text x="0" y="-4.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">ATP</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_11" idList="layout_object_13 layout_object_14 layout_object_15">
+                <render:g stroke="foreground" stroke-width="3" fill="clone_gradient">
+                  <render:ellipse cx="25" cy="25" rx="25"/>
+                  <render:g>
+                    <render:text x="0" y="-4.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">ADP</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_12" idList="layout_object_16">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="30" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="45" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="15"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_13" idList="layout_object_17">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="77.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_14" idList="layout_object_18">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="69.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_15" idList="layout_object_19">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="40" y="140"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_16" idList="layout_object_20">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="132.5"/>
+                      <render:element xsi:type="RenderPoint" x="38" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_17" idList="layout_object_21">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="catalysisHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="182"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_18" idList="layout_object_22">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+
+                  <render:g>
+                    <render:text x="0" y="-5.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">Grb2</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="50" cy="40" cz="50%" rx="40" ry="10"/>
+                    <render:g>
+                      <render:text x="0" y="33" font-family="monospaced" font-size="14" text-anchor="middle" vtext-anchor="top">active</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_19" idList="layout_object_23">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="-5.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">Grb2</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="50" cy="40" cz="50%" rx="40" ry="10"/>
+                    <render:g>
+                      <render:text x="0" y="33" font-family="monospaced" font-size="14" text-anchor="middle" vtext-anchor="top">inactive</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_20" idList="layout_object_24">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="45" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="15" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="-1.66533e-15"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="8.32667e-16"/>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="0"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_21" idList="layout_object_25">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="87.5" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_22" idList="layout_object_26">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="69.5" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_23" idList="layout_object_27">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="stimulationHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="144.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_24" idList="layout_object_28">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">SOS</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_25" idList="layout_object_29">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="115" y="64.0"/>
+                      <render:element xsi:type="RenderPoint" x="220" y="64.0"/>
+                      <render:element xsi:type="RenderPoint" x="230" y="54.0"/>
+                      <render:element xsi:type="RenderPoint" x="230" y="10.0"/>
+                      <render:element xsi:type="RenderPoint" x="220" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="54.0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="64"/>
+                      <render:element xsi:type="RenderPoint" x="115" y="64"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:rectangle x="10.0" y="8.0" z="0.0" width="100.0" height="40.0" rx="10.0" ry="10.0" />  
+
+                    <render:g>
+                      <render:text x="40" y="10.0" font-family="monospaced" font-size="20" text-anchor="start" vtext-anchor="top">SOS</render:text>
+                    </render:g>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:rectangle x="120.0" y="8.0" z="0.0" width="100.0" height="40.0" rx="10.0" ry="10.0" />  
+
+                    <render:g>
+                      <render:text x="145" y="10.0" font-family="monospaced" font-size="20" text-anchor="start" vtext-anchor="top">Grb2</render:text>
+                    </render:g>
+                    <render:g stroke="foreground" stroke-width="3" fill="background">
+                      <render:ellipse cx="170" cy="45" cz="50%" rx="40" ry="10"/>
+                      <render:g>
+                        <render:text x="148.0" y="38" font-family="monospaced" font-size="14" text-anchor="start" vtext-anchor="top">active</render:text>
+                      </render:g>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_26" idList="layout_object_30">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="30"/>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="15"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="-15"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:ellipse fill="foreground" cx="50%" cy="50%" rx="16.6667%" ry="50%"/>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_27" idList="layout_object_31">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="110" y="152.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_28" idList="layout_object_32">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="110" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="142.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_29" idList="layout_object_33">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="149.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_30" idList="layout_object_34">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+
+                  <render:g>
+                    <render:text x="0" y="-5.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">RAS</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="50" cy="40" cz="50%" rx="40" ry="10"/>
+                    <render:g>
+                      <render:text x="0" y="33" font-family="monospaced" font-size="14" text-anchor="middle" vtext-anchor="top">inactive</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_31" idList="layout_object_35">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="-5.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">RAS</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="50" cy="40" cz="50%" rx="40" ry="10"/>
+                    <render:g>
+                      <render:text x="0" y="33" font-family="monospaced" font-size="14" text-anchor="middle" vtext-anchor="top">active</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_32" idList="layout_object_36">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:ellipse cx="25" cy="25" rx="25"/>
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">GTP</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_33" idList="layout_object_37">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:ellipse cx="25" cy="25" rx="25"/>
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">GDP</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_34" idList="layout_object_38">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="30" y="7.5"/>
+                      <render:element xsi:type="RenderPoint" x="45" y="7.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="15"/>
+                      <render:element xsi:type="RenderPoint" x="22.5" y="15"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_35" idList="layout_object_39">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="72.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_36" idList="layout_object_40">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="54.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_37" idList="layout_object_41">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="140"/>
+                      <render:element xsi:type="RenderPoint" x="65" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_38" idList="layout_object_42">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="43" y="131"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_39" idList="layout_object_43">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="stimulationHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="174.5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_40" idList="layout_object_44">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="90" y="60"/>
+                      <render:element xsi:type="RenderPoint" x="180" y="60"/>
+                      <render:element xsi:type="RenderPoint" x="180" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="60"/>
+                      <render:element xsi:type="RenderPoint" x="90" y="60"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                  <render:g>
+                    <render:text x="0" y="13.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="top">MAPK</render:text>
+                    <render:text x="0" y="-7.0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="bottom">cascade</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:polygon>
+                      <render:listOfElements>
+                        <render:element xsi:type="RenderPoint" x="6" y="17.5"/>
+                        <render:element xsi:type="RenderPoint" x="38" y="17.5"/>
+                        <render:element xsi:type="RenderPoint" x="50" y="30.0"/>
+                        <render:element xsi:type="RenderPoint" x="38" y="42.5"/>
+                        <render:element xsi:type="RenderPoint" x="0" y="42.5"/>
+                        <render:element xsi:type="RenderPoint" x="0" y="17.5"/>
+                        <render:element xsi:type="RenderPoint" x="6" y="17.5"/>
+                      </render:listOfElements>
+                    </render:polygon>
+                    <render:g>
+                      <render:text x="5.0" y="0" font-family="monospaced" font-size="16" text-anchor="start" vtext-anchor="middle">RAS</render:text>
+                    </render:g>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:polygon>
+                      <render:listOfElements>
+                        <render:element xsi:type="RenderPoint" x="174" y="17.5"/>
+                        <render:element xsi:type="RenderPoint" x="142" y="17.5"/>
+                        <render:element xsi:type="RenderPoint" x="130" y="30.0"/>
+                        <render:element xsi:type="RenderPoint" x="142" y="42.5"/>
+                        <render:element xsi:type="RenderPoint" x="180" y="42.5"/>
+                        <render:element xsi:type="RenderPoint" x="180" y="17.5"/>
+                        <render:element xsi:type="RenderPoint" x="174" y="17.5"/>
+                      </render:listOfElements>
+                    </render:polygon>
+                    <render:g>
+                      <render:text x="-5.0" y="0" font-family="monospaced" font-size="16" text-anchor="end" vtext-anchor="middle">ERK</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_41" idList="layout_object_45">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="80" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_42" idList="layout_object_46">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">ERK</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="25" cy="40" cz="50%" rx="11"/>
+                    <render:g>
+                      <render:text x="18" y="33" font-family="monospaced" font-size="14" text-anchor="start" vtext-anchor="top">2P</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_43" idList="layout_object_47">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="80" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_44" idList="layout_object_48">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">RSK</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="100" cy="20" cz="50%" rx="10"/>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_45" idList="layout_object_49">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">RSK</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="100" cy="20" cz="50%" rx="10"/>
+                    <render:g>
+                      <render:text x="96" y="14" font-family="monospaced" font-size="14" text-anchor="start" vtext-anchor="top">P</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_46" idList="layout_object_50">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="20" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="15" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="20" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="20" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="10"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_47" idList="layout_object_51">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="60" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_48" idList="layout_object_52">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="52" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_49" idList="layout_object_53">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="52.5" y="140"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_50" idList="layout_object_54">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="130"/>
+                      <render:element xsi:type="RenderPoint" x="48" y="96"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_51" idList="layout_object_55">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="catalysisHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="181"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_52" idList="layout_object_56">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">c-Fos</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="100" cy="20" cz="50%" rx="10"/>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_53" idList="layout_object_57">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">c-Fos</render:text>
+                  </render:g>
+                  <render:g stroke="foreground" stroke-width="3" fill="background">
+                    <render:ellipse cx="100" cy="20" cz="50%" rx="10"/>
+                    <render:g>
+                      <render:text x="96" y="14" font-family="monospaced" font-size="14" text-anchor="start" vtext-anchor="top">P</render:text>
+                    </render:g>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_54" idList="layout_object_58">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="20" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="15" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="20" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="20" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="10"/>
+                      <render:element xsi:type="RenderPoint" x="15" y="10"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_55" idList="layout_object_59">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="70" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_56" idList="layout_object_60">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="62" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_57" idList="layout_object_61">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="62.5" y="140"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_58" idList="layout_object_62">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="131"/>
+                      <render:element xsi:type="RenderPoint" x="60.5" y="100"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_59" idList="layout_object_63">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="catalysisHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="297"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_60" idList="layout_object_64">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="60" y="60"/>
+                      <render:element xsi:type="RenderPoint" x="160" y="60"/>
+                      <render:element xsi:type="RenderPoint" x="190" y="30"/>
+                      <render:element xsi:type="RenderPoint" x="160" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="30"/>
+                      <render:element xsi:type="RenderPoint" x="30" y="60"/>
+                      <render:element xsi:type="RenderPoint" x="60" y="60"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                  <render:g>
+                    <render:text x="0" y="6.0" font-family="monospaced" font-size="18" text-anchor="middle" vtext-anchor="top">gene</render:text>
+                    <render:text x="0" y="-16.0" font-family="monospaced" font-size="18" text-anchor="middle" vtext-anchor="bottom">transcription</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_61" idList="layout_object_65">
+                <render:g stroke="foreground" stroke-width="3">
+                  <render:curve endHead="productionHead">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="10" y="100"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="157"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_62" idList="layout_object_66">
+                <render:g stroke="foreground" stroke-width="5" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="20.0" ry="20.0" />
+                  <render:g>
+                    <render:text x="-30.0" y="22.0" font-family="monospaced" font-size="36" text-anchor="end" vtext-anchor="top">extracellular</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+              <render:style id="render_object_63" idList="layout_object_67">
+                <render:g stroke="foreground" stroke-width="3" fill="background">
+                  <render:rectangle x="0.0" y="0.0" z="0.0" width="100%" height="100%" rx="10.0" ry="10.0" />  
+                  <render:g>
+                    <render:text x="0" y="0" font-family="monospaced" font-size="20" text-anchor="middle" vtext-anchor="middle">IGF</render:text>
+                  </render:g>
+                </render:g>
+              </render:style>
+            </render:listOfStyles>
+          </render:renderInformation>
+        </render:listOfRenderInformation>
+      </layout:layout>
+    </layout:listOfLayouts>
+  </model>
+</sbml>

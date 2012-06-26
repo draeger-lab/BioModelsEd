@@ -1,0 +1,1615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" xmlns:render="http://www.sbml.org/sbml/level3/version1/render/version1" level="3" version="1">
+  <model id="Model_1" name="New Model">
+    <listOfUnitDefinitions>
+      <unitDefinition id="volume">
+        <listOfUnits>
+          <unit kind="litre" exponent="NaN" scale="-3" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="substance">
+        <listOfUnits>
+          <unit kind="mole" exponent="NaN" scale="-3" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="compartment_0" name="compartment" size="1" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="species_0" name="Ca++" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_1" name="calmodulin" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_2" name="Ca++-calmodulin" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_3" name="CaMK_activated" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_4" name="CaMK_inactive" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_5" name="ATP" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_6" name="CaMK_active" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_7" name="ADP" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_8" name="CaMK_partactive" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_9" name="P" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="species_10" name="Phosphatase" compartment="compartment_0" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="reaction_0" name="reaction" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="speciesReference_reaction0_species1" species="species_1" constant="false"/>
+          <speciesReference id="speciesReference_reaction0_species0" species="species_0" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="speciesReference_reaction0_species2" species="species_2" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> compartment_0 </ci>
+              <ci> k1 </ci>
+              <ci> species_1 </ci>
+              <ci> species_0 </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="reaction_1" name="reaction_1" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="speciesReference_reaction1_species4" species="species_4" constant="false"/>
+          <speciesReference id="speciesReference_reaction1_species2" species="species_2" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="speciesReference_reaction1_species3" species="species_3" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> compartment_0 </ci>
+              <ci> k1 </ci>
+              <ci> species_4 </ci>
+              <ci> species_2 </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="reaction_2" name="reaction_2" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="speciesReference_reaction2_species3" species="species_3" constant="false"/>
+          <speciesReference id="speciesReference_reaction2_species5" species="species_5" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="speciesReference_reaction2_species6" species="species_6" constant="false"/>
+          <speciesReference id="speciesReference_reaction2_species7" species="species_7" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> compartment_0 </ci>
+              <ci> k1 </ci>
+              <ci> species_3 </ci>
+              <ci> species_5 </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="reaction_3" name="reaction_3" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="speciesReference_reaction3_species6" species="species_6" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="speciesReference_reaction3_species0" species="species_0" constant="false"/>
+          <speciesReference id="speciesReference_reaction3_species8" species="species_8" constant="false"/>
+          <speciesReference id="speciesReference_reaction3_species1" species="species_1" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> compartment_0 </ci>
+              <ci> k1 </ci>
+              <ci> species_6 </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="reaction_4" name="reaction_4" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="speciesReference_reaction4_species8" species="species_8" constant="false"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="speciesReference_reaction4_species9" species="species_9" constant="false"/>
+          <speciesReference id="speciesReference_reaction4_species4" species="species_4" constant="false"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> compartment_0 </ci>
+              <ci> k1 </ci>
+              <ci> species_8 </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+    <layout:listOfLayouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <layout:layout id="KohnMapLayout">
+        <layout:dimensions width="1000" height="500"/>
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph id="speciesGlyph_species10" objectRole="proteinSpecies" species="species10">
+            <layout:boundingBox>
+              <layout:position x="285" y="70"/>
+              <layout:dimensions width="104" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species1" objectRole="proteinSpecies" species="species1">
+            <layout:boundingBox>
+              <layout:position x="300" y="200"/>
+              <layout:dimensions width="74" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species4" objectRole="proteinSpecies" species="species4">
+            <layout:boundingBox>
+              <layout:position x="100" y="150"/>
+              <layout:dimensions width="124" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_variousSubstrates" objectRole="proteinSpecies">
+            <layout:boundingBox>
+              <layout:position x="150" y="300"/>
+              <layout:dimensions width="104" height="48"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species2" species="species2">
+            <layout:boundingBox>
+              <layout:position x="330" y="160"/>
+              <layout:dimensions width="4" height="4"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species3" species="species3">
+            <layout:boundingBox>
+              <layout:position x="160" y="212"/>
+              <layout:dimensions width="4" height="4"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species6" species="species6">
+            <layout:boundingBox>
+              <layout:position x="160" y="112"/>
+              <layout:dimensions width="4" height="4"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph id="reactionGlyph_ProteinPhosphorylation">
+            <layout:boundingBox>
+              <layout:position x="85" y="319"/>
+              <layout:dimensions width="60" height="10"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_CaMKPhosphorylation">
+            <layout:boundingBox>
+              <layout:position x="157" y="59"/>
+              <layout:dimensions width="10" height="86"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction0">
+            <layout:boundingBox>
+              <layout:position x="327" y="129"/>
+              <layout:dimensions width="10" height="66"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction1">
+            <layout:boundingBox>
+              <layout:position x="135" y="181"/>
+              <layout:dimensions width="160" height="38"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_proteinPhosphorilationInhibition">
+            <layout:boundingBox>
+              <layout:position x="115" y="212"/>
+              <layout:dimensions width="47" height="32"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_CaMKDephosphorylation">
+            <layout:boundingBox>
+              <layout:position x="155" y="77"/>
+              <layout:dimensions width="125" height="10"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_bindingInhibition">
+            <layout:boundingBox>
+              <layout:position x="164" y="114"/>
+              <layout:dimensions width="76" height="125"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_bindingRequirement">
+            <layout:boundingBox>
+              <layout:position x="270" y="162"/>
+              <layout:dimensions width="60" height="50"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_phosphorylation">
+            <layout:boundingBox>
+              <layout:position x="105" y="179"/>
+              <layout:dimensions width="10" height="140"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_autophosphorylation">
+            <layout:boundingBox>
+              <layout:position x="30" y="109"/>
+              <layout:dimensions width="125" height="151"/>
+            </layout:boundingBox>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+        <layout:listOfTextGlyphs>
+          <layout:textGlyph id="textGlyph_species9_1" text="P">
+            <layout:boundingBox>
+              <layout:position x="152" y="30"/>
+              <layout:dimensions width="20" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species9_2" text="P">
+            <layout:boundingBox>
+              <layout:position x="60" y="312"/>
+              <layout:dimensions width="20" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species0" text="Ca++">
+            <layout:boundingBox>
+              <layout:position x="312" y="100"/>
+              <layout:dimensions width="50" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species1" text="CaM" graphicalObject="speciesGlyph_species1">
+            <layout:boundingBox>
+              <layout:position x="312" y="200"/>
+              <layout:dimensions width="50" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_variousSubstrtates_1" text="various" graphicalObject="speciesGlyph_species1">
+            <layout:boundingBox>
+              <layout:position x="162" y="300"/>
+              <layout:dimensions width="80" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_variousSubstrates_2" text="substrates" graphicalObject="speciesGlyph_species1">
+            <layout:boundingBox>
+              <layout:position x="162" y="320"/>
+              <layout:dimensions width="80" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species4_1" text="CaMK" graphicalObject="speciesGlyph_species4">
+            <layout:boundingBox>
+              <layout:position x="50" y="150"/>
+              <layout:dimensions width="50" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species4_2" text="kinase" graphicalObject="speciesGlyph_species4">
+            <layout:boundingBox>
+              <layout:position x="100" y="150"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species4_3" text="reg" graphicalObject="speciesGlyph_species4">
+            <layout:boundingBox>
+              <layout:position x="195" y="150"/>
+              <layout:dimensions width="24" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_species10" text="Ph&apos;tase" graphicalObject="speciesGlyph_species10">
+            <layout:boundingBox>
+              <layout:position x="297" y="70"/>
+              <layout:dimensions width="80" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number1" objectRole="greenText" text="1">
+            <layout:boundingBox>
+              <layout:position x="115" y="260"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number2" objectRole="redText" text="2">
+            <layout:boundingBox>
+              <layout:position x="140" y="232"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number3" text="3">
+            <layout:boundingBox>
+              <layout:position x="165" y="190"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number4" text="4">
+            <layout:boundingBox>
+              <layout:position x="220" y="190"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number5" objectRole="greenText" text="5">
+            <layout:boundingBox>
+              <layout:position x="295" y="140"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number6" text="6">
+            <layout:boundingBox>
+              <layout:position x="340" y="147"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number7" objectRole="greenText" text="7">
+            <layout:boundingBox>
+              <layout:position x="70" y="88"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number8" objectRole="redText" text="8">
+            <layout:boundingBox>
+              <layout:position x="250" y="120"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_number9" objectRole="redText" text="9">
+            <layout:boundingBox>
+              <layout:position x="255" y="60"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+        </layout:listOfTextGlyphs>
+        <render:listOfRenderInformation versionMajor="1" versionMinor="0">
+          <render:renderInformation id="KohnMapStyle" backgroundColor="#FFFFFFFF">
+            <render:listOfColorDefinitions>
+              <render:colorDefinition id="black" value="#000000"/>
+              <render:colorDefinition id="red" value="#ff0000"/>
+              <render:colorDefinition id="blue" value="#0000ff"/>
+              <render:colorDefinition id="green" value="#00ff00"/>
+            </render:listOfColorDefinitions>
+            <render:listOfLineEndings>
+              <render:lineEnding id="open3SidedArrowHead">
+                <render:boundingBox>
+                  <render:position x="0" y="-4"/>
+                  <render:dimensions width="12" height="8"/>
+                </render:boundingBox>
+                <render:g>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="covalentBinding_and_covalentModification_black_end">
+                <render:boundingBox>
+                  <render:position x="-10" y="-5"/>
+                  <render:dimensions width="10" height="10"/>
+                </render:boundingBox>
+                <render:g>
+                  <render:curve stroke="black" stroke-width="1">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="10"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="covalentBinding_and_covalentModification_black_start">
+                <render:boundingBox>
+                  <render:position x="0" y="-5"/>
+                  <render:dimensions width="10" height="10"/>
+                </render:boundingBox>
+                <render:g>
+                  <render:curve stroke="black" stroke-width="1">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="100%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="100%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="covalentBinding_and_covalentModification_blue">
+                <render:boundingBox>
+                  <render:position x="-10" y="-5"/>
+                  <render:dimensions width="10" height="10"/>
+                </render:boundingBox>
+                <render:g>
+                  <render:curve stroke="blue" stroke-width="1">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="10"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="inhibition_red">
+                <render:boundingBox>
+                  <render:position x="0" y="-5"/>
+                  <render:dimensions width="2" height="10"/>
+                </render:boundingBox>
+                <render:g>
+                  <render:curve stroke="red" stroke-width="2">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="cleavage_red">
+                <render:boundingBox>
+                  <render:position x="-5" y="-5"/>
+                  <render:dimensions width="20" height="5"/>
+                </render:boundingBox>
+                <render:g>
+                  <render:curve stroke="red" stroke-width="1">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="7" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="0"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="catalysis_green">
+                <render:boundingBox>
+                  <render:position x="0" y="-5"/>
+                  <render:dimensions width="10" height="10"/>
+                </render:boundingBox>
+                <render:g stroke="green" stroke-width="1">
+                  <render:ellipse cx="5" cy="5" rx="4"/>
+                </render:g>
+              </render:lineEnding>
+              <render:lineEnding id="requirement_green">
+                <render:boundingBox>
+                  <render:position x="-5" y="-5"/>
+                  <render:dimensions width="15" height="10"/>
+                </render:boundingBox>
+                <render:g stroke="green" stroke-width="1">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="5" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="5" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="5" y="0"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:lineEnding>
+            </render:listOfLineEndings>
+            <render:listOfStyles>
+              <render:style id="styleForElementarySpecies" roleList="elementarySpecies">
+                <render:g stroke="black" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal"/>
+              </render:style>
+              <render:style id="styleForProteinSpecies" roleList="proteinSpecies">
+                <render:g stroke="black" stroke-width="2" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:rectangle x="0" y="0" width="100%" height="100%" rx="10%" ry="10%"/>
+                </render:g>
+              </render:style>
+              <render:style id="styleForTextGlyphs" roleList="redText">
+                <render:g stroke="red" stroke-width="1" fill-rule="nonzero" font-size="12" font-family="sans-serif" font-style="normal" font-weight="normal" text-anchor="middle"/>
+              </render:style>
+              <render:style id="styleForTextGlyphs" roleList="greenText">
+                <render:g stroke="green" stroke-width="1" fill-rule="nonzero" font-size="12" font-family="sans-serif" font-style="normal" font-weight="normal" text-anchor="middle"/>
+              </render:style>
+              <render:style id="styleForTextGlyphs" typeList="TEXTGLYPH">
+                <render:g stroke="black" stroke-width="1" fill-rule="nonzero" font-size="12" font-family="sans-serif" font-style="normal" font-weight="normal" text-anchor="middle"/>
+              </render:style>
+              <render:style id="styleForPhosphateTextGlyphs" idList="textGlyph_species9_1 textGlyph_species9_2">
+                <render:g stroke="blue" stroke-width="1" fill-rule="nonzero" font-size="12" font-family="sans-serif" font-style="normal" font-weight="normal" text-anchor="middle"/>
+              </render:style>
+              <render:style id="styleForSpeciesDotGlyphs1" idList="speciesGlyph_species3 speciesGlyph_species6">
+                <render:g stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:ellipse stroke="red" fill="red" cx="50%" cy="50%" rx="50%"/>
+                </render:g>
+              </render:style>
+              <render:style id="styleForSpeciesDotGlyphs2" idList="speciesGlyph_species2">
+                <render:g stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:ellipse stroke="green" fill="green" cx="50%" cy="50%" rx="50%"/>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_ProteinPhosphorylation" idList="reactionGlyph_ProteinPhosphorylation">
+                <render:g stroke="blue" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve endHead="covalentBinding_and_covalentModification_blue">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_CaMKPhosphorylation" idList="reactionGlyph_CaMKPhosphorylation">
+                <render:g stroke="blue" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="50%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="53"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve endHead="covalentBinding_and_covalentModification_blue">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="50%" y="57"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="100%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_reaction0" idList="reactionGlyph_reaction0">
+                <render:g stroke="black" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve startHead="covalentBinding_and_covalentModification_black_start">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="50%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="31"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve endHead="covalentBinding_and_covalentModification_black_end">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="50%" y="35"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="100%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_reaction1" idList="reactionGlyph_reaction1">
+                <render:g stroke="black" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve startHead="covalentBinding_and_covalentModification_black_start">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="5" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="5" y="33"/>
+                      <render:element xsi:type="RenderPoint" x="25" y="33"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve endHead="covalentBinding_and_covalentModification_black_end">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="29" y="33"/>
+                      <render:element xsi:type="RenderPoint" x="67" y="33"/>
+                      <render:element xsi:type="RenderPoint" x="72" y="28"/>
+                      <render:element xsi:type="RenderPoint" x="72" y="0"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve endHead="covalentBinding_and_covalentModification_black_end">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="72" y="28"/>
+                      <render:element xsi:type="RenderPoint" x="77" y="33"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="33"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_proteinPhosphorilationInhibition" idList="reactionGlyph_proteinPhosphorilationInhibition">
+                <render:g stroke="red" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve endHead="inhibition_red">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="100%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="27"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="27"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_CaMKDephosphorylation" idList="reactionGlyph_CaMKDephosphorylation">
+                <render:g stroke="red" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve endHead="cleavage_red">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="100%" y="50%"/>
+                      <render:element xsi:type="RenderPoint" x="12" y="50%"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_bindingInhibition" idList="reactionGlyph_bindingInhibition">
+                <render:g stroke="red" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve endHead="inhibition_red">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="100%" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="25" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="25" y="105"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_bindingRequirement" idList="reactionGlyph_bindingRequirement">
+                <render:g stroke="green" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve endHead="requirement_green">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="100%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="5" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="5" y="40"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_phosphorylation" idList="reactionGlyph_phosphorylation">
+                <render:g stroke="green" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve endHead="catalysis_green">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="50%" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="50%" y="130"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+              <render:style id="style4_reactionGlyph_autophosphorylation" idList="reactionGlyph_autophosphorylation">
+                <render:g stroke="green" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="80" y="70"/>
+                      <render:element xsi:type="RenderPoint" x="80" y="146"/>
+                      <render:element xsi:type="RenderPoint" x="75" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="100%"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="65" y="5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="62" y="8"/>
+                      <render:element xsi:type="RenderPoint" x="68" y="2"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="77" y="8"/>
+                      <render:element xsi:type="RenderPoint" x="83" y="2"/>
+                    </render:listOfElements>
+                  </render:curve>
+                  <render:curve endHead="catalysis_green">
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="80" y="5"/>
+                      <render:element xsi:type="RenderPoint" x="115" y="5"/>
+                    </render:listOfElements>
+                  </render:curve>
+                </render:g>
+              </render:style>
+            </render:listOfStyles>
+          </render:renderInformation>
+        </render:listOfRenderInformation>
+      </layout:layout>
+      <layout:layout id="AlbertsDrawingLayout">
+        <layout:dimensions width="1400" height="1000"/>
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph id="speciesGlyph_species4" species="species_4">
+            <layout:boundingBox>
+              <layout:position x="850" y="20"/>
+              <layout:dimensions width="500" height="260"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species1" species="species_1">
+            <layout:boundingBox>
+              <layout:position x="350" y="400"/>
+              <layout:dimensions width="290" height="110"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species8" species="species_8">
+            <layout:boundingBox>
+              <layout:position x="150" y="100"/>
+              <layout:dimensions width="435.419" height="198.786"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species2" species="species_2">
+            <layout:boundingBox>
+              <layout:position x="800" y="400"/>
+              <layout:dimensions width="230" height="95"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species3" species="species_3">
+            <layout:boundingBox>
+              <layout:position x="850" y="700"/>
+              <layout:dimensions width="435.419" height="230"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species6" species="species_6">
+            <layout:boundingBox>
+              <layout:position x="150" y="700"/>
+              <layout:dimensions width="435.419" height="250"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species9">
+            <layout:boundingBox>
+              <layout:position x="750" y="30"/>
+              <layout:dimensions width="30" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species5">
+            <layout:boundingBox>
+              <layout:position x="750" y="730"/>
+              <layout:dimensions width="55" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species7">
+            <layout:boundingBox>
+              <layout:position x="650" y="730"/>
+              <layout:dimensions width="55" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species0_1">
+            <layout:boundingBox>
+              <layout:position x="720" y="470"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="speciesGlyph_species0_2">
+            <layout:boundingBox>
+              <layout:position x="250" y="600"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph id="reactionGlyph_reaction0" reaction="reaction_0">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start x="700" y="460"/>
+                  <layout:end x="740" y="460"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction0_1" speciesReference="speciesReference_reaction0_species1" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="660" y="460"/>
+                      <layout:end x="700" y="460"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction0_2" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction0_species2" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="740" y="460"/>
+                      <layout:end x="770" y="460"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction1" reaction="reaction_1">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="CubicBezier">
+                  <layout:start x="1211" y="613"/>
+                  <layout:end x="1202" y="627"/>
+                  <layout:basePoint1 x="1199" y="630"/>
+                  <layout:basePoint2 x="1214" y="610"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction1_1" speciesReference="speciesReference_reaction1_species4" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="1210" y="250"/>
+                      <layout:end x="1211" y="613"/>
+                      <layout:basePoint1 x="1320" y="460"/>
+                      <layout:basePoint2 x="1331" y="441"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction1_2" speciesReference="speciesReference_reaction1_species2" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="1050" y="450"/>
+                      <layout:end x="1211" y="613"/>
+                      <layout:basePoint1 x="1220" y="450"/>
+                      <layout:basePoint2 x="1331" y="441"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction1_3" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction1_species3" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="1202" y="627"/>
+                      <layout:end x="1170" y="670"/>
+                      <layout:basePoint1 x="1178" y="661"/>
+                      <layout:basePoint2 x="1185" y="649"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction2" reaction="reaction_2">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start x="745" y="880"/>
+                  <layout:end x="705" y="880"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_1" speciesReference="speciesReference_reaction2_species3" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="830" y="880"/>
+                      <layout:end x="745" y="880"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_2" speciesReference="speciesReference_reaction2_species5" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="775" y="764"/>
+                      <layout:end x="745" y="880"/>
+                      <layout:basePoint1 x="775" y="880"/>
+                      <layout:basePoint2 x="775" y="880"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_3" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction2_species6" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="705" y="880"/>
+                      <layout:end x="595" y="880"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_4" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction2_species7" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="705" y="880"/>
+                      <layout:end x="675" y="794"/>
+                      <layout:basePoint1 x="675" y="880"/>
+                      <layout:basePoint2 x="675" y="880"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction3" reaction="reaction_3">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="CubicBezier">
+                  <layout:start x="181" y="697"/>
+                  <layout:end x="154" y="660"/>
+                  <layout:basePoint1 x="157" y="666"/>
+                  <layout:basePoint2 x="169" y="680"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_1" speciesReference="speciesReference_reaction3_species6" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="230" y="760"/>
+                      <layout:end x="181" y="697"/>
+                      <layout:basePoint1 x="185" y="703"/>
+                      <layout:basePoint2 x="205" y="729"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_2" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction3_species0" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="154" y="660"/>
+                      <layout:end x="210" y="605"/>
+                      <layout:basePoint1 x="124" y="619"/>
+                      <layout:basePoint2 x="150" y="605"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_3" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction3_species8" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="154" y="660"/>
+                      <layout:end x="180" y="300"/>
+                      <layout:basePoint1 x="34" y="495"/>
+                      <layout:basePoint2 x="50" y="530"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_4" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction3_species1" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="154" y="660"/>
+                      <layout:end x="310" y="470"/>
+                      <layout:basePoint1 x="34" y="495"/>
+                      <layout:basePoint2 x="250" y="470"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction4" reaction="reaction_4">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start x="650" y="155"/>
+                  <layout:end x="690" y="155"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction4_1" speciesReference="speciesReference_reaction4_species8" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="595" y="155"/>
+                      <layout:end x="650" y="155"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction4_2" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction4_species9" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="690" y="155"/>
+                      <layout:end x="765" y="84"/>
+                      <layout:basePoint1 x="765" y="155"/>
+                      <layout:basePoint2 x="765" y="155"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction4_3" objectRole="productSpeciesReference" speciesReference="speciesReference_reaction4_species4" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="690" y="155"/>
+                      <layout:end x="800" y="155"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+        <layout:listOfTextGlyphs>
+          <layout:textGlyph id="textGlyph_1" objectRole="largeText" text="Ca2+-INDEPENDENT" graphicalObject="speciesGlyph_species8">
+            <layout:boundingBox>
+              <layout:position x="450" y="210"/>
+              <layout:dimensions width="180" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_2" objectRole="largeText" text="(50-80% ACTIVE)" graphicalObject="speciesGlyph_species8">
+            <layout:boundingBox>
+              <layout:position x="455" y="240"/>
+              <layout:dimensions width="170" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_3" objectRole="smallText" text="protein" graphicalObject="reactionGlyph_reaction4">
+            <layout:boundingBox>
+              <layout:position x="625" y="90"/>
+              <layout:dimensions width="70" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_4" objectRole="smallText" text="phosphatase" graphicalObject="reactionGlyph_reaction4">
+            <layout:boundingBox>
+              <layout:position x="605" y="114"/>
+              <layout:dimensions width="110" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_5" objectRole="largeText" text="INACTIVE" graphicalObject="speciesGlyph_species4">
+            <layout:boundingBox>
+              <layout:position x="1160" y="200"/>
+              <layout:dimensions width="100" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_6" objectRole="smallText" text="calmodulin" graphicalObject="speciesGlyph_species1">
+            <layout:boundingBox>
+              <layout:position x="465" y="500"/>
+              <layout:dimensions width="100" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_7" objectRole="smallText" text="Ca2+/calmodulin" graphicalObject="speciesGlyph_species2">
+            <layout:boundingBox>
+              <layout:position x="840" y="500"/>
+              <layout:dimensions width="150" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_8" objectRole="largeText" text="FULLY" graphicalObject="speciesGlyph_species6">
+            <layout:boundingBox>
+              <layout:position x="445" y="850"/>
+              <layout:dimensions width="70" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_9" objectRole="largeText" text="ACTIVE" graphicalObject="speciesGlyph_species6">
+            <layout:boundingBox>
+              <layout:position x="440" y="880"/>
+              <layout:dimensions width="80" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_10" objectRole="largeText" text="ACTIVATED" graphicalObject="speciesGlyph_species3">
+            <layout:boundingBox>
+              <layout:position x="1050" y="860"/>
+              <layout:dimensions width="100" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_11" objectRole="smallText" text="auto-" graphicalObject="reactionGlyph_reaction2">
+            <layout:boundingBox>
+              <layout:position x="700" y="900"/>
+              <layout:dimensions width="50" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_12" objectRole="smallText" text="phosphorylation" graphicalObject="reactionGlyph_reaction2">
+            <layout:boundingBox>
+              <layout:position x="650" y="924"/>
+              <layout:dimensions width="150" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_13" objectRole="largeText" text="+" graphicalObject="speciesGlyph_species0_1">
+            <layout:boundingBox>
+              <layout:position x="700" y="460"/>
+              <layout:dimensions width="15" height="30"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_14" objectRole="layoutOnlyText" text="CaMK" graphicalObject="speciesGlyph_species8">
+            <layout:boundingBox>
+              <layout:position x="200" y="140"/>
+              <layout:dimensions width="140" height="60"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_15" objectRole="layoutOnlyText" text="CaMK" graphicalObject="speciesGlyph_species4">
+            <layout:boundingBox>
+              <layout:position x="900" y="60"/>
+              <layout:dimensions width="140" height="60"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_16" objectRole="layoutOnlyText" text="CaMK" graphicalObject="speciesGlyph_species3">
+            <layout:boundingBox>
+              <layout:position x="900" y="740"/>
+              <layout:dimensions width="140" height="60"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_17" objectRole="layoutOnlyText" text="CaMK" graphicalObject="speciesGlyph_species6">
+            <layout:boundingBox>
+              <layout:position x="200" y="740"/>
+              <layout:dimensions width="140" height="60"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_18" objectRole="layoutOnlyText" text="Pi" graphicalObject="speciesGlyph_species9">
+            <layout:boundingBox>
+              <layout:position x="755" y="30"/>
+              <layout:dimensions width="20" height="20"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_19" objectRole="layoutOnlyText" text="Ca++" graphicalObject="speciesGlyph_species0_1">
+            <layout:boundingBox>
+              <layout:position x="730" y="470"/>
+              <layout:dimensions width="40" height="20"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_20" objectRole="layoutOnlyText" text="ATP" graphicalObject="speciesGlyph_species5">
+            <layout:boundingBox>
+              <layout:position x="760" y="730"/>
+              <layout:dimensions width="40" height="20"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_21" objectRole="layoutOnlyText" text="ADP" graphicalObject="speciesGlyph_species7">
+            <layout:boundingBox>
+              <layout:position x="660" y="730"/>
+              <layout:dimensions width="40" height="20"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="textGlyph_22" objectRole="layoutOnlyText" text="Ca++" graphicalObject="speciesGlyph_species0_2">
+            <layout:boundingBox>
+              <layout:position x="260" y="600"/>
+              <layout:dimensions width="40" height="20"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+        </layout:listOfTextGlyphs>
+      </layout:layout>
+      <layout:layout id="simpleReactionLayout">
+        <layout:dimensions width="1000" height="500"/>
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph id="SpeciesGlyph_species8" species="species_8">
+            <layout:boundingBox>
+              <layout:position x="104" y="67"/>
+              <layout:dimensions width="144" height="48"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species4" species="species_4">
+            <layout:boundingBox>
+              <layout:position x="464" y="67"/>
+              <layout:dimensions width="124" height="48"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species1" species="species_1">
+            <layout:boundingBox>
+              <layout:position x="104" y="167"/>
+              <layout:dimensions width="124" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species0_1" species="species_0">
+            <layout:boundingBox>
+              <layout:position x="254" y="167"/>
+              <layout:dimensions width="74" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species0_2" species="species_0">
+            <layout:boundingBox>
+              <layout:position x="104" y="247"/>
+              <layout:dimensions width="74" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species6" species="species_6">
+            <layout:boundingBox>
+              <layout:position x="104" y="327"/>
+              <layout:dimensions width="124" height="48"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species3" species="species_3">
+            <layout:boundingBox>
+              <layout:position x="464" y="327"/>
+              <layout:dimensions width="124" height="48"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species2" species="species_2">
+            <layout:boundingBox>
+              <layout:position x="464" y="167"/>
+              <layout:dimensions width="204" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species5" species="species_5">
+            <layout:boundingBox>
+              <layout:position x="368" y="297"/>
+              <layout:dimensions width="64" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species7" species="species_7">
+            <layout:boundingBox>
+              <layout:position x="254" y="297"/>
+              <layout:dimensions width="64" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph id="SpeciesGlyph_species9" species="species_9">
+            <layout:boundingBox>
+              <layout:position x="368" y="34"/>
+              <layout:dimensions width="44" height="24"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph id="reactionGlyph_reaction_0" reaction="reaction_0">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start x="386" y="179"/>
+                  <layout:end x="406" y="179"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction0_substratesReaction0" objectRole="substrate" speciesReference="speciesReference_reaction0_species0" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="386" y="179"/>
+                      <layout:end x="333" y="179"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction0_species2" objectRole="product" speciesReference="speciesReference_reaction0_species2" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="406" y="179"/>
+                      <layout:end x="459" y="179"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction_4" reaction="reaction_4">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start x="316" y="91"/>
+                  <layout:end x="336" y="91"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction4_species8" objectRole="substrate" speciesReference="speciesReference_reaction4_species8" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="316" y="91"/>
+                      <layout:end x="253" y="91"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction4_species4" objectRole="product" speciesReference="speciesReference_reaction4_species4" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="336" y="91"/>
+                      <layout:end x="459" y="91"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction4_species9" objectRole="sideproduct" speciesReference="speciesReference_reaction4_species9" role="sideproduct">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="336" y="91"/>
+                      <layout:end x="390" y="63"/>
+                      <layout:basePoint1 x="390" y="91"/>
+                      <layout:basePoint2 x="390" y="91"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction_2" reaction="reaction_2">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start x="353" y="351"/>
+                  <layout:end x="333" y="351"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_species3" objectRole="substrate" speciesReference="speciesReference_reaction2_species3" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="353" y="351"/>
+                      <layout:end x="459" y="351"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_species5" objectRole="sidesubstrate" speciesReference="speciesReference_reaction2_species5" role="sidesubstrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="353" y="351"/>
+                      <layout:end x="400" y="326"/>
+                      <layout:basePoint1 x="400" y="351"/>
+                      <layout:basePoint2 x="400" y="351"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_species6" objectRole="product" speciesReference="speciesReference_reaction2_species6" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="LineSegment">
+                      <layout:start x="333" y="351"/>
+                      <layout:end x="233" y="351"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction2_species7" objectRole="sideproduct" speciesReference="speciesReference_reaction2_species7" role="sideproduct">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="333" y="351"/>
+                      <layout:end x="286" y="326"/>
+                      <layout:basePoint1 x="286" y="351"/>
+                      <layout:basePoint2 x="286" y="351"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction3" reaction="reaction3">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="CubicBezier">
+                  <layout:start x="72" y="339"/>
+                  <layout:end x="51" y="316"/>
+                  <layout:basePoint1 x="60" y="327.5"/>
+                  <layout:basePoint2 x="60" y="328.5"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_species6" objectRole="substrate" speciesReference="speciesReference_reaction3_species6" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="99" y="348"/>
+                      <layout:end x="72" y="339"/>
+                      <layout:basePoint1 x="89" y="346"/>
+                      <layout:basePoint2 x="84" y="346.5"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_species8" objectRole="product" speciesReference="speciesReference_reaction3_species8" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="51" y="316"/>
+                      <layout:end x="99" y="91"/>
+                      <layout:basePoint1 x="15" y="266"/>
+                      <layout:basePoint2 x="0" y="111"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_species1" objectRole="product" speciesReference="speciesReference_reaction3_species1" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="51" y="316"/>
+                      <layout:end x="99" y="179"/>
+                      <layout:basePoint1 x="15" y="266"/>
+                      <layout:basePoint2 x="30" y="189"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction3_species0" objectRole="product" speciesReference="speciesReference_reaction3_species0" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="51" y="316"/>
+                      <layout:end x="99" y="259"/>
+                      <layout:basePoint1 x="33" y="291"/>
+                      <layout:basePoint2 x="30" y="269"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph id="reactionGlyph_reaction_1" reaction="reaction_1">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="CubicBezier">
+                  <layout:start x="672" y="314"/>
+                  <layout:end x="649" y="326"/>
+                  <layout:basePoint1 x="655.75" y="323.5"/>
+                  <layout:basePoint2 x="661.5" y="319.75"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction1_species4" objectRole="substrate" speciesReference="speciesReference_reaction1_species4" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="593" y="91"/>
+                      <layout:end x="672" y="314"/>
+                      <layout:basePoint1 x="800" y="171"/>
+                      <layout:basePoint2 x="768" y="257"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction1_species2" objectRole="substrate" speciesReference="speciesReference_reaction1_species2" role="substrate">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="673" y="179"/>
+                      <layout:end x="672" y="314"/>
+                      <layout:basePoint1 x="700" y="179"/>
+                      <layout:basePoint2 x="768" y="257"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph id="speciesReferenceGlyph_reaction1_species3" objectRole="product" speciesReference="speciesReference_reaction1_species3" role="product">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start x="649" y="326"/>
+                      <layout:end x="593" y="351"/>
+                      <layout:basePoint1 x="599" y="351"/>
+                      <layout:basePoint2 x="614" y="343"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+        <layout:listOfTextGlyphs>
+          <layout:textGlyph id="TextGlyph_species8_1" text="CaMK">
+            <layout:boundingBox>
+              <layout:position x="146" y="67"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species8_2" text="(partially active)">
+            <layout:boundingBox>
+              <layout:position x="116" y="91"/>
+              <layout:dimensions width="120" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species4_1" text="CaMK">
+            <layout:boundingBox>
+              <layout:position x="496" y="67"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species4_2" text="(inactive)">
+            <layout:boundingBox>
+              <layout:position x="476" y="91"/>
+              <layout:dimensions width="100" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species1" originOfText="species_1">
+            <layout:boundingBox>
+              <layout:position x="116" y="169"/>
+              <layout:dimensions width="100" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species0_1" text="Ca2+">
+            <layout:boundingBox>
+              <layout:position x="266" y="167"/>
+              <layout:dimensions width="50" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species0_2" text="Ca2+">
+            <layout:boundingBox>
+              <layout:position x="116" y="249"/>
+              <layout:dimensions width="50" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species6_1" text="CaMK">
+            <layout:boundingBox>
+              <layout:position x="135" y="325"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species6_2" text="(active)">
+            <layout:boundingBox>
+              <layout:position x="115" y="349"/>
+              <layout:dimensions width="100" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species3_1" text="CaMK">
+            <layout:boundingBox>
+              <layout:position x="496" y="327"/>
+              <layout:dimensions width="60" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species3_2" text="(activated)">
+            <layout:boundingBox>
+              <layout:position x="476" y="351"/>
+              <layout:dimensions width="100" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species2" text="Ca2+/calmodulin">
+            <layout:boundingBox>
+              <layout:position x="476" y="167"/>
+              <layout:dimensions width="180" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species5" originOfText="species_5">
+            <layout:boundingBox>
+              <layout:position x="380" y="297"/>
+              <layout:dimensions width="40" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species7" originOfText="species_7">
+            <layout:boundingBox>
+              <layout:position x="266" y="297"/>
+              <layout:dimensions width="40" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_species9" text="Pi">
+            <layout:boundingBox>
+              <layout:position x="380" y="34"/>
+              <layout:dimensions width="20" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph id="TextGlyph_plus" text="+">
+            <layout:boundingBox>
+              <layout:position x="232" y="167"/>
+              <layout:dimensions width="10" height="24"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+        </layout:listOfTextGlyphs>
+        <render:listOfRenderInformation versionMajor="1" versionMinor="0">
+          <render:renderInformation id="simpleReactionStyle" name="default style" programName="Ralph Gauges" programVersion="1.0" backgroundColor="#FFFFFFFF">
+            <render:listOfColorDefinitions>
+              <render:colorDefinition id="lightBlue" value="#add8e6"/>
+              <render:colorDefinition id="white" value="#ffffff"/>
+              <render:colorDefinition id="black" value="#000000"/>
+              <render:colorDefinition id="red" value="#ff0000"/>
+              <render:colorDefinition id="green" value="#00ff00"/>
+              <render:colorDefinition id="blue" value="#0000ff"/>
+              <render:colorDefinition id="lightYellow" value="#ffffd1"/>
+              <render:colorDefinition id="darkGreen" value="#002000"/>
+            </render:listOfColorDefinitions>
+            <render:listOfGradientDefinitions>
+              <render:radialGradient id="speciesGlyphGradient">
+                <render:stop offset="0" stop-color="white"/>
+                <render:stop offset="100%" stop-color="lightBlue"/>
+              </render:radialGradient>
+            </render:listOfGradientDefinitions>
+            <render:listOfLineEndings>
+              <render:lineEnding id="simpleHead">
+                <render:boundingBox>
+                  <render:position x="-8" y="-3"/>
+                  <render:dimensions width="10" height="6"/>
+                </render:boundingBox>
+                <render:g stroke="black" stroke-width="1" fill="black">
+                  <render:polygon>
+                    <render:listOfElements>
+                      <render:element xsi:type="RenderPoint" x="0" y="0"/>
+                      <render:element xsi:type="RenderPoint" x="10" y="3"/>
+                      <render:element xsi:type="RenderPoint" x="0" y="6"/>
+                    </render:listOfElements>
+                  </render:polygon>
+                </render:g>
+              </render:lineEnding>
+            </render:listOfLineEndings>
+            <render:listOfStyles>
+              <render:style id="compartmentGlyphStyle" typeList="COMPARTMENTGLYPH">
+                <render:g stroke="darkGreen" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:rectangle fill="lightYellow" x="0" y="0" width="100%" height="100%" rx="10%" ry="10%"/>
+                </render:g>
+              </render:style>
+              <render:style id="speciesGlyphStyle" typeList="SPECIESGLYPH">
+                <render:g stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal">
+                  <render:rectangle fill="speciesGlyphGradient" x="0" y="0" width="100%" height="100%" rx="5" ry="50%"/>
+                </render:g>
+              </render:style>
+              <render:style id="reactionGlyphStyle" typeList="REACTIONGLYPH TEXTGLYPH">
+                <render:g stroke="black" stroke-width="1" fill-rule="nonzero" font-size="12" font-family="sans-serif" font-style="normal" font-weight="normal" text-anchor="middle"/>
+              </render:style>
+              <render:style id="substrateSpeciesReferenceGlyphStyle" roleList="sidesubstrate substrate">
+                <render:g stroke="#000000" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal"/>
+              </render:style>
+              <render:style id="productSpeciesReferenceGlyphStyle" roleList="product sideproduct">
+                <render:g stroke="#000000" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal" endHead="simpleHead"/>
+              </render:style>
+              <render:style id="activatorSpeciesReferenceGlyphStyle" roleList="activator">
+                <render:g stroke="green" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal"/>
+              </render:style>
+              <render:style id="modifierSpeciesReferenceGlyphStyle" roleList="modifier">
+                <render:g stroke="blue" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal"/>
+              </render:style>
+              <render:style id="inhibitorSpeciesReferenceGlyphStyle" roleList="inhibitor">
+                <render:g stroke="red" stroke-width="1" fill-rule="nonzero" font-size="0" font-family="sans-serif" font-style="normal" font-weight="normal"/>
+              </render:style>
+            </render:listOfStyles>
+          </render:renderInformation>
+        </render:listOfRenderInformation>
+      </layout:layout>
+    </layout:listOfLayouts>
+  </model>
+</sbml>

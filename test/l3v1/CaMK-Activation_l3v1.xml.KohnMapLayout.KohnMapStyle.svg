@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000pt" height="500pt" viewBox="0 0 1000 500" version="1.1" overflow="visible">
+<desc>SVG image generated from SBML layout and render information</desc>
+
+<defs>
+<!-- gradient definitions exported for local render information with id: "KohnMapStyle" -->
+
+</defs>
+
+
+<svg x="285" y="70" width="104" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_species10</desc>
+
+<g stroke="#000000" stroke-width="2" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <rect stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" x="0" y="0" width="104" height="24" rx="10.4" ry="2.4"/>
+
+                </g>
+
+</svg>
+
+
+<svg x="300" y="200" width="74" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_species1</desc>
+
+<g stroke="#000000" stroke-width="2" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <rect stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" x="0" y="0" width="74" height="24" rx="7.4" ry="2.4"/>
+
+                </g>
+
+</svg>
+
+
+<svg x="100" y="150" width="124" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_species4</desc>
+
+<g stroke="#000000" stroke-width="2" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <rect stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" x="0" y="0" width="124" height="24" rx="12.4" ry="2.4"/>
+
+                </g>
+
+</svg>
+
+
+<svg x="150" y="300" width="104" height="48" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_variousSubstrates</desc>
+
+<g stroke="#000000" stroke-width="2" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <rect stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" x="0" y="0" width="104" height="48" rx="10.4" ry="4.8"/>
+
+                </g>
+
+</svg>
+
+
+<svg x="330" y="160" width="4" height="4" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_species2</desc>
+
+<g stroke="inherit" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <ellipse stroke="#00ff00" stroke-width="inherit" stroke-dasharray="inherit" fill="#00ff00" fill-rule="inherit" cx="2" cy="2" rx="2" ry="2"/>
+
+                </g>
+
+</svg>
+
+
+<svg x="160" y="212" width="4" height="4" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_species3</desc>
+
+<g stroke="inherit" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <ellipse stroke="#ff0000" stroke-width="inherit" stroke-dasharray="inherit" fill="#ff0000" fill-rule="inherit" cx="2" cy="2" rx="2" ry="2"/>
+
+                </g>
+
+</svg>
+
+
+<svg x="160" y="112" width="4" height="4" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for species glyph speciesGlyph_species6</desc>
+
+<g stroke="inherit" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <ellipse stroke="#ff0000" stroke-width="inherit" stroke-dasharray="inherit" fill="#ff0000" fill-rule="inherit" cx="2" cy="2" rx="2" ry="2"/>
+
+                </g>
+
+</svg>
+
+
+
+
+
+<svg x="85" y="319" width="60" height="10" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_ProteinPhosphorylation</desc>
+
+<g stroke="#0000ff" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M0,5L60,5"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(60 , 5) rotate(0) translate(-10 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#0000ff" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M0,0L10,5L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="157" y="59" width="10" height="86" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_CaMKPhosphorylation</desc>
+
+<g stroke="#0000ff" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,0L5,53"/>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,57L5,86"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(5 , 86) rotate(90) translate(-10 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#0000ff" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M0,0L10,5L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="327" y="129" width="10" height="66" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_reaction0</desc>
+
+<g stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,0L5,31"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(5 , 0) rotate(-90) translate(0 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M10,0L0,5L10,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,35L5,66"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(5 , 66) rotate(90) translate(-10 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M0,0L10,5L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="135" y="181" width="160" height="38" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_reaction1</desc>
+
+<g stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,0L5,33L25,33"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(5 , 0) rotate(-90) translate(0 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M10,0L0,5L10,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M29,33L67,33L72,28L72,0"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(72 , 0) rotate(-90) translate(-10 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M0,0L10,5L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M72,28L77,33L160,33"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(160 , 33) rotate(0) translate(-10 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#000000" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M0,0L10,5L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="115" y="212" width="47" height="32" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_proteinPhosphorilationInhibition</desc>
+
+<g stroke="#ff0000" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M47,0L47,27L0,27"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(0 , 27) rotate(180) translate(0 , -5) ">
+<svg width="2" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#ff0000" stroke-width="2" stroke-dasharray="inherit" fill="none" d="M0,0L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="155" y="77" width="125" height="10" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_CaMKDephosphorylation</desc>
+
+<g stroke="#ff0000" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M125,5L12,5"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(12 , 5) rotate(180) translate(-5 , -5) ">
+<svg width="20" height="5" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#ff0000" stroke-width="1" stroke-dasharray="inherit" fill="none" d="M7,5L0,0L20,0"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="164" y="114" width="76" height="125" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_bindingInhibition</desc>
+
+<g stroke="#ff0000" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M0,0L76,0L76,125L25,125L25,105"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(25 , 105) rotate(-90) translate(0 , -5) ">
+<svg width="2" height="10" overflow="visible">
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="#ff0000" stroke-width="2" stroke-dasharray="inherit" fill="none" d="M0,0L0,10"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="270" y="162" width="60" height="50" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_bindingRequirement</desc>
+
+<g stroke="#00ff00" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M60,0L5,0L5,40"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(5 , 40) rotate(90) translate(-5 , -5) ">
+<svg width="15" height="10" overflow="visible">
+<g stroke="#00ff00" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M0,0L0,10"/>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,0L15,5L5,10L5,0"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="105" y="179" width="10" height="140" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_phosphorylation</desc>
+
+<g stroke="#00ff00" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M5,0L5,130"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(5 , 130) rotate(90) translate(0 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="#00ff00" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <ellipse stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" cx="5" cy="5" rx="4" ry="4"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+<svg x="30" y="109" width="125" height="151" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for reaction glyph reactionGlyph_autophosphorylation</desc>
+
+<g stroke="#00ff00" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="inherit">
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M80,70L80,146L75,151L0,151L0,5L65,5"/>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M62,8L68,2"/>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M77,8L83,2"/>
+
+                  <path stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="none" d="M80,5L115,5"/>
+<g stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit">
+<g transform="translate(115 , 5) rotate(0) translate(0 , -5) ">
+<svg width="10" height="10" overflow="visible">
+<g stroke="#00ff00" stroke-width="1" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" font-family="inherit" font-size="inherit" font-weight="inherit" font-style="inherit" text-anchor="inherit">
+                  <ellipse stroke="inherit" stroke-width="inherit" stroke-dasharray="inherit" fill="inherit" fill-rule="inherit" cx="5" cy="5" rx="4" ry="4"/>
+
+                </g>
+</svg>
+</g>
+</g>
+
+                </g>
+</svg>
+
+
+
+<svg x="152" y="30" width="20" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species9_1</desc>
+<text text-anchor="middle" x="10" y="19.2" stroke="#0000ff" fill="#0000ff" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">P</text>
+
+</svg>
+
+
+<svg x="60" y="312" width="20" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species9_2</desc>
+<text text-anchor="middle" x="10" y="19.2" stroke="#0000ff" fill="#0000ff" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">P</text>
+
+</svg>
+
+
+<svg x="312" y="100" width="50" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species0</desc>
+<text text-anchor="middle" x="25" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">Ca++</text>
+
+</svg>
+
+
+<svg x="312" y="200" width="50" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species1</desc>
+<text text-anchor="middle" x="25" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">CaM</text>
+
+</svg>
+
+
+<svg x="162" y="300" width="80" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_variousSubstrtates_1</desc>
+<text text-anchor="middle" x="40" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">various</text>
+
+</svg>
+
+
+<svg x="162" y="320" width="80" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_variousSubstrates_2</desc>
+<text text-anchor="middle" x="40" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">substrates</text>
+
+</svg>
+
+
+<svg x="50" y="150" width="50" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species4_1</desc>
+<text text-anchor="middle" x="25" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">CaMK</text>
+
+</svg>
+
+
+<svg x="100" y="150" width="60" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species4_2</desc>
+<text text-anchor="middle" x="30" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">kinase</text>
+
+</svg>
+
+
+<svg x="195" y="150" width="24" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species4_3</desc>
+<text text-anchor="middle" x="12" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">reg</text>
+
+</svg>
+
+
+<svg x="297" y="70" width="80" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_species10</desc>
+<text text-anchor="middle" x="40" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">Ph'tase</text>
+
+</svg>
+
+
+<svg x="115" y="260" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number1</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#00ff00" fill="#00ff00" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">1</text>
+
+</svg>
+
+
+<svg x="140" y="232" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number2</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#ff0000" fill="#ff0000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">2</text>
+
+</svg>
+
+
+<svg x="165" y="190" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number3</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">3</text>
+
+</svg>
+
+
+<svg x="220" y="190" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number4</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">4</text>
+
+</svg>
+
+
+<svg x="295" y="140" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number5</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#00ff00" fill="#00ff00" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">5</text>
+
+</svg>
+
+
+<svg x="340" y="147" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number6</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#000000" fill="#000000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">6</text>
+
+</svg>
+
+
+<svg x="70" y="88" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number7</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#00ff00" fill="#00ff00" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">7</text>
+
+</svg>
+
+
+<svg x="250" y="120" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number8</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#ff0000" fill="#ff0000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">8</text>
+
+</svg>
+
+
+<svg x="255" y="60" width="10" height="24" stroke-width="0.0" stroke-dasharray="none" fill="none" fill-rule="nonzero" font-family="sans-serif" font-size="0" font-weight="normal" font-style="normal" text-anchor="start" overflow="visible">
+<desc>representation for text glyph textGlyph_number9</desc>
+<text text-anchor="middle" x="5" y="19.2" stroke="#ff0000" fill="#ff0000" stroke-width="1" font-family="sans-serif" font-size="12" font-weight="normal" font-style="normal">9</text>
+
+</svg>
+
+
+
+
+</svg>
+

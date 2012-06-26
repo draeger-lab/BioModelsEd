@@ -60,6 +60,5 @@ public class GUITools {
    */
   public static void setEnabled(boolean isEnabled, String command, 
     JMenuBar menuBar, JToolBar... toolBars) {
-    //TODO set command in menu bar and tool bar recursively
   }
 }
