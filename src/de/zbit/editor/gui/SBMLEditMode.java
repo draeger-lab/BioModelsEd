@@ -16,9 +16,13 @@
  */
 package de.zbit.editor.gui;
 
+import java.awt.event.MouseEvent;
+
 import org.sbml.jsbml.util.ValuePair;
 
+import y.base.Node;
 import y.view.EditMode;
+import y.view.HitInfo;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 
@@ -63,6 +67,29 @@ public class SBMLEditMode extends EditMode  {
 		ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
     firePropertyChange(SBMLEditorConstants.EditModeMouseClicked, lastPositionMouseClicked, newPositionMouseClicked);
     lastPositionMouseClicked = newPositionMouseClicked;
+  }
+  
+  @Override
+  protected void nodeClicked(Node node) {
+    System.out.print("X : " + getGraph2D().getCenterX(node));
+  }
+  
+  @Override
+  public void mouseClicked(MouseEvent evt) {
+    //FIXME Test, no Function
+    if (evt.getButton() == MouseEvent.BUTTON1) {
+      for (int i = 0; i < this.getGraph2D().getNodeArray().length; i++) {
+        Node node = this.getGraph2D().getNodeArray()[i];
+        double x = this.getGraph2D().getX(node);
+        double y = this.getGraph2D().getY(node);
+        System.out.print("\nX : " + x + ", Y : " + y);        
+      }
+      HitInfo info = this.getGraph2D().getHitInfo(evt.getX(), evt.getY());
+      info.getFirstHit();
+    }
+    else if (evt.getButton() == MouseEvent.BUTTON3) {
+      System.out.print("Rechts");
+    }
   }
   
 }

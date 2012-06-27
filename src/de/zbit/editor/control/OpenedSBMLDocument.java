@@ -198,10 +198,14 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
         (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
     layout = layout.clone();
     layout.setId(Resources.createValidID("l"));
+    
+    layout.getListOfSpeciesGlyphs().setParentSBML(layout);
     for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
       glyph.setId(nextGenericId());
+      glyph.setSpecies(glyph.getName());
     }
     extendedLayoutModel.addLayout(layout);
+    
     
     logger.info("Added Layout in Model: " + model.getId() + " Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
     setFileModified(true);

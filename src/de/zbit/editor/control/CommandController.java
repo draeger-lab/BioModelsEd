@@ -131,6 +131,7 @@ public class CommandController implements PropertyChangeListener {
   
       Species s = SBMLFactory.createSpecies(genericId, nameFromPopup, sboTerm, model.getLevel(), model.getVersion());
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph("glyph_" + s.getId(), model.getLevel(), model.getVersion(), s.getId());
+      sGlyph.setName(s.getName());
       sGlyph.setBoundingBox(sGlyph.createBoundingBox(
           SBMLEditorConstants.glyphDefaultWidth,
           SBMLEditorConstants.glyphDefaultHeight,

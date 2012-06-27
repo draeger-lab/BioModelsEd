@@ -64,7 +64,9 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       }
       
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
-      Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
+      Species s = layout.getModel().getSpecies(speciesGlyph.getSpecies());
+      //FIXME speciesGlyph hat kein Model
+      //Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
       panel.getConverter().createNode(s.getId(),
           s.getName(),
