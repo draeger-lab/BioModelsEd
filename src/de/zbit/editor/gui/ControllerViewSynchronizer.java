@@ -30,6 +30,10 @@ import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
+import de.zbit.editor.SBMLEditorConstants;
+
+import y.base.Node;
+
 
 /**
  * @author Eugen Netz
@@ -68,7 +72,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       //FIXME speciesGlyph hat kein Model
       //Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
-      panel.getConverter().createNode(s.getId(),
+     Node n = panel.getConverter().createNode(s.getId(),
           s.getName(),
           s.getSBOTerm(),
           boundingBox.getPosition().getX(),
@@ -76,6 +80,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
           boundingBox.getDimensions().getWidth(),
           boundingBox.getDimensions().getHeight());
       panel.getGraph2DView().updateView();
+      speciesGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
     }
     else if (node instanceof ReactionGlyph) {
       ReactionGlyph reactionGlyph = (ReactionGlyph) node;

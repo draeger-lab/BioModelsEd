@@ -118,7 +118,7 @@ public class FileManager {
 	 */
 	private boolean isFilePathUsed(String filePath) {
 		for (OpenedDocument<?> doc : listOfOpenedDocuments) {
-			if (doc.hasAssociatedFilepath() && doc.getAssociatedFilepath() == filePath) {
+			if (doc.hasAssociatedFilepath() && doc.getAssociatedFilepath().equals(filePath)) {
 				return true;
 			}
 		}
@@ -170,7 +170,7 @@ public class FileManager {
     for (Layout layout : doc.getListOfLayouts()) {
       boolean s = commandController.closeTab(layout);
       logger.info(layout.getName() + " closing succes? : " + s);
-      success &= s;
+      success |= s;
     }
     if(success) {
       this.listOfOpenedDocuments.remove(doc);

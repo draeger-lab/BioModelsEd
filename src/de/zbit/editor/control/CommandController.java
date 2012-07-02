@@ -39,6 +39,7 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
+import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.render.AbstractRenderPlugin;
 import org.sbml.jsbml.ext.render.ColorDefinition;
@@ -46,6 +47,8 @@ import org.sbml.jsbml.ext.render.GlobalRenderInformation;
 import org.sbml.jsbml.ext.render.RenderConstants;
 import org.sbml.jsbml.ext.render.RenderModelPlugin;
 import org.sbml.jsbml.util.ValuePair;
+
+import y.base.Node;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.GUIFactory;
@@ -82,6 +85,7 @@ public class CommandController implements PropertyChangeListener {
   private Logger logger = Logger.getLogger(CommandController.class.getName());
   private States state;
   private SBMLView view;
+  private Node node;
   
   /**
    * @param editorInstance
@@ -370,6 +374,32 @@ public class CommandController implements PropertyChangeListener {
       }
       else if (this.state == States.emptySet) {
         createEmptySet(evt);
+      }    
+    }
+    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMouseDraggedLeft)) {
+      ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
+      logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());
+    }
+    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedLeft)) {
+      if (this.state == States.normal) {
+        this.node = (Node) evt.getNewValue();
+      }
+    }
+    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
+      if (this.state == States.normal) {
+        
+        ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
+        
+        Layout layout = this.view.getCurrentLayout();
+        ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
+        for (SpeciesGlyph glyph : list) {
+          Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          if (node == this.node) {
+            glyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
+            logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());
+            break;
+          }
+        }
       }
     }
   }

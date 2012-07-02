@@ -22,7 +22,9 @@ import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
 import y.view.EditMode;
+import y.view.Graph2D;
 import y.view.HitInfo;
+import y.view.NodePort;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 
@@ -34,6 +36,8 @@ import de.zbit.editor.control.CommandController;
 public class SBMLEditMode extends EditMode  {
 
   private ValuePair<Double, Double> lastPositionMouseClicked;
+  private ValuePair<Double, Double> oldNodePosition;
+  private Node node;
 
 
   public SBMLEditMode(CommandController controller) {
@@ -43,22 +47,49 @@ public class SBMLEditMode extends EditMode  {
     this.allowEdgeCreation(true);
     this.addPropertyChangeListener(controller);
   }
-
-   
   
   @Override
   public void mousePressedLeft(double x, double y) {
 	  //TODO set Source Node for edge
-	ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-    firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, lastPositionMouseClicked, newPositionMouseClicked);
-    lastPositionMouseClicked = newPositionMouseClicked;
+    
+    HitInfo info = this.getGraph2D().getHitInfo(x, y);
+    Object hit = info.getFirstHit();
+    if (hit instanceof Node) {
+      this.node = (Node) hit;
+      double nodeX = this.getGraph2D().getX(node);
+      double nodeY = this.getGraph2D().getY(node);
+      
+      firePropertyChange(SBMLEditorConstants.EditModeNodePressedLeft, null, this.node);      
+      oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
+    }
+    else {
+      ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+      firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, lastPositionMouseClicked, newPositionMouseClicked);
+      lastPositionMouseClicked = newPositionMouseClicked;
+    }  
+    
   }
   
   @Override
   public void mouseReleasedLeft(double x, double y) {
     //TODO set Target Node for edge, create edge
-		ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
-    firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, lastPositionMouseClicked, positionMouseReleased);
+    
+    HitInfo info = this.getGraph2D().getHitInfo(x, y);
+    Object hit = info.getFirstHit();
+    if (hit instanceof Node) {
+      this.node =  (Node) hit;
+      double nodeX = this.getGraph2D().getX(node);
+      double nodeY = this.getGraph2D().getY(node);
+      
+      ValuePair<Double, Double> newNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);
+      firePropertyChange(SBMLEditorConstants.EditModeNodeReleasedLeft, oldNodePosition, newNodePosition);      
+      oldNodePosition = newNodePosition;
+      
+    }
+    else {
+    		ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
+    		firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, lastPositionMouseClicked, positionMouseReleased);
+    }
   } 
   
   @Override
@@ -68,28 +99,30 @@ public class SBMLEditMode extends EditMode  {
     firePropertyChange(SBMLEditorConstants.EditModeMouseClicked, lastPositionMouseClicked, newPositionMouseClicked);
     lastPositionMouseClicked = newPositionMouseClicked;
   }
+    
+  /*@Override
+  public void mouseDraggedLeft(double x, double y) {
+    HitInfo info = this.getGraph2D().getHitInfo(x, y);
+    Object hit = info.getFirstHit();
+    info.
+    if (hit instanceof Node) {
+      this.node =  (Node) hit;
+      double nodeX = this.getGraph2D().getX(node);
+      double nodeY = this.getGraph2D().getY(node);
+      
+      ValuePair<Double, Double> newNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);
+      firePropertyChange(SBMLEditorConstants.EditModeMouseDraggedLeft, null, newNodePosition);      
+      //oldNodePosition = newNodePosition;
+    }
+  }*/
   
   @Override
-  protected void nodeClicked(Node node) {
-    System.out.print("X : " + getGraph2D().getCenterX(node));
+  protected void nodePortDragged(Graph2D graph,
+      NodePort port,
+      boolean wasSelected,
+      double x,
+      double y,
+      boolean firstDrag) {
+    System.out.println("Heilandzack " + x +"/" + y);
   }
-  
-  @Override
-  public void mouseClicked(MouseEvent evt) {
-    //FIXME Test, no Function
-    if (evt.getButton() == MouseEvent.BUTTON1) {
-      for (int i = 0; i < this.getGraph2D().getNodeArray().length; i++) {
-        Node node = this.getGraph2D().getNodeArray()[i];
-        double x = this.getGraph2D().getX(node);
-        double y = this.getGraph2D().getY(node);
-        System.out.print("\nX : " + x + ", Y : " + y);        
-      }
-      HitInfo info = this.getGraph2D().getHitInfo(evt.getX(), evt.getY());
-      info.getFirstHit();
-    }
-    else if (evt.getButton() == MouseEvent.BUTTON3) {
-      System.out.print("Rechts");
-    }
-  }
-  
 }
