@@ -62,17 +62,17 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     if (node instanceof SpeciesGlyph) {
       SpeciesGlyph speciesGlyph = (SpeciesGlyph) node;
 
-      if (this.layout != this.tabmanager.getCurrentLayout()) {
+      /*if (this.layout != this.tabmanager.getCurrentLayout()) {
         logger.info("glyph not relevant to this layout");
         return;
-      }
+      }*/
       
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
       Species s = layout.getModel().getSpecies(speciesGlyph.getSpecies());
       //FIXME speciesGlyph hat kein Model
       //Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
-     Node n = panel.getConverter().createNode(s.getId(),
+     Node n = panel.getConverter().createNode(speciesGlyph.getId(),
           s.getName(),
           s.getSBOTerm(),
           boundingBox.getPosition().getX(),
@@ -98,12 +98,21 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     //TreeNodeChangeEvent event = (TreeNodeChangeEvent) evt;
     //TODO Paint anew with new Doc?
     //panel.getConverter().createGraph(panel.getDocument());
-    
+    logger.info(evt.getPropertyName());
+    if(evt.getPropertyName().equals("nodeDelete")){
+      Node node = (Node) evt.getNewValue();
+      this.panel.getGraph2DView().getGraph2D().removeNode(node);
+      panel.getGraph2DView().updateView();
+      logger.info("CVS : Removed node");
+    }
+    else {
+      logger.info("CVS : Unknown property change event");
+    }
   }
 
   @Override
   public void nodeRemoved(TreeNodeRemovedEvent evt) {
-	  // TODO Auto-generated method stub
+	  logger.info("Node Removed Event in CVS");
 
   }
 

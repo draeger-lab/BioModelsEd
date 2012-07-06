@@ -48,7 +48,7 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
 
     Edge e1 = graph.createEdge(start, reactionNode);
     Edge e2 = graph.createEdge(reactionNode, target);;
-
+    
     nre.setCenter((graph.getRealizer(start).getCenterX() + graph.getRealizer(target).getCenterX())/2d, (graph.getRealizer(start).getCenterY() + graph.getRealizer(target).getCenterY())/2d);
     ((EdgeRealizer)graph.getRealizer(e2)).setArrow(Arrow.DELTA);
 

@@ -30,7 +30,13 @@ public class SBMLEditorConstants {
   public static final String EditModeNodePressedLeft = "nodePressedLeft in EditMode";
   public static final String EditModeNodeReleasedLeft = "nodeReleasedLeft in EditMode";
   public static final String EditModeMouseDraggedLeft = "mouseDraggedLeft in EditMode";
+  public static final String EditModeNodeReleasedRight = "nodeReleasedRight in EditMode";
+  public static final String EditModeMouseReleasedRight = "mouseReleasedRight in EditMode";
+  public static final String EditModeNodePressedRight = "nodePressedRight in EditMode";
+  public static final String EditModeMousePressedRight = "mousePressedRight in EditMode";
+  
   public static final String genericId = "s";
+  public static final String genericGlyphIdPrefix = "glyph";
   public static final int glyphDefaultDepth = 0;
   public static final int glyphDefaultHeight = 100;
   public static final int glyphDefaultWidth = 100;
@@ -124,9 +130,4 @@ public class SBMLEditorConstants {
   public static final String addEmptySet = "addEmptySet";
   public static final String openLayoutInNewTab = "openLayoutInNewTab";
   public static final String openLayoutInTab = "openLayoutInTab";
- 
-  
-  
-  
-    
 }

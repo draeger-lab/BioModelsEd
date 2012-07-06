@@ -18,6 +18,8 @@ package de.zbit.editor.control;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -30,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
@@ -46,13 +49,18 @@ import org.sbml.jsbml.ext.render.ColorDefinition;
 import org.sbml.jsbml.ext.render.GlobalRenderInformation;
 import org.sbml.jsbml.ext.render.RenderConstants;
 import org.sbml.jsbml.ext.render.RenderModelPlugin;
+import org.sbml.jsbml.util.TreeNodeChangeListener;
+import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.GUIFactory;
+import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
+import de.zbit.editor.gui.SBMLEditMode;
+import de.zbit.sbml.util.SBMLtools;
 
 /**
  * @author Jakob Matthes
@@ -86,6 +94,9 @@ public class CommandController implements PropertyChangeListener {
   private States state;
   private SBMLView view;
   private Node node;
+  private SpeciesGlyph glyph;
+  private boolean nodeCopy = false;
+  private ValuePair<Integer, Integer> pos;
   
   /**
    * @param editorInstance
@@ -107,7 +118,7 @@ public class CommandController implements PropertyChangeListener {
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
   
     // generate generic id
-    String genericId = selectedDoc.nextGenericId();
+    String genericId = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
     String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
     logger.info("popup: " + nameFromPopup);
   
@@ -132,21 +143,14 @@ public class CommandController implements PropertyChangeListener {
        */
       Layout layout = this.view.getCurrentLayout();
       Model model = layout.getModel();
-  
+      String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
       Species s = SBMLFactory.createSpecies(genericId, nameFromPopup, sboTerm, model.getLevel(), model.getVersion());
-      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph("glyph_" + s.getId(), model.getLevel(), model.getVersion(), s.getId());
-      sGlyph.setName(s.getName());
-      sGlyph.setBoundingBox(sGlyph.createBoundingBox(
-          SBMLEditorConstants.glyphDefaultWidth,
-          SBMLEditorConstants.glyphDefaultHeight,
-          SBMLEditorConstants.glyphDefaultDepth,
-          x,
-          y,
-          SBMLEditorConstants.glyphDefaultZ));
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId , model.getLevel(), model.getVersion(), s.getId());
   
       model.addSpecies(s);
       //TODO sGlyph.setNamedSBase(); ???
-      layout.addSpeciesGlyph(sGlyph);
+      sGlyph = SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, s.getName());
+
       selectedDoc.setFileModified(true);
       view.refreshTitle(layout);
 
@@ -383,24 +387,36 @@ public class CommandController implements PropertyChangeListener {
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedLeft)) {
       if (this.state == States.normal) {
         this.node = (Node) evt.getNewValue();
+        this.glyph = getSpeciesGlyphFromNode();
+        logger.info("Glyph selected ID: " + this.glyph.getId() + " Name: " +this.glyph.getName() + 
+          " belongs to Species: " + this.glyph.getSpecies());
       }
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
       if (this.state == States.normal) {
         
         ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
-        
-        Layout layout = this.view.getCurrentLayout();
-        ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
-        for (SpeciesGlyph glyph : list) {
-          Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-          if (node == this.node) {
-            glyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
-            logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());
-            break;
-          }
-        }
+        SpeciesGlyph glyph = getSpeciesGlyphFromNode();
+        glyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
+        logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());        
       }
+    }
+    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedRight)) {
+      this.node = (Node) evt.getNewValue();
+      this.glyph = getSpeciesGlyphFromNode();
+      JPopupMenu popup = GUIFactory.createNodePopupMenu(this);
+      SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
+      MouseEvent e = editmode.getLastPressEvent();
+      popup.show(e.getComponent(), e.getX(), e.getY());
+      logger.info("Glyph selected ID: " + this.glyph.getId() + " Name: " +this.glyph.getName() + 
+        "belongs to Species: " + this.glyph.getSpecies());
+    }
+    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMousePressedRight)) {
+      JPopupMenu popup = GUIFactory.createPastePopupMenu(this, this.nodeCopy);
+      SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
+      MouseEvent e = editmode.getLastPressEvent();
+      popup.show(e.getComponent(), e.getX(), e.getY());
+      this.pos = new ValuePair<Integer, Integer>( e.getX(), e.getY()); 
     }
   }
 
@@ -508,5 +524,63 @@ public class CommandController implements PropertyChangeListener {
       }
     }
     return true;
+  }
+  
+  public SpeciesGlyph getSpeciesGlyphFromNode() {
+    
+    Layout layout = this.view.getCurrentLayout();
+    ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
+    for (SpeciesGlyph glyph : list) {
+      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      if (node == this.node) {
+        return glyph;
+      }
+    }
+    return null;
+  }
+  
+  public void nodeDelete() {
+    
+      
+    Layout layout = this.view.getCurrentLayout();
+    layout.getListOfSpeciesGlyphs().remove(glyph);
+    layout.firePropertyChange("nodeDelete", null, this.node);
+    logger.info("nodeDelete in CC");
+  }
+  
+  public void nodeCopy() {
+    this.nodeCopy = true;
+  }
+  
+  public void nodePaste() {
+    Layout layout = this.view.getCurrentLayout();
+    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
+    .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+        
+    Double x = Double.valueOf(Integer.toString(this.pos.getL()));
+    Double y = Double.valueOf(Integer.toString(this.pos.getV()));
+    String speciesId = this.glyph.getSpecies();
+    Species species = this.glyph.getModel().getSpecies(speciesId);  
+    String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
+    
+    if(layout.getModel() == this.glyph.getModel()) {
+      logger.info("nodePaste: Same Model");
+      
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+        SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesId);
+      
+      SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.glyph.getName());
+    }
+    else {
+      logger.info("nodePaste: Different Model");
+      String speciesIdNew = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
+      Species s = SBMLFactory.createSpecies(speciesIdNew, this.glyph.getName(), species.getSBOTerm(), SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV());
+      layout.getModel().addSpecies(s);
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+        SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesIdNew);
+      SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.glyph.getName());
+      
+      
+    }
   }
 }

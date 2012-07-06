@@ -96,13 +96,13 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	/**
 	 * get next generic species id
 	 */
-	public String nextGenericId() {
+	public String nextGenericId(String prefix) {
 		int count = 0;
-		String s = SBMLEditorConstants.genericId + count;
+		String s = prefix + count;
 		// search for first avalible id
 		while(listOfUsedIds.contains(s)) {
       count+=1;
-      s = SBMLEditorConstants.genericId+count;
+      s = prefix+count;
     }
     listOfUsedIds.add(s);
     return s;
@@ -199,9 +199,9 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     layout = layout.clone();
     layout.setId(Resources.createValidID("l"));
     
-    layout.getListOfSpeciesGlyphs().setParentSBML(layout);
+    //layout.getListOfSpeciesGlyphs().setParentSBML(layout);
     for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
-      glyph.setId(nextGenericId());
+      glyph.setId(nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix));
       glyph.setSpecies(glyph.getName());
     }
     extendedLayoutModel.addLayout(layout);

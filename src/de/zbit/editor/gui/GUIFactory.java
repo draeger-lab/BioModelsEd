@@ -33,6 +33,8 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.zbit.editor.control.CommandController;
+
 /**
  * @author Jakob Matthes
  * @version $Rev$
@@ -179,6 +181,35 @@ public class GUIFactory {
     menuItem = new JMenuItem(Resources.getString("TAB_CLOSE_ALL"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
       component, "closeAll"));
+    popup.add(menuItem);
+    return popup;
+  }
+  
+  public static JPopupMenu createNodePopupMenu(CommandController controller) {
+    JMenuItem menuItem;
+    // Create the popup menu.
+    JPopupMenu popup = new JPopupMenu();
+    
+    menuItem = new JMenuItem(Resources.getString("NODE_COPY"));
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      controller, "nodeCopy"));
+    popup.add(menuItem);
+    menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      controller, "nodeDelete"));
+    popup.add(menuItem);
+    return popup;
+  }
+  
+  public static JPopupMenu createPastePopupMenu(CommandController controller, boolean nodeCopy) {
+    JMenuItem menuItem;
+    
+    JPopupMenu popup = new JPopupMenu();
+    
+    menuItem = new JMenuItem(Resources.getString("NODE_PASTE"));
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      controller, "nodePaste"));
+    menuItem.setEnabled(nodeCopy);
     popup.add(menuItem);
     return popup;
   }

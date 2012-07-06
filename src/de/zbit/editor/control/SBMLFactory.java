@@ -17,7 +17,10 @@
 package de.zbit.editor.control;
 
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+
+import de.zbit.editor.SBMLEditorConstants;
 
 /**
  * @author Jakob Matthes
@@ -33,6 +36,8 @@ public class SBMLFactory {
    * @param version
    * @return
    */
+	
+	//TODO Species only with Compartment
   public static Species createSpecies(String id, String name,
     int sboTerm, int level, int version) {
     Species s = new Species(id, name, level, version);
@@ -46,5 +51,18 @@ public class SBMLFactory {
     SpeciesGlyph sg = new SpeciesGlyph(id, level, version);
     sg.setSpecies(speciesId);
     return sg;
+  }
+  
+  public static SpeciesGlyph addSpeciesGlyphToLayout(Layout layout, SpeciesGlyph sGlyph, double x, double y, String name) {
+    sGlyph.setName(name);
+    sGlyph.setBoundingBox(sGlyph.createBoundingBox(
+      SBMLEditorConstants.glyphDefaultWidth,
+      SBMLEditorConstants.glyphDefaultHeight,
+      SBMLEditorConstants.glyphDefaultDepth,
+      x,
+      y,
+      SBMLEditorConstants.glyphDefaultZ));
+    layout.addSpeciesGlyph(sGlyph);
+    return sGlyph;
   }
 }

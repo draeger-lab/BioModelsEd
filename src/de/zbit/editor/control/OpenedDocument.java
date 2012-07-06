@@ -73,6 +73,10 @@ public class OpenedDocument<T> {
   }
 
 
+  public String getFilename(){
+	  return new File(getAssociatedFilepath()).getName();
+  }
+  
   /**
    * @param associatedFilepath
    *        the associatedFilepath to set
