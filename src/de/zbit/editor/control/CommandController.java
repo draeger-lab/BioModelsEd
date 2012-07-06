@@ -540,12 +540,14 @@ public class CommandController implements PropertyChangeListener {
   }
   
   public void nodeDelete() {
-    
-      
     Layout layout = this.view.getCurrentLayout();
+    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
+    .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    
     layout.getListOfSpeciesGlyphs().remove(glyph);
     layout.firePropertyChange("nodeDelete", null, this.node);
     logger.info("nodeDelete in CC");
+    selectedDoc.setFileModified(true);
   }
   
   public void nodeCopy() {
@@ -579,8 +581,7 @@ public class CommandController implements PropertyChangeListener {
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesIdNew);
       SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.glyph.getName());
-      
-      
     }
+    selectedDoc.setFileModified(true);
   }
 }
