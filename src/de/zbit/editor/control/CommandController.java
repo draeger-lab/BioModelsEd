@@ -36,6 +36,7 @@ import javax.swing.JPopupMenu;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
@@ -43,6 +44,7 @@ import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.Point;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.render.AbstractRenderPlugin;
 import org.sbml.jsbml.ext.render.ColorDefinition;
@@ -171,6 +173,46 @@ public class CommandController implements PropertyChangeListener {
   
     this.state = States.normal;
   }
+  
+  private void createReaction(Node sourceNode, Node targetNode) {
+    // TODO Draw Reaction, add Reaction to Model
+      OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+        .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+
+      //String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
+      //logger.info("popup: " + nameFromPopup);
+      Layout layout = this.view.getCurrentLayout();
+      ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
+      SpeciesGlyph source = null;
+      SpeciesGlyph target = null;
+     
+      
+      for (SpeciesGlyph glyph : list) {
+        Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+        if (node == sourceNode) {
+          source = glyph;
+        } else if (node == targetNode) {
+          target = glyph;
+        }
+      }
+      if ((source == null) || (target == null)) {
+        return;
+      }
+      
+      Model model = layout.getModel();
+      //TODO Let user decide, if the Reaction is reversible 
+      boolean reversible = false;
+      
+      String genericId = selectedDoc.nextGenericId("s");
+      Reaction reaction = SBMLFactory.createReaction(genericId, model.getSpecies(source.getSpecies()),
+        model.getSpecies(target.getSpecies()), reversible, model.getLevel(), model.getVersion());
+      genericId = selectedDoc.nextGenericId("sGlyph");
+      ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(genericId, source, target, model.getLevel(), model.getVersion());
+      
+      model.addReaction(reaction);
+      layout.add(reactionGlyph);
+      
+    }
 
   private void createEmptySet(PropertyChangeEvent evt) {
     createSpecies(evt, SBO.getEmptySet());
@@ -417,6 +459,18 @@ public class CommandController implements PropertyChangeListener {
       MouseEvent e = editmode.getLastPressEvent();
       popup.show(e.getComponent(), e.getX(), e.getY());
       this.pos = new ValuePair<Integer, Integer>( e.getX(), e.getY()); 
+    }
+    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeClickedLeft)) {
+      if (this.state == States.reaction) {
+        if (this.node == null) {
+          this.node = (Node) evt.getNewValue();
+          logger.info("Source Node for Reaction set.");
+        } else {
+          createReaction(this.node, (Node) evt.getNewValue());  
+          
+          logger.info("Target Node for Reaction set. Creating Reaction");
+        }
+      }
     }
   }
 

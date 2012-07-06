@@ -43,9 +43,11 @@ public class SBMLEditMode extends EditMode  {
   public SBMLEditMode(CommandController controller) {
     super();
     this.allowNodeCreation(true);
+    this.allowMoveSelection(false);
     this.setCreateEdgeMode(new SBMLCreateEdgeMode());
     this.allowEdgeCreation(true);
     this.addPropertyChangeListener(controller);
+    this.allowNodeEditing(false);
   }
   
   @Override
@@ -96,8 +98,33 @@ public class SBMLEditMode extends EditMode  {
   public void mouseClicked(double x, double y) {
     // TODO Left/Right Unterscheidung?
 		ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+	
     firePropertyChange(SBMLEditorConstants.EditModeMouseClicked, lastPositionMouseClicked, newPositionMouseClicked);
     lastPositionMouseClicked = newPositionMouseClicked;
+  }
+  
+  @Override
+  public void mouseClicked(MouseEvent evt) {
+    if (evt.getButton() == MouseEvent.BUTTON1) {
+      double x = evt.getX();
+      double y = evt.getY();
+      HitInfo info = this.getGraph2D().getHitInfo(x, y);
+      Object hit = info.getFirstHit();
+      
+      if (hit instanceof Node) {
+        this.node = (Node) hit;
+        ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+        firePropertyChange(SBMLEditorConstants.EditModeNodeClickedLeft,
+          null, this.node);
+        lastPositionMouseClicked = newPositionMouseClicked;
+      } 
+      /*else {
+        ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+        firePropertyChange(SBMLEditorConstants.EditModeMouseClicked,
+          lastPositionMouseClicked, newPositionMouseClicked);
+        lastPositionMouseClicked = newPositionMouseClicked;
+      }*/
+    }
   }
     
   /*@Override

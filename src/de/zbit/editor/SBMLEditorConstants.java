@@ -25,6 +25,7 @@ public class SBMLEditorConstants {
 
   public static final String associatedOpenedSBMLDocument = "associatedOpenedSBMLDocument";
   public static final String EditModeMouseClicked = "mouseClicked in EditMode";
+  public static final String EditModeNodeClickedLeft = "nodeClickedLeft in EditMode";
   public static final String EditModeMousePressedLeft = "mousePressedLeft in EditMode";
   public static final String EditModeMouseReleasedLeft = "mouseReleasedLeft in EditMode";
   public static final String EditModeNodePressedLeft = "nodePressedLeft in EditMode";

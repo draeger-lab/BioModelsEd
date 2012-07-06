@@ -16,9 +16,14 @@
  */
 package de.zbit.editor.control;
 
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 
 import de.zbit.editor.SBMLEditorConstants;
 
@@ -64,5 +69,29 @@ public class SBMLFactory {
       SBMLEditorConstants.glyphDefaultZ));
     layout.addSpeciesGlyph(sGlyph);
     return sGlyph;
+  }
+  
+  public static Reaction createReaction(String id, Species source, Species target, boolean reversible, int level, int version){
+    Reaction reaction = new Reaction(id, level, version);
+    SpeciesReference sourceRef = new SpeciesReference(source);
+    SpeciesReference targetRef = new SpeciesReference(target);
+    reaction.addReactant(sourceRef);
+    reaction.addProduct(targetRef);
+    reaction.setReversible(reversible);
+    return reaction;
+  }
+  
+  public static ReactionGlyph createReactionGlyph(String id, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
+    ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);
+    SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(source.getId() + "_Ref", level, version);
+    sourceRef.setSpeciesGlyph(source.getId());
+    sourceRef.setRole(SpeciesReferenceRole.SUBSTRATE);
+    SpeciesReferenceGlyph targetRef = new SpeciesReferenceGlyph(target.getId() + "_Ref", level, version);
+    targetRef.setSpeciesGlyph(target.getId());
+    targetRef.setRole(SpeciesReferenceRole.PRODUCT);
+    
+    reactionGlyph.addSpeciesReferenceGlyph(sourceRef);
+    
+    return reactionGlyph;
   }
 }

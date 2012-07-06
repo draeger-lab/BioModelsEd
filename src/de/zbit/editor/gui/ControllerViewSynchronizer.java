@@ -84,6 +84,10 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     }
     else if (node instanceof ReactionGlyph) {
       ReactionGlyph reactionGlyph = (ReactionGlyph) node;
+      panel.getConverter().createNode(reactionGlyph.getId(), "Label", reactionGlyph.getSBOTerm(),
+        20,20,20,20);
+      panel.getGraph2DView().updateView();
+      //panel.getGraph2DView().getGraph2D().createEdge(arg0, arg1, arg2);
     }
     else if (node instanceof TextGlyph) {
       TextGlyph textGlyph = (TextGlyph) node;
