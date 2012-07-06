@@ -322,7 +322,7 @@ public class CellDesignerAnnotationParser implements Runnable {
       BufferedReader bufferedReader = new BufferedReader(new FileReader(xmlFile));
       String line;
       
-      //TODO parse "<reaction " Tag
+      //TODO parse "<reaction " Tag, because it contains the ReactionId (or create Ids for Reactions)
       while((line = bufferedReader.readLine()) != null) {
         while((line != null) && (!line.startsWith("<annotation>"))) {
           line = bufferedReader.readLine();
@@ -356,6 +356,8 @@ public class CellDesignerAnnotationParser implements Runnable {
 	private void writeLayout(String id, Double x, Double y, Double width, Double height, boolean compartment, boolean species) {
 		int level = layout.getLevel(), version = layout.getVersion();
 		
+		//TODO change Id to the one used in CellDesigner
+		//Needed to find Species for Reactions
 		if (idCounts.containsKey(id)) {
 			idCounts.put(id, Integer.valueOf(idCounts.get(id).intValue() + 1));
 		} else {

@@ -18,7 +18,6 @@ package de.zbit.editor.control;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -51,18 +50,13 @@ import org.sbml.jsbml.ext.render.ColorDefinition;
 import org.sbml.jsbml.ext.render.GlobalRenderInformation;
 import org.sbml.jsbml.ext.render.RenderConstants;
 import org.sbml.jsbml.ext.render.RenderModelPlugin;
-import org.sbml.jsbml.util.TreeNodeChangeListener;
-import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
-
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.GUIFactory;
-import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
-import de.zbit.sbml.util.SBMLtools;
 
 /**
  * @author Jakob Matthes
@@ -467,8 +461,12 @@ public class CommandController implements PropertyChangeListener {
           logger.info("Source Node for Reaction set.");
         } else {
           createReaction(this.node, (Node) evt.getNewValue());  
-          
-          logger.info("Target Node for Reaction set. Creating Reaction");
+          Layout layout = this.view.getCurrentLayout();
+          //FIXME use something like ValuePair, but VP needs Comparables
+          //ValuePair<Node, Node> nodes = new ValuePair<Node, Node>(this.node, (Node) evt.getNewValue());
+          layout.firePropertyChange("reactionCreated", this.node, evt.getNewValue());
+          logger.info("Target Node for Reaction set. Created Reaction");
+          this.node = null;
         }
       }
     }

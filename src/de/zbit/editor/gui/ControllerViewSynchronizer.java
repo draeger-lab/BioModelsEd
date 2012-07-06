@@ -31,6 +31,7 @@ import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.graph.sbgn.ReactionNodeRealizer;
 
 import y.base.Node;
 
@@ -108,7 +109,14 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       this.panel.getGraph2DView().getGraph2D().removeNode(node);
       panel.getGraph2DView().updateView();
       logger.info("CVS : Removed node");
+    } else if (evt.getPropertyName().equals("reactionCreated")) {
+      logger.info("CVS : Draw Reaction");
+      //TODO Use ReactionNodeRealizer or EdgeRealizer or something like that
+      panel.getGraph2DView().getGraph2D().createEdge((Node) evt.getOldValue(), (Node) evt.getNewValue());
+      SBMLEditMode editMode = (SBMLEditMode) panel.getGraph2DView().getViewModes().next();
+      SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
     }
+    
     else {
       logger.info("CVS : Unknown property change event");
     }
