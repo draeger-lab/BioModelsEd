@@ -20,7 +20,10 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
@@ -88,6 +91,15 @@ public class SBMLFactory {
   public static ReactionGlyph createReactionGlyph(OpenedSBMLDocument selectedDoc, Reaction reaction, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
     String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
     ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);
+    double x = source.getBoundingBox().getPosition().getX() + target.getBoundingBox().getPosition().getX() / 2d;
+    double y = source.getBoundingBox().getPosition().getY() + target.getBoundingBox().getPosition().getY() / 2d;
+    BoundingBox bb = new BoundingBox();
+    bb.setLevel(source.getLevel());
+    bb.setVersion(source.getVersion());
+    bb.setDimensions(new Dimensions(10, 10, 0, source.getLevel(), source.getVersion()));
+    bb.setPosition(new Point(x, y, 0, source.getLevel(), source.getVersion()));
+    reactionGlyph.setBoundingBox(bb);
+    
     id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix+ "Ref");
     SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(id, level, version);
     sourceRef.setSpeciesGlyph(source.getId());

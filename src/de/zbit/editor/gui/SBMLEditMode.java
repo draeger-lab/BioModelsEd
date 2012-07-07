@@ -89,14 +89,14 @@ public class SBMLEditMode extends EditMode  {
     }
   } 
   
-  @Override
+  /*@Override
   public void mouseClicked(double x, double y) {
     // TODO Left/Right Unterscheidung?
 		ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
 	
     firePropertyChange(SBMLEditorConstants.EditModeMouseClicked, lastPositionMouseClicked, newPositionMouseClicked);
     lastPositionMouseClicked = newPositionMouseClicked;
-  }
+  }*/
   
  /* @Override
   public void mouseClicked(MouseEvent evt) {
