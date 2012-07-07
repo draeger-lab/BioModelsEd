@@ -17,6 +17,7 @@
 package de.zbit.editor.control;
 
 import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -71,26 +72,34 @@ public class SBMLFactory {
     return sGlyph;
   }
   
-  public static Reaction createReaction(String id, Species source, Species target, boolean reversible, int level, int version){
+  public static Reaction createReaction(OpenedSBMLDocument selectedDoc, Species source, Species target, boolean reversible, int level, int version){
+    String id = selectedDoc.nextGenericId("r");
     Reaction reaction = new Reaction(id, level, version);
     SpeciesReference sourceRef = new SpeciesReference(source);
     SpeciesReference targetRef = new SpeciesReference(target);
     reaction.addReactant(sourceRef);
     reaction.addProduct(targetRef);
     reaction.setReversible(reversible);
+    reaction.setSBOTerm(SBO.getStateTransition());
     return reaction;
   }
   
-  public static ReactionGlyph createReactionGlyph(String id, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
+  public static ReactionGlyph createReactionGlyph(OpenedSBMLDocument selectedDoc, Reaction reaction, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
+    String id = selectedDoc.nextGenericId("rGlyph");
     ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);
-    SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(source.getId() + "_Ref", level, version);
+    id = selectedDoc.nextGenericId("rGlyphRef");
+    SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(id, level, version);
     sourceRef.setSpeciesGlyph(source.getId());
     sourceRef.setRole(SpeciesReferenceRole.SUBSTRATE);
-    SpeciesReferenceGlyph targetRef = new SpeciesReferenceGlyph(target.getId() + "_Ref", level, version);
+    id = selectedDoc.nextGenericId("rGlyphRef");
+    SpeciesReferenceGlyph targetRef = new SpeciesReferenceGlyph(id, level, version);
     targetRef.setSpeciesGlyph(target.getId());
     targetRef.setRole(SpeciesReferenceRole.PRODUCT);
     
     reactionGlyph.addSpeciesReferenceGlyph(sourceRef);
+    reactionGlyph.addSpeciesReferenceGlyph(targetRef);
+    reactionGlyph.setSBOTerm(SBO.getStateTransition());
+    reactionGlyph.setReaction(reaction);
     
     return reactionGlyph;
   }

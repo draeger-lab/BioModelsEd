@@ -95,6 +95,7 @@ public class CommandController implements PropertyChangeListener {
   
   private SpeciesGlyph selectedGlyph;
   private SpeciesGlyph copyGlyph; 
+  private Node node = null;
   
   private ValuePair<Double, Double> pos;
   
@@ -200,12 +201,10 @@ public class CommandController implements PropertyChangeListener {
       Model model = layout.getModel();
       //TODO Let user decide, if the Reaction is reversible 
       boolean reversible = false;
-      
-      String genericId = selectedDoc.nextGenericId("s");
-      Reaction reaction = SBMLFactory.createReaction(genericId, model.getSpecies(source.getSpecies()),
+    
+      Reaction reaction = SBMLFactory.createReaction(selectedDoc, model.getSpecies(source.getSpecies()),
         model.getSpecies(target.getSpecies()), reversible, model.getLevel(), model.getVersion());
-      genericId = selectedDoc.nextGenericId("sGlyph");
-      ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(genericId, source, target, model.getLevel(), model.getVersion());
+      ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(selectedDoc, reaction, source, target, model.getLevel(), model.getVersion());
       
       model.addReaction(reaction);
       layout.add(reactionGlyph);
@@ -429,17 +428,19 @@ public class CommandController implements PropertyChangeListener {
         
         this.nodeSelected = true;
         this.selectedGlyph = getSpeciesGlyphFromNode((Node) evt.getNewValue());
-        logger.info("Glyph selected ID: " + this.selectedGlyph.getId() + " Name: " +this.selectedGlyph.getName() + 
-          " belongs to Species: " + this.selectedGlyph.getSpecies());
+        if (this.selectedGlyph != null) {
+          logger.info("Glyph selected ID: " + this.selectedGlyph.getId() + " Name: " +this.selectedGlyph.getName() + 
+            " belongs to Species: " + this.selectedGlyph.getSpecies());
+        } else {
+          this.nodeSelected = false;
+        }
       }
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
-      if (this.state == States.normal) {
-        
-        ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
-        this.selectedGlyph = getSpeciesGlyphFromNode((Node) evt.getNewValue());
-        selectedGlyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
-        logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());        
+      if ((this.state == States.normal) && (this.nodeSelected)) {     
+          ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
+          selectedGlyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
+          logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());  
       }
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedRight)) {
@@ -473,6 +474,7 @@ public class CommandController implements PropertyChangeListener {
           //ValuePair<Node, Node> nodes = new ValuePair<Node, Node>(this.node, (Node) evt.getNewValue());
           layout.firePropertyChange("reactionCreated", this.node, evt.getNewValue());
           logger.info("Target Node for Reaction set. Created Reaction");
+          this.state = States.normal;
           this.node = null;
         }
       }

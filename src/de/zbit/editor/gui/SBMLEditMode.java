@@ -22,9 +22,7 @@ import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
 import y.view.EditMode;
-import y.view.Graph2D;
 import y.view.HitInfo;
-import y.view.NodePort;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 
@@ -43,11 +41,9 @@ public class SBMLEditMode extends EditMode  {
   public SBMLEditMode(CommandController controller) {
     super();
     this.allowNodeCreation(true);
-    this.allowMoveSelection(false);
     this.setCreateEdgeMode(new SBMLCreateEdgeMode());
     this.allowEdgeCreation(true);
     this.addPropertyChangeListener(controller);
-    this.allowNodeEditing(false);
   }
   
   @Override
@@ -68,6 +64,7 @@ public class SBMLEditMode extends EditMode  {
       ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
       firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, lastPositionMouseClicked, newPositionMouseClicked);
       lastPositionMouseClicked = newPositionMouseClicked;
+            
     }  
     
   }

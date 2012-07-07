@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -31,9 +32,13 @@ import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.graph.io.def.SBGNVisualizationProperties;
 import de.zbit.graph.sbgn.ReactionNodeRealizer;
 
 import y.base.Node;
+import y.view.EdgeRealizer;
+import y.view.GenericEdgeRealizer;
+import y.view.ViewMode;
 
 
 /**
@@ -45,13 +50,15 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
   private TabManager tabmanager;
   private GraphLayoutPanel panel;
+  private SBMLEditMode editMode;
   private Layout layout;
   private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
   
-  public ControllerViewSynchronizer(TabManager tabmanager, GraphLayoutPanel panel, Layout layout) {
+  public ControllerViewSynchronizer(TabManager tabmanager, GraphLayoutPanel panel, Layout layout, SBMLEditMode editMode) {
     this.tabmanager = tabmanager;
     this.panel = panel;
     this.layout = layout;
+    this.editMode = editMode;
   }
   
   /* (non-Javadoc)
@@ -83,13 +90,6 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       panel.getGraph2DView().updateView();
       speciesGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
     }
-    else if (node instanceof ReactionGlyph) {
-      ReactionGlyph reactionGlyph = (ReactionGlyph) node;
-      panel.getConverter().createNode(reactionGlyph.getId(), "Label", reactionGlyph.getSBOTerm(),
-        20,20,20,20);
-      panel.getGraph2DView().updateView();
-      //panel.getGraph2DView().getGraph2D().createEdge(arg0, arg1, arg2);
-    }
     else if (node instanceof TextGlyph) {
       TextGlyph textGlyph = (TextGlyph) node;
     }
@@ -110,11 +110,20 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       panel.getGraph2DView().updateView();
       logger.info("CVS : Removed node");
     } else if (evt.getPropertyName().equals("reactionCreated")) {
-      logger.info("CVS : Draw Reaction");
       //TODO Use ReactionNodeRealizer or EdgeRealizer or something like that
-      panel.getGraph2DView().getGraph2D().createEdge((Node) evt.getOldValue(), (Node) evt.getNewValue());
-      SBMLEditMode editMode = (SBMLEditMode) panel.getGraph2DView().getViewModes().next();
+      //panel.getGraph2DView().getGraph2D().createEdge((Node) evt.getOldValue(), (Node) evt.getNewValue(),(EdgeRealizer) new ReactionNodeRealizer());
+      //panel.getGraph2DView().getGraph2D().createEdge((Node) evt.getOldValue(), (Node) evt.getNewValue());
+      
+  
+  
+      //SBMLEditMode editMode = (SBMLEditMode) panel.getGraph2DView().getViewModes().next();
+   
+      
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
+      createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), (Node) evt.getOldValue(), (Node) evt.getNewValue(),
+         new GenericEdgeRealizer());
+      logger.info("CVS : Reaction Drawn");
+      
     }
     
     else {

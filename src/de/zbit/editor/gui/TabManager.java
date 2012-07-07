@@ -25,6 +25,7 @@ import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 
 import y.view.Graph2DView;
+import y.view.ViewMode;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
 
@@ -196,11 +197,14 @@ public class TabManager extends JTabbedPane {
 
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     Graph2DView view = panel.getGraph2DView();
-    
+    //FIXME Not sure if necessery
+    //view.removeViewMode((ViewMode) view.getViewModes().next());
+    //ViewMode viewMode = (ViewMode) view.getViewModes().next();
+ 
     view.addViewMode(editMode);
     
     
-    layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout));
+    layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout, editMode));
     return panel;
   }
 }
