@@ -1,6 +1,6 @@
 /*
- * $$Id${file_name} ${time} ${user}$$
- * $$URL${file_name}$$
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -16,16 +16,11 @@
  */
 package de.zbit.editor.gui;
 
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 
-
-//TODO: Insert JavaDoc
-//TODO: Insert License Header
-//TODO: Set SVN properties
 /**
  * @author Alexander Diamantikos
  * @since 1.0
@@ -33,7 +28,6 @@ import javax.swing.ImageIcon;
  */
 public class Resources {
 	
-  private static ArrayList<String> usedIDs = new ArrayList<String>();
 	private final static ResourceBundle bundleDefault = ResourceBundle.getBundle("de.zbit.editor.gui.SBMLEditor", Locale.getDefault());
 	
 	//Icons
@@ -56,41 +50,25 @@ public class Resources {
   public static final ImageIcon iconEmptySet = Resources.createImageIcon("images/ButtonEmptySet.png", null);
   public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
   
-	//Get localized String in default language
+	// Get localized String in default language
 	public static String getString(String key){
 		return bundleDefault.getString(key);
 	}
 	
-
-	/** Returns an ImageIcon, or null if the path was invalid. */
-
+	/**
+	 * Returns an ImageIcon, or null if the path was invalid.
+	 * @param path
+	 * @param description
+	 * @return
+	 */
 	protected static ImageIcon createImageIcon(String path, String description) {
-
 	  java.net.URL imgURL = Resources.class.getResource(path);
-
 	  if (imgURL != null) {
-
 	    return new ImageIcon(imgURL, description);
-
 	  } else {
-
 	    System.err.println("Couldn't find file: " + path);
-
 	    return null;
-
 	  }
-
 	}
-	
-	public static String createValidID(String prefix) {
-    int i = 1;
-    String s = prefix+i;
-    while(usedIDs.contains(s)) {
-      i+=1;
-      s = prefix+i;
-    }
-    usedIDs.add(s);
-    return s;
-  }
 		 
 }

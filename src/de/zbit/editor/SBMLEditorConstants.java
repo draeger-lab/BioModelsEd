@@ -38,14 +38,22 @@ public class SBMLEditorConstants {
   
   public static final String genericId = "s";
   public static final String genericReactionIdPrefix = "r";
+  public static final String genericLayoutIdPrefix = "layout";
+  
   public static final String genericGlyphIdPrefix = "glyph";
+  public static final String genericCompartmentGlyphIdPrefix = "compartmentglyph";
+  public static final String genericReactionGlyphIdPrefix = "reactionglyph";
+  public static final String genericSpeciesGlyphIdPrefix = "speciesglyph";
+  public static final String genericTextGlyphIdPrefix = "textglyph";
   public static final int glyphDefaultDepth = 0;
   public static final int glyphDefaultHeight = 100;
   public static final int glyphDefaultWidth = 100;
   public static final int glyphDefaultZ = 0;
   public static final String LAYOUT_LINK_KEY = "LAYOUT_LINK_KEY";
   public static final String GLYPH_NODE_KEY = "GLYPH_NODE_KEY";
+  public static final Object GRAPHOBJECT_TEXTGLYPH_KEY = "GRAPHOBJECT_TEXTGLYPH_KEY";
   public static final String layoutDefaultName = "default_layout";
+  public static final String modelDefaultName = "defalt_model";
   public static final String compartmentDefaultName = "default_compartent";
   public static final String openingDone = "openingDone";
   public static final String savingDone = "savingDone";
@@ -74,6 +82,9 @@ public class SBMLEditorConstants {
   public static final String fileSaveAs = "fileSaveAs";
   public static final String fileExport = "fileExport";
   public static final String fileQuit = "fileQuit";
+  public static final String nodeDelete = "nodeDelete";
+  public static final String nodeCopy = "nodeCopy";
+  public static final String nodeRename = "nodeRename";
   //Menu Edit
   //Resource Strings
   public static final String MENU_EDIT = "MENU_EDIT";

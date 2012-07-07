@@ -27,7 +27,6 @@ import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
-import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
@@ -84,9 +83,6 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
           boundingBox.getDimensions().getHeight());
       panel.getGraph2DView().updateView();
       speciesGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
-    }
-    else if (node instanceof TextGlyph) {
-      TextGlyph textGlyph = (TextGlyph) node;
     }
   }
 

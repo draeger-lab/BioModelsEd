@@ -33,6 +33,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 
 /**
@@ -189,15 +190,22 @@ public class GUIFactory {
     JMenuItem menuItem;
     // Create the popup menu.
     JPopupMenu popup = new JPopupMenu();
+
+    menuItem = new JMenuItem(Resources.getString("NODE_RENAME"));
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      controller, SBMLEditorConstants.nodeRename));
+    popup.add(menuItem);
     
     menuItem = new JMenuItem(Resources.getString("NODE_COPY"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, "nodeCopy"));
+      controller, SBMLEditorConstants.nodeCopy));
     popup.add(menuItem);
+    
     menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, "nodeDelete"));
+      controller, SBMLEditorConstants.nodeDelete));
     popup.add(menuItem);
+    
     return popup;
   }
   

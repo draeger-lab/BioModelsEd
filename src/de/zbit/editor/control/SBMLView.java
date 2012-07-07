@@ -75,10 +75,44 @@ public interface SBMLView {
   /**
    * @param layout
    */
-  void refreshTitle(Layout layout);
+  public void refreshTitle(Layout layout);
 
   /**
    * @param list
    */
-  void updateComboBox(ListOf<Layout> list);
+  public void updateComboBox(ListOf<Layout> list);
+  
+  public void helpAbout();
+
+  /**
+   * 
+   */
+  public void layoutClone();
+
+  /**
+   * 
+   */
+  public void layoutDelete();
+
+  /**
+   * @param layout
+   * @return
+   */
+  public boolean layoutClose(Layout layout);
+
+  /**
+   * @return 
+   * 
+   */
+  public boolean layoutNew();
+
+  /**
+   * 
+   */
+  public void openLayoutInTab();
+
+  /**
+   * 
+   */
+  public void openLayoutInNewTab();
 }

@@ -18,6 +18,7 @@ package de.zbit.editor.control;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ import javax.swing.tree.TreeNode;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.NamedSBase;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
@@ -35,11 +37,11 @@ import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import de.zbit.editor.SBMLEditorConstants;
-import de.zbit.editor.gui.Resources;
 
 /**
  * @author Jan Rudolph
@@ -87,10 +89,23 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	 */
 	private void initializeIds() {
 		Model model = this.document.getModel();
-		List<Species> listOfSpecies = model.getListOfSpecies();
-		for (Species s : listOfSpecies) {
+		List<Layout> listOfLayouts = getListOfLayouts();
+
+		List<NamedSBase> list = new LinkedList<NamedSBase>();
+		list.addAll(model.getListOfCompartments());
+		list.addAll(model.getListOfReactions());
+		list.addAll(model.getListOfSpecies());
+		list.addAll(listOfLayouts);
+		for (Layout l : listOfLayouts) {
+		  list.addAll(l.getListOfAdditionalGraphicalObjects());
+		  list.addAll(l.getListOfCompartmentGlyphs());
+		  list.addAll(l.getListOfReactionGlyphs());
+		  list.addAll(l.getListOfSpeciesGlyphs());
+		  list.addAll(l.getListOfTextGlyphs());
+		}
+		for (NamedSBase s : list) {
 			if (s.isSetId()) {
-				listOfUsedIds.add(s.getId());				
+				listOfUsedIds.add(s.getId());
 			}
 		}
 	}
@@ -103,7 +118,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 		String s = prefix + count;
 		// search for first avalible id
 		while(listOfUsedIds.contains(s)) {
-      count+=1;
+      count += 1;
       s = prefix+count;
     }
     listOfUsedIds.add(s);
@@ -156,7 +171,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
     ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
-    Layout layout = extendedLayoutModel.createLayout(Resources.createValidID("l"));
+    Layout layout = extendedLayoutModel.createLayout(nextGenericId(SBMLEditorConstants.genericLayoutIdPrefix));
     layout.setName(SBMLEditorConstants.layoutDefaultName);
     model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
     return layout; 
@@ -182,36 +197,67 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     }
   }
   
+  /**
+   * @param name
+   * @return
+   */
   public Layout createNewLayout(String name) {
     Model model = this.document.getModel();
     ExtendedLayoutModel extendedLayoutModel =
         (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
     
-    Layout layout = extendedLayoutModel.createLayout(Resources.createValidID("l"));
+    Layout layout = extendedLayoutModel.createLayout(nextGenericId(SBMLEditorConstants.genericLayoutIdPrefix));
     layout.setName(name);
     logger.info("Created Layout in Model: " + model.getId() + " Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
     setFileModified(true);
     return layout;
   }
   
+  /**
+   * @param layout
+   * @return
+   */
   public Layout addLayout (Layout layout) {
     Model model = this.document.getModel();
     ExtendedLayoutModel extendedLayoutModel =
         (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
-    layout = layout.clone();
-    layout.setId(Resources.createValidID("l"));
     
-    //layout.getListOfSpeciesGlyphs().setParentSBML(layout);
-    for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
-      glyph.setId(nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix));
-      glyph.setSpecies(glyph.getName());
+    Layout newLayout = new Layout(nextGenericId(SBMLEditorConstants.genericLayoutIdPrefix),
+        model.getLevel(),
+        model.getVersion());
+    
+    newLayout.setName(layout.getName());
+    
+    for (CompartmentGlyph cg : layout.getListOfCompartmentGlyphs()) {
+      CompartmentGlyph cgClone = cg.clone();
+      cgClone.setId(nextGenericId(SBMLEditorConstants.genericCompartmentGlyphIdPrefix));
+      cgClone.setCompartment(cg.getCompartment());
+      newLayout.addCompartmentGlyph(cgClone);
     }
-    extendedLayoutModel.addLayout(layout);
+    for (ReactionGlyph rg : layout.getListOfReactionGlyphs()) {
+      ReactionGlyph rgClone = rg.clone();
+      rgClone.setId(nextGenericId(SBMLEditorConstants.genericReactionGlyphIdPrefix));
+      rgClone.setReaction(rg.getReaction());
+      newLayout.addReactionGlyph(rgClone);
+    }
+    for (SpeciesGlyph sg : layout.getListOfSpeciesGlyphs()) {
+      SpeciesGlyph sgClone = sg.clone();
+      sgClone.setId(nextGenericId(SBMLEditorConstants.genericSpeciesGlyphIdPrefix));
+      sgClone.setSpecies(sg.getSpecies());
+      newLayout.addSpeciesGlyph(sgClone);
+    }
+    for (TextGlyph tg : layout.getListOfTextGlyphs()) {
+      TextGlyph tgClone = tg.clone();
+      tgClone.setId(nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix));
+      newLayout.addTextGlyph(tgClone);
+    }
+    
+    extendedLayoutModel.addLayout(newLayout);
     
     
-    logger.info("Added Layout in Model: " + model.getId() + " Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
+    logger.info("Added Layout in Model: " + model.getId() + " Layout ID: " + newLayout.getId() + " Layout Name: " + newLayout.getName());
     setFileModified(true);
-    return layout;
+    return newLayout;
   }
   
   /**
@@ -252,18 +298,24 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     
     List<Compartment> compartments = model.getListOfCompartments();
     for (Compartment c : compartments) {
-      //FIXME Just a Glyph whitout information
-      CompartmentGlyph cGlyph = layout.createCompartmentGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix), c.getId());
-      layout.addCompartmentGlyph(cGlyph);
+      layout.createCompartmentGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix), c.getId());
     }
     
     return true;
   }
   
+  /**
+   * @return
+   */
   public ListOf<Layout> getListOfLayouts() {
     ExtendedLayoutModel extendedLayoutModel =
         (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
-    return extendedLayoutModel.getListOfLayouts();
+    if (extendedLayoutModel != null) {
+      return extendedLayoutModel.getListOfLayouts();
+    }
+    else {
+      return new ListOf<Layout>();
+    }
   }
     
 }

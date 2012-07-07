@@ -45,28 +45,78 @@ public class EditorToolbar extends JToolBar {
    * @param commandController
    */
   public EditorToolbar(SBMLEditor parent) {
-    // TODO: Create a very simple icon for each button, use Tooltips, remove the
-    // String Label.
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE), Resources.iconUnknown, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addUnknownMolecule));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.SIMPLE_MOLECULE), Resources.iconSimpleMolecule, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addSimpleMolecule));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.MACROMOLECULE), Resources.iconMacromolecule, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addMacromolecule));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.EMPTY_SET), Resources.iconEmptySet, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addEmptySet));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.REACTION), Resources.iconPositive, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addReaction));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.CATALYSIS), Resources.iconPositive, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addCatalysis));
-    GUIFactory.addButton(this, Resources.getString(SBMLEditorConstants.INHIBITION), Resources.iconPositive, 0, 0,
-      EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
-    add(layoutComboBox);
-    GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN),
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openLayoutInTab));
-    GUIFactory.addButton(this,  Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN_NEW),
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.openLayoutInNewTab));
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE),
+        Resources.iconUnknown,
+        0,
+        0,
+        EventHandler.create(ActionListener.class,
+            parent,
+            SBMLEditorConstants.addUnknownMolecule));
     
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.SIMPLE_MOLECULE),
+        Resources.iconSimpleMolecule,
+        0,
+        0,
+        EventHandler.create(ActionListener.class,
+            parent,
+            SBMLEditorConstants.addSimpleMolecule));
+    
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.MACROMOLECULE),
+        Resources.iconMacromolecule,
+        0,
+        0,
+        EventHandler.create(ActionListener.class,
+            parent,
+            SBMLEditorConstants.addMacromolecule));
+    
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.EMPTY_SET),
+        Resources.iconEmptySet,
+        0,
+        0,
+        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addEmptySet));
+    
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.REACTION),
+        Resources.iconPositive,
+        0,
+        0,
+        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addReaction));
+    
+    GUIFactory
+        .addButton(this,
+            Resources.getString(SBMLEditorConstants.CATALYSIS),
+            Resources.iconPositive,
+            0,
+            0,
+            EventHandler.create(ActionListener.class,
+                parent,
+                SBMLEditorConstants.addCatalysis));
+    
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.INHIBITION),
+        Resources.iconPositive,
+        0,
+        0,
+        EventHandler
+            .create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
+    
+    add(layoutComboBox);
+    
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN),
+        EventHandler.create(ActionListener.class,
+            parent,
+            SBMLEditorConstants.openLayoutInTab));
+ 
+    GUIFactory.addButton(this,
+        Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN_NEW),
+        EventHandler.create(ActionListener.class,
+            parent,
+            SBMLEditorConstants.openLayoutInNewTab));
   }
   
   private static class ListItem {

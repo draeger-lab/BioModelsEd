@@ -129,6 +129,9 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#fileNew()
+   */
   @Override
   public boolean fileNew() {
     return commandController.fileNew();
@@ -168,6 +171,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   
   public String askUserFileNew() {
     return JOptionPane.showInputDialog(Resources.getString("NEW_FILE"), Resources.getString("GENERIC_FILE_NAME"));
+  }
+  
+  public String askUserLayoutNew() {
+    return JOptionPane.showInputDialog(Resources.getString("NEW_LAYOUT"), Resources.getString("GENERIC_LAYOUT_NAME"));
   }
   
   @Override
@@ -266,8 +273,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     this.commandController.stateInhibition();
   }
   
-  public String nameDialogue(String id) {
-    return JOptionPane.showInputDialog("Enter name:", id);
+  public String nameDialogue(String s) {
+    return JOptionPane.showInputDialog(Resources.getString("NEW_SPECIES"), s);
   }
   
   @Override
@@ -305,6 +312,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     editorToolbar.updateComboBox(list);    
   }
   
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#openLayoutInNewTab()
+   */
+  @Override
   public void openLayoutInNewTab() {
     Layout layout = editorToolbar.getSelectedLayout();
     logger.info("Try to Open Layout in new Tab ID: " + layout.getId() + " Layout Name: " + layout.getName());
@@ -318,6 +329,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     }
   }
   
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#openLayoutInTab()
+   */
+  @Override
   public void openLayoutInTab() {
     Layout layout = editorToolbar.getSelectedLayout();
     logger.info("Try to Open Layout in current Tab ID: " + layout.getId() + " Layout Name: " + layout.getName());
@@ -331,32 +346,64 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     }
   }
   
-  public void layoutNew() {
+  /**
+   * 
+   */
+  @Override
+  public boolean layoutNew() {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) getCurrentLayout().getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    Layout layout = doc.createNewLayout(askUserFileNew());
+    String layoutName = askUserLayoutNew();
+    if (layoutName == null) {
+      return false;
+    }
+    Layout layout = doc.createNewLayout(layoutName);
     
-    addLayout(layout);
+    return addLayout(layout);
   }
   
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#layoutClone()
+   */
+  @Override
   public void layoutClone() {
     Layout layout = getCurrentLayout();
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    Layout layout2 = doc.addLayout(layout);
+
+    Layout clonedLayout = doc.addLayout(layout); 
     
-    logger.info("Cloning Layout ID: "+ layout.getId() + " Name: " +layout.getName() + " to  Layout ID: "+ layout2.getId() + " Name: " +layout2.getName());
-    addLayout(layout2);
+    logger.info("Cloning Layout ID: "+ layout.getId() + " Name: " +layout.getName() + " to  Layout ID: "+ clonedLayout.getId() + " Name: " +clonedLayout.getName());
+    addLayout(clonedLayout);
   }
   
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#layoutDelete()
+   */
+  @Override
   public void layoutDelete() {
     commandController.layoutDelete(getCurrentLayout());
-    
   }
   
-  
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#layoutClose(org.sbml.jsbml.ext.layout.Layout)
+   */
+  @Override
   public boolean layoutClose(Layout layout) {
     logger.info("ID: "+ layout.getId() + " Name: " +layout.getName());
     return commandController.layoutClose(layout);
+  }
+
+
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#helpAbout()
+   */
+  @Override
+  public void helpAbout() {
+    JOptionPane.showMessageDialog(frame,
+        Resources.getString("DIALOG_ABOUT_MESSAGE"),
+        Resources.getString("DIALOG_ABOUT_TITLE"),
+        JOptionPane.PLAIN_MESSAGE
+        );
   } 
 }

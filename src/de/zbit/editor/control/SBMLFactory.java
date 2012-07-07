@@ -16,19 +16,23 @@
  */
 package de.zbit.editor.control;
 
+import java.util.List;
+
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
-import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Dimensions;
+import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
+import org.sbml.jsbml.ext.layout.TextGlyph;
 
 import de.zbit.editor.SBMLEditorConstants;
 
@@ -98,6 +102,13 @@ public class SBMLFactory {
     return sGlyph;
   }
   
+  public static TextGlyph createTextGlyph(String id, int level, int version, GraphicalObject graphicalObject, String text) {
+    TextGlyph tg = new TextGlyph(id, level, version);
+    tg.setGraphicalObject(graphicalObject);
+    tg.setText(text);
+    graphicalObject.putUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY, tg);
+    return tg;
+  }
   
   public static Reaction createReaction(OpenedSBMLDocument selectedDoc, Species source, Species target, boolean reversible, int level, int version){
     String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericReactionIdPrefix);
@@ -156,5 +167,4 @@ public class SBMLFactory {
     return rGlyph;
   }
   
-  public static SpeciesReferenceGlyph createSpeciesReferenceGlyph
 }

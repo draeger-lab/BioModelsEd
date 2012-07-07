@@ -30,6 +30,7 @@ import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
+import org.sbml.jsbml.ext.layout.TextGlyph;
 
 import y.base.Node;
 import y.view.GenericEdgeRealizer;
@@ -63,18 +64,23 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
       return;
     }
 		initCompartments(layout);
+		initTextGlyphs(layout);
 		initSpeciesGlyphs(layout);
 		//TODO Initialize Reaction Modifiers
 		initReactionGlyphs(layout);
-		initTextGlyphs(layout);
 	}
 
 	/**
 	 * @param layout
 	 */
 	private void initTextGlyphs(Layout layout) {
-		// TODO Auto-generated method stub
-		
+	  ListOf<TextGlyph> list = layout.getListOfTextGlyphs();
+	  for (TextGlyph textGlyph : list) {
+	    SpeciesGlyph s = layout.getSpeciesGlyph(textGlyph.getGraphicalObject());
+	    if (s != null) {
+	      s.putUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY, textGlyph);
+	    }
+	  }
 	}
 
 	/**
@@ -104,13 +110,19 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 */
 	private void initSpeciesGlyphs(Layout layout) {
 	  ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
-	  for (SpeciesGlyph glyph: list) {
+	  for (SpeciesGlyph glyph : list) {
 
 	    String speciesId = glyph.getSpecies();
-
 	    Species species = layout.getModel().getSpecies(speciesId);
+	    if (species == null) {
+	      continue;
+	    }
 
-	    String name = species.getName();
+	    String name = "(" + species.getName() + ")";
+	    TextGlyph textGlyph = (TextGlyph) glyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+	    if (textGlyph != null) {
+	      name = textGlyph.getText();
+	    }
 	    
 	    Node n;
 	    if (glyph.isSetBoundingBox() && glyph.getBoundingBox().isSetPosition()
@@ -137,11 +149,17 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 			  return;
 			}
 			else {
-			  // TODO order: outmost compartment -> innermost compartment
-			  // TODO skip outmoust compartment
+			  // TODO
+			  // String outmostCompartmentId = getOutmostCompartmentId(compartments);
+			  String outmostCompartmentId = "outmost";
 			  for (CompartmentGlyph c : compartments) {
+			    // TODO order: outmost compartment -> innermost compartment
+			    if (c.getId().equals(outmostCompartmentId)) {
+			      continue;
+			    }
 			    Node n;
-			    if (c.getBoundingBox() != null) {
+			    if (c.isSetBoundingBox() && c.getBoundingBox().isSetDimensions()
+			        && c.getBoundingBox().isSetPosition()) {
 			      BoundingBox bb = c.getBoundingBox();
 			      Dimensions dimensions = bb.getDimensions();
 			      Point point = bb.getPosition();
@@ -154,6 +172,16 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 			    c.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
 			  }
 			}
+	}
+	
+	/**
+	 * @param a
+	 * @param b
+	 * @return whether {@link BoundingBox} a contains {@link BoundingBox} b 
+	 */
+	private static boolean containsBoundingBox(BoundingBox a, BoundingBox b) {
+	  // TODO
+	  return false;
 	}
 
 	/* (non-Javadoc)

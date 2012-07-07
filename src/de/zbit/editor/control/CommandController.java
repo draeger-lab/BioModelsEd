@@ -48,6 +48,7 @@ import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
+import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.ext.render.AbstractRenderPlugin;
 import org.sbml.jsbml.ext.render.ColorDefinition;
 import org.sbml.jsbml.ext.render.GlobalRenderInformation;
@@ -122,58 +123,52 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-  
+
     // generate generic id
-    String genericId = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
-    String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
+    String speciesId = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
+    String nameFromPopup = this.getEditorInstance().nameDialogue(Resources.getString("GENERIC_SPECIES_NAME"));
+    if (nameFromPopup == null) {
+      return;
+    }
     logger.info("popup: " + nameFromPopup);
-  
-    /* use name as id if possible
-    String id = selectedDoc.isIdAvailable(nameFromPopup) ? nameFromPopup
-        : genericId;
-    logger.info("id: " + id);
-  
-    if ((nameFromPopup != null) && (nameFromPopup.length() > 0)) {
-      // is there any possibility in java to correctly check types before
-      // casting?
-       * */
-       
-      @SuppressWarnings("unchecked")
-      ValuePair<Double, Double> newMousePosition =
-          (ValuePair<Double, Double>) evt.getNewValue();
-      Double x = newMousePosition.getL();
-      Double y = newMousePosition.getV();
-  
-      /*
-       * layout and model references
-       */
-      Layout layout = this.view.getCurrentLayout();
-      Model model = layout.getModel();
-      String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
-      Species s = SBMLFactory.createSpecies(genericId, nameFromPopup, sboTerm, model.getLevel(), model.getVersion());
-      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId , model.getLevel(), model.getVersion(), s.getId());
-  
-      model.addSpecies(s);
-      sGlyph = SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, s.getName());
 
-      selectedDoc.setFileModified(true);
-      view.refreshTitle(layout);
+    @SuppressWarnings("unchecked")
+    ValuePair<Double, Double> newMousePosition = (ValuePair<Double, Double>) evt.getNewValue();
+    Double x = newMousePosition.getL();
+    Double y = newMousePosition.getV();
 
-      /*
-       * keep a list of all glyphs which are associated with the species
-       */
-      List<String> glyphList = new ArrayList<String>();
-      glyphList.add(sGlyph.getId());
+    // layout and model references
+    Layout layout = this.view.getCurrentLayout();
+    Model model = layout.getModel();
+    final int level = model.getLevel();
+    final int version = model.getVersion();
 
-      Map<String, List<String>> layoutGlyphMap = new HashMap<String, List<String>>();
-      layoutGlyphMap.put(layout.getId(), glyphList);
+    String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
+    String textglyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix);
 
-      s.putUserObject(SBMLEditorConstants.GLYPH_LINK_KEY, layoutGlyphMap);
-  
-//      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
-//      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
-    
-  
+    Species s = SBMLFactory.createSpecies(speciesId, nameFromPopup, sboTerm, level, version);
+    SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId , level, version, speciesId);
+    TextGlyph tGlyph = SBMLFactory.createTextGlyph(textglyphId, level, version, sGlyph, nameFromPopup);
+
+    model.addSpecies(s);
+    SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, s.getName());
+    layout.addTextGlyph(tGlyph);
+
+    selectedDoc.setFileModified(true);
+    view.refreshTitle(layout);
+
+    // keep a list of all glyphs which are associated with the species
+    List<String> glyphList = new ArrayList<String>();
+    glyphList.add(sGlyph.getId());
+
+    Map<String, List<String>> layoutGlyphMap = new HashMap<String, List<String>>();
+    layoutGlyphMap.put(layout.getId(), glyphList);
+
+    s.putUserObject(SBMLEditorConstants.GLYPH_LINK_KEY, layoutGlyphMap);
+
+    //      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
+    //      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
+
     this.state = States.normal;
   }
   
@@ -304,16 +299,16 @@ public class CommandController implements PropertyChangeListener {
     if (name.isEmpty()) {
       name = Resources.getString(SBMLEditorConstants.genericFileName);
     }
+
     /*
      * first, create a new SBMLDocument
      */
     SBMLDocument sbmlDocument = new SBMLDocument(
         SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV());
-    Model model = sbmlDocument.createModel(Resources.createValidID("m"));
+    Model model = sbmlDocument.createModel(SBMLEditorConstants.modelDefaultName);
     model.setName(name);
     model.createCompartment(SBMLEditorConstants.compartmentDefaultName);
-    
 
     /*
      * embed the new SBMLDocument in an OpenedSBMLDocument and tell the
@@ -480,6 +475,7 @@ public class CommandController implements PropertyChangeListener {
       }    
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMouseDraggedLeft)) {
+      @SuppressWarnings("unchecked")
       ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
       logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());
     }
@@ -545,6 +541,7 @@ public class CommandController implements PropertyChangeListener {
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
       if ((this.state == States.normal) && (this.nodeSelected)) {     
+          @SuppressWarnings("unchecked")
           ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
           selectedGlyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
           logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());  
@@ -661,7 +658,10 @@ public class CommandController implements PropertyChangeListener {
     }
   }
   
-  //Returns if User did not cancel saving progress 
+  /**
+   * @param doc
+   * @return if iser did not cancel saving progress
+   */
   public boolean askUserSave(OpenedSBMLDocument doc) {
     if (doc.isFileModified()) {
       int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
@@ -682,8 +682,11 @@ public class CommandController implements PropertyChangeListener {
     return true;
   }
   
+  /**
+   * @param selectedNode
+   * @return
+   */
   public SpeciesGlyph getSpeciesGlyphFromNode(Node selectedNode) {
-    
     Layout layout = this.view.getCurrentLayout();
     ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
     for (SpeciesGlyph glyph : list) {
@@ -695,6 +698,9 @@ public class CommandController implements PropertyChangeListener {
     return null;
   }
   
+  /**
+   * 
+   */
   public ReactionGlyph getReactionGlyphFromNode(Node selectedNode) {
     Layout layout = this.view.getCurrentLayout();
     ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
@@ -719,58 +725,104 @@ public class CommandController implements PropertyChangeListener {
     this.nodeSelected = false;
   }
   
+  /**
+   * 
+   */
   public void editDelete() {
     if(this.nodeSelected) {
       this.nodeDelete();
     }
   }
   
+  /**
+   * 
+   */
   public void nodeCopy() {
     this.nodeCopy = true;
     this.copyGlyph = this.selectedGlyph;
   }
   
+  /**
+   * 
+   */
   public void editCopy() {
     if(this.nodeSelected) {
       this.nodeCopy();
     }
   }
   
+  /**
+   * 
+   */
+  public void nodeRename() {
+    if (nodeSelected == true) {
+      TextGlyph textGlyph = (TextGlyph) selectedGlyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+      // TODO
+      JOptionPane.showInputDialog(Resources.getString("NEW_FILE"), Resources.getString("GENERIC_FILE_NAME"));
+    }
+  }
+  
+  /**
+   * 
+   */
   public void nodePaste() {
     Layout layout = this.view.getCurrentLayout();
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
-    .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
         
     Double x = this.pos.getL();
     Double y = this.pos.getV();
     String speciesId = this.copyGlyph.getSpecies();
     Species species = this.copyGlyph.getModel().getSpecies(speciesId);  
-    String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
+    TextGlyph originalTextGlyph = (TextGlyph) this.copyGlyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+    String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
+    String textGlyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix);
     
     if(layout.getModel() == this.copyGlyph.getModel()) {
       logger.info("nodePaste: Same Model");
       
-      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesId);
-      
       SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.copyGlyph.getName());
+
+      if (originalTextGlyph != null) {
+        TextGlyph newTextGlyph = SBMLFactory.createTextGlyph(textGlyphId,
+            SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+            SBMLView.DEFAULT_LEVEL_VERSION.getV(),
+            sGlyph,
+            originalTextGlyph.getText());
+        layout.addTextGlyph(newTextGlyph);
+      }
     }
     else {
       logger.info("nodePaste: Different Model");
       String speciesIdNew = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
       Species s = SBMLFactory.createSpecies(speciesIdNew, this.copyGlyph.getName(), species.getSBOTerm(), SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV());
       layout.getModel().addSpecies(s);
-      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesIdNew);
       SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.copyGlyph.getName());
+      
+      if (originalTextGlyph != null) {
+        TextGlyph newTextGlyph = SBMLFactory.createTextGlyph(textGlyphId,
+            SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+            SBMLView.DEFAULT_LEVEL_VERSION.getV(),
+            sGlyph,
+            originalTextGlyph.getText());
+        layout.addTextGlyph(newTextGlyph);
+      }
     }
     selectedDoc.setFileModified(true);
+    view.refreshTitle(layout);
   }
   
+  /**
+   * 
+   */
   public void editPaste() {
     if(this.nodeSelected) {
       Point point = this.copyGlyph.getBoundingBox().getPosition();
-      this.pos = new ValuePair<Double, Double> (point.getX() + 50, point.getY() + 50);
+      this.pos = new ValuePair<Double, Double>(point.getX() + 50, point.getY() + 50);
       this.nodePaste();
     }
   }

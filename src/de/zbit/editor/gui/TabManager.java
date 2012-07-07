@@ -17,6 +17,7 @@
 package de.zbit.editor.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
@@ -37,7 +38,7 @@ public class TabManager extends JTabbedPane {
   private static final long serialVersionUID = -905908829761611472L;
   private static Logger logger = Logger.getLogger(OpenedSBMLDocument.class.toString());
   private SBMLEditor editorInstance;
-  private ArrayList<Layout> listOfLayouts = new ArrayList<Layout>();
+  private List<Layout> listOfLayouts = new ArrayList<Layout>();
   
   /**
    * @param editorInstance
@@ -64,7 +65,7 @@ public class TabManager extends JTabbedPane {
       
     GraphLayoutPanel panel = createPanelFromLayout(layout);
     
-    addTab("",panel);
+    addTab("", panel);
     setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
 

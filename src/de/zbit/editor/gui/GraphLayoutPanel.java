@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -83,7 +84,7 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	@Override
 	protected Graph2D createGraphFromDocument(Layout layout) {
 		converter = new Layout2GraphML();
-	    return converter.createGraph(layout, editMode);
+		return converter.createGraph(layout, editMode);
 	}
 
   public Layout2GraphML getConverter() {
@@ -97,7 +98,7 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	 * @see de.zbit.graph.gui.TranslatorGraphLayerPanel#getOutputFileFilterForRealDocument()
 	 */
 	@Override
-	protected List getOutputFileFilterForRealDocument() {
+	protected List<FileFilter> getOutputFileFilterForRealDocument() {
 		// TODO Auto-generated method stub
 		return null;
 	}
