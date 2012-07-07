@@ -89,10 +89,14 @@ public class CommandController implements PropertyChangeListener {
   private Logger logger = Logger.getLogger(CommandController.class.getName());
   private States state;
   private SBMLView view;
-  private Node node;
-  private SpeciesGlyph glyph;
+  
+  private boolean nodeSelected = false;
   private boolean nodeCopy = false;
-  private ValuePair<Integer, Integer> pos;
+  
+  private SpeciesGlyph selectedGlyph;
+  private SpeciesGlyph copyGlyph; 
+  
+  private ValuePair<Double, Double> pos;
   
   /**
    * @param editorInstance
@@ -422,37 +426,40 @@ public class CommandController implements PropertyChangeListener {
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedLeft)) {
       if (this.state == States.normal) {
-        this.node = (Node) evt.getNewValue();
-        this.glyph = getSpeciesGlyphFromNode();
-        logger.info("Glyph selected ID: " + this.glyph.getId() + " Name: " +this.glyph.getName() + 
-          " belongs to Species: " + this.glyph.getSpecies());
+        
+        this.nodeSelected = true;
+        this.selectedGlyph = getSpeciesGlyphFromNode((Node) evt.getNewValue());
+        logger.info("Glyph selected ID: " + this.selectedGlyph.getId() + " Name: " +this.selectedGlyph.getName() + 
+          " belongs to Species: " + this.selectedGlyph.getSpecies());
       }
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
       if (this.state == States.normal) {
         
         ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
-        SpeciesGlyph glyph = getSpeciesGlyphFromNode();
-        glyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
+        this.selectedGlyph = getSpeciesGlyphFromNode((Node) evt.getNewValue());
+        selectedGlyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
         logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());        
       }
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedRight)) {
-      this.node = (Node) evt.getNewValue();
-      this.glyph = getSpeciesGlyphFromNode();
+      
+      this.nodeSelected = true;
+      this.selectedGlyph = getSpeciesGlyphFromNode((Node) evt.getNewValue());
       JPopupMenu popup = GUIFactory.createNodePopupMenu(this);
       SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
       MouseEvent e = editmode.getLastPressEvent();
       popup.show(e.getComponent(), e.getX(), e.getY());
-      logger.info("Glyph selected ID: " + this.glyph.getId() + " Name: " +this.glyph.getName() + 
-        "belongs to Species: " + this.glyph.getSpecies());
+      logger.info("Glyph selected ID: " + this.selectedGlyph.getId() + " Name: " +this.selectedGlyph.getName() + 
+        "belongs to Species: " + this.selectedGlyph.getSpecies());
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMousePressedRight)) {
       JPopupMenu popup = GUIFactory.createPastePopupMenu(this, this.nodeCopy);
       SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
       MouseEvent e = editmode.getLastPressEvent();
       popup.show(e.getComponent(), e.getX(), e.getY());
-      this.pos = new ValuePair<Integer, Integer>( e.getX(), e.getY()); 
+           
+      this.pos = new ValuePair<Double, Double>(Double.parseDouble(new Integer(e.getX()).toString()) , Double.parseDouble(new Integer(e.getY()).toString())); 
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeClickedLeft)) {
       if (this.state == States.reaction) {
@@ -578,13 +585,13 @@ public class CommandController implements PropertyChangeListener {
     return true;
   }
   
-  public SpeciesGlyph getSpeciesGlyphFromNode() {
+  public SpeciesGlyph getSpeciesGlyphFromNode(Node selectedNode) {
     
     Layout layout = this.view.getCurrentLayout();
     ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
     for (SpeciesGlyph glyph : list) {
       Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-      if (node == this.node) {
+      if (node == selectedNode) {
         return glyph;
       }
     }
@@ -596,14 +603,28 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
     .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
     
-    layout.getListOfSpeciesGlyphs().remove(glyph);
-    layout.firePropertyChange("nodeDelete", null, this.node);
+    layout.getListOfSpeciesGlyphs().remove(selectedGlyph);
+    layout.firePropertyChange("nodeDelete", null, this.selectedGlyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
     logger.info("nodeDelete in CC");
     selectedDoc.setFileModified(true);
+    this.nodeSelected = false;
+  }
+  
+  public void editDelete() {
+    if(this.nodeSelected) {
+      this.nodeDelete();
+    }
   }
   
   public void nodeCopy() {
     this.nodeCopy = true;
+    this.copyGlyph = this.selectedGlyph;
+  }
+  
+  public void editCopy() {
+    if(this.nodeSelected) {
+      this.nodeCopy();
+    }
   }
   
   public void nodePaste() {
@@ -611,29 +632,37 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
     .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
         
-    Double x = Double.valueOf(Integer.toString(this.pos.getL()));
-    Double y = Double.valueOf(Integer.toString(this.pos.getV()));
-    String speciesId = this.glyph.getSpecies();
-    Species species = this.glyph.getModel().getSpecies(speciesId);  
+    Double x = this.pos.getL();
+    Double y = this.pos.getV();
+    String speciesId = this.copyGlyph.getSpecies();
+    Species species = this.copyGlyph.getModel().getSpecies(speciesId);  
     String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
     
-    if(layout.getModel() == this.glyph.getModel()) {
+    if(layout.getModel() == this.copyGlyph.getModel()) {
       logger.info("nodePaste: Same Model");
       
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesId);
       
-      SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.glyph.getName());
+      SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.copyGlyph.getName());
     }
     else {
       logger.info("nodePaste: Different Model");
       String speciesIdNew = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
-      Species s = SBMLFactory.createSpecies(speciesIdNew, this.glyph.getName(), species.getSBOTerm(), SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV());
+      Species s = SBMLFactory.createSpecies(speciesIdNew, this.copyGlyph.getName(), species.getSBOTerm(), SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV());
       layout.getModel().addSpecies(s);
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesIdNew);
-      SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.glyph.getName());
+      SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, this.copyGlyph.getName());
     }
     selectedDoc.setFileModified(true);
+  }
+  
+  public void editPaste() {
+    if(this.nodeSelected) {
+      Point point = this.copyGlyph.getBoundingBox().getPosition();
+      this.pos = new ValuePair<Double, Double> (point.getX() + 50, point.getY() + 50);
+      this.nodePaste();
+    }
   }
 }

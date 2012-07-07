@@ -70,7 +70,6 @@ public class TabManager extends JTabbedPane {
 
     refreshTitle(layout);
     showTab(layout);
-    
     return true;
   }
   

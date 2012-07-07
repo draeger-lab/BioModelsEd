@@ -74,16 +74,16 @@ public class EditorMenu extends JMenuBar {
     GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_REDO), Resources.iconButtonRedo,
       ctrl, KeyEvent.VK_Y, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.editRedo));
     GUIFactory.createMenuItem(menuEdit,  Resources.getString(SBMLEditorConstants.MENU_EDIT_DELETE), Resources.iconButtonDelete, 
-        "DELETE", EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.editDelete));
+        "DELETE", EventHandler.create(ActionListener.class, commandcontroller, SBMLEditorConstants.editDelete));
     GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_COPY), Resources.iconButtonCopy,
       ctrl, KeyEvent.VK_C, EventHandler.create(ActionListener.class,
-        parent, SBMLEditorConstants.editCopy));
+        commandcontroller, SBMLEditorConstants.editCopy));
     GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_CUT), Resources.iconButtonCut,
       ctrl, KeyEvent.VK_X, EventHandler.create(ActionListener.class,
         parent, SBMLEditorConstants.editCut));
     GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_PASTE), Resources.iconButtonPaste,
       ctrl, KeyEvent.VK_V, EventHandler.create(ActionListener.class,
-        parent, SBMLEditorConstants.editPaste));
+        commandcontroller, SBMLEditorConstants.editPaste));
     JMenu menuLayout = GUIFactory.createMenu(this,
       Resources.getString(SBMLEditorConstants.MENU_LAYOUT));
     GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_NEW), Resources.iconButtonNew,
