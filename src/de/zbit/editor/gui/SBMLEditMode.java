@@ -16,8 +16,6 @@
  */
 package de.zbit.editor.gui;
 
-import java.awt.event.MouseEvent;
-
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
@@ -100,7 +98,7 @@ public class SBMLEditMode extends EditMode  {
     lastPositionMouseClicked = newPositionMouseClicked;
   }
   
-  @Override
+ /* @Override
   public void mouseClicked(MouseEvent evt) {
     if (evt.getButton() == MouseEvent.BUTTON1) {
       double x = evt.getX();
@@ -115,14 +113,14 @@ public class SBMLEditMode extends EditMode  {
           null, this.node);
         lastPositionMouseClicked = newPositionMouseClicked;
       } 
-      /*else {
+      else {
         ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
         firePropertyChange(SBMLEditorConstants.EditModeMouseClicked,
           lastPositionMouseClicked, newPositionMouseClicked);
         lastPositionMouseClicked = newPositionMouseClicked;
-      }*/
+      }
     }
-  }
+  }*/
     
   /*@Override
   public void mouseDraggedLeft(double x, double y) {

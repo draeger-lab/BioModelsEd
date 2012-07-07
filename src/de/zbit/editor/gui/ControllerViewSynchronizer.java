@@ -21,24 +21,17 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
-import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
-import de.zbit.editor.SBMLEditorConstants;
-import de.zbit.graph.io.def.SBGNVisualizationProperties;
-import de.zbit.graph.sbgn.ReactionNodeRealizer;
-
 import y.base.Node;
-import y.view.EdgeRealizer;
 import y.view.GenericEdgeRealizer;
-import y.view.ViewMode;
+import de.zbit.editor.SBMLEditorConstants;
 
 
 /**

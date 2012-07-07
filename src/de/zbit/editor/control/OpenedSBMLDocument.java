@@ -224,7 +224,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     
     List<Species> species = model.getListOfSpecies();
     for (Species s : species) {
-      // TODO
+      
     }
     
     List<Reaction> reactions = model.getListOfReactions();

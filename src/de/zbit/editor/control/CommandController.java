@@ -435,6 +435,22 @@ public class CommandController implements PropertyChangeListener {
           this.nodeSelected = false;
         }
       }
+      if (this.state == States.reaction) {
+        if (this.node == null) {
+          this.node = (Node) evt.getNewValue();
+          logger.info("Source Node for Reaction set.");
+        } else {
+          createReaction(this.node, (Node) evt.getNewValue());  
+          Layout layout = this.view.getCurrentLayout();
+          //FIXME use something like ValuePair, but VP needs Comparables
+          //ValuePair<Node, Node> nodes = new ValuePair<Node, Node>(this.node, (Node) evt.getNewValue());
+          layout.firePropertyChange("reactionCreated", this.node, evt.getNewValue());
+          logger.info("Target Node for Reaction set. Created Reaction");
+          this.state = States.normal;
+          this.node = null;
+        }
+      }
+      
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
       if ((this.state == States.normal) && (this.nodeSelected)) {     
@@ -461,23 +477,6 @@ public class CommandController implements PropertyChangeListener {
       popup.show(e.getComponent(), e.getX(), e.getY());
            
       this.pos = new ValuePair<Double, Double>(Double.parseDouble(new Integer(e.getX()).toString()) , Double.parseDouble(new Integer(e.getY()).toString())); 
-    }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeClickedLeft)) {
-      if (this.state == States.reaction) {
-        if (this.node == null) {
-          this.node = (Node) evt.getNewValue();
-          logger.info("Source Node for Reaction set.");
-        } else {
-          createReaction(this.node, (Node) evt.getNewValue());  
-          Layout layout = this.view.getCurrentLayout();
-          //FIXME use something like ValuePair, but VP needs Comparables
-          //ValuePair<Node, Node> nodes = new ValuePair<Node, Node>(this.node, (Node) evt.getNewValue());
-          layout.firePropertyChange("reactionCreated", this.node, evt.getNewValue());
-          logger.info("Target Node for Reaction set. Created Reaction");
-          this.state = States.normal;
-          this.node = null;
-        }
-      }
     }
   }
 
