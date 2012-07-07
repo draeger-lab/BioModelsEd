@@ -20,6 +20,7 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -62,15 +63,37 @@ public class SBMLFactory {
     return sg;
   }
   
+  /**
+   * adds Species Glyph to layout defining a new Boundingbox  by x and y
+   * @param layout
+   * @param sGlyph
+   * @param x
+   * @param y
+   * @param name
+   * @return
+   */
   public static SpeciesGlyph addSpeciesGlyphToLayout(Layout layout, SpeciesGlyph sGlyph, double x, double y, String name) {
+    return addSpeciesGlyphToLayout(layout, sGlyph, x, y, SBMLEditorConstants.glyphDefaultDepth, 
+      SBMLEditorConstants.glyphDefaultWidth, SBMLEditorConstants.glyphDefaultHeight, 
+      SBMLEditorConstants.glyphDefaultDepth, name);
+  }
+  /**
+   * adds Species Glyph to layout defining a new Boundingbox  by x and y
+   * @param layout
+   * @param sGlyph
+   * @param x
+   * @param y
+   * @param z
+   * @param width
+   * @param height
+   * @param depth
+   * @param name
+   * @return
+   */
+  public static SpeciesGlyph addSpeciesGlyphToLayout(Layout layout, SpeciesGlyph sGlyph, double x, double y, double z,
+    double width, double height, double depth, String name) {
     sGlyph.setName(name);
-    sGlyph.setBoundingBox(sGlyph.createBoundingBox(
-      SBMLEditorConstants.glyphDefaultWidth,
-      SBMLEditorConstants.glyphDefaultHeight,
-      SBMLEditorConstants.glyphDefaultDepth,
-      x,
-      y,
-      SBMLEditorConstants.glyphDefaultZ));
+    sGlyph.createBoundingBox(width, height, depth, x, y, z);
     layout.addSpeciesGlyph(sGlyph);
     return sGlyph;
   }
@@ -117,4 +140,21 @@ public class SBMLFactory {
     
     return reactionGlyph;
   }
+  
+  public static CompartmentGlyph createCompartmentGlyph(String id, int level, int version, String compartment) {
+    CompartmentGlyph cGlyph = new CompartmentGlyph(id, level, version);
+    cGlyph.setCompartment(compartment);
+    return cGlyph;
+  }
+  
+  public static ReactionGlyph createReactionGlyph(String id, int level, int version, 
+    List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs) {
+    ReactionGlyph rGlyph = new ReactionGlyph(id, level, version);
+    for(SpeciesReferenceGlyph glyph : listOfSpeciesReferenceGlyphs) {
+      rGlyph.addSpeciesReferenceGlyph(glyph);
+    }
+    return rGlyph;
+  }
+  
+  public static SpeciesReferenceGlyph createSpeciesReferenceGlyph
 }
