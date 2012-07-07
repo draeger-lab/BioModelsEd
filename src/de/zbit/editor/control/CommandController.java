@@ -94,10 +94,12 @@ public class CommandController implements PropertyChangeListener {
   private SBMLView view;
   
   private boolean nodeSelected = false;
+  private boolean reactionSelected = false;
   private boolean nodeCopy = false;
   
   private SpeciesGlyph selectedGlyph;
   private SpeciesGlyph copyGlyph; 
+  private ReactionGlyph selectedReactionGlyph;
   private Node node = null;
   
   private ValuePair<Double, Double> pos;
@@ -152,7 +154,6 @@ public class CommandController implements PropertyChangeListener {
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId , model.getLevel(), model.getVersion(), s.getId());
   
       model.addSpecies(s);
-      //TODO sGlyph.setNamedSBase(); ???
       sGlyph = SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, s.getName());
 
       selectedDoc.setFileModified(true);
@@ -205,7 +206,6 @@ public class CommandController implements PropertyChangeListener {
       //TODO Let user decide, if the Reaction is reversible 
       boolean reversible = false;
     
-      //TODO Set Bounding Box
       Reaction reaction = SBMLFactory.createReaction(selectedDoc, model.getSpecies(source.getSpecies()),
         model.getSpecies(target.getSpecies()), reversible, model.getLevel(), model.getVersion());
       ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(selectedDoc, reaction, source, target, model.getLevel(), model.getVersion());
@@ -264,7 +264,6 @@ public class CommandController implements PropertyChangeListener {
     } else if (this.state == States.inhibition) {
       modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
     }
-    //TODO modifierGlyph.setBoundingBox(boundingBox);
     modifierGlyph.setId(selectedDoc.nextGenericId("modGlyph"));
     modifierGlyph.setLevel(model.getLevel());
     modifierGlyph.setVersion(model.getVersion());
@@ -487,12 +486,17 @@ public class CommandController implements PropertyChangeListener {
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedLeft)) {
       if (this.state == States.normal) {
         
-        this.nodeSelected = true;
+        
         this.selectedGlyph = getSpeciesGlyphFromNode((Node) evt.getNewValue());
         if (this.selectedGlyph != null) {
+          this.nodeSelected = true;
+          this.reactionSelected = false;
           logger.info("Glyph selected ID: " + this.selectedGlyph.getId() + " Name: " +this.selectedGlyph.getName() + 
             " belongs to Species: " + this.selectedGlyph.getSpecies());
         } else {
+          this.selectedReactionGlyph = getReactionGlyphFromNode((Node) evt.getNewValue());
+          logger.info("Glyph selected ID: " + this.selectedReactionGlyph.getId());
+          this.reactionSelected = true;
           this.nodeSelected = false;
         }
       }
@@ -544,6 +548,11 @@ public class CommandController implements PropertyChangeListener {
           ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
           selectedGlyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
           logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());  
+      } else if ((this.state == States.normal) && (this.reactionSelected)) {
+         ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
+         this.selectedReactionGlyph.getBoundingBox().getPosition().setX(pos.getL());
+         this.selectedReactionGlyph.getBoundingBox().getPosition().setY(pos.getV());
+         logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());
       }
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedRight)) {
@@ -682,6 +691,18 @@ public class CommandController implements PropertyChangeListener {
       if (node == selectedNode) {
         return glyph;
       }
+    }
+    return null;
+  }
+  
+  public ReactionGlyph getReactionGlyphFromNode(Node selectedNode) {
+    Layout layout = this.view.getCurrentLayout();
+    ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
+    for (ReactionGlyph glyph : list) {
+      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      if (node == selectedNode) {
+        return glyph;
+      } 
     }
     return null;
   }
