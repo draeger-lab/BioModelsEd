@@ -35,6 +35,7 @@ import javax.swing.JPopupMenu;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
@@ -45,6 +46,8 @@ import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.ext.render.AbstractRenderPlugin;
 import org.sbml.jsbml.ext.render.ColorDefinition;
 import org.sbml.jsbml.ext.render.GlobalRenderInformation;
@@ -173,11 +176,11 @@ public class CommandController implements PropertyChangeListener {
     this.state = States.normal;
   }
   
-  private void createReaction(Node sourceNode, Node targetNode) {
-    // TODO Draw Reaction, add Reaction to Model
+  private ReactionGlyph createReaction(Node sourceNode, Node targetNode) {
       OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
 
+      //FIXME Name needed?
       //String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
       //logger.info("popup: " + nameFromPopup);
       Layout layout = this.view.getCurrentLayout();
@@ -195,13 +198,14 @@ public class CommandController implements PropertyChangeListener {
         }
       }
       if ((source == null) || (target == null)) {
-        return;
+        return null;
       }
       
       Model model = layout.getModel();
       //TODO Let user decide, if the Reaction is reversible 
       boolean reversible = false;
     
+      //TODO Set Bounding Box
       Reaction reaction = SBMLFactory.createReaction(selectedDoc, model.getSpecies(source.getSpecies()),
         model.getSpecies(target.getSpecies()), reversible, model.getLevel(), model.getVersion());
       ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(selectedDoc, reaction, source, target, model.getLevel(), model.getVersion());
@@ -209,7 +213,66 @@ public class CommandController implements PropertyChangeListener {
       model.addReaction(reaction);
       layout.add(reactionGlyph);
       
+      return reactionGlyph;
     }
+  
+  private void createModifier(Node sourceNode, Node targetNode) {
+    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+    .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+
+    //FIXME Name needed?
+    //String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
+    //logger.info("popup: " + nameFromPopup);
+    Layout layout = this.view.getCurrentLayout();
+    ListOf<SpeciesGlyph> speciesList = layout.getListOfSpeciesGlyphs();
+    ListOf<ReactionGlyph> reactionList = layout.getListOfReactionGlyphs();
+    SpeciesGlyph source = null;
+    ReactionGlyph target = null;
+  
+    for (SpeciesGlyph glyph : speciesList) {
+      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      if (sourceNode == node) {
+        source = glyph;
+      }
+    }
+    for (ReactionGlyph glyph : reactionList) {
+      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      if (targetNode == node) {
+        target = glyph;
+      }
+    }
+    if ((source == null) && (target == null)) {
+      return;
+    }
+    
+    Model model = layout.getModel();
+    Reaction targetReaction = (Reaction) target.getReactionInstance();
+    
+    //Creation of a modifier
+    ModifierSpeciesReference modifier = new ModifierSpeciesReference();
+    modifier.setId(selectedDoc.nextGenericId("mod"));
+    modifier.setLevel(model.getLevel());
+    modifier.setVersion(model.getVersion());
+    modifier.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
+    modifier.setSpecies(source.getSpecies());
+    targetReaction.addModifier(modifier);
+    
+    //Creation of a modifier glyph
+    SpeciesReferenceGlyph modifierGlyph = new SpeciesReferenceGlyph();
+    if (this.state == States.catalysis) {
+      modifierGlyph.setRole(SpeciesReferenceRole.MODIFIER);
+    } else if (this.state == States.inhibition) {
+      modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
+    }
+    //TODO modifierGlyph.setBoundingBox(boundingBox);
+    modifierGlyph.setId(selectedDoc.nextGenericId("modGlyph"));
+    modifierGlyph.setLevel(model.getLevel());
+    modifierGlyph.setVersion(model.getVersion());
+    modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
+    modifierGlyph.setSpeciesGlyph(source.getId());
+    target.addSpeciesReferenceGlyph(modifierGlyph);
+    
+  }
 
   private void createEmptySet(PropertyChangeEvent evt) {
     createSpecies(evt, SBO.getEmptySet());
@@ -372,8 +435,6 @@ public class CommandController implements PropertyChangeListener {
 
     if (evt.getPropertyName().equals(SBMLEditorConstants.openingDone)) {
       OpenedSBMLDocument doc = (OpenedSBMLDocument) evt.getNewValue();
-
-      //FIXME Changed order, so that a Layout definitely exists when adding RenderInformation. Does that make a difference?
       /*
        * add first or new default layout to view
        */
@@ -440,12 +501,38 @@ public class CommandController implements PropertyChangeListener {
           this.node = (Node) evt.getNewValue();
           logger.info("Source Node for Reaction set.");
         } else {
-          createReaction(this.node, (Node) evt.getNewValue());  
+          ReactionGlyph rGlyph = createReaction(this.node, (Node) evt.getNewValue());  
           Layout layout = this.view.getCurrentLayout();
           //FIXME use something like ValuePair, but VP needs Comparables
           //ValuePair<Node, Node> nodes = new ValuePair<Node, Node>(this.node, (Node) evt.getNewValue());
-          layout.firePropertyChange("reactionCreated", this.node, evt.getNewValue());
+          ArrayList<Object> list = new ArrayList<Object>();
+          list.add(this.node);
+          list.add(evt.getNewValue());
+          list.add(rGlyph);
+          layout.firePropertyChange("reactionCreated", null, list);
           logger.info("Target Node for Reaction set. Created Reaction");
+          this.state = States.normal;
+          this.node = null;
+        }
+      }
+      if ((this.state == States.catalysis) || (this.state == States.inhibition)) {
+        if (this.node == null) {
+          this.node = (Node) evt.getNewValue();
+          logger.info("Source Node for " + this.state + " set.");
+        } else {
+          createModifier(this.node, (Node) evt.getNewValue());
+          Layout layout = this.view.getCurrentLayout();
+          ArrayList<Object> list = new ArrayList<Object>();
+          list.add(this.node);
+          list.add(evt.getNewValue());
+          if (this.state == States.catalysis) {
+            list.add("Catalysis");
+          } else if (this.state == States.inhibition) {
+            list.add("Inhibition");
+          }
+          
+          layout.firePropertyChange("modifierCreated", null, list);
+          logger.info("Target Node for " + this.state + " set.");
           this.state = States.normal;
           this.node = null;
         }

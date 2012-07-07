@@ -97,6 +97,7 @@ public class SBMLFactory {
     targetRef.setSpeciesGlyph(target.getId());
     targetRef.setRole(SpeciesReferenceRole.PRODUCT);
     
+    
     reactionGlyph.addSpeciesReferenceGlyph(sourceRef);
     reactionGlyph.addSpeciesReferenceGlyph(targetRef);
     reactionGlyph.setSBOTerm(SBO.getStateTransition());

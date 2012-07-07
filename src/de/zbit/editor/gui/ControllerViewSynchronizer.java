@@ -17,6 +17,7 @@
 package de.zbit.editor.gui;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
@@ -24,6 +25,7 @@ import javax.swing.tree.TreeNode;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
@@ -102,21 +104,28 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       this.panel.getGraph2DView().getGraph2D().removeNode(node);
       panel.getGraph2DView().updateView();
       logger.info("CVS : Removed node");
+      
     } else if (evt.getPropertyName().equals("reactionCreated")) {
-      //TODO Use ReactionNodeRealizer or EdgeRealizer or something like that
-      //panel.getGraph2DView().getGraph2D().createEdge((Node) evt.getOldValue(), (Node) evt.getNewValue(),(EdgeRealizer) new ReactionNodeRealizer());
-      //panel.getGraph2DView().getGraph2D().createEdge((Node) evt.getOldValue(), (Node) evt.getNewValue());
       
-  
-  
-      //SBMLEditMode editMode = (SBMLEditMode) panel.getGraph2DView().getViewModes().next();
-   
-      
+      ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
+      Node source = (Node) list.get(0);
+      Node target = (Node) list.get(1);
+      ReactionGlyph reactionGlyph = (ReactionGlyph) list.get(2);
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
-      createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), (Node) evt.getOldValue(), (Node) evt.getNewValue(),
-         new GenericEdgeRealizer());
+      Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
+         new GenericEdgeRealizer(), null);
+      reactionGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, reactionNode);
       logger.info("CVS : Reaction Drawn");
       
+    } else if (evt.getPropertyName().equals("modifierCreated")) {
+      ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
+      Node source = (Node) list.get(0);
+      Node target = (Node) list.get(1);
+      String state = (String) list.get(2);
+      SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
+      createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
+        new GenericEdgeRealizer(), state);
+      logger.info("CVS : Modifier Drawn");
     }
     
     else {

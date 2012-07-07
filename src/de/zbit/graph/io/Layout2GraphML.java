@@ -26,10 +26,15 @@ import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.Point;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 
 import y.base.Node;
+import y.view.GenericEdgeRealizer;
 import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.gui.SBMLCreateEdgeMode;
 
 /**
  * @author Andreas Dr&aum;ger
@@ -59,6 +64,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
     }
 		initCompartments(layout);
 		initSpeciesGlyphs(layout);
+		//TODO Initialize Reaction Modifiers
 		initReactionGlyphs(layout);
 		initTextGlyphs(layout);
 	}
@@ -75,8 +81,22 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 * @param layout
 	 */
 	private void initReactionGlyphs(Layout layout) {
-		// TODO Auto-generated method stub
-		
+	  ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
+	  for (ReactionGlyph r : list) {
+	    Node source = null;
+	    Node target = null;
+	    ListOf<SpeciesReferenceGlyph> refList = r.getListOfSpeciesReferenceGlyphs();
+	    for (SpeciesReferenceGlyph sRef : refList) {
+	      if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE) {
+	        source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+	      }
+	      if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT) {
+	        target = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+	      }
+	    }
+	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
+	    createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), null);	
+	  }
 	}
 
 	/**

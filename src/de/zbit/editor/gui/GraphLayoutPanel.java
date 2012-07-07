@@ -49,6 +49,7 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	 * from our {@link SBMLDocument}.
 	 */
 	private Layout2GraphML converter = null;
+	private SBMLEditMode editMode;
 	
 	/**
 	 * Maps a element id to a list of graphical objects associated
@@ -60,8 +61,9 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	 * 
 	 * @param layout
 	 */
-	public GraphLayoutPanel(Layout layout) {
+	public GraphLayoutPanel(Layout layout, SBMLEditMode editMode) {
 	  super(null, null, null, layout, false);
+	  this.editMode = editMode;
 		if (layout == null)
       System.out.print("Layout = null");
 		
@@ -81,7 +83,7 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	@Override
 	protected Graph2D createGraphFromDocument(Layout layout) {
 		converter = new Layout2GraphML();
-	    return converter.createGraph(layout);
+	    return converter.createGraph(layout, editMode);
 	}
 
   public Layout2GraphML getConverter() {

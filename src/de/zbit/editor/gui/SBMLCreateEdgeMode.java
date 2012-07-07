@@ -16,13 +16,13 @@
  */
 package de.zbit.editor.gui;
 
-import de.zbit.graph.sbgn.ReactionNodeRealizer;
 import y.base.Edge;
 import y.base.Node;
 import y.view.Arrow;
 import y.view.CreateEdgeMode;
 import y.view.EdgeRealizer;
 import y.view.Graph2D;
+import de.zbit.graph.sbgn.ReactionNodeRealizer;
 
 
 /**
@@ -36,11 +36,17 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
    
   }
   
-  @Override
-  public Edge createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer) {
+
+  public Node createEdgeNode(Graph2D graph, Node start, Node target, EdgeRealizer realizer, String modifier) {
     if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
       Edge e = super.createEdge(graph, start, target, realizer);
-      return e;
+      //TODO Distinction between INHIBITION and CATALYSIS
+      if (modifier.equals("Catalysis")) {
+        graph.getRealizer(e).setArrow(Arrow.CIRCLE);
+      } else if (modifier.equals("Inhibition")) {
+        graph.getRealizer(e).setArrow(Arrow.DASH);
+      }
+      return null;
     }
     
     ReactionNodeRealizer nre = new ReactionNodeRealizer();
@@ -52,6 +58,6 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
     nre.setCenter((graph.getRealizer(start).getCenterX() + graph.getRealizer(target).getCenterX())/2d, (graph.getRealizer(start).getCenterY() + graph.getRealizer(target).getCenterY())/2d);
     ((EdgeRealizer)graph.getRealizer(e2)).setArrow(Arrow.DELTA);
 
-    return e2;
+    return reactionNode;
   }
 }

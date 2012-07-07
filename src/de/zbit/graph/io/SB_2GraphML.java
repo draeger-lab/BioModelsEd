@@ -43,6 +43,7 @@ import y.view.NodeLabel;
 import y.view.NodeRealizer;
 import y.view.hierarchy.GroupNodeRealizer;
 import y.view.hierarchy.HierarchyManager;
+import de.zbit.editor.gui.SBMLEditMode;
 import de.zbit.graph.GraphTools;
 import de.zbit.graph.io.def.GenericDataMap;
 import de.zbit.graph.io.def.GraphMLmaps;
@@ -97,6 +98,11 @@ public abstract class SB_2GraphML <T> {
    * The translated graph
    */
   protected Graph2D simpleGraph;
+  
+  /**
+   * The used SBMLEditMode
+   */
+  protected SBMLEditMode editMode;
   
   /**
    * This set should contain all nodes that need to be layouted
@@ -184,7 +190,8 @@ public abstract class SB_2GraphML <T> {
   }
   
   
-  public Graph2D createGraph(T document) {
+  public Graph2D createGraph(T document, SBMLEditMode editMode) {
+    this.editMode = editMode;
     // Reset all variables and create the graph instance
     crateNewGraph();
     
