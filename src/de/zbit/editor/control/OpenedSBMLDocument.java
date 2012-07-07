@@ -29,9 +29,11 @@ import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
@@ -224,17 +226,35 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     
     List<Species> species = model.getListOfSpecies();
     for (Species s : species) {
-      
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix),
+        s.getLevel(), s.getVersion(), s.getId());
+      layout.add(sGlyph);
     }
     
     List<Reaction> reactions = model.getListOfReactions();
     for (Reaction r : reactions) {
-      // TODO
+      //FIXME Always the first Reactant and Product are used
+      SpeciesGlyph source = null;
+      SpeciesGlyph target = null;
+      List<SpeciesGlyph> sGlyphs = layout.getListOfSpeciesGlyphs();
+      for (SpeciesGlyph sGlyph : sGlyphs) {
+        if (sGlyph.getSpecies() == r.getListOfReactants().get(0).getSpecies()) {
+          source = sGlyph;
+        } else if (sGlyph.getSpecies() == r.getListOfProducts().get(0).getSpecies()) {
+          target = sGlyph;
+        }
+      }
+      if ((source != null) && (target != null)) {
+        ReactionGlyph rGlyph = SBMLFactory.createReactionGlyph(this, r, source, target, r.getLevel(), r.getVersion());
+        layout.add(rGlyph);
+      }
     }
     
     List<Compartment> compartments = model.getListOfCompartments();
     for (Compartment c : compartments) {
-      // TODO
+      //FIXME Just a Glyph whitout information
+      CompartmentGlyph cGlyph = layout.createCompartmentGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix), c.getId());
+      layout.addCompartmentGlyph(cGlyph);
     }
     
     return true;

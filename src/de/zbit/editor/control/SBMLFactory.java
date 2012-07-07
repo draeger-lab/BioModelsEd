@@ -72,8 +72,9 @@ public class SBMLFactory {
     return sGlyph;
   }
   
+  
   public static Reaction createReaction(OpenedSBMLDocument selectedDoc, Species source, Species target, boolean reversible, int level, int version){
-    String id = selectedDoc.nextGenericId("r");
+    String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericReactionIdPrefix);
     Reaction reaction = new Reaction(id, level, version);
     SpeciesReference sourceRef = new SpeciesReference(source);
     SpeciesReference targetRef = new SpeciesReference(target);
@@ -85,13 +86,13 @@ public class SBMLFactory {
   }
   
   public static ReactionGlyph createReactionGlyph(OpenedSBMLDocument selectedDoc, Reaction reaction, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
-    String id = selectedDoc.nextGenericId("rGlyph");
+    String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
     ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);
-    id = selectedDoc.nextGenericId("rGlyphRef");
+    id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix+ "Ref");
     SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(id, level, version);
     sourceRef.setSpeciesGlyph(source.getId());
     sourceRef.setRole(SpeciesReferenceRole.SUBSTRATE);
-    id = selectedDoc.nextGenericId("rGlyphRef");
+    id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix+ "Ref");
     SpeciesReferenceGlyph targetRef = new SpeciesReferenceGlyph(id, level, version);
     targetRef.setSpeciesGlyph(target.getId());
     targetRef.setRole(SpeciesReferenceRole.PRODUCT);

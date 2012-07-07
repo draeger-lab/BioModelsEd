@@ -37,6 +37,7 @@ public class SBMLEditorConstants {
   public static final String EditModeMousePressedRight = "mousePressedRight in EditMode";
   
   public static final String genericId = "s";
+  public static final String genericReactionIdPrefix = "r";
   public static final String genericGlyphIdPrefix = "glyph";
   public static final int glyphDefaultDepth = 0;
   public static final int glyphDefaultHeight = 100;
