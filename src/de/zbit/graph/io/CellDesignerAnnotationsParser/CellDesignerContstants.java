@@ -35,16 +35,10 @@ public class CellDesignerContstants {
   public static final String reaction = "reaction";
   public static final String baseReactant = "baseReactant";
   public static final String baseProduct = "baseProcuct";
-  public static final String reactionPrefix = "reaction:";
-  public static final String baseReactantPrefix = "baseReactant:";
-  public static final String baseProductPrefix = "baseProcuct:";
   public static final String alias = "alias";
   public static final String reactantLink = "reactantLink";
   public static final String productLink = "productLink";
   public static final String modification = "modification";
-  public static final String speciesPrefix = "speciesAlias:";
-  public static final String boundsPrefix = "bounds:";
-  public static final String compartmentPrefix = "compartmentAlias:";
   public static final String reversible = "reversible";
   public static final String speciesReference = "speciesReference";
   public static final String reactant = "reactant";
@@ -52,4 +46,11 @@ public class CellDesignerContstants {
   public static final String listOfProducts = "listOfProducts";
   public static final String reactionType = "reactionType";
   public static final String stateTransition = "STATE_TRANSITION";
+  public static final String product = "product";
+  public static final String metaid = "metaid";
+  public static final String protein = "PROTEIN";
+  public static final String speciesClass = "class";
+  public static final String footer = "</annotation>\n";
+  public static final String header = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" +
+          "<annotation xmlns:celldesigner=\"http://www.sbml.org/2001/ns/celldesigner\">\n";
 }

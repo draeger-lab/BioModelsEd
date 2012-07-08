@@ -17,24 +17,18 @@
 package de.zbit.graph.io.CellDesignerAnnotationsParser;
 
 import java.io.BufferedReader;
-
-import de.zbit.editor.control.SBMLFactory;
-import de.zbit.graph.io.CellDesignerAnnotationsParser.CellDesignerContstants;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -44,18 +38,14 @@ import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
-import org.sbml.jsbml.ext.layout.BoundingBox;
-import org.sbml.jsbml.ext.layout.CompartmentGlyph;
-import org.sbml.jsbml.ext.layout.Dimensions;
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
-import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
-import org.sbml.jsbml.ext.layout.Point;
-import org.sbml.jsbml.ext.layout.ReactionGlyph;
-import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
+
+import de.zbit.editor.control.SBMLFactory;
 
 
 
@@ -84,11 +74,6 @@ public class CellDesignerAnnotationParser implements Runnable {
 		}
 	}
 
-	/**
-	 * 
-	 */
-	private int ReactionCounter = 0;
-	
 	/**
 	 * Direct link to the layout.
 	 */
@@ -140,7 +125,8 @@ public class CellDesignerAnnotationParser implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Reads out CellDesigner annotations and converts them into
+	 * a layout according to JSBML Layout extension
 	 * @param inputStream
 	 * @throws XMLStreamException 
 	 */
@@ -150,35 +136,38 @@ public class CellDesignerAnnotationParser implements Runnable {
 			logger.info("SBMLDocument didn't contain any model.");
 			return;
 		}
-		
-		boolean newSpeciesAlias = false;
-		boolean newCompartmentAlias = false;
-		String reactionRole = "";
-		
-		Map<String, String> attributeMap = new HashMap<String,String>();
-		List<SpeciesReferenceGlyph> listOfReactants = new ArrayList<SpeciesReferenceGlyph>();
-		List<SpeciesReferenceGlyph> listOfProducts = new ArrayList<SpeciesReferenceGlyph>();
-    
+	
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader streamReader = inputFactory.createXMLStreamReader(inputStream);
 		
-		// xmlns:celldesigner="http://www.sbml.org/2001/ns/celldesigner"
+		// local variables to hold all parsed infomation before it can be used to create Layout Objects 
+		boolean newSpeciesAlias = false;
+		boolean newCompartmentAlias = false;
+		String reactionRole = "";
+		Map<String, String> attributeMap = new HashMap<String,String>();
+		List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs = new LinkedList<SpeciesReferenceGlyph>();
+    
+		
 		// parse all tokens
 		while (streamReader.hasNext()) {
 			
 		  // get basis information
 		  int eventType = streamReader.getEventType();
 			
+		  // on XML-opening tab
       if (eventType == XMLStreamConstants.START_ELEMENT) {
-        String name = streamReader.getLocalName();
+        // parses attributes
         parse(attributeMap, streamReader);
+        
+        // Local XML-Name
+        String name = streamReader.getLocalName();
+        
         if (name.equals(CellDesignerContstants.listOfReactants)) {
-          reactionRole = "reactant";
+          reactionRole = CellDesignerContstants.reactant;
         }
         else if (name.equals(CellDesignerContstants.listOfProducts)) {
-          reactionRole = "product";
+          reactionRole = CellDesignerContstants.product;
         }
-        // parsing species alias
         else if (name.equals(CellDesignerContstants.speciesAlias)) {
           newSpeciesAlias = true;
 				}
@@ -186,26 +175,27 @@ public class CellDesignerAnnotationParser implements Runnable {
 				  newCompartmentAlias = true;
 				}
 				else if (name.equals(CellDesignerContstants.bounds)) {
-          if (newSpeciesAlias) {
+				  if (newSpeciesAlias) {
             createSpeciesGlyph(attributeMap);
           }
           else if (newCompartmentAlias) {
             createCompartment(attributeMap);
           }
-          attributeMap = new HashMap<String, String>();
           newSpeciesAlias = false;
           newCompartmentAlias = false;
+          attributeMap = new HashMap<String, String>();
 				}
-				//FIXME Check if reaction is STATE_TRANSITION
-				else if (name.equals(CellDesignerContstants.reaction)) {
-          //newReaction = true;
+				else if (name.equals(CellDesignerContstants.alias)) {
+          attributeMap.put(CellDesignerContstants.alias, streamReader.getElementText());
+          listOfSpeciesReferenceGlyphs.add(createSpeciesReferenceGlyph(attributeMap, reactionRole));
         }
-        else if (name.equals(CellDesignerContstants.baseReactant)) {
-          listOfReactants.add(createSpeciesReferenceGlyph(attributeMap, reactionRole));
+				else if (name.equals(CellDesignerContstants.speciesClass)) {
+          attributeMap.put(CellDesignerContstants.speciesClass, streamReader.getElementText());
+          listOfSpeciesReferenceGlyphs.add(createSpeciesReferenceGlyph(attributeMap, reactionRole));
         }
-        else if (name.equals(CellDesignerContstants.speciesReference)) {
-          listOfReactants.add(createSpeciesReferenceGlyph(attributeMap, reactionRole));
-        }
+				else if (name.equals(CellDesignerContstants.reactionType)) {
+				  attributeMap.put(CellDesignerContstants.reactionType, streamReader.getElementText());
+				}
 			}	
       else if (eventType == XMLStreamConstants.END_ELEMENT) {
         String name = streamReader.getLocalName();
@@ -216,44 +206,122 @@ public class CellDesignerAnnotationParser implements Runnable {
           reactionRole = "";
         }
         else if (name.equals(CellDesignerContstants.reaction)) {
-			    createReaction(attributeMap);
+			    createReaction(attributeMap, listOfSpeciesReferenceGlyphs);
+			    // after the reaction is created all references are reset
+			    listOfSpeciesReferenceGlyphs = new LinkedList<SpeciesReferenceGlyph>();
 			    attributeMap = new HashMap<String, String>();
 			  }
 			}
-     // else if ()
 			streamReader.next();
 		}
 	}
 
+  /**
+   * creates a SpeciesReferenceGlyph
+   * BoundingBox is set to (0,0,0,0)
+   * @param attributeMap
+   * @param type
+   * @return SpeciesReferenceGlyph
+   */
   private SpeciesReferenceGlyph createSpeciesReferenceGlyph(
-    Map<String, String> attributeMap, String basereactant) {
-    logger.info("adding " + basereactant);
-    return null;
-  }
-
-  private void createReaction(Map<String, String> attributeMap) {
+    Map<String, String> attributeMap, String type) {
     int level = layout.getLevel();
     int version = layout.getVersion();
-    String r = CellDesignerContstants.reactionPrefix;
-    String br = CellDesignerContstants.baseReactantPrefix;
-    String bp = CellDesignerContstants.baseProductPrefix;
-    
-    String id = attributeMap.get(r + CellDesignerContstants.id + getRandomSuffix());
-    
-    ReactionGlyph rGlyph = new ReactionGlyph(id, level, version);
-
-    SpeciesReferenceGlyph sRGlyph1 = new SpeciesReferenceGlyph(id, level, version);
-    SpeciesReferenceGlyph sRGlyph2 = new SpeciesReferenceGlyph(id, level, version);
+    String sR = CellDesignerContstants.speciesReference;
+    String id = attributeMap.get(sR + CellDesignerContstants.species) + "_ref" + getRandomSuffix();
+    String speciesReference = attributeMap.get(CellDesignerContstants.alias);
+    SpeciesReferenceRole role = getRole(type);
+    double x = 0;
+    double y = 0;
+    double width = 0;
+    double height = 0;
+    return SBMLFactory.createSpeciesReferenceGlyph(id, level, version, x, y, width, height, role, speciesReference);
   }
 
+  /**
+   * Transfers reaction terms used in CellDesigner annotations
+   * into SpeciesReferenceRoles used in JSBML
+   * @param parsed type
+   * @return SpeciesRefereneRole
+   */
+  private SpeciesReferenceRole getRole(String type) {
+    if (type.equals(CellDesignerContstants.baseProduct)) {
+      return SpeciesReferenceRole.PRODUCT;
+    }
+    else if (type.equals(CellDesignerContstants.product)) {
+      return SpeciesReferenceRole.SIDEPRODUCT;
+    }
+    else if (type.equals(CellDesignerContstants.baseReactant)) {
+      return SpeciesReferenceRole.SUBSTRATE;
+    }
+    else if (type.equals(CellDesignerContstants.reactant)) {
+      return SpeciesReferenceRole.SIDESUBSTRATE;
+    }
+    else {
+      return SpeciesReferenceRole.UNDEFINED;
+    }
+  }
+  
+  /**
+   * Transfers reaction terms used in CellDesigner annotations
+   * into SBO terms used in JSBML
+   * @param reactionType
+   * @return according SBO term
+   */
+  private int getSBO(String reactionType) {
+    if (reactionType.equals(CellDesignerContstants.stateTransition)) {
+      return SBO.getStateTransition();
+    }
+    else {
+      return SBO.getUnknownTransition();
+    }
+  }
+  
+  /**
+   * creates a ReactionGlyph, includes all SpeciesRefernceGlyphs
+   * and adds it to the layout
+   * the BoundingBox is set to 0,0,0,0
+   * and no Curve is set
+   * @param attributeMap
+   * @param listOfSpeciesReferenceGlyphs
+   */
+  private void createReaction(Map<String, String> attributeMap, List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs) {
+    int level = layout.getLevel();
+    int version = layout.getVersion();
+    String r = CellDesignerContstants.reaction;
+    
+    String reaction = attributeMap.get(r + CellDesignerContstants.id);
+    String id = reaction + getRandomSuffix();
+    String reactionType = attributeMap.get(CellDesignerContstants.reactionType);
+    double x = 0;
+    double y = 0;
+    double width = 0;
+    double height = 0;
+    
+    layout.add(SBMLFactory.createReactionGlyph(id, level, version, listOfSpeciesReferenceGlyphs, 
+      x, y, width, height, reaction, getSBO(reactionType)));
+  }
+
+  /**
+   * generates random id suffices _randRANDOMINTEGER
+   * to avoid collision with other ids
+   * this is neccessary in some cases since ids cannot be counter
+   * checked against the models ids
+   * @return random id suffix
+   */
   private String getRandomSuffix() {
     Random rand = new Random();
-    return NumberFormat.getInstance(Locale.ENGLISH).format(rand.nextDouble());
+    return "_rand" + Integer.toString(Math.abs(rand.nextInt()));
   }
 
+  /**
+   * Reads out attributes form map, creats a compartment glyph
+   * and adds it to the layout
+   * @param attributeMap
+   */
   private void createCompartment(Map<String, String> attributeMap) {
-    String c = CellDesignerContstants.compartmentPrefix;
-    String b = CellDesignerContstants.boundsPrefix;
+    String c = CellDesignerContstants.compartment;
+    String b = CellDesignerContstants.bounds;
     String id = attributeMap.get(c + CellDesignerContstants.id);
     String compartment = attributeMap.get(c + CellDesignerContstants.compartment);
     String x = attributeMap.get(b + CellDesignerContstants.x);
@@ -266,19 +334,19 @@ public class CellDesignerAnnotationParser implements Runnable {
     Double actualWidth = width == null ? 0 : Double.parseDouble(width);
     Double actualHeigth = height == null ? 0 : Double.parseDouble(height);
     
-    addCompartmentGlyphToLayout(id, compartment, actualX, actualY, actualWidth, actualHeigth);
+    layout.addCompartmentGlyph(SBMLFactory.createCompartmentGlyph(id, layout.getLevel(), layout.getVersion(), compartment,
+      actualX, actualY, actualWidth, actualHeigth));
   }
 
-  private void addCompartmentGlyphToLayout(String id, String compartment, Double actualX,
-    Double actualY, Double actualWidth, Double actualHeigth) {
-    CompartmentGlyph cGlyph = SBMLFactory.createCompartmentGlyph(id, layout.getLevel(), layout.getVersion(), compartment);
-    cGlyph.createBoundingBox(actualWidth, actualHeigth, 0, actualX, actualY, 0);
-    layout.addCompartmentGlyph(cGlyph);
-  }
   
+  /**
+   * Reads out attributes form map, creats a species glyph
+   * and adds it to the layout
+   * @param attributeMap
+   */
   private void createSpeciesGlyph(Map<String, String> attributeMap) {
-    String s = CellDesignerContstants.speciesPrefix;
-    String b = CellDesignerContstants.boundsPrefix;
+    String s = CellDesignerContstants.species;
+    String b = CellDesignerContstants.bounds;
     String id = attributeMap.get(s + CellDesignerContstants.id);
     String speciesId = attributeMap.get(s + CellDesignerContstants.species);
     String x = attributeMap.get(b + CellDesignerContstants.x);
@@ -291,27 +359,19 @@ public class CellDesignerAnnotationParser implements Runnable {
     Double actualWidth = width == null ? 0 : Double.parseDouble(width);
     Double actualHeigth = height == null ? 0 : Double.parseDouble(height);
 
-    addSpeciesGlyphToLayout(id, speciesId, actualX, actualY, actualWidth, actualHeigth);
+    layout.add(SBMLFactory.createSpeciesGlyph(id, layout.getLevel(), layout.getVersion(), 
+      actualX, actualY, actualWidth, actualHeigth, speciesId));
   }
 
-  private void addSpeciesGlyphToLayout(String id, String speciesId, Double actualX,
-    Double actualY, Double actualWidth, Double actualHeigth) {
-    SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(id, layout.getLevel(), layout.getVersion(), speciesId);
-    sGlyph.createBoundingBox(actualWidth, actualHeigth, 0, actualX, actualY, 0);
-    layout.add(sGlyph);
-  }
-	
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
 		if ((sbmlDocument != null) && (sbmlDocument.isSetModel())) {
 			String annotation =
-					"<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" +
-					"<annotation xmlns:celldesigner=\"http://www.sbml.org/2001/ns/celldesigner\">\n" +
-					//sbmlDocument.getModel().getAnnotation().getNonRDFannotation() +
+					CellDesignerContstants.header +
 					readCellDesignerAnnotations() +
-					"</annotation>\n";
+					CellDesignerContstants.footer;
 			System.err.print(annotation);
 			try {
 				readCDLayout(new BufferedReader(new StringReader(annotation)));
@@ -321,6 +381,11 @@ public class CellDesignerAnnotationParser implements Runnable {
 		}
 	}
 	
+	/**
+	 * Reads all relevant lines from xmlFile for parsing
+	 * CellDesigner annotations
+	 * @return annotations
+	 */
 	public String readCellDesignerAnnotations() {
 	  StringBuffer annotations = new StringBuffer();
 	  
@@ -328,7 +393,6 @@ public class CellDesignerAnnotationParser implements Runnable {
       BufferedReader bufferedReader = new BufferedReader(new FileReader(xmlFile));
       String line;
       
-      //TODO parse "<reaction " Tag, because it contains the ReactionId (or create Ids for Reactions)
       while((line = bufferedReader.readLine()) != null) {
         while((line != null) && (!line.startsWith("<annotation>"))) {
           line = bufferedReader.readLine();
@@ -350,21 +414,24 @@ public class CellDesignerAnnotationParser implements Runnable {
         }
       }      
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return annotations.toString();
 	}
 	
 	/**
-	 * Parse context object
+	 * parses attributes and inserts them into map
+	 * all attributes can be accessed by
+	 * localName:attributeName
+	 * @param map
+	 * @param reader
 	 */
 	private void parse(Map<String,String> map, XMLStreamReader reader) {
 	  for (int i = 0; i < reader.getAttributeCount(); i++) {
-	    String attributeName = reader.getLocalName() + ":" + reader.getAttributeLocalName(i);
+	    String attributeName = reader.getLocalName() + reader.getAttributeLocalName(i);
 	    String attributeValue = reader.getAttributeValue(i);
 	    map.put(attributeName, attributeValue);
-	    logger.info(attributeName + " : " +  attributeValue);
+	    logger.info(reader.getLocalName() + ":" + reader.getAttributeLocalName(i) + " = " +  attributeValue);
 	  }
 	}
 	
