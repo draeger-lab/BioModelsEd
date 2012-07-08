@@ -17,6 +17,7 @@
 
 package de.zbit.editor.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
 import java.util.logging.Logger;
@@ -104,16 +105,23 @@ public class EditorToolbar extends JToolBar {
         EventHandler
             .create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
     
-    add(layoutComboBox);
     
+    layoutComboBox.setMaximumSize(new Dimension(150, 24));
+    add(layoutComboBox);
     GUIFactory.addButton(this,
         Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN),
+        Resources.iconTab,
+        0,
+        0,
         EventHandler.create(ActionListener.class,
             parent,
             SBMLEditorConstants.openLayoutInTab));
  
     GUIFactory.addButton(this,
         Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN_NEW),
+        Resources.iconTabNew,
+        0,
+        0,
         EventHandler.create(ActionListener.class,
             parent,
             SBMLEditorConstants.openLayoutInNewTab));

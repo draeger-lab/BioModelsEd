@@ -49,6 +49,8 @@ public class Resources {
   public static final ImageIcon iconMacromolecule = Resources.createImageIcon("images/ButtonMacromolecule.png", null);
   public static final ImageIcon iconEmptySet = Resources.createImageIcon("images/ButtonEmptySet.png", null);
   public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
+  public static final ImageIcon iconTab = Resources.createImageIcon("images/ButtonTab.png", null);
+  public static final ImageIcon iconTabNew = Resources.createImageIcon("images/ButtonTabNew.png", null);
   
 	// Get localized String in default language
 	public static String getString(String key){
