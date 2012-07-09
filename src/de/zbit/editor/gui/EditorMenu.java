@@ -38,7 +38,7 @@ public class EditorMenu extends JMenuBar {
    * 
    */
   private static final long serialVersionUID = -3245574503778953826L;
-
+  
 
   public EditorMenu(CommandController commandcontroller, SBMLView parent) {
     JMenu menuFile = GUIFactory.createMenu(this,
@@ -95,5 +95,18 @@ public class EditorMenu extends JMenuBar {
     JMenu menuHelp = GUIFactory.createMenu(this, Resources.getString(SBMLEditorConstants.MENU_HELP));
     GUIFactory.createMenuItem(menuHelp, Resources.getString(SBMLEditorConstants.MENU_HELP_ABOUT), Resources.iconButtonAbout,
                 EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.helpAbout));
+    
+    setEnableState(false);
+        
+  }
+  
+  public void setEnableState(boolean anyDocumentsOpen) {
+    
+    this.getMenu(0).getItem(3).setEnabled(false);
+    this.getMenu(0).getItem(5).setEnabled(false);
+    this.getMenu(0).getItem(6).setEnabled(false);
+    this.getMenu(0).getItem(7).setEnabled(false);
+    this.getMenu(1).setEnabled(anyDocumentsOpen);
+    this.getMenu(2).setEnabled(anyDocumentsOpen);
   }
 }

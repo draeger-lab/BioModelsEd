@@ -17,6 +17,7 @@
 
 package de.zbit.editor.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
@@ -125,6 +126,8 @@ public class EditorToolbar extends JToolBar {
         EventHandler.create(ActionListener.class,
             parent,
             SBMLEditorConstants.openLayoutInNewTab));
+    
+    setEnableState(false);
   }
   
   private static class ListItem {
@@ -160,5 +163,16 @@ public class EditorToolbar extends JToolBar {
     int sel = layoutComboBox.getSelectedIndex();
     logger.info(msg + "selected index: " + sel);
     return listOfLayouts.get(sel);
+  }
+
+  /**
+   * @param anyDocumentsOpen
+   */
+  public void setEnableState(boolean anyDocumentsOpen) {
+    Component[] array = this.getComponents();
+    
+    for (int i = 0; i < array.length; i++) {
+      array[i].setEnabled(anyDocumentsOpen);
+    }    
   }
 }

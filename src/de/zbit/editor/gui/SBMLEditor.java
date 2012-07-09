@@ -49,6 +49,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   private CommandController commandController;
   private EditorToolbar editorToolbar;
   private TabManager tabManager;
+  private EditorMenu editorMenu;
   private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
   
   /**
@@ -91,7 +92,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   private void setUpGUI() throws Throwable {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     frame = new JFrame(PROGRAM_NAME);
-    frame.setJMenuBar(new EditorMenu(commandController, this));
+    this.editorMenu = new EditorMenu(commandController, this);
+    frame.setJMenuBar(editorMenu);
     editorToolbar = new EditorToolbar(this);
     frame.add(editorToolbar, BorderLayout.NORTH);
     frame.add(tabManager);
@@ -135,6 +137,11 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   @Override
   public boolean fileNew() {
     return commandController.fileNew();
+  }
+  
+  public void setEnableState(boolean anyDocumentsOpen) {
+    this.editorMenu.setEnableState(anyDocumentsOpen);
+    this.editorToolbar.setEnableState(anyDocumentsOpen);
   }
   
   /**

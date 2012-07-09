@@ -59,18 +59,20 @@ public class TabManager extends JTabbedPane {
    */
   public boolean addTab(Layout layout) {
     if(listOfLayouts.contains(layout)) {
-      logger.info("List contains layout: ID: "+ layout.getId() + " Name: " +layout.getName());
+      logger.warning("List contains layout: ID: "+ layout.getId() + " Name: " +layout.getName());
     }
     listOfLayouts.add(layout);
       
     GraphLayoutPanel panel = createPanelFromLayout(layout);
     
     addTab("", panel);
-    setSelectedComponent(panel);
+    setSelectedIndex(getIndexFromLayout(layout));
+    //setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
 
     refreshTitle(layout);
     showTab(layout);
+    this.editorInstance.setEnableState(true);
     return true;
   }
   
@@ -80,7 +82,7 @@ public class TabManager extends JTabbedPane {
    */
   public boolean closeTab(Layout layout) {
     if (isLayoutOpen(layout)) {
-      int index = this.listOfLayouts.indexOf(layout);
+      int index = getIndexFromLayout(layout);
       remove(index);
       this.listOfLayouts.remove(index);
       logger.info("ID: " + layout.getId() + " Name: " + layout.getName()
@@ -109,9 +111,10 @@ public class TabManager extends JTabbedPane {
   public void showTab(Layout layout) {
     if(layout == null) {
       this.editorInstance.updateComboBox(new ListOf<Layout>());
+      this.editorInstance.setEnableState(false);
     }
     else {
-      setSelectedIndex(this.listOfLayouts.indexOf(layout));
+      setSelectedIndex(getIndexFromLayout(layout));
       OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
       this.editorInstance.updateComboBox(doc.getListOfLayouts());
     }
@@ -120,12 +123,13 @@ public class TabManager extends JTabbedPane {
   /**
    * 
    */
-  public void closeAllTabs() {
+  public boolean closeAllTabs() {
     while (isAnySelected()) {
       if(this.editorInstance.layoutClose(getCurrentLayout()) == false) {
-        break;
+        return false;
       }
     }
+    return true;
   }
 
   /**
@@ -134,16 +138,23 @@ public class TabManager extends JTabbedPane {
   public void refreshTitle(Layout layout) {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
 
-    for(Layout l : doc.getListOfLayouts()) {
+    TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(layout));
+    String title = doc.getAssociatedFilename()+": "+ layout.getName();
+    if(doc.isFileModified()) {
+      title = "*"+title;
+    }
+    component.setTitle(title);
+    
+    /*for(Layout l : doc.getListOfLayouts()) {
       if(isLayoutOpen(l)) {
-        TabComponent component = (TabComponent) getTabComponentAt(this.listOfLayouts.indexOf(l));
+        TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(layout));
         String title = doc.getAssociatedFilename()+": "+ l.getName();
         if(doc.isFileModified()) {
           title = "*"+title;
         }
         component.setTitle(title);
       }
-    }
+    }*/
   }
 
   /**
@@ -151,11 +162,27 @@ public class TabManager extends JTabbedPane {
    * @return
    */
   public boolean isLayoutOpen(Layout layout) {
-    return this.listOfLayouts.contains(layout);
+    for(Layout l : this.listOfLayouts) {
+      if (layout == l) {
+        return true;
+      }
+    }
+    return false;
   }  
   
   public boolean isAnySelected() {
     return getSelectedIndex() != -1;
+  }
+  
+  private int getIndexFromLayout(Layout layout) {
+    int index = 0;
+    for(Layout l : this.listOfLayouts) {
+      if (layout == l) {
+        return index;
+      }
+      index+=1;
+    }
+    return -1;
   }
   
   public boolean isAnyOpenFromDocument(Layout layout) {
@@ -178,7 +205,7 @@ public class TabManager extends JTabbedPane {
    * @param layout
    */
   public void changeTab(Layout oldLayout, Layout newLayout) {
-    int index = listOfLayouts.indexOf(oldLayout);
+    int index = getIndexFromLayout(oldLayout);
     
     listOfLayouts.set(index, newLayout);
 

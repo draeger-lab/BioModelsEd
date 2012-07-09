@@ -337,7 +337,7 @@ public class CommandController implements PropertyChangeListener {
   public void fileQuit() {
     if (this.fileManager.anyFileIsModified()) {
       int returnVal = GUIFactory.createQuestionClose(this.view.getFrame());
-      if (returnVal == JOptionPane.YES_OPTION) {
+      if (returnVal == JOptionPane.YES_OPTION && this.view.getTabManager().closeAllTabs()) {
         System.exit(0);
       }
     } else {
