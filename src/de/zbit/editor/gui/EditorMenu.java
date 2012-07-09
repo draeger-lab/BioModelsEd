@@ -102,10 +102,10 @@ public class EditorMenu extends JMenuBar {
   
   public void setEnableState(boolean anyDocumentsOpen) {
     
-    this.getMenu(0).getItem(3).setEnabled(false);
-    this.getMenu(0).getItem(5).setEnabled(false);
-    this.getMenu(0).getItem(6).setEnabled(false);
-    this.getMenu(0).getItem(7).setEnabled(false);
+    this.getMenu(0).getItem(3).setEnabled(anyDocumentsOpen);
+    this.getMenu(0).getItem(5).setEnabled(anyDocumentsOpen);
+    this.getMenu(0).getItem(6).setEnabled(anyDocumentsOpen);
+    this.getMenu(0).getItem(7).setEnabled(anyDocumentsOpen);
     this.getMenu(1).setEnabled(anyDocumentsOpen);
     this.getMenu(2).setEnabled(anyDocumentsOpen);
   }
