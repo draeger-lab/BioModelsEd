@@ -53,9 +53,10 @@ public class SBMLFactory {
 	
 	//TODO Species only with Compartment
   public static Species createSpecies(String id, String name,
-    int sboTerm, int level, int version) {
+    int sboTerm, int level, int version, String compartmentId) {
     Species s = new Species(id, name, level, version);
     s.setSBOTerm(sboTerm);
+    s.setCompartment(compartmentId);
     return s;
   }
 
@@ -97,14 +98,31 @@ public class SBMLFactory {
     return sGlyph;
   }
   
-  public static TextGlyph createTextGlyph(String id, int level, int version, GraphicalObject graphicalObject, String text) {
+  /**
+   * @param id
+   * @param level
+   * @param version
+   * @param graphicalObject
+   * @param speciesId
+   * @return
+   */
+  public static TextGlyph createTextGlyph(String id, int level, int version, GraphicalObject graphicalObject, String speciesId) {
     TextGlyph tg = new TextGlyph(id, level, version);
     tg.setGraphicalObject(graphicalObject);
-    tg.setText(text);
+    tg.setOriginOfText(speciesId);
     graphicalObject.putUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY, tg);
     return tg;
   }
   
+  /**
+   * @param selectedDoc
+   * @param source
+   * @param target
+   * @param reversible
+   * @param level
+   * @param version
+   * @return
+   */
   public static Reaction createReaction(OpenedSBMLDocument selectedDoc, Species source, Species target, boolean reversible, int level, int version){
     String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericReactionIdPrefix);
     Reaction reaction = new Reaction(id, level, version);
@@ -117,6 +135,15 @@ public class SBMLFactory {
     return reaction;
   }
   
+  /**
+   * @param selectedDoc
+   * @param reaction
+   * @param source
+   * @param target
+   * @param level
+   * @param version
+   * @return
+   */
   public static ReactionGlyph createReactionGlyph(OpenedSBMLDocument selectedDoc, Reaction reaction, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
     String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
     ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);

@@ -120,8 +120,12 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 
 	    String name = "(" + species.getName() + ")";
 	    TextGlyph textGlyph = (TextGlyph) glyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
-	    if (textGlyph != null) {
-	      name = textGlyph.getText();
+	    if (textGlyph != null && textGlyph.isSetNamedSBase()) {
+	      String namedSBase = textGlyph.getNamedSBase();
+	      Species originSpecies = textGlyph.getModel().getSpecies(namedSBase);
+	      if (originSpecies != null && originSpecies.isSetName()) {
+	        name = originSpecies.getName();
+	      }
 	    }
 	    
 	    Node n;

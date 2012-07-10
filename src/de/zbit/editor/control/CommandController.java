@@ -73,22 +73,19 @@ public class CommandController implements PropertyChangeListener {
    * species creation
    */
   private enum States {
-    catalysis, emptySet, inhibition, macromolecule, mousePressedCatalysis, mousePressedInhibition, mousePressedReaction, normal, reaction, simpleMolecule, unknownMolecule,
+    catalysis,
+    emptySet,
+    inhibition,
+    macromolecule,
+    mousePressedCatalysis,
+    mousePressedInhibition,
+    mousePressedReaction,
+    normal,
+    reaction,
+    simpleMolecule,
+    unknownMolecule
   }
-//  private enum States {
-//    /*
-//     * normal mode, view graph
-//     */
-//    MODE_VIEW,
-//    /*
-//     * insert a SBOTerm object
-//     */
-//    MODE_SBO,
-//    /*
-//     * insert a render object
-//     */
-//    MODE_RENDER
-//  }
+
   private FileManager fileManager;
   private Logger logger = Logger.getLogger(CommandController.class.getName());
   private States state;
@@ -146,9 +143,10 @@ public class CommandController implements PropertyChangeListener {
     String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
     String textglyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix);
 
-    Species s = SBMLFactory.createSpecies(speciesId, nameFromPopup, sboTerm, level, version);
+    String compartmentId = findCompartmentId(x, y);
+    Species s = SBMLFactory.createSpecies(speciesId, nameFromPopup, sboTerm, level, version, compartmentId);
     SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId , level, version, speciesId);
-    TextGlyph tGlyph = SBMLFactory.createTextGlyph(textglyphId, level, version, sGlyph, nameFromPopup);
+    TextGlyph tGlyph = SBMLFactory.createTextGlyph(textglyphId, level, version, sGlyph, speciesId);
 
     model.addSpecies(s);
     SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, s.getName());
@@ -172,6 +170,15 @@ public class CommandController implements PropertyChangeListener {
     this.state = States.normal;
   }
   
+  /**
+   * @param x
+   * @param y
+   * @return
+   */
+  private String findCompartmentId(Double x, Double y) {
+    return view.findCompartmentId(x, y);
+  }
+
   private ReactionGlyph createReaction(Node sourceNode, Node targetNode) {
       OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
@@ -790,14 +797,19 @@ public class CommandController implements PropertyChangeListener {
             SBMLView.DEFAULT_LEVEL_VERSION.getL(),
             SBMLView.DEFAULT_LEVEL_VERSION.getV(),
             sGlyph,
-            originalTextGlyph.getText());
+            originalTextGlyph.getNamedSBase());
         layout.addTextGlyph(newTextGlyph);
       }
     }
     else {
       logger.info("nodePaste: Different Model");
       String speciesIdNew = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
-      Species s = SBMLFactory.createSpecies(speciesIdNew, this.copyGlyph.getName(), species.getSBOTerm(), SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV());
+      Species s = SBMLFactory.createSpecies(speciesIdNew,
+          this.copyGlyph.getName(),
+          species.getSBOTerm(),
+          SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+          SBMLView.DEFAULT_LEVEL_VERSION.getV(),
+          selectedDoc.getDefaultCompartment());
       layout.getModel().addSpecies(s);
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(glyphId, SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV(), speciesIdNew);

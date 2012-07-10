@@ -115,4 +115,10 @@ public interface SBMLView {
    * 
    */
   public void openLayoutInNewTab();
+
+  /**
+   * @param x
+   * @param y
+   */
+  public String findCompartmentId(Double x, Double y);
 }

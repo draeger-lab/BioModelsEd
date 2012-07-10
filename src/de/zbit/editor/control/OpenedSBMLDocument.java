@@ -317,5 +317,20 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       return new ListOf<Layout>();
     }
   }
+
+
+  /**
+   * @return
+   */
+  public String getDefaultCompartment() {
+    Model model = this.document.getModel();
+    List<Compartment> compartments = model.getListOfCompartments();
+    if (compartments.size() > 0) {
+      return compartments.get(0).getId();
+    }
+    else {
+      return "";
+    }
+  }
     
 }

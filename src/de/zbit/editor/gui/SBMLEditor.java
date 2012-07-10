@@ -412,5 +412,15 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
         Resources.getString("DIALOG_ABOUT_TITLE"),
         JOptionPane.PLAIN_MESSAGE
         );
+  }
+
+
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#findCompartmentId(java.lang.Double, java.lang.Double)
+   */
+  @Override
+  public String findCompartmentId(Double x, Double y) {
+    // TODO determine compartment under Point x,y
+    return SBMLEditorConstants.compartmentDefaultName;
   } 
 }
