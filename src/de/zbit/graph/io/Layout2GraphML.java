@@ -66,11 +66,37 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 		initCompartments(layout);
 		initTextGlyphs(layout);
 		initSpeciesGlyphs(layout);
-		//TODO Initialize Reaction Modifiers
 		initReactionGlyphs(layout);
+		initReactionModifiers(layout);
+		initTextGlyphs(layout);
 	}
 
-	/**
+	private void initReactionModifiers(Layout layout) {
+	  SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
+	  ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
+    for (ReactionGlyph r : list) {
+      ListOf<SpeciesReferenceGlyph> refList = r.getListOfSpeciesReferenceGlyphs();
+      for (SpeciesReferenceGlyph sRef : refList) {
+        if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.MODIFIER) {
+          Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          if ((source != null) && (target != null)) {
+            createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Catalysis");
+          }
+        }
+        if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.INHIBITOR) {
+          Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          if ((source != null) && (target != null)) {
+            createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Inhibition");
+          }
+        }
+      }
+    }
+    
+  }
+
+  /**
 	 * @param layout
 	 */
 	private void initTextGlyphs(Layout layout) {
@@ -101,7 +127,8 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	      }
 	    }
 	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
-	    createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), null);	
+	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), null);	
+	    r.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
 	  }
 	}
 
