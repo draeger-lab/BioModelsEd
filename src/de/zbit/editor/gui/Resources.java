@@ -48,6 +48,9 @@ public class Resources {
   public static final ImageIcon iconSimpleMolecule = Resources.createImageIcon("images/ButtonSimpleMolecule.png", null);
   public static final ImageIcon iconMacromolecule = Resources.createImageIcon("images/ButtonMacromolecule.png", null);
   public static final ImageIcon iconEmptySet = Resources.createImageIcon("images/ButtonEmptySet.png", null);
+  public static final ImageIcon iconTransition = Resources.createImageIcon("images/ButtonTransition.png", null);
+  public static final ImageIcon iconCatalysis = Resources.createImageIcon("images/ButtonCatalysis.png", null);
+  public static final ImageIcon iconInhibition = Resources.createImageIcon("images/ButtonInhibition.png", null);
   public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
   public static final ImageIcon iconTab = Resources.createImageIcon("images/ButtonTab.png", null);
   public static final ImageIcon iconTabNew = Resources.createImageIcon("images/ButtonTabNew.png", null);

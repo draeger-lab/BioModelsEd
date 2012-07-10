@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -91,9 +92,6 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    //TreeNodeChangeEvent event = (TreeNodeChangeEvent) evt;
-    //TODO Paint anew with new Doc?
-    //panel.getConverter().createGraph(panel.getDocument());
     logger.info(evt.getPropertyName());
     if(evt.getPropertyName().equals("nodeDelete")){
       Node node = (Node) evt.getNewValue();
@@ -103,13 +101,20 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       
     } else if (evt.getPropertyName().equals("reactionCreated")) {
       
+      String reversible = "False";
       ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
       Node source = (Node) list.get(0);
       Node target = (Node) list.get(1);
       ReactionGlyph reactionGlyph = (ReactionGlyph) list.get(2);
+      
+      Reaction reaction = (Reaction) reactionGlyph.getReactionInstance();
+      if (reaction.getReversible()) {
+       reversible = "True";
+      }
+      
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
       Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
-         new GenericEdgeRealizer(), null);
+         new GenericEdgeRealizer(), reversible);
       reactionGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, reactionNode);
       logger.info("CVS : Reaction Drawn");
       

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
@@ -115,6 +116,13 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	private void initReactionGlyphs(Layout layout) {
 	  ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
 	  for (ReactionGlyph r : list) {
+	    String reversible = "False";
+	    
+	    Reaction reaction = (Reaction) r.getReactionInstance();
+      if (reaction.getReversible()) {
+       reversible = "True";
+      }
+	    
 	    Node source = null;
 	    Node target = null;
 	    ListOf<SpeciesReferenceGlyph> refList = r.getListOfSpeciesReferenceGlyphs();
@@ -127,7 +135,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	      }
 	    }
 	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
-	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), null);	
+	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), reversible);	
 	    r.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
 	  }
 	}

@@ -40,7 +40,6 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
   public Node createEdgeNode(Graph2D graph, Node start, Node target, EdgeRealizer realizer, String modifier) {
     if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
       Edge e = super.createEdge(graph, start, target, realizer);
-      //TODO Distinction between INHIBITION and CATALYSIS
       if (modifier.equals("Catalysis")) {
         graph.getRealizer(e).setArrow(Arrow.CIRCLE);
       } else if (modifier.equals("Inhibition")) {
@@ -52,11 +51,15 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
     ReactionNodeRealizer nre = new ReactionNodeRealizer();
     Node reactionNode = graph.createNode(nre);
 
-    Edge e1 = graph.createEdge(start, reactionNode);
+    Edge e1 = graph.createEdge(reactionNode, start);
     Edge e2 = graph.createEdge(reactionNode, target);;
     
     nre.setCenter((graph.getRealizer(start).getCenterX() + graph.getRealizer(target).getCenterX())/2d, (graph.getRealizer(start).getCenterY() + graph.getRealizer(target).getCenterY())/2d);
     ((EdgeRealizer)graph.getRealizer(e2)).setArrow(Arrow.DELTA);
+    
+    if (modifier.equals("True")) {
+      ((EdgeRealizer) graph.getRealizer(e1)).setArrow(Arrow.DELTA);
+    }
 
     return reactionNode;
   }

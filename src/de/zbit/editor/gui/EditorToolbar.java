@@ -83,7 +83,7 @@ public class EditorToolbar extends JToolBar {
     
     GUIFactory.addButton(this,
         Resources.getString(SBMLEditorConstants.REACTION),
-        Resources.iconPositive,
+        Resources.iconTransition,
         0,
         0,
         EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addReaction));
@@ -91,7 +91,7 @@ public class EditorToolbar extends JToolBar {
     GUIFactory
         .addButton(this,
             Resources.getString(SBMLEditorConstants.CATALYSIS),
-            Resources.iconPositive,
+            Resources.iconCatalysis,
             0,
             0,
             EventHandler.create(ActionListener.class,
@@ -100,7 +100,7 @@ public class EditorToolbar extends JToolBar {
     
     GUIFactory.addButton(this,
         Resources.getString(SBMLEditorConstants.INHIBITION),
-        Resources.iconPositive,
+        Resources.iconInhibition,
         0,
         0,
         EventHandler
