@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.beans.EventHandler;
 import java.util.logging.Logger;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
@@ -127,8 +128,15 @@ public class EditorToolbar extends JToolBar {
             parent,
             SBMLEditorConstants.openLayoutInNewTab));
     
+    GUIFactory.addCheckbox(this, 
+      Resources.getString(SBMLEditorConstants.REVERSIBLE),
+      EventHandler.create(ActionListener.class,
+        parent,
+        SBMLEditorConstants.reversible));
+    
     setEnableState(false);
   }
+  
   
   private static class ListItem {
     private final String text;

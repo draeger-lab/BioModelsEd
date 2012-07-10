@@ -280,6 +280,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     this.commandController.stateInhibition();
   }
   
+  public void reversible() {
+    this.commandController.changeReversible();
+  }
+  
   public String nameDialogue(String s) {
     return JOptionPane.showInputDialog(Resources.getString("NEW_SPECIES"), s);
   }

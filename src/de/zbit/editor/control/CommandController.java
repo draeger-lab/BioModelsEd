@@ -89,6 +89,7 @@ public class CommandController implements PropertyChangeListener {
   private FileManager fileManager;
   private Logger logger = Logger.getLogger(CommandController.class.getName());
   private States state;
+  private boolean reversible;
   private SBMLView view;
   
   private boolean nodeSelected = false;
@@ -183,15 +184,11 @@ public class CommandController implements PropertyChangeListener {
       OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
 
-      //FIXME Name needed?
-      //String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
-      //logger.info("popup: " + nameFromPopup);
       Layout layout = this.view.getCurrentLayout();
       ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
       SpeciesGlyph source = null;
       SpeciesGlyph target = null;
      
-      
       for (SpeciesGlyph glyph : list) {
         Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
         if (node == sourceNode) {
@@ -205,12 +202,11 @@ public class CommandController implements PropertyChangeListener {
       }
       
       Model model = layout.getModel();
-      //TODO Let user decide, if the Reaction is reversible 
-      boolean reversible = false;
     
       Reaction reaction = SBMLFactory.createReaction(selectedDoc, model.getSpecies(source.getSpecies()),
         model.getSpecies(target.getSpecies()), reversible, model.getLevel(), model.getVersion());
       ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(selectedDoc, reaction, source, target, model.getLevel(), model.getVersion());
+      reaction.setName(reaction.getId());
       
       model.addReaction(reaction);
       layout.add(reactionGlyph);
@@ -222,9 +218,6 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
     .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
 
-    //FIXME Name needed?
-    //String nameFromPopup = this.getEditorInstance().nameDialogue(genericId);
-    //logger.info("popup: " + nameFromPopup);
     Layout layout = this.view.getCurrentLayout();
     ListOf<SpeciesGlyph> speciesList = layout.getListOfSpeciesGlyphs();
     ListOf<ReactionGlyph> reactionList = layout.getListOfReactionGlyphs();
@@ -257,6 +250,7 @@ public class CommandController implements PropertyChangeListener {
     modifier.setVersion(model.getVersion());
     modifier.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
     modifier.setSpecies(source.getSpecies());
+    modifier.setName(modifier.getId());
     targetReaction.addModifier(modifier);
     
     //Creation of a modifier glyph
@@ -271,6 +265,7 @@ public class CommandController implements PropertyChangeListener {
     modifierGlyph.setVersion(model.getVersion());
     modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
     modifierGlyph.setSpeciesGlyph(source.getId());
+    modifierGlyph.setName(modifierGlyph.getId());
     target.addSpeciesReferenceGlyph(modifierGlyph);
     
   }
@@ -510,8 +505,6 @@ public class CommandController implements PropertyChangeListener {
         } else {
           ReactionGlyph rGlyph = createReaction(this.node, (Node) evt.getNewValue());  
           Layout layout = this.view.getCurrentLayout();
-          //FIXME use something like ValuePair, but VP needs Comparables
-          //ValuePair<Node, Node> nodes = new ValuePair<Node, Node>(this.node, (Node) evt.getNewValue());
           ArrayList<Object> list = new ArrayList<Object>();
           list.add(this.node);
           list.add(evt.getNewValue());
@@ -618,6 +611,10 @@ public class CommandController implements PropertyChangeListener {
   public void stateUnknownMolecule() {
     this.state = States.unknownMolecule;
     logger.info(this.state.toString());
+  }
+  
+  public void changeReversible() {
+    this.reversible = !this.reversible;
   }
 
   public boolean closeTab(Layout layout) {

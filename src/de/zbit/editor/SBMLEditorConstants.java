@@ -133,6 +133,7 @@ public class SBMLEditorConstants {
   public static final String INHIBITION = "INHIBITION";
   public static final String MENU_TAB_OPEN_NEW = "MENU_TAB_OPEN_NEW";
   public static final String MENU_TAB_OPEN = "MENU_TAB_OPEN";
+  public static final String REVERSIBLE = "REVERSIBLE";
   //Actions
   public static final String addMacromolecule = "addMacromolecule";
   public static final String addInhibition = "addInhibition";
@@ -143,4 +144,5 @@ public class SBMLEditorConstants {
   public static final String addEmptySet = "addEmptySet";
   public static final String openLayoutInNewTab = "openLayoutInNewTab";
   public static final String openLayoutInTab = "openLayoutInTab";
+  public static final String reversible = "reversible";
 }

@@ -22,6 +22,7 @@ import java.beans.EventHandler;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -135,6 +136,26 @@ public class GUIFactory {
     }
     toolbar.add(button);
     return button;
+  }
+  
+  /**
+   * Add a checkbox to a given toolbar
+   * 
+   * @param toolbar
+   * @param name
+   * @param l
+   * @return
+   */
+  public static JCheckBox addCheckbox(JToolBar toolbar, String name,
+    ActionListener... l) {
+    JCheckBox checkbox = new JCheckBox(name);
+    if (l != null) {
+      for (ActionListener listener : l) {
+        checkbox.addActionListener(listener);
+      }
+    }
+    toolbar.add(checkbox);
+    return checkbox;
   }
 
 
