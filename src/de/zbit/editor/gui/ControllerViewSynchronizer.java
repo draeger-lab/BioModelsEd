@@ -75,15 +75,17 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       //FIXME speciesGlyph hat kein Model
       //Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
-     Node n = panel.getConverter().createNode(speciesGlyph.getId(),
-          s.getName(),
-          s.getSBOTerm(),
-          boundingBox.getPosition().getX(),
-          boundingBox.getPosition().getY(),
-          boundingBox.getDimensions().getWidth(),
-          boundingBox.getDimensions().getHeight());
-      panel.getGraph2DView().updateView();
-      speciesGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+      if (boundingBox != null) {
+        Node n = panel.getConverter().createNode(speciesGlyph.getId(),
+            s.getName(),
+            s.getSBOTerm(),
+            boundingBox.getPosition().getX(),
+            boundingBox.getPosition().getY(),
+            boundingBox.getDimensions().getWidth(),
+            boundingBox.getDimensions().getHeight());
+        panel.getGraph2DView().updateView();
+        speciesGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+      }
     }
   }
 

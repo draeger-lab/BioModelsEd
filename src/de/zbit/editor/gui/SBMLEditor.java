@@ -184,6 +184,14 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return JOptionPane.showInputDialog(Resources.getString("NEW_LAYOUT"), Resources.getString("GENERIC_LAYOUT_NAME"));
   }
   
+  //TODO Add String to Resources
+  /**
+   * Asks user, if Glyphs should be created for all Structures in the model
+   */
+  public int askUserCreateLayoutInformation() {
+    return JOptionPane.showConfirmDialog(null, "Create Generic Layout Information?", "No Layout Information found.", 0);
+  }
+  
   @Override
   public boolean fileOpen() throws FileNotFoundException {
     return commandController.fileOpen();

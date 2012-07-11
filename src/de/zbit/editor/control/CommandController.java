@@ -236,7 +236,7 @@ public class CommandController implements PropertyChangeListener {
         target = glyph;
       }
     }
-    if ((source == null) && (target == null)) {
+    if ((source == null) || (target == null)) {
       return;
     }
     
@@ -431,10 +431,19 @@ public class CommandController implements PropertyChangeListener {
 
     if (evt.getPropertyName().equals(SBMLEditorConstants.openingDone)) {
       OpenedSBMLDocument doc = (OpenedSBMLDocument) evt.getNewValue();
+      
+      //TODO DefaultLayout isn't always empty.
       /*
        * add first or new default layout to view
        */
-      this.view.addLayout(doc.getFirstLayoutOrNew());
+      Layout layout = doc.getFirstLayoutOrNew();
+      this.view.addLayout(layout);
+      if (layout.getName().equals(SBMLEditorConstants.layoutDefaultName)) {
+         int newInformation = this.view.askUserCreateLayoutInformation();
+         if (newInformation == 0) {
+           doc.createLayoutInformation();
+         }
+      }
       /*
        * notify fileManager about newly opened document
        */

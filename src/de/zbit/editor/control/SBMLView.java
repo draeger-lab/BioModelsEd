@@ -62,6 +62,7 @@ public interface SBMLView {
 
   public File askUserOpenDialog();
   public File askUserSaveDialog();
+  public int askUserCreateLayoutInformation();
 
   public JFrame getFrame();
 
