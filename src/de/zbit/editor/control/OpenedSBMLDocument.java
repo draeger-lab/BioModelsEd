@@ -288,9 +288,12 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       layout.add(sGlyph);
     }
     
+    //TODO TextGlyphs für SpeciesGlyphs
+    
     List<Reaction> reactions = model.getListOfReactions();
     for (Reaction r : reactions) {
       //FIXME Always the first Reactant and Product are used
+      //Maybe doesn't work
       SpeciesGlyph source = null;
       SpeciesGlyph target = null;
       List<SpeciesGlyph> sGlyphs = layout.getListOfSpeciesGlyphs();

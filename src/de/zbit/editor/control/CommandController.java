@@ -747,12 +747,25 @@ public class CommandController implements PropertyChangeListener {
     this.nodeSelected = false;
   }
   
+  public void reactionDelete() {
+    Layout layout = this.view.getCurrentLayout();
+    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
+    .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    
+    layout.getListOfReactionGlyphs().remove(this.selectedReactionGlyph);
+    layout.firePropertyChange("nodeDelete", null, this.selectedReactionGlyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
+    selectedDoc.setFileModified(true);
+    this.reactionSelected = false;
+  }
+  
   /**
    * 
    */
   public void editDelete() {
     if(this.nodeSelected) {
       this.nodeDelete();
+    } else if (this.reactionSelected) {
+      this.reactionDelete();
     }
   }
   
