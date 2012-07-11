@@ -138,23 +138,24 @@ public class TabManager extends JTabbedPane {
   public void refreshTitle(Layout layout) {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
 
-    TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(layout));
+    /*TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(layout));
     String title = doc.getAssociatedFilename()+": "+ layout.getName();
     if(doc.isFileModified()) {
       title = "*"+title;
     }
     component.setTitle(title);
-    
-    /*for(Layout l : doc.getListOfLayouts()) {
+    */
+    for(Layout l : doc.getListOfLayouts()) {
       if(isLayoutOpen(l)) {
-        TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(layout));
+        TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(l));
         String title = doc.getAssociatedFilename()+": "+ l.getName();
         if(doc.isFileModified()) {
           title = "*"+title;
         }
         component.setTitle(title);
+        logger.info("Tab title changed: Index: " + getIndexFromLayout(l) +" Name: " + title);
       }
-    }*/
+    }
   }
 
   /**
