@@ -59,6 +59,9 @@ public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
    */
   protected OpenedSBMLDocument doInBackground() throws Exception {
     return new OpenedSBMLDocument(SBMLReader.read(stream), file.getAbsolutePath());
+    /*CellDesignerAnnotationParser parser = new CellDesignerAnnotationParser(file);
+    parser.run();
+    return new OpenedSBMLDocument(parser.getSBMLDocument(), file.getAbsolutePath());*/
   }
 
 
