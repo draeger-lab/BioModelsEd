@@ -36,11 +36,13 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
@@ -253,23 +255,18 @@ public class CellDesignerAnnotationParser implements Runnable {
     String id = attributeMap.get(sR + CellDesignerContstants.species) + "_ref" + getRandomSuffix();
     String speciesReference = attributeMap.get(CellDesignerContstants.alias);
     SpeciesReferenceRole role = getRole(type);
-    double x = 0;
-    double y = 0;
-    double width = 0;
-    double height = 0;
-    
     assert(listOfSpeciesReferenceGlyphs != null);
     
     /*
-     * check for double entries since baseProduct/Reactant are added seperately
+     * checking for double entries since baseProduct/Reactant are added seperately
      */
     for (SpeciesReferenceGlyph srGlyph : listOfSpeciesReferenceGlyphs) {
       if (srGlyph.getSpeciesReference().equals(speciesReference)) {
-        logger.info("found twice"); 
+        logger.info("found twice");
         return listOfSpeciesReferenceGlyphs;
       }
     }
-    SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(id, level, version, x, y, width, height, role, speciesReference);
+    SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(id, level, version, role, speciesReference);
     boolean done = listOfSpeciesReferenceGlyphs.add(srGlyph);
     logger.info("created SRG " + done);
     return listOfSpeciesReferenceGlyphs;
@@ -292,14 +289,11 @@ public class CellDesignerAnnotationParser implements Runnable {
     String id = attributeMap.get(type + CellDesignerContstants.species) + "_ref" + getRandomSuffix();
     String speciesReference = attributeMap.get(type + CellDesignerContstants.alias);
     SpeciesReferenceRole role = getRole(type);
-    double x = 0;
-    double y = 0;
-    double width = 0;
-    double height = 0;
     
     assert(listOfSpeciesReferenceGlyphs != null);
-    SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(id, level, version, x, y, width, height, role, speciesReference);
+    SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(id, level, version, role, speciesReference);
     boolean done = listOfSpeciesReferenceGlyphs.add(srGlyph);
+    
     logger.info("created SRG " + done);
     return listOfSpeciesReferenceGlyphs;
   }
@@ -340,6 +334,8 @@ public class CellDesignerAnnotationParser implements Runnable {
       for(Species s : listOfSpecies) {
         if (s.getId().equals(speciesId)) {
           s.setSBOTerm(getMoleculeSBO(moleculeClass));
+          // FIXME annotations should be unset properly
+          s.unsetAnnotation();
         }
       }
     }
@@ -420,18 +416,24 @@ public class CellDesignerAnnotationParser implements Runnable {
     int version = layout.getVersion();
     String r = CellDesignerContstants.reaction;
     
-    String reaction = attributeMap.get(r + CellDesignerContstants.id);
-    String id = reaction + getRandomSuffix();
+    String reactionId = attributeMap.get(r + CellDesignerContstants.id);
+    String id = reactionId + getRandomSuffix();
     String reactionType = attributeMap.get(CellDesignerContstants.reactionType);
-    double x = 0;
-    double y = 0;
-    double width = 0;
-    double height = 0;
     
     logger.info("creating reaction glyph with " + listOfSpeciesReferenceGlyphs.size() + " reference(s)");
     
-    layout.add(SBMLFactory.createReactionGlyph(id, level, version, listOfSpeciesReferenceGlyphs, 
-      x, y, width, height, reaction, getReactionSBO(reactionType)));
+    Reaction reaction = layout.getModel().getReaction(reactionId);
+    // FIXME annotations should be filtered properly
+    reaction.unsetAnnotation();
+    ListOf<SpeciesReference> listOfSpeciesReferences = new ListOf<SpeciesReference>();
+    listOfSpeciesReferences.addAll(reaction.getListOfProducts());
+    listOfSpeciesReferences.addAll(reaction.getListOfReactants());
+    for(SpeciesReference sr : listOfSpeciesReferences) {
+      sr.unsetAnnotation();
+    }
+    
+    layout.add(SBMLFactory.createReactionGlyph(id, level, version, listOfSpeciesReferenceGlyphs,
+      reactionId, getReactionSBO(reactionType)));
   }
 
   /**
@@ -461,13 +463,8 @@ public class CellDesignerAnnotationParser implements Runnable {
     String width = attributeMap.get(b + CellDesignerContstants.width);
     String height = attributeMap.get(b + CellDesignerContstants.heigth);
     
-    Double actualX = x == null ? 0 : Double.parseDouble(x);
-    Double actualY = y == null ? 0 : Double.parseDouble(y);
-    Double actualWidth = width == null ? 0 : Double.parseDouble(width);
-    Double actualHeigth = height == null ? 0 : Double.parseDouble(height);
-    
-    layout.addCompartmentGlyph(SBMLFactory.createCompartmentGlyph(id, layout.getLevel(), layout.getVersion(), compartment,
-      actualX, actualY, actualWidth, actualHeigth));
+    layout.addCompartmentGlyph(SBMLFactory.createCompartmentGlyph(id, layout.getLevel(), layout.getVersion(), 
+      x, y, width, height, compartment));
   }
 
   
@@ -485,14 +482,9 @@ public class CellDesignerAnnotationParser implements Runnable {
     String y = attributeMap.get(b + CellDesignerContstants.y);
     String width = attributeMap.get(b + CellDesignerContstants.width);
     String height = attributeMap.get(b + CellDesignerContstants.heigth);
-    
-    Double actualX = x == null ? 0 : Double.parseDouble(x);
-    Double actualY = y == null ? 0 : Double.parseDouble(y);
-    Double actualWidth = width == null ? 0 : Double.parseDouble(width);
-    Double actualHeigth = height == null ? 0 : Double.parseDouble(height);
 
     layout.add(SBMLFactory.createSpeciesGlyph(id, layout.getLevel(), layout.getVersion(), 
-      actualX, actualY, actualWidth, actualHeigth, speciesId));
+      x, y, width, height, speciesId));
   }
 
 	/* (non-Javadoc)
@@ -507,6 +499,9 @@ public class CellDesignerAnnotationParser implements Runnable {
 			System.err.print(annotation);
 			try {
 				readCDLayout(new BufferedReader(new StringReader(annotation)));
+				sbmlDocument.setLevelAndVersion(3, 1);
+			// FIXME annotations should be filtered properly
+				sbmlDocument.getModel().unsetAnnotation();
 			} catch (XMLStreamException exc) {
 				throw new RuntimeException(exc);
 			}

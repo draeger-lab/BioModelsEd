@@ -188,15 +188,51 @@ public class SBMLFactory {
    * @return
    */
   public static CompartmentGlyph createCompartmentGlyph(String id, int level, int version, 
-    String compartment, Double x, Double y, Double width, Double height) {
+    Double x, Double y, Double width, Double height, String compartment) {
+    CompartmentGlyph cGlyph = createCompartmentGlyph(id, level, version, compartment);
+    cGlyph.createBoundingBox(width, height, 0, x, y, 0);
+    return cGlyph;
+  }
+  /**
+   * creates a CompartmentGlyph with BoundingBox parsing string values
+   * sets assoc. Compartment
+   * @param id
+   * @param level
+   * @param version
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param compartment
+   * @return
+   */
+  public static CompartmentGlyph createCompartmentGlyph(String id, int level, int version,
+    String x, String y, String width, String height, String compartment) {
+    if(x != null && y != null && width != null && height != null) {
+      return createCompartmentGlyph(id, level, version, Double.parseDouble(x), 
+        Double.parseDouble(y), Double.parseDouble(width), Double.parseDouble(height), compartment);
+    }
+    return createCompartmentGlyph(id, level, version, compartment);
+  }
+  
+  /**
+   * creates a CompartmentGlyph without BoundingBox
+   * sets assoc. Compartment
+   * @param id
+   * @param level
+   * @param version
+   * @param compartment
+   * @return
+   */
+  public static CompartmentGlyph createCompartmentGlyph(String id, int level, int version, 
+    String compartment) {
     CompartmentGlyph cGlyph = new CompartmentGlyph(id, level, version);
     cGlyph.setCompartment(compartment);
-    cGlyph.createBoundingBox(width, height, 0, x, y, 0);
     return cGlyph;
   }
   
   /**
-   * Creates a ReactionGlyph with Boundingbox, 
+   * Creates a ReactionGlyph without Boundingbox, 
    * adds SpeciesReferences, assoc. reaction and reaction type
    * TODO field ReactionGlyph.curve never used
    * @param id
@@ -212,13 +248,11 @@ public class SBMLFactory {
    * @return
    */
   public static ReactionGlyph createReactionGlyph(String id, int level, int version, 
-    List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs, Double x, Double y, Double width, Double height,
-    String reaction, int reactionType) {
+    List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs, String reaction, int reactionType) {
     ReactionGlyph rGlyph = new ReactionGlyph(id, level, version);
     for(SpeciesReferenceGlyph glyph : listOfSpeciesReferenceGlyphs) {
       rGlyph.addSpeciesReferenceGlyph(glyph);
     }
-    rGlyph.createBoundingBox(width, height, 0, x, y, 0);
     rGlyph.setReaction(reaction);
     rGlyph.setSBOTerm(reactionType);
     return rGlyph;
@@ -226,7 +260,8 @@ public class SBMLFactory {
   
   /**
    * creates a SpeciesReferenceGlyph with BoundingBox,
-   * SpeciesReferenceRole, and SpeciesReference (assoc. SpeciesGlyph)
+   * sets SpeciesReferenceRole
+   * sets SpeciesReference (assoc. SpeciesGlyph)
    * @param id
    * @param level
    * @param version
@@ -240,9 +275,48 @@ public class SBMLFactory {
    */
   public static SpeciesReferenceGlyph createSpeciesReferenceGlyph(String id, int level, int version,
     double x, double y, double width, double height, SpeciesReferenceRole role, String speciesReference) {
-    SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph(id, level, version);
-    
+    SpeciesReferenceGlyph srGlyph = createSpeciesReferenceGlyph(id, level, version, role, speciesReference);
     srGlyph.createBoundingBox(width, height, 0, x, y, 0);
+    return srGlyph;
+  }
+  /**
+   * creates a SpeciesReferenceGlyph with BoundingBox if valid values are given, 
+   * parsing coordinates from String
+   * sets SpeciesReferenceRole
+   * sets SpeciesReference (assoc. SpeciesGlyph)
+   * @param id
+   * @param level
+   * @param version
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param role
+   * @param speciesReference
+   * @return
+   */
+  public static SpeciesReferenceGlyph createSpeciesReferenceGlyph(String id, int level, int version,
+    String x, String y, String width, String height, SpeciesReferenceRole role, String speciesReference) {
+    if(x != null && y != null && width != null && height != null) {
+      return createSpeciesReferenceGlyph(id, level, version, Double.parseDouble(x), 
+        Double.parseDouble(y), Double.parseDouble(width), Double.parseDouble(height), role, speciesReference);
+    }
+    return createSpeciesReferenceGlyph(id, level, version, role, speciesReference);
+  }
+  /**
+   * creates a SpeciesReferenceGlyph without BoundinBox
+   * sets SpeciesReferenceRole
+   * sets SpeciesReference (assoc. SpeciesGlyph)
+   * @param id
+   * @param level
+   * @param version
+   * @param role
+   * @param speciesReference
+   * @return
+   */
+  public static SpeciesReferenceGlyph createSpeciesReferenceGlyph(String id, int level, int version,
+    SpeciesReferenceRole role, String speciesReference) {
+    SpeciesReferenceGlyph srGlyph = new SpeciesReferenceGlyph(id, level, version);
     srGlyph.setRole(role);
     srGlyph.setSpeciesReference(speciesReference);
     return srGlyph;
@@ -263,10 +337,31 @@ public class SBMLFactory {
    */
   public static SpeciesGlyph createSpeciesGlyph(String id, int level,
     int version, double x, double y, double width, double height, String species) {
-    SpeciesGlyph sg = new SpeciesGlyph(id, level, version);
-    sg.setSpecies(species);
+    SpeciesGlyph sg = createSpeciesGlyph(id, level, version, species);
     sg.createBoundingBox(width, height, 0, x, y, 0);
     return sg;
+  }
+  /**
+   * creates a SpeciesGlyph with BoundingBox if given coordinates
+   * as String are not null
+   * sets assoc. Species
+   * @param id
+   * @param level
+   * @param version
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param species
+   * @return
+   */
+  public static SpeciesGlyph createSpeciesGlyph(String id, int level,
+    int version, String x, String y, String width, String height, String species) {
+    if(x != null && y != null && width != null && height != null) {
+      return createSpeciesGlyph(id, level, version, Double.parseDouble(x), 
+        Double.parseDouble(y), Double.parseDouble(width), Double.parseDouble(height), species);
+    }
+    return createSpeciesGlyph(id, level, version, species);
   }
 
   /**
@@ -275,13 +370,13 @@ public class SBMLFactory {
    * @param id
    * @param level
    * @param version
-   * @param speciesId
+   * @param species
    * @return
    */
   public static SpeciesGlyph createSpeciesGlyph(String id,
-    int level, int version, String speciesId) {
+    int level, int version, String species) {
     SpeciesGlyph sg = new SpeciesGlyph(id, level, version);
-    sg.setSpecies(speciesId);
+    sg.setSpecies(species);
     return sg;
   }
 }

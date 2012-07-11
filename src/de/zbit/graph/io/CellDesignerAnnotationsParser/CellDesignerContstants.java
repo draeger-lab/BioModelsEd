@@ -51,8 +51,8 @@ public class CellDesignerContstants {
   public static final String classProtein = "PROTEIN";
   public static final String speciesClass = "class";
   public static final String footer = "</annotation>\n";
-  public static final String CellDesignerNamespace = "\"http://www.sbml.org/2001/ns/celldesigner\"";
+  public static final String cellDesignerNamespace = "\"http://www.sbml.org/2001/ns/celldesigner\"";
   public static final String header = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" +
-          "<annotation xmlns:celldesigner=" + CellDesignerNamespace + ">\n";
+          "<annotation xmlns:celldesigner=" + cellDesignerNamespace + ">\n";
   public static final String moleculeClass = "class";
 }
