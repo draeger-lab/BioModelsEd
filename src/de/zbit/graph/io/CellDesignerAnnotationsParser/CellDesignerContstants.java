@@ -34,7 +34,7 @@ public class CellDesignerContstants {
   public static final int level = 3;
   public static final String reaction = "reaction";
   public static final String baseReactant = "baseReactant";
-  public static final String baseProduct = "baseProcuct";
+  public static final String baseProduct = "baseProduct";
   public static final String alias = "alias";
   public static final String reactantLink = "reactantLink";
   public static final String productLink = "productLink";
@@ -48,10 +48,11 @@ public class CellDesignerContstants {
   public static final String stateTransition = "STATE_TRANSITION";
   public static final String product = "product";
   public static final String metaid = "metaid";
-  public static final String protein = "PROTEIN";
+  public static final String classProtein = "PROTEIN";
   public static final String speciesClass = "class";
   public static final String footer = "</annotation>\n";
   public static final String CellDesignerNamespace = "\"http://www.sbml.org/2001/ns/celldesigner\"";
   public static final String header = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" +
           "<annotation xmlns:celldesigner=" + CellDesignerNamespace + ">\n";
+  public static final String moleculeClass = "class";
 }

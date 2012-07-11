@@ -34,11 +34,13 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBO;
+import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
@@ -63,9 +65,10 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 * @throws XMLStreamException 
 	 */
 	public static void main(String[] args) throws XMLStreamException, IOException {
-		logger.info("Reading file " + args[0]);
+		File openFile = new File(args[0]);
+		logger.info("Reading file " + openFile.getAbsolutePath());
 		logger.setLevel(Level.FINEST);
-		CellDesignerAnnotationParser parser = new CellDesignerAnnotationParser(new File(args[0]));
+		CellDesignerAnnotationParser parser = new CellDesignerAnnotationParser(openFile);
 		parser.run();
 		if (args.length > 1) {
 			SBMLWriter.write(parser.getSBMLDocument(), new File(args[1]), ' ', (short) 2);
@@ -183,15 +186,22 @@ public class CellDesignerAnnotationParser implements Runnable {
           }
           newSpeciesAlias = false;
           newCompartmentAlias = false;
-          attributeMap = new HashMap<String, String>();
+          attributeMap = resetMap();
+				}
+				else if (name.equals(CellDesignerContstants.baseReactant)) {
+				  listOfSpeciesReferenceGlyphs = createBaseReactant(attributeMap,listOfSpeciesReferenceGlyphs);
+				}
+				else if (name.equals(CellDesignerContstants.baseProduct)) {
+          listOfSpeciesReferenceGlyphs = createBaseProduct(attributeMap,listOfSpeciesReferenceGlyphs);
+        }
+				else if (name.equals(CellDesignerContstants.moleculeClass)){
+				  attributeMap.put(CellDesignerContstants.moleculeClass, streamReader.getElementText());
+				  createProtein(attributeMap);
+				  attributeMap = resetMap();
 				}
 				else if (name.equals(CellDesignerContstants.alias)) {
           attributeMap.put(CellDesignerContstants.alias, streamReader.getElementText());
-          listOfSpeciesReferenceGlyphs.add(createSpeciesReferenceGlyph(attributeMap, reactionRole));
-        }
-				else if (name.equals(CellDesignerContstants.speciesClass)) {
-          attributeMap.put(CellDesignerContstants.speciesClass, streamReader.getElementText());
-          listOfSpeciesReferenceGlyphs.add(createSpeciesReferenceGlyph(attributeMap, reactionRole));
+          createSpeciesReferenceGlyph(attributeMap, reactionRole,listOfSpeciesReferenceGlyphs);
         }
 				else if (name.equals(CellDesignerContstants.reactionType)) {
 				  attributeMap.put(CellDesignerContstants.reactionType, streamReader.getElementText());
@@ -209,7 +219,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 			    createReaction(attributeMap, listOfSpeciesReferenceGlyphs);
 			    // after the reaction is created all references are reset
 			    listOfSpeciesReferenceGlyphs = new LinkedList<SpeciesReferenceGlyph>();
-			    attributeMap = new HashMap<String, String>();
+			    attributeMap = resetMap();
 			  }
 			}
 			streamReader.next();
@@ -217,14 +227,26 @@ public class CellDesignerAnnotationParser implements Runnable {
 	}
 
   /**
+   * resetting attribute Map
+   * @return empty Map
+   */
+  private Map<String, String> resetMap() {
+    Map<String, String> attributeMap;
+    attributeMap = new HashMap<String, String>();
+    logger.info("!ATTRIBUTEMAP-RESET!");
+    return attributeMap;
+  }
+  /**
    * creates a SpeciesReferenceGlyph
    * BoundingBox is set to (0,0,0,0)
+   * adds it to list of SRG's
    * @param attributeMap
    * @param type
-   * @return SpeciesReferenceGlyph
+   * @param listOfSpeciesReferenceGlyphs 
+   * @return listOfSpeciesReferenceGlyphs
    */
-  private SpeciesReferenceGlyph createSpeciesReferenceGlyph(
-    Map<String, String> attributeMap, String type) {
+  private List<SpeciesReferenceGlyph> createSpeciesReferenceGlyph(
+    Map<String, String> attributeMap, String type, List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs) {
     int level = layout.getLevel();
     int version = layout.getVersion();
     String sR = CellDesignerContstants.speciesReference;
@@ -235,8 +257,94 @@ public class CellDesignerAnnotationParser implements Runnable {
     double y = 0;
     double width = 0;
     double height = 0;
-    return SBMLFactory.createSpeciesReferenceGlyph(id, level, version, x, y, width, height, role, speciesReference);
+    
+    assert(listOfSpeciesReferenceGlyphs != null);
+    
+    /*
+     * check for double entries since baseProduct/Reactant are added seperately
+     */
+    for (SpeciesReferenceGlyph srGlyph : listOfSpeciesReferenceGlyphs) {
+      if (srGlyph.getSpeciesReference().equals(speciesReference)) {
+        logger.info("found twice"); 
+        return listOfSpeciesReferenceGlyphs;
+      }
+    }
+    SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(id, level, version, x, y, width, height, role, speciesReference);
+    boolean done = listOfSpeciesReferenceGlyphs.add(srGlyph);
+    logger.info("created SRG " + done);
+    return listOfSpeciesReferenceGlyphs;
   }
+
+  /**
+   * creates a SpeciesReferenceGlyph of base type (baseReactant, baseProduct)
+   * BoundingBox is set to (0,0,0,0)
+   * adds it to list of SRG's
+   * @param attributeMap
+   * @param type
+   * @param listOfSpeciesReferenceGlyphs
+   * @return
+   */
+  private List<SpeciesReferenceGlyph> createBaseSpeciesReferenceGlyph(
+    Map<String, String> attributeMap, String type,
+    List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs) {
+    int level = layout.getLevel();
+    int version = layout.getVersion();
+    String id = attributeMap.get(type + CellDesignerContstants.species) + "_ref" + getRandomSuffix();
+    String speciesReference = attributeMap.get(type + CellDesignerContstants.alias);
+    SpeciesReferenceRole role = getRole(type);
+    double x = 0;
+    double y = 0;
+    double width = 0;
+    double height = 0;
+    
+    assert(listOfSpeciesReferenceGlyphs != null);
+    SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(id, level, version, x, y, width, height, role, speciesReference);
+    boolean done = listOfSpeciesReferenceGlyphs.add(srGlyph);
+    logger.info("created SRG " + done);
+    return listOfSpeciesReferenceGlyphs;
+  }
+  
+  /**
+   * uses createSpeciesReferenceGlyph to create SRG as baseProduct
+   * @param attributeMap
+   * @param listOfSpeciesReferenceGlyphs
+   * @return 
+   */
+  private List<SpeciesReferenceGlyph> createBaseProduct(Map<String, String> attributeMap, List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs) {
+    return createBaseSpeciesReferenceGlyph(attributeMap, CellDesignerContstants.baseProduct, listOfSpeciesReferenceGlyphs);
+  }
+
+  /**
+   * uses createSpeciesReferenceGlyph to create SRG as baseReactant
+   * @param attributeMap
+   * @param listOfSpeciesReferenceGlyphs
+   * @return 
+   */
+  private List<SpeciesReferenceGlyph> createBaseReactant(Map<String, String> attributeMap, List<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs) {
+    return createBaseSpeciesReferenceGlyph(attributeMap, CellDesignerContstants.baseReactant, listOfSpeciesReferenceGlyphs);
+  }
+
+  /**
+   * Reads out species information and integrates it into model
+   * @param attributeMap
+   */
+  private void createProtein(Map<String, String> attributeMap) {
+    String speciesId = attributeMap.get(CellDesignerContstants.species + CellDesignerContstants.id);
+    String moleculeClass = attributeMap.get(CellDesignerContstants.moleculeClass);
+    
+    ListOf<Species> listOfSpecies = layout.getModel().getListOfSpecies();
+    if (listOfSpecies == null) {
+      throw new AssertionError("listOfSpeciesEmpty!");
+    }
+    else {
+      for(Species s : listOfSpecies) {
+        if (s.getId().equals(speciesId)) {
+          s.setSBOTerm(getMoleculeSBO(moleculeClass));
+        }
+      }
+    }
+  }
+
 
   /**
    * Transfers reaction terms used in CellDesigner annotations
@@ -245,6 +353,7 @@ public class CellDesignerAnnotationParser implements Runnable {
    * @return SpeciesRefereneRole
    */
   private SpeciesReferenceRole getRole(String type) {
+    logger.info("found: " + type);
     if (type.equals(CellDesignerContstants.baseProduct)) {
       return SpeciesReferenceRole.PRODUCT;
     }
@@ -268,12 +377,33 @@ public class CellDesignerAnnotationParser implements Runnable {
    * @param reactionType
    * @return according SBO term
    */
-  private int getSBO(String reactionType) {
-    if (reactionType.equals(CellDesignerContstants.stateTransition)) {
+  private int getReactionSBO(String reactionType) {
+    if (reactionType == null) {
+      return SBO.getUnknownTransition();
+    }
+    else if (reactionType.equals(CellDesignerContstants.stateTransition)) {
       return SBO.getStateTransition();
     }
     else {
       return SBO.getUnknownTransition();
+    }
+  }
+  
+  /**
+   * Transfers molecule descriptions used in CellDesigner annotations
+   * into SBO terms used in JSBML
+   * @param moleculeType
+   * @return according SBO term
+   */
+  private int getMoleculeSBO(String moleculeType) {
+    if (moleculeType == null) {
+      return SBO.getUnknownMolecule();
+    }
+    else if (moleculeType.equals(CellDesignerContstants.classProtein)) {
+      return SBO.getProtein();
+    }
+    else {
+      return SBO.getUnknownMolecule();
     }
   }
   
@@ -298,8 +428,10 @@ public class CellDesignerAnnotationParser implements Runnable {
     double width = 0;
     double height = 0;
     
+    logger.info("creating reaction glyph with " + listOfSpeciesReferenceGlyphs.size() + " reference(s)");
+    
     layout.add(SBMLFactory.createReactionGlyph(id, level, version, listOfSpeciesReferenceGlyphs, 
-      x, y, width, height, reaction, getSBO(reactionType)));
+      x, y, width, height, reaction, getReactionSBO(reactionType)));
   }
 
   /**
@@ -400,6 +532,15 @@ public class CellDesignerAnnotationParser implements Runnable {
         line = bufferedReader.readLine();
         
         while((line != null) && (!line.startsWith("</annotation>"))) {
+          annotations.append(line + "\n");
+          line = bufferedReader.readLine();
+        }
+        while((line != null) && (!line.startsWith("<listOfSpecies>"))) {
+          line = bufferedReader.readLine();
+        }
+        line = bufferedReader.readLine();
+        
+        while((line != null) && (!line.startsWith("</listOfSpecies>"))) {
           annotations.append(line + "\n");
           line = bufferedReader.readLine();
         }
