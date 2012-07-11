@@ -136,6 +136,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	    }
 	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
 	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), reversible);	
+	    this.simpleGraph.setLocation(n, r.getBoundingBox().getPosition().getX(), r.getBoundingBox().getPosition().getY());
 	    r.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
 	  }
 	}

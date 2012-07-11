@@ -40,6 +40,8 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
@@ -436,14 +438,15 @@ public class CommandController implements PropertyChangeListener {
       /*
        * add first or new default layout to view
        */
+      boolean hasLayout = doc.hasLayout();
       Layout layout = doc.getFirstLayoutOrNew();
-      this.view.addLayout(layout);
-      if (layout.getName().equals(SBMLEditorConstants.layoutDefaultName)) {
+      if (!hasLayout) {
          int newInformation = this.view.askUserCreateLayoutInformation();
          if (newInformation == 0) {
            doc.createLayoutInformation();
          }
       }
+      this.view.addLayout(layout);
       /*
        * notify fileManager about newly opened document
        */
@@ -552,7 +555,13 @@ public class CommandController implements PropertyChangeListener {
       if ((this.state == States.normal) && (this.nodeSelected)) {     
           @SuppressWarnings("unchecked")
           ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();
-          selectedGlyph.getBoundingBox().setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
+          BoundingBox bb = new BoundingBox();
+          bb.setLevel(3);
+          bb.setVersion(1);
+          bb.setDimensions(new Dimensions(100, 100, 0, 3, 1));
+          bb.setPosition(new Point(pos.getL(), pos.getV(), SBMLEditorConstants.glyphDefaultZ, 3, 1));
+          selectedGlyph.setBoundingBox(bb);
+          logger.info(bb.isSetDimensions() + "  " + bb.isSetPosition() + selectedGlyph.getBoundingBox().getPosition().getX());
           logger.info("New glyph information: " + "Node X: " + pos.getL() + " Y: " + pos.getV());  
       } else if ((this.state == States.normal) && (this.reactionSelected)) {
          ValuePair<Double, Double> pos = (ValuePair<Double, Double>) evt.getNewValue();

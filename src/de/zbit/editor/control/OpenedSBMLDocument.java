@@ -185,9 +185,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     ExtendedLayoutModel extendedLayoutModel =
         (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
 
-    if (extendedLayoutModel != null &&
-        extendedLayoutModel.getListOfLayouts() != null &&
-        !extendedLayoutModel.getListOfLayouts().isEmpty()) {
+    if (this.hasLayout()) {
       logger.info("opening first layout");
       return extendedLayoutModel.getLayout(0);
     }
@@ -197,6 +195,19 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     }
   }
   
+  /**
+   * Check, if this Document has a Layout
+   * 
+   * @return true, if Document has a Layout
+   */
+  public boolean hasLayout() {
+    ExtendedLayoutModel extendedLayoutModel =
+      (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
+    
+    return ((extendedLayoutModel != null) &&
+        (extendedLayoutModel.getListOfLayouts() != null) &&
+        (!extendedLayoutModel.getListOfLayouts().isEmpty()));    
+  }
   /**
    * @param name
    * @return
