@@ -345,7 +345,7 @@ public class CellDesignerAnnotationParser implements Runnable {
    * @param attributeMap
    */
   private void createSpeciesGlyph(Map<String, String> attributeMap) {
-    String s = CellDesignerContstants.species;
+    String s = CellDesignerContstants.speciesAlias;
     String b = CellDesignerContstants.bounds;
     String id = attributeMap.get(s + CellDesignerContstants.id);
     String speciesId = attributeMap.get(s + CellDesignerContstants.species);

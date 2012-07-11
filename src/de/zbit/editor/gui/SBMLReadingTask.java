@@ -29,6 +29,7 @@ import org.sbml.jsbml.SBMLReader;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
+import de.zbit.graph.io.CellDesignerAnnotationsParser.CellDesignerAnnotationParser;
 
 /**
  * @author Eugen Netz
@@ -58,10 +59,10 @@ public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
    * @see javax.swing.SwingWorker#doInBackground()
    */
   protected OpenedSBMLDocument doInBackground() throws Exception {
-    return new OpenedSBMLDocument(SBMLReader.read(stream), file.getAbsolutePath());
-    /*CellDesignerAnnotationParser parser = new CellDesignerAnnotationParser(file);
+    //return new OpenedSBMLDocument(SBMLReader.read(stream), file.getAbsolutePath());
+    CellDesignerAnnotationParser parser = new CellDesignerAnnotationParser(file);
     parser.run();
-    return new OpenedSBMLDocument(parser.getSBMLDocument(), file.getAbsolutePath());*/
+    return new OpenedSBMLDocument(parser.getSBMLDocument(), file.getAbsolutePath());
   }
 
 
