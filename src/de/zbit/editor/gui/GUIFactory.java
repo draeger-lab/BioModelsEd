@@ -234,11 +234,6 @@ public class GUIFactory {
     JMenuItem menuItem;
     // Create the popup menu.
     JPopupMenu popup = new JPopupMenu();
-
-    menuItem = new JMenuItem(Resources.getString("NODE_RENAME"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, SBMLEditorConstants.nodeRename));
-    popup.add(menuItem);
        
     menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
