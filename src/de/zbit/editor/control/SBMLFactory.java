@@ -50,8 +50,6 @@ public class SBMLFactory {
    * @param version
    * @return
    */
-	
-	//TODO Species only with Compartment
   public static Species createSpecies(String id, String name,
     int sboTerm, int level, int version, String compartmentId) {
     Species s = new Species(id, name, level, version);
@@ -77,6 +75,7 @@ public class SBMLFactory {
       SBMLEditorConstants.glyphDefaultWidth, SBMLEditorConstants.glyphDefaultHeight, 
       SBMLEditorConstants.glyphDefaultDepth, name);
   }
+  
   /**
    * adds Species Glyph to layout defining a new Boundingbox  by x and y
    * @param layout

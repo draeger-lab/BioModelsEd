@@ -40,13 +40,10 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.BoundingBox;
-import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
-import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
@@ -907,13 +904,20 @@ public class CommandController implements PropertyChangeListener {
       logger.info("nodePaste: Different Model");
       String speciesIdNew = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
       Species s = SBMLFactory.createSpecies(speciesIdNew,
-          copySpeciesGlyph.getName(),
+          species.getName(),
           species.getSBOTerm(),
           SBMLView.DEFAULT_LEVEL_VERSION.getL(),
           SBMLView.DEFAULT_LEVEL_VERSION.getV(),
           selectedDoc.getDefaultCompartment());
       layout.getModel().addSpecies(s);
-      SpeciesGlyph speciesGlyph = SBMLFactory.createSpeciesGlyph(glyphId, SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV(), x, y, width, height, speciesIdNew);
+      SpeciesGlyph speciesGlyph = SBMLFactory.createSpeciesGlyph(glyphId,
+          SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+          SBMLView.DEFAULT_LEVEL_VERSION.getV(),
+          x,
+          y,
+          width,
+          height,
+          speciesIdNew);
       layout.add(speciesGlyph);
       
       logger.info("New Glyph: " + 
@@ -928,7 +932,7 @@ public class CommandController implements PropertyChangeListener {
             SBMLView.DEFAULT_LEVEL_VERSION.getL(),
             SBMLView.DEFAULT_LEVEL_VERSION.getV(),
             speciesGlyph,
-            originalTextGlyph.getText());
+            speciesIdNew);
         layout.addTextGlyph(newTextGlyph);
       }
     }
