@@ -776,8 +776,9 @@ public class CommandController implements PropertyChangeListener {
         logger.info("Couldn't find glyph for node");
       }
       else if (glyph instanceof SpeciesGlyph) {
-        //TODO: Delete all Reactions associated with glyph
         ((SpeciesGlyph) glyph).getSpecies();
+        deleteReactionGlyphs((SpeciesGlyph) glyph, layout);
+        
         if (this.nodeCopyList.remove(glyph)){
           logger.info("Removed glyph from copylist");
         }
@@ -793,6 +794,39 @@ public class CommandController implements PropertyChangeListener {
             
     logger.info("nodeDelete in CC");
     layoutModified(layout);
+  }
+  
+  public List<ReactionGlyph> findReactionGlyphs(SpeciesGlyph sGlyph, Layout layout) {
+    ArrayList<ReactionGlyph> list = new ArrayList<ReactionGlyph>();
+    
+    for (ReactionGlyph rGlyph : layout.getListOfReactionGlyphs()) {
+      List<SpeciesReferenceGlyph> sRefList = rGlyph.getListOfSpeciesReferenceGlyphs();
+      
+      for (int i = 0; i < sRefList.size(); i++) {
+        if((sGlyph.getId().equals(sRefList.get(i).getSpeciesGlyph())) && 
+          ((sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT) ||
+           (sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE))){
+          logger.info("Reaktionen löschen: Reaction"+ rGlyph.getId() + " zur Liste hinzugefügt.");
+          list.add(rGlyph);
+        }
+      }
+    }
+    logger.info("Reaktionen löschen: Liste der Reaktionen wurde erstellt");
+    return list;
+  }
+  
+  private void deleteReactionGlyphs(SpeciesGlyph sGlyph, Layout layout) {
+    List<ReactionGlyph> list = findReactionGlyphs(sGlyph, layout);
+    
+    for (ReactionGlyph rGlyph : list) {
+      layout.getListOfReactionGlyphs().remove(rGlyph);
+      layout.firePropertyChange("nodeDelete", null, rGlyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
+      
+      if (this.nodeCopyList.remove(rGlyph)){
+        logger.info("Removed glyph from copylist");
+      }
+      logger.info("Reaktionen löschen: Reaction gelöscht.");
+    }
   }
     
   /**
