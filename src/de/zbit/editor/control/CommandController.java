@@ -257,7 +257,7 @@ public class CommandController implements PropertyChangeListener {
     } else if (this.state == States.inhibition) {
       modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
     }
-    modifierGlyph.setId(selectedDoc.nextGenericId("SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix"));
+    modifierGlyph.setId(selectedDoc.nextGenericId(SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix));
     modifierGlyph.setLevel(model.getLevel());
     modifierGlyph.setVersion(model.getVersion());
     modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
