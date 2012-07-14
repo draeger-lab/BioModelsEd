@@ -16,9 +16,16 @@
  */
 package de.zbit.editor.gui;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
+import y.base.NodeCursor;
 import y.view.EditMode;
 import y.view.HitInfo;
 import de.zbit.editor.SBMLEditorConstants;
@@ -31,13 +38,13 @@ import de.zbit.editor.control.CommandController;
  */
 public class SBMLEditMode extends EditMode  {
 
-  private ValuePair<Double, Double> lastPositionMouseClicked;
-  private ValuePair<Double, Double> oldNodePosition;
-  private Node node;
-
-
+  //private ValuePair<Double, Double> lastPositionMouseClicked;
+  //private ValuePair<Double, Double> oldNodePosition;
+  //private Node node;
+ 
   public SBMLEditMode(CommandController controller) {
     super();
+    this.allowBendCreation(false);
     this.allowNodeCreation(true);
     this.setCreateEdgeMode(new SBMLCreateEdgeMode());
     this.allowEdgeCreation(true);
@@ -51,17 +58,15 @@ public class SBMLEditMode extends EditMode  {
     HitInfo info = this.getGraph2D().getHitInfo(x, y);
     Object hit = info.getFirstHit();
     if (hit instanceof Node) {
-      this.node = (Node) hit;
-      double nodeX = this.getGraph2D().getX(node);
-      double nodeY = this.getGraph2D().getY(node);
+      Node node = (Node) hit;
       
-      firePropertyChange(SBMLEditorConstants.EditModeNodePressedLeft, null, this.node);      
-      oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
+      firePropertyChange(SBMLEditorConstants.EditModeNodePressedLeft, null, node);      
+      //oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
     }
     else {
       ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-      firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, lastPositionMouseClicked, newPositionMouseClicked);
-      lastPositionMouseClicked = newPositionMouseClicked;
+      firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, null, newPositionMouseClicked);
+      //lastPositionMouseClicked = newPositionMouseClicked;
             
     }  
     
@@ -69,96 +74,67 @@ public class SBMLEditMode extends EditMode  {
   
   @Override
   public void mouseReleasedLeft(double x, double y) {
-    //TODO set Target Node for edge, create edge
+   
+    List<Node> list = getSelectedNodes();      
     
-    HitInfo info = this.getGraph2D().getHitInfo(x, y);
-    Object hit = info.getFirstHit();
-    if (hit instanceof Node) {
-      this.node =  (Node) hit;
-      double nodeX = this.getGraph2D().getX(node);
-      double nodeY = this.getGraph2D().getY(node);
-      
-      ValuePair<Double, Double> newNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);
-      firePropertyChange(SBMLEditorConstants.EditModeNodeReleasedLeft, oldNodePosition, newNodePosition);      
-      oldNodePosition = newNodePosition;
-      
-    }
-    else {
-    		ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
-    		firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, lastPositionMouseClicked, positionMouseReleased);
-    }
+    // Set list of nodes in CommandController
+    firePropertyChange(SBMLEditorConstants.EditModeSelectionChanged, null, list);
+    // Initiate updating of glyphs
+    firePropertyChange(SBMLEditorConstants.EditModeUpdateNodes, null, this.getGraph2D());  
+    // Send mouse position
+    ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
+    firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  
   } 
   
-  /*@Override
-  public void mouseClicked(double x, double y) {
-    // TODO Left/Right Unterscheidung?
-		ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-	
-    firePropertyChange(SBMLEditorConstants.EditModeMouseClicked, lastPositionMouseClicked, newPositionMouseClicked);
-    lastPositionMouseClicked = newPositionMouseClicked;
-  }*/
-  
- /* @Override
-  public void mouseClicked(MouseEvent evt) {
-    if (evt.getButton() == MouseEvent.BUTTON1) {
-      double x = evt.getX();
-      double y = evt.getY();
-      HitInfo info = this.getGraph2D().getHitInfo(x, y);
-      Object hit = info.getFirstHit();
-      
-      if (hit instanceof Node) {
-        this.node = (Node) hit;
-        ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-        firePropertyChange(SBMLEditorConstants.EditModeNodeClickedLeft,
-          null, this.node);
-        lastPositionMouseClicked = newPositionMouseClicked;
-      } 
-      else {
-        ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-        firePropertyChange(SBMLEditorConstants.EditModeMouseClicked,
-          lastPositionMouseClicked, newPositionMouseClicked);
-        lastPositionMouseClicked = newPositionMouseClicked;
-      }
+  /**
+   * @return
+   */
+  private List<Node> getSelectedNodes() {
+    NodeCursor cursor = this.getGraph2D().selectedNodes();
+
+    List<Node> list = new ArrayList<Node>();
+
+    while(cursor.ok()) {
+      Node current = cursor.node();
+      list.add(current);
+      cursor.next();
     }
-  }*/
-    
-  /*@Override
-  public void mouseDraggedLeft(double x, double y) {
-    HitInfo info = this.getGraph2D().getHitInfo(x, y);
-    Object hit = info.getFirstHit();
-    info.
-    if (hit instanceof Node) {
-      this.node =  (Node) hit;
-      double nodeX = this.getGraph2D().getX(node);
-      double nodeY = this.getGraph2D().getY(node);
-      
-      ValuePair<Double, Double> newNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);
-      firePropertyChange(SBMLEditorConstants.EditModeMouseDraggedLeft, null, newNodePosition);      
-      //oldNodePosition = newNodePosition;
-    }
-  }*/
-  
+    return list;
+  }
+
   @Override
   public void mousePressedRight(double x, double y) {
     HitInfo info = this.getGraph2D().getHitInfo(x, y);
     Object hit = info.getFirstHit();
     if (hit instanceof Node) {
-      this.node = (Node) hit;
-      double nodeX = this.getGraph2D().getX(node);
-      double nodeY = this.getGraph2D().getY(node);
       
-      firePropertyChange(SBMLEditorConstants.EditModeNodePressedRight, null, this.node);      
-      oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
+      Node node = (Node) hit;
+      
+      unselectAll(this.getGraph2D());
+      this.getGraph2D().setSelected(node, true);
+      this.getGraph2D().updateViews();
+      
+      List<Node> list = this.getSelectedNodes();
+      
+      // Set list of nodes in CommandController
+      firePropertyChange(SBMLEditorConstants.EditModeSelectionChanged, null, list);
+      
+      firePropertyChange(SBMLEditorConstants.EditModeNodePressedRight, null, node);      
+      //oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
     }
     else {
+
+      
       ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-      firePropertyChange(SBMLEditorConstants.EditModeMousePressedRight, lastPositionMouseClicked, newPositionMouseClicked);
-      lastPositionMouseClicked = newPositionMouseClicked;
+      firePropertyChange(SBMLEditorConstants.EditModeMousePressedRight, null, newPositionMouseClicked);
+      //lastPositionMouseClicked = newPositionMouseClicked;
     }
   }
   
   public void nodeDelete(Node node) {
     this.getGraph2D().removeNode(node);
   }
+  
+  
   
 }

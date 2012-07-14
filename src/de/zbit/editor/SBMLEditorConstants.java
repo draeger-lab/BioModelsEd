@@ -35,6 +35,8 @@ public class SBMLEditorConstants {
   public static final String EditModeMouseReleasedRight = "mouseReleasedRight in EditMode";
   public static final String EditModeNodePressedRight = "nodePressedRight in EditMode";
   public static final String EditModeMousePressedRight = "mousePressedRight in EditMode";
+  public static final String EditModeSelectionChanged = "selection changed in EditMode";
+  public static final String EditModeUpdateNodes = "update node properties in EditMode";
   
   public static final String genericId = "s";
   public static final String genericReactionIdPrefix = "r";
@@ -145,4 +147,6 @@ public class SBMLEditorConstants {
   public static final String openLayoutInNewTab = "openLayoutInNewTab";
   public static final String openLayoutInTab = "openLayoutInTab";
   public static final String reversible = "reversible";
+  
+  
 }
