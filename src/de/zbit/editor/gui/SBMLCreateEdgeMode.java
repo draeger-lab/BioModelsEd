@@ -31,23 +31,8 @@ import de.zbit.graph.sbgn.ReactionNodeRealizer;
  * @version $Rev$
  */
 public class SBMLCreateEdgeMode extends CreateEdgeMode {
-  
-  public void test(){
    
-  }
-  
-
-  public Node createEdgeNode(Graph2D graph, Node start, Node target, EdgeRealizer realizer, String modifier) {
-    if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
-      Edge e = super.createEdge(graph, start, target, realizer);
-      if (modifier.equals("Catalysis")) {
-        graph.getRealizer(e).setArrow(Arrow.CIRCLE);
-      } else if (modifier.equals("Inhibition")) {
-        graph.getRealizer(e).setArrow(Arrow.DASH);
-      }
-      return null;
-    }
-    
+  public Node createEdgeNode(Graph2D graph, Node start, Node target, EdgeRealizer realizer, boolean reversible) {
     ReactionNodeRealizer nre = new ReactionNodeRealizer();
     Node reactionNode = graph.createNode(nre);
 
@@ -57,10 +42,20 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
     nre.setCenter((graph.getRealizer(start).getCenterX() + graph.getRealizer(target).getCenterX())/2d, (graph.getRealizer(start).getCenterY() + graph.getRealizer(target).getCenterY())/2d);
     ((EdgeRealizer)graph.getRealizer(e2)).setArrow(Arrow.DELTA);
     
-    if (modifier.equals("True")) {
+    if (reversible) {
       ((EdgeRealizer) graph.getRealizer(e1)).setArrow(Arrow.DELTA);
     }
-
     return reactionNode;
+  }
+  
+  public void createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer, String modifier) {
+    if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
+      Edge e = super.createEdge(graph, start, target, realizer);
+      if (modifier.equals("Catalysis")) {
+        graph.getRealizer(e).setArrow(Arrow.CIRCLE);
+      } else if (modifier.equals("Inhibition")) {
+        graph.getRealizer(e).setArrow(Arrow.DASH);
+      }
+    }
   }
 }

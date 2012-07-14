@@ -242,7 +242,7 @@ public class CommandController implements PropertyChangeListener {
     
     //Creation of a modifier
     ModifierSpeciesReference modifier = new ModifierSpeciesReference();
-    modifier.setId(selectedDoc.nextGenericId("mod"));
+    modifier.setId(selectedDoc.nextGenericId(SBMLEditorConstants.genericModifierReferenceIdPrefix));
     modifier.setLevel(model.getLevel());
     modifier.setVersion(model.getVersion());
     modifier.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
@@ -257,7 +257,7 @@ public class CommandController implements PropertyChangeListener {
     } else if (this.state == States.inhibition) {
       modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
     }
-    modifierGlyph.setId(selectedDoc.nextGenericId("modGlyph"));
+    modifierGlyph.setId(selectedDoc.nextGenericId("SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix"));
     modifierGlyph.setLevel(model.getLevel());
     modifierGlyph.setVersion(model.getVersion());
     modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
@@ -430,7 +430,6 @@ public class CommandController implements PropertyChangeListener {
     if (evt.getPropertyName().equals(SBMLEditorConstants.openingDone)) {
       OpenedSBMLDocument doc = (OpenedSBMLDocument) evt.getNewValue();
       
-      //TODO DefaultLayout isn't always empty.
       /*
        * add first or new default layout to view
        */

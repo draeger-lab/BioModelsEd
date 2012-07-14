@@ -102,21 +102,17 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       logger.info("CVS : Removed node");
       
     } else if (evt.getPropertyName().equals("reactionCreated")) {
-      
-      String reversible = "False";
+     
       ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
       Node source = (Node) list.get(0);
       Node target = (Node) list.get(1);
       ReactionGlyph reactionGlyph = (ReactionGlyph) list.get(2);
       
       Reaction reaction = (Reaction) reactionGlyph.getReactionInstance();
-      if (reaction.getReversible()) {
-       reversible = "True";
-      }
       
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
       Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
-         new GenericEdgeRealizer(), reversible);
+         new GenericEdgeRealizer(), reaction.getReversible());
       reactionGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, reactionNode);
       logger.info("CVS : Reaction Drawn");
       
@@ -126,7 +122,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       Node target = (Node) list.get(1);
       String state = (String) list.get(2);
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
-      createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
+      createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), source, target,
         new GenericEdgeRealizer(), state);
       logger.info("CVS : Modifier Drawn");
     }

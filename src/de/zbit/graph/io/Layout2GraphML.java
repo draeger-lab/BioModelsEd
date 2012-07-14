@@ -82,14 +82,14 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
           Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
           Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
           if ((source != null) && (target != null)) {
-            createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Catalysis");
+            createEdgeMode.createEdge(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Catalysis");
           }
         }
         if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.INHIBITOR) {
           Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
           Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
           if ((source != null) && (target != null)) {
-            createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Inhibition");
+            createEdgeMode.createEdge(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Inhibition");
           }
         }
       }
@@ -116,12 +116,8 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	private void initReactionGlyphs(Layout layout) {
 	  ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
 	  for (ReactionGlyph r : list) {
-	    String reversible = "False";
 	    
 	    Reaction reaction = (Reaction) r.getReactionInstance();
-      if (reaction.getReversible()) {
-       reversible = "True";
-      }
 	    
 	    Node source = null;
 	    Node target = null;
@@ -135,7 +131,8 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	      }
 	    }
 	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
-	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target, new GenericEdgeRealizer(), reversible);	
+	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target,
+	      new GenericEdgeRealizer(), reaction.getReversible());	
 	    this.simpleGraph.setLocation(n, r.getBoundingBox().getPosition().getX(), r.getBoundingBox().getPosition().getY());
 	    r.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
 	  }
