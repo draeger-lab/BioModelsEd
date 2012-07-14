@@ -56,7 +56,7 @@ public class SBMLEditorConstants {
   public static final Object GRAPHOBJECT_TEXTGLYPH_KEY = "GRAPHOBJECT_TEXTGLYPH_KEY";
   public static final String layoutDefaultName = "default_layout";
   public static final String modelDefaultName = "defalt_model";
-  public static final String compartmentDefaultName = "default_compartent";
+  public static final String compartmentDefaultName = "default";
   public static final String openingDone = "openingDone";
   public static final String savingDone = "savingDone";
   public static final String fileNotFound = "FILE_NOT_FOUND";

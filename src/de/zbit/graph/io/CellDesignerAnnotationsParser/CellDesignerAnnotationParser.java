@@ -199,7 +199,6 @@ public class CellDesignerAnnotationParser implements Runnable {
 				else if (name.equals(CellDesignerContstants.moleculeClass)){
 				  attributeMap.put(CellDesignerContstants.moleculeClass, streamReader.getElementText());
 				  createProtein(attributeMap);
-				  attributeMap = resetMap();
 				}
 				else if (name.equals(CellDesignerContstants.alias)) {
           attributeMap.put(CellDesignerContstants.alias, streamReader.getElementText());
@@ -386,7 +385,7 @@ public class CellDesignerAnnotationParser implements Runnable {
   }
   
   /**
-   * Transfers molecule descriptions used in CellDesigner annotations
+   * Transfers molecule descriptions used in CellDesignecompartmentAliasr annotations
    * into SBO terms used in JSBML
    * @param moleculeType
    * @return according SBO term
@@ -454,7 +453,7 @@ public class CellDesignerAnnotationParser implements Runnable {
    * @param attributeMap
    */
   private void createCompartment(Map<String, String> attributeMap) {
-    String c = CellDesignerContstants.compartment;
+    String c = CellDesignerContstants.compartmentAlias;
     String b = CellDesignerContstants.bounds;
     String id = attributeMap.get(c + CellDesignerContstants.id);
     String compartment = attributeMap.get(c + CellDesignerContstants.compartment);

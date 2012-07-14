@@ -184,7 +184,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	 */
 	private void initCompartments(Layout layout) {
 			List<CompartmentGlyph> compartments = layout.getListOfCompartmentGlyphs();
-			if (compartments.size() == 1) {
+			if (compartments.size() == 0) {
 			  // found one compartment, the default compartment, do not draw it
 			  return;
 			}

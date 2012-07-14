@@ -23,6 +23,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -30,8 +32,16 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
+import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
+import org.sbml.jsbml.ext.layout.Point;
+import org.sbml.jsbml.ext.layout.Position;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
@@ -432,7 +442,71 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
    */
   @Override
   public String findCompartmentId(Double x, Double y) {
-    // TODO determine compartment under Point x,y
-    return SBMLEditorConstants.compartmentDefaultName;
+    Layout layout = this.getCurrentLayout();
+    if (layout == null) {
+      logger.info("layout null"); 
+      return SBMLEditorConstants.compartmentDefaultName;
+    }
+    
+    ListOf<CompartmentGlyph> listOfCompartmentGlyphs = layout.getListOfCompartmentGlyphs();
+    if (listOfCompartmentGlyphs == null) {
+      logger.info("listOfCompartmentGlyphs null");
+      return SBMLEditorConstants.compartmentDefaultName;
+    }
+    
+    for(CompartmentGlyph c : listOfCompartmentGlyphs) {
+      BoundingBox bb = c.getBoundingBox();
+      if (!inside(x,y,bb)) {
+        listOfCompartmentGlyphs.remove(c);
+      }
+    }
+    return getInnermostCompartmentId(listOfCompartmentGlyphs);
+  }
+
+
+  /**
+   * returns the innermost compartment glyph of the given list
+   * all bounding boxes need to be set
+   * @param listOfCompartmentGlyphs
+   * @return
+   */
+  private String getInnermostCompartmentId(ListOf<CompartmentGlyph> listOfCompartmentGlyphs) {
+    if (listOfCompartmentGlyphs.size() > 0) {
+      CompartmentGlyph innermost = listOfCompartmentGlyphs.get(0);
+      for(CompartmentGlyph cg : listOfCompartmentGlyphs) {
+        BoundingBox bb = cg.getBoundingBox();
+        Point p = bb.getPosition();
+        if (p == null) continue;
+        BoundingBox innermostBb = innermost.getBoundingBox();
+        if (inside(p.getX(),p.getY(),innermostBb)) {
+          innermost = cg;
+        }
+      }
+      return innermost.getCompartment();
+    }
+    else {
+      return SBMLEditorConstants.compartmentDefaultName;
+    }
+  }
+
+
+  /**
+   * Checks if given Coordinates x,y hit BoundingBox bb
+   * @param x
+   * @param y
+   * @param bb
+   * @return
+   */
+  private boolean inside(Double x, Double y, BoundingBox bb) {
+    if (bb == null) return false;
+    Dimensions dimensions = bb.getDimensions();
+    if (dimensions == null) return false;
+    Point point = bb.getPosition();
+    if (point == null) return false;
+    double bx = point.getX();
+    double by = point.getY();
+    double width = dimensions.getWidth();
+    double height = dimensions.getHeight();
+    return (bx <= x && x <= bx+width && by <= y && y <= by+width);
   } 
 }
