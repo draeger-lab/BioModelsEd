@@ -47,6 +47,7 @@ public class SBMLEditorConstants {
   public static final String genericReactionGlyphIdPrefix = "reactionglyph";
   public static final String genericSpeciesGlyphIdPrefix = "speciesglyph";
   public static final String genericTextGlyphIdPrefix = "textglyph";
+  public static final String genericSpeciesReferenceGlyphIdPrefix = "speciesReferenceGlyph";
   public static final int glyphDefaultDepth = 0;
   public static final int glyphDefaultHeight = 100;
   public static final int glyphDefaultWidth = 100;

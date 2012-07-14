@@ -18,6 +18,7 @@ package de.zbit.editor.control;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -37,6 +38,7 @@ import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
@@ -247,18 +249,32 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       cgClone.setCompartment(cg.getCompartment());
       newLayout.addCompartmentGlyph(cgClone);
     }
+    HashMap<String, String> sGlyphMap = new HashMap<String, String>();
+    for (SpeciesGlyph sg : layout.getListOfSpeciesGlyphs()) {
+      SpeciesGlyph sgClone = sg.clone();
+      sgClone.setId(nextGenericId(SBMLEditorConstants.genericSpeciesGlyphIdPrefix));
+      sGlyphMap.put(sg.getId(), sgClone.getId());
+      sgClone.setSpecies(sg.getSpecies());
+      newLayout.addSpeciesGlyph(sgClone);
+    }
     for (ReactionGlyph rg : layout.getListOfReactionGlyphs()) {
       ReactionGlyph rgClone = rg.clone();
       rgClone.setId(nextGenericId(SBMLEditorConstants.genericReactionGlyphIdPrefix));
       rgClone.setReaction(rg.getReaction());
+      
+      ListOf<SpeciesReferenceGlyph> list = new ListOf<SpeciesReferenceGlyph>();
+      list.setLevel(model.getLevel());
+      list.setVersion(model.getVersion());
+      for (SpeciesReferenceGlyph sRefGlyph : rg.getListOfSpeciesReferenceGlyphs()) {
+        SpeciesReferenceGlyph sRefGlyphClone = sRefGlyph.clone();
+        sRefGlyphClone.setId(nextGenericId(SBMLEditorConstants.genericSpeciesReferenceGlyphIdPrefix));
+        sRefGlyphClone.setSpeciesGlyph(sGlyphMap.get(sRefGlyph.getSpeciesGlyphInstance().getId()));
+        list.add(sRefGlyphClone);
+      }
+      rgClone.setListOfSpeciesReferencesGlyph(list);
       newLayout.addReactionGlyph(rgClone);
     }
-    for (SpeciesGlyph sg : layout.getListOfSpeciesGlyphs()) {
-      SpeciesGlyph sgClone = sg.clone();
-      sgClone.setId(nextGenericId(SBMLEditorConstants.genericSpeciesGlyphIdPrefix));
-      sgClone.setSpecies(sg.getSpecies());
-      newLayout.addSpeciesGlyph(sgClone);
-    }
+    
     for (TextGlyph tg : layout.getListOfTextGlyphs()) {
       TextGlyph tgClone = tg.clone();
       tgClone.setId(nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix));
@@ -271,6 +287,16 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     logger.info("Added Layout in Model: " + model.getId() + " Layout ID: " + newLayout.getId() + " Layout Name: " + newLayout.getName());
     setFileModified(true);
     return newLayout;
+  }
+  
+  /**
+   * 
+   * @param species
+   * @param newLayout
+   * @return SpeciesGlyph of the species in the given Layout
+   */
+  private SpeciesGlyph findSpeciesGlyph(Species species, Layout newLayout) {
+    return new SpeciesGlyph();
   }
   
   /**
