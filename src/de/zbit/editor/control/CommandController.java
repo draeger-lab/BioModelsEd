@@ -744,7 +744,7 @@ public class CommandController implements PropertyChangeListener {
   
   /**
    * @param doc
-   * @return if iser did not cancel saving progress
+   * @return if user did not cancel saving progress
    */
   public boolean askUserSave(OpenedSBMLDocument doc) {
     if (doc.isFileModified()) {
@@ -776,7 +776,7 @@ public class CommandController implements PropertyChangeListener {
         logger.info("Couldn't find glyph for node");
       }
       else if (glyph instanceof SpeciesGlyph) {
-        ((SpeciesGlyph) glyph).getSpecies();
+        String speciesId = ((SpeciesGlyph) glyph).getSpecies();
         deleteReactionGlyphs((SpeciesGlyph) glyph, layout);
         
         if (this.nodeCopyList.remove(glyph)){
@@ -784,6 +784,10 @@ public class CommandController implements PropertyChangeListener {
         }
         layout.getListOfSpeciesGlyphs().remove(glyph);
         layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
+        if (!selectedDoc.hasAnySpeciesGlyphForSpeciesId(speciesId)) {
+          logger.info("No glyph left for species: Deleting species id: " + speciesId);
+          layout.getModel().removeSpecies(speciesId);
+        }
       }
       else if (glyph instanceof ReactionGlyph) {
         this.nodeCopyList.remove(glyph);

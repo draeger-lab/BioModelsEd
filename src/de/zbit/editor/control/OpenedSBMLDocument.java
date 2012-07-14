@@ -374,5 +374,20 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       return "";
     }
   }
+
+
+  /**
+   * @param speciesId
+   * @return
+   */
+  public boolean hasAnySpeciesGlyphForSpeciesId(String speciesId) {
+    boolean hasAnyGlyph = false;
+    for(Layout layout : getListOfLayouts()) {
+      for(SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
+        hasAnyGlyph |= glyph.getSpecies().equals(speciesId);
+      }
+    }
+    return hasAnyGlyph;
+  }
     
 }
