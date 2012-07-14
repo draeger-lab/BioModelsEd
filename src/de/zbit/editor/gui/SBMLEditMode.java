@@ -80,7 +80,9 @@ public class SBMLEditMode extends EditMode  {
     // Set list of nodes in CommandController
     firePropertyChange(SBMLEditorConstants.EditModeSelectionChanged, null, list);
     // Initiate updating of glyphs
-    firePropertyChange(SBMLEditorConstants.EditModeUpdateNodes, null, this.getGraph2D());  
+    if (!list.isEmpty()) {
+      firePropertyChange(SBMLEditorConstants.EditModeUpdateNodes, null, this.getGraph2D());
+    }
     // Send mouse position
     ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
     firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  

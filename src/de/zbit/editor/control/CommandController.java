@@ -323,7 +323,7 @@ public class CommandController implements PropertyChangeListener {
      * create a new default layout and tell the view to display it
      */
     Layout layout = doc.createDefaultLayout();
-    if (!this.view.addLayout(layout)) {
+    if (!this.view.addLayout(layout, false)) {
       return false;
     }
     
@@ -435,14 +435,17 @@ public class CommandController implements PropertyChangeListener {
        * add first or new default layout to view
        */
       boolean hasLayout = doc.hasLayout();
+      boolean autoLayout = false;
       Layout layout = doc.getFirstLayoutOrNew();
+      logger.info("Document has layout information: " + hasLayout);
       if (!hasLayout) {
          int newInformation = this.view.askUserCreateLayoutInformation();
          if (newInformation == 0) {
            doc.createLayoutInformation();
+           autoLayout = true;
          }
       }
-      this.view.addLayout(layout);
+      this.view.addLayout(layout, autoLayout);
       /*
        * notify fileManager about newly opened document
        */
@@ -476,7 +479,7 @@ public class CommandController implements PropertyChangeListener {
       
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedLeft)) {
-      nodePressedLeft(evt);      
+      nodePressedLeft(evt);
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
       
@@ -503,6 +506,7 @@ public class CommandController implements PropertyChangeListener {
    */
   private void updateNodes(PropertyChangeEvent evt) {
     Graph2D graph = (Graph2D) evt.getNewValue();
+   
     for (Node node : this.nodeList) {
       NamedSBaseGlyph glyph =  getGlyphFromNode(node);
       if (glyph == null) {
@@ -522,7 +526,7 @@ public class CommandController implements PropertyChangeListener {
             " Height: "+ height);
       }
     }
-    
+    this.layoutModified(this.view.getCurrentLayout());
   }
   
   private NamedSBaseGlyph getGlyphFromNode(Node node) {
@@ -758,8 +762,7 @@ public class CommandController implements PropertyChangeListener {
     
   public void nodeDelete() {
     Layout layout = this.view.getCurrentLayout();
-    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) layout.getSBMLDocument()
-    .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    OpenedSBMLDocument selectedDoc = getDocumentFromLayout(layout);
     
     for (Node node : this.nodeList) {
       NamedSBaseGlyph glyph = getGlyphFromNode(node);
@@ -783,7 +786,7 @@ public class CommandController implements PropertyChangeListener {
     }
             
     logger.info("nodeDelete in CC");
-    selectedDoc.setFileModified(true);
+    layoutModified(layout);
   }
     
   /**
@@ -845,8 +848,7 @@ public class CommandController implements PropertyChangeListener {
         copyReactionGlyph(layout, selectedDoc, copyReactionGlyph);
       }
     }
-    selectedDoc.setFileModified(true);
-    view.refreshTitle(layout);
+    layoutModified(layout);
   }
   
   /**
@@ -935,8 +937,7 @@ public class CommandController implements PropertyChangeListener {
             speciesIdNew);
         layout.addTextGlyph(newTextGlyph);
       }
-    }
-    
+    }    
   }
 
   /**
@@ -949,5 +950,11 @@ public class CommandController implements PropertyChangeListener {
   private OpenedSBMLDocument getDocumentFromLayout(Layout layout) {
     return (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+  }
+  
+  private void layoutModified(Layout layout) {
+    OpenedSBMLDocument doc = getDocumentFromLayout(layout);
+    doc.setFileModified(true);
+    this.view.refreshTitle(layout);
   }
 }

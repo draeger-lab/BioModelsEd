@@ -51,7 +51,7 @@ public interface SBMLView {
 
   public void fileQuit();
 
-  public boolean addLayout(Layout layout);
+  public boolean addLayout(Layout layout, boolean autoLayout);
 
   public Layout getCurrentLayout();
 

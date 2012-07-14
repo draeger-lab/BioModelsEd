@@ -25,6 +25,7 @@ import javax.swing.JTabbedPane;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 
+import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
@@ -57,13 +58,13 @@ public class TabManager extends JTabbedPane {
   /**
    * @param doc
    */
-  public boolean addTab(Layout layout) {
+  public boolean addTab(Layout layout, boolean autoLayout) {
     if(listOfLayouts.contains(layout)) {
       logger.warning("List contains layout: ID: "+ layout.getId() + " Name: " +layout.getName());
     }
     listOfLayouts.add(layout);
       
-    GraphLayoutPanel panel = createPanelFromLayout(layout);
+    GraphLayoutPanel panel = createPanelFromLayout(layout, autoLayout);
     
     addTab("", panel);
     setSelectedIndex(getIndexFromLayout(layout));
@@ -210,7 +211,7 @@ public class TabManager extends JTabbedPane {
     
     listOfLayouts.set(index, newLayout);
 
-    GraphLayoutPanel panel = createPanelFromLayout(newLayout);
+    GraphLayoutPanel panel = createPanelFromLayout(newLayout, false);
 
     setComponentAt(index, panel);
     setSelectedComponent(panel);
@@ -220,10 +221,13 @@ public class TabManager extends JTabbedPane {
 
   }
   
-  public GraphLayoutPanel createPanelFromLayout (Layout layout) { 
+  public GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     GraphLayoutPanel panel = new GraphLayoutPanel(layout, editMode);
     Graph2DView view = panel.getGraph2DView();
+    if (autoLayout) {
+      view.applyLayout(new OrganicLayouter());
+    }
     
     //FIXME Not sure if necessery
     //view.removeViewMode((ViewMode) view.getViewModes().next());

@@ -216,21 +216,22 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
   @Override
   public boolean fileSave() {
-	  boolean b = commandController.fileSave();
-    if(b) {
+	  boolean success = commandController.fileSave();
+    if(success) {
       this.tabManager.refreshTitle(getCurrentLayout());
+      this.editorMenu.setSaveState(false);
     }
-    return b;
+    return success;
   }
 
 
   @Override
   public boolean fileSaveAs() {
-    boolean b = commandController.fileSaveAs();
-    if(b) {
+    boolean success = commandController.fileSaveAs();
+    if(success) {
       this.tabManager.refreshTitle(getCurrentLayout());
     }
-    return b;
+    return success;
   }
 
 
@@ -244,8 +245,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
    * @see de.zbit.editor.control.SBMLView#addDocument(de.zbit.editor.control.OpenedSBMLDocument)
    */
   @Override
-  public boolean addLayout(Layout layout) {
-    return getTabManager().addTab(layout);
+  public boolean addLayout(Layout layout, boolean autoLayout) {
+    return getTabManager().addTab(layout, autoLayout);
   }
 
 
@@ -331,6 +332,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   @Override
   public void refreshTitle(Layout layout) {
     this.tabManager.refreshTitle(layout);
+    this.editorMenu.setSaveState(true);
   }
   
   /**
@@ -353,7 +355,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
         tabManager.showTab(layout);
       }
       else {
-        addLayout(layout);
+        addLayout(layout, false);
       }
     }
   }
@@ -388,7 +390,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     }
     Layout layout = doc.createNewLayout(layoutName);
     
-    return addLayout(layout);
+    return addLayout(layout, false);
   }
   
   /* (non-Javadoc)
@@ -403,7 +405,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     Layout clonedLayout = doc.addLayout(layout); 
     
     logger.info("Cloning Layout ID: "+ layout.getId() + " Name: " +layout.getName() + " to  Layout ID: "+ clonedLayout.getId() + " Name: " +clonedLayout.getName());
-    addLayout(clonedLayout);
+    addLayout(clonedLayout, false);
   }
   
   /* (non-Javadoc)
