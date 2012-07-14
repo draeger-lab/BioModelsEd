@@ -194,6 +194,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return JOptionPane.showInputDialog(Resources.getString("NEW_LAYOUT"), Resources.getString("GENERIC_LAYOUT_NAME"));
   }
   
+  public String askUserLayoutRename() {
+    return JOptionPane.showInputDialog(Resources.getString("NEW_NAME"), this.getCurrentLayout().getName());
+  }
+  
   //TODO Add String to Resources
   /**
    * Asks user, if Glyphs should be created for all Structures in the model
@@ -518,8 +522,13 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
    */
   @Override
   public boolean layoutRename() {
-    String name = askUserLayoutNew();
-    return this.commandController.layoutRename(this.getCurrentLayout(), name);
+    String name = askUserLayoutRename();
+    if (name == null) {
+      return false;
+    }
+    else {
+      return this.commandController.layoutRename(this.getCurrentLayout(), name);
+    }
   }
 
 
