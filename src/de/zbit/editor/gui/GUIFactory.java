@@ -207,7 +207,7 @@ public class GUIFactory {
     return popup;
   }
   
-  public static JPopupMenu createNodePopupMenu(CommandController controller) {
+  public static JPopupMenu createSpeciesGlyphPopupMenu(CommandController controller) {
     JMenuItem menuItem;
     // Create the popup menu.
     JPopupMenu popup = new JPopupMenu();
@@ -222,6 +222,24 @@ public class GUIFactory {
       controller, SBMLEditorConstants.nodeCopy));
     popup.add(menuItem);
     
+    menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      controller, SBMLEditorConstants.nodeDelete));
+    popup.add(menuItem);
+    
+    return popup;
+  }
+  
+  public static JPopupMenu createReactionGlyphPopupMenu(CommandController controller) {
+    JMenuItem menuItem;
+    // Create the popup menu.
+    JPopupMenu popup = new JPopupMenu();
+
+    menuItem = new JMenuItem(Resources.getString("NODE_RENAME"));
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      controller, SBMLEditorConstants.nodeRename));
+    popup.add(menuItem);
+       
     menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
       controller, SBMLEditorConstants.nodeDelete));
