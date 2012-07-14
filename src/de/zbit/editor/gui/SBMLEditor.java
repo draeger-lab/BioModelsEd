@@ -23,8 +23,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -32,16 +30,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.Point;
-import org.sbml.jsbml.ext.layout.Position;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
@@ -197,13 +191,12 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   public String askUserLayoutRename() {
     return JOptionPane.showInputDialog(Resources.getString("NEW_NAME"), this.getCurrentLayout().getName());
   }
-  
-  //TODO Add String to Resources
+
   /**
    * Asks user, if Glyphs should be created for all Structures in the model
    */
   public int askUserCreateLayoutInformation() {
-    return JOptionPane.showConfirmDialog(null, "Create Generic Layout Information?", "No Layout Information found.", 0);
+    return JOptionPane.showConfirmDialog(null, Resources.getString("DIALOG_CREATE_LAYOUT_QUESTION"), Resources.getString("DIALOG_CREATE_LAYOUT_TITLE"), 0);
   }
   
   @Override
@@ -240,8 +233,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   @Override
-  public void fileQuit() {
-    commandController.fileQuit();
+  public boolean fileQuit() {
+    return commandController.fileQuit();
   }
 
 
@@ -513,7 +506,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     double by = point.getY();
     double width = dimensions.getWidth();
     double height = dimensions.getHeight();
-    return (bx <= x && x <= bx+width && by <= y && y <= by+width);
+    return (bx <= x && x <= bx+width && by <= y && y <= by+height);
   }
 
 

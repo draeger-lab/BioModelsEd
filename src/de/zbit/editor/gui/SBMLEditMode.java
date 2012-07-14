@@ -17,11 +17,8 @@
 package de.zbit.editor.gui;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
@@ -53,7 +50,6 @@ public class SBMLEditMode extends EditMode  {
   
   @Override
   public void mousePressedLeft(double x, double y) {
-	  //TODO set Source Node for edge
     
     HitInfo info = this.getGraph2D().getHitInfo(x, y);
     Object hit = info.getFirstHit();

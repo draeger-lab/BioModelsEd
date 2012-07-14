@@ -43,14 +43,12 @@ import de.zbit.editor.SBMLEditorConstants;
  */
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
-  private TabManager tabmanager;
   private GraphLayoutPanel panel;
   private SBMLEditMode editMode;
   private Layout layout;
   private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
   
-  public ControllerViewSynchronizer(TabManager tabmanager, GraphLayoutPanel panel, Layout layout, SBMLEditMode editMode) {
-    this.tabmanager = tabmanager;
+  public ControllerViewSynchronizer(GraphLayoutPanel panel, Layout layout, SBMLEditMode editMode) {
     this.panel = panel;
     this.layout = layout;
     this.editMode = editMode;
@@ -72,7 +70,8 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
       Species s = layout.getModel().getSpecies(speciesGlyph.getSpecies());
-      //FIXME speciesGlyph hat kein Model
+      //FIXME speciesGlyph hat Aufgrund eines fehlers in clone() kein Model,
+      //folgende Zeile würde einen fehler ausgeben:
       //Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
       if (boundingBox != null) {
@@ -92,6 +91,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   /* (non-Javadoc)
    * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     logger.info(evt.getPropertyName());

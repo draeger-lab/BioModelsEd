@@ -290,16 +290,6 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
   }
   
   /**
-   * 
-   * @param species
-   * @param newLayout
-   * @return SpeciesGlyph of the species in the given Layout
-   */
-  private SpeciesGlyph findSpeciesGlyph(Species species, Layout newLayout) {
-    return new SpeciesGlyph();
-  }
-  
-  /**
    * create layout information for every element of the model
    * @return
    */
@@ -314,14 +304,13 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix),
         s.getLevel(), s.getVersion(), s.getId());
       layout.add(sGlyph);
+      TextGlyph tGlyph = SBMLFactory.createTextGlyph(this.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix),
+        model.getLevel(), model.getVersion(), sGlyph, s.getId());
+      layout.addTextGlyph(tGlyph);
     }
-    
-    //TODO TextGlyphs für SpeciesGlyphs
     
     List<Reaction> reactions = model.getListOfReactions();
     for (Reaction r : reactions) {
-      //FIXME Always the first Reactant and Product are used
-      //Maybe doesn't work
       SpeciesGlyph source = null;
       SpeciesGlyph target = null;
       List<SpeciesGlyph> sGlyphs = layout.getListOfSpeciesGlyphs();

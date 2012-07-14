@@ -23,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.beans.EventHandler;
 import java.util.logging.Logger;
 
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 

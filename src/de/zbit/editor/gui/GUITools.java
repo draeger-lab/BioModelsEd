@@ -1,6 +1,6 @@
 /*
- * $Id$
- * $URL$
+ * $$Id$$
+ * $$URL$$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -29,7 +29,6 @@ import javax.swing.JToolBar;
  * @since 1.0
  * @version $Rev$
  */
-// TODO: Correct header, set SVN properties.
 public class GUITools {
 
   /**

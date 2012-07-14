@@ -37,8 +37,6 @@ public interface SBMLView {
   public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(
       3, 1);
 
-  // TODO: let all actions return a boolean value (success/failure)
-
   public boolean fileNew();
 
   public boolean fileOpen() throws FileNotFoundException;
@@ -49,7 +47,7 @@ public interface SBMLView {
 
   public boolean fileSaveAs();
 
-  public void fileQuit();
+  public boolean fileQuit();
 
   public boolean addLayout(Layout layout, boolean autoLayout);
 
@@ -71,7 +69,7 @@ public interface SBMLView {
   public void showWarning(String warning);
   public void showError(String error);
 
-  boolean closeTab(Layout layout);
+  public boolean closeTab(Layout layout);
 
   /**
    * @param layout

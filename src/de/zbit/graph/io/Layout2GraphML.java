@@ -70,6 +70,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 		initReactionGlyphs(layout);
 		initReactionModifiers(layout);
 		initTextGlyphs(layout);
+		logger.info("Layout Information Initialized.");
 	}
 
 	private void initReactionModifiers(Layout layout) {

@@ -25,8 +25,6 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.ProgressMonitorInputStream;
 import javax.swing.SwingWorker;
 
-import org.sbml.jsbml.SBMLReader;
-
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.graph.io.CellDesignerAnnotationsParser.CellDesignerAnnotationParser;

@@ -70,8 +70,8 @@ import de.zbit.editor.gui.SBMLEditMode;
 public class CommandController implements PropertyChangeListener {
 
   /**
-   * TODO maybe rethink states an hold SBOTerm instead this would simplify
-   * species creation
+   * States
+   * 
    */
   private enum States {
     catalysis,
@@ -333,7 +333,7 @@ public class CommandController implements PropertyChangeListener {
   /**
    * quits program
    */
-  public void fileQuit() {
+  public boolean fileQuit() {
     if (this.fileManager.anyFileIsModified()) {
       int returnVal = GUIFactory.createQuestionClose(this.view.getFrame());
       if (returnVal == JOptionPane.YES_OPTION && this.view.getTabManager().closeAllTabs()) {
@@ -342,6 +342,7 @@ public class CommandController implements PropertyChangeListener {
     } else {
       System.exit(0);
     }
+    return true;
   }
 
   /**
@@ -448,11 +449,11 @@ public class CommandController implements PropertyChangeListener {
       /*
        * notify fileManager about newly opened document
        */
+      this.fileManager.addDocument(doc);
       
-      // FIXME Test to save and write Colors
-      // this.fileManager.addDocument(doc);
-      if (this.fileManager.addDocument(doc)) {
-        // TODO createDefaultRenderInformation in OpenedSBMLDocument needed
+      //Test to save and write Colors
+      /*
+        if (this.fileManager.addDocument(doc)) {
         AbstractRenderPlugin absRenderPlugin = 
           (AbstractRenderPlugin) doc.getDocument().getModel().getExtension(RenderConstants.namespaceURI);
         
@@ -469,7 +470,7 @@ public class CommandController implements PropertyChangeListener {
           renderPlugin.addGlobalRenderInformation(renderInfo);
           doc.getDocument().getModel().addExtension(RenderConstants.namespaceURI, renderPlugin);
         }
-      }
+      }*/
     }
     else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMousePressedLeft)) {
       mousePressedLeft(evt);    

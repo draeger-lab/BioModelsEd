@@ -28,7 +28,6 @@ import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 import y.base.Node;
-import y.layout.hierarchic.HierarchicLayouter;
 import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
 import de.zbit.editor.SBMLEditorConstants;
@@ -232,15 +231,10 @@ public class TabManager extends JTabbedPane {
     if (autoLayout) {
       view.applyLayout(new OrganicLayouter());
     }
-    
-    //FIXME Not sure if necessery
-    //view.removeViewMode((ViewMode) view.getViewModes().next());
-    //ViewMode viewMode = (ViewMode) view.getViewModes().next();
  
     view.addViewMode(editMode);
-    
-    
-    layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout, editMode));
+        
+    layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, layout, editMode));
     return panel;
   }
 
