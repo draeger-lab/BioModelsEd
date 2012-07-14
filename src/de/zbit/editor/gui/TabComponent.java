@@ -78,6 +78,11 @@ public class TabComponent extends JPanel {
   public void closeAll() {
     tabManager.closeAllTabs();
   }
+  
+  public void autoLayout() {
+    GraphLayoutPanel panel = (GraphLayoutPanel) tabManager.getComponentAt(tabManager.indexOfTabComponent(this));
+    tabManager.layoutAuto(panel.getDocument());
+  }
 
   class TabListener extends MouseAdapter {
 

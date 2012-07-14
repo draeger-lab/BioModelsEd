@@ -106,6 +106,10 @@ public interface SBMLView {
    * 
    */
   public boolean layoutNew();
+  
+  public boolean layoutRename();
+  
+  public boolean layoutAuto();
 
   /**
    * 

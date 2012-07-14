@@ -508,25 +508,31 @@ public class CommandController implements PropertyChangeListener {
     Graph2D graph = (Graph2D) evt.getNewValue();
    
     for (Node node : this.nodeList) {
-      NamedSBaseGlyph glyph =  getGlyphFromNode(node);
-      if (glyph == null) {
-        logger.info("Couldn't find glyph for node");
-      }
-      else {
-        double x = graph.getX(node);
-        double y = graph.getY(node);
-        double width = graph.getWidth(node);
-        double height = graph.getHeight(node);
-        glyph.createBoundingBox(width, height, SBMLEditorConstants.glyphDefaultDepth, x, y, SBMLEditorConstants.glyphDefaultZ);
-        logger.info("Updating glyph information: " + 
-            "Id: " + glyph.getId() + 
-            " X: " + x +
-            " Y:" + y +
-            " Width: " + width +
-            " Height: "+ height);
-      }
+      updateGlyphFromNode(node, graph);
     }
-    this.layoutModified(this.view.getCurrentLayout());
+  }
+  
+  public boolean updateGlyphFromNode(Node node, Graph2D graph) {
+    NamedSBaseGlyph glyph =  getGlyphFromNode(node);
+    if (glyph == null) {
+      logger.info("Couldn't find glyph for node");
+      return false;
+    }
+    else {
+      double x = graph.getX(node);
+      double y = graph.getY(node);
+      double width = graph.getWidth(node);
+      double height = graph.getHeight(node);
+      glyph.createBoundingBox(width, height, SBMLEditorConstants.glyphDefaultDepth, x, y, SBMLEditorConstants.glyphDefaultZ);
+      logger.info("Updating glyph information: " + 
+          "Id: " + glyph.getId() + 
+          " X: " + x +
+          " Y:" + y +
+          " Width: " + width +
+          " Height: "+ height);
+      this.layoutModified(this.view.getCurrentLayout());
+      return true;
+    }
   }
   
   private NamedSBaseGlyph getGlyphFromNode(Node node) {
@@ -956,5 +962,15 @@ public class CommandController implements PropertyChangeListener {
     OpenedSBMLDocument doc = getDocumentFromLayout(layout);
     doc.setFileModified(true);
     this.view.refreshTitle(layout);
+  }
+
+  /**
+   * @param currentLayout
+   */
+  public boolean layoutRename(Layout layout, String name) {
+    layout.setName(name);
+    layoutModified(layout);
+    this.view.updateComboBox(getDocumentFromLayout(layout).getListOfLayouts());
+    return true;
   }
 }

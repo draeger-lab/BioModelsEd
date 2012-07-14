@@ -54,6 +54,8 @@ public class Resources {
   public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
   public static final ImageIcon iconTab = Resources.createImageIcon("images/ButtonTab.png", null);
   public static final ImageIcon iconTabNew = Resources.createImageIcon("images/ButtonTabNew.png", null);
+  public static final ImageIcon iconAuto = Resources.createImageIcon("images/ButtonAuto.png", null);
+  public static final ImageIcon iconRename = Resources.createImageIcon("images/ButtonRename.png", null);
   
 	// Get localized String in default language
 	public static String getString(String key){

@@ -24,7 +24,11 @@ import javax.swing.JTabbedPane;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
+import y.base.Node;
+import y.layout.hierarchic.HierarchicLayouter;
 import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
 import de.zbit.editor.SBMLEditorConstants;
@@ -238,5 +242,27 @@ public class TabManager extends JTabbedPane {
     
     layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(this, panel, layout, editMode));
     return panel;
+  }
+
+  /**
+   * @param panel 
+   * 
+   */
+  public boolean layoutAuto(Layout layout) {
+    GraphLayoutPanel panel = (GraphLayoutPanel) getComponentAt(getIndexFromLayout(layout));
+    Graph2DView view = panel.getGraph2DView();
+    view.applyLayout(new OrganicLayouter());
+    view.updateView();
+    
+    for(SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
+      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      this.editorInstance.getController().updateGlyphFromNode(node, view.getGraph2D());
+    }
+    for(ReactionGlyph glyph : layout.getListOfReactionGlyphs()) {
+      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      this.editorInstance.getController().updateGlyphFromNode(node, view.getGraph2D());
+    }
+    
+    return true;
   }
 }

@@ -204,6 +204,12 @@ public class GUIFactory {
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
       component, "closeAll"));
     popup.add(menuItem);
+    
+    menuItem = new JMenuItem("Autolayout");
+    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+      component, "autoLayout"));
+    popup.add(menuItem);
+    
     return popup;
   }
   

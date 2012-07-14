@@ -510,5 +510,24 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     double width = dimensions.getWidth();
     double height = dimensions.getHeight();
     return (bx <= x && x <= bx+width && by <= y && y <= by+width);
+  }
+
+
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#layoutRename()
+   */
+  @Override
+  public boolean layoutRename() {
+    String name = askUserLayoutNew();
+    return this.commandController.layoutRename(this.getCurrentLayout(), name);
+  }
+
+
+  /* (non-Javadoc)
+   * @see de.zbit.editor.control.SBMLView#layoutAuto()
+   */
+  @Override
+  public boolean layoutAuto() {
+    return this.tabManager.layoutAuto(this.getCurrentLayout());
   } 
 }

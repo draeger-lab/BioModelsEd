@@ -107,16 +107,22 @@ public class SBMLEditorConstants {
   //Resource Strings
   public static final String MENU_LAYOUT = "MENU_LAYOUT";
   public static final String MENU_LAYOUT_NEW = "MENU_LAYOUT_NEW";
+  public static final String MENU_LAYOUT_RENAME = "MENU_LAYOUT_RENAME";
   public static final String MENU_LAYOUT_CLONE = "MENU_LAYOUT_CLONE";
   public static final String MENU_LAYOUT_DELETE = "MENU_LAYOUT_DELETE";
+  public static final String MENU_LAYOUT_AUTO = "MENU_LAYOUT_AUTO";
   //Actions
   public static final String layoutNew = "layoutNew";
+  public static final String layoutRename = "layoutRename";
   public static final String layoutClone = "layoutClone";
   public static final String layoutDelete = "layoutDelete";
+  public static final String layoutAuto = "layoutAuto";
   //Keystrokes
   public static final String MENU_LAYOUT_NEW_KEYSTROKE = "alt N";
+  public static final String MENU_LAYOUT_RENAME_KEYSTROKE = "alt R";
   public static final String MENU_LAYOUT_CLONE_KEYSTROKE = "alt C";
   public static final String MENU_LAYOUT_DELETE_KEYSTROKE = "alt D";
+  public static final String MENU_LAYOUT_AUTO_KEYSTROKE = "alt A";
   //Menu Help
   //Resource Strings
   public static final String MENU_HELP = "MENU_HELP";
@@ -146,7 +152,5 @@ public class SBMLEditorConstants {
   public static final String addEmptySet = "addEmptySet";
   public static final String openLayoutInNewTab = "openLayoutInNewTab";
   public static final String openLayoutInTab = "openLayoutInTab";
-  public static final String reversible = "reversible";
-  
-  
+  public static final String reversible = "reversible";  
 }
