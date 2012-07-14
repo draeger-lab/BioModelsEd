@@ -201,12 +201,14 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
    * @return true, if Document has a Layout
    */
   public boolean hasLayout() {
+    boolean hasLayout = false;
     ExtendedLayoutModel extendedLayoutModel =
       (ExtendedLayoutModel) this.document.getModel().getExtension(LayoutConstants.namespaceURI);
-    
-    return ((extendedLayoutModel != null) &&
-        (extendedLayoutModel.getListOfLayouts() != null) &&
-        (!extendedLayoutModel.getListOfLayouts().isEmpty()));    
+    if (extendedLayoutModel != null) {
+      ListOf<Layout> listOfLayouts = extendedLayoutModel.getListOfLayouts();
+      hasLayout = (listOfLayouts != null && !listOfLayouts.isEmpty());
+    }
+    return hasLayout;
   }
   /**
    * @param name
