@@ -18,6 +18,7 @@ package de.zbit.editor.gui;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
@@ -125,6 +126,22 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), source, target,
         new GenericEdgeRealizer(), state);
       logger.info("CVS : Modifier Drawn");
+    }
+    
+    else if (evt.getPropertyName().equals("nodeRenamed")) {
+      Species species = (Species) evt.getNewValue();
+      
+      logger.info("rename species with id " + species.getId() + " to " + species.getName());
+      
+      List<SpeciesGlyph> listOfGlyphs = layout.getListOfSpeciesGlyphs();
+      for (SpeciesGlyph glyph : listOfGlyphs) {
+        if (glyph.isSetSpecies() && glyph.getSpecies().equals(species.getId())) {
+          Node n = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          this.panel.getGraph2DView().getGraph2D().setLabelText(n, species.getName());
+        }
+      }
+
+      this.panel.getGraph2DView().updateView();
     }
     
     else {

@@ -866,11 +866,27 @@ public class CommandController implements PropertyChangeListener {
    * 
    */
   public void nodeRename() {
-    /*if (speciesSelected == true) {
-      TextGlyph textGlyph = (TextGlyph) selectedSpeciesGlyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
-      // TODO
-      JOptionPane.showInputDialog(Resources.getString("NEW_FILE"), Resources.getString("GENERIC_FILE_NAME"));
-    }*/
+    Node nodeToRename = this.nodeList.get(0);
+    SpeciesGlyph selectedGlyph = (SpeciesGlyph) getGlyphFromNode(nodeToRename);
+    TextGlyph textGlyph = (TextGlyph) selectedGlyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+    Species species = selectedGlyph.getModel().getSpecies(textGlyph.getNamedSBase());
+    String oldName = species != null ? species.getName() : "";
+    String newName = JOptionPane.showInputDialog(Resources.getString("NEW_NODE_NAME"),
+        oldName);
+    if (newName != null) {
+      // set name
+      species.setName(newName);
+      
+      // set file as modified
+      OpenedSBMLDocument doc = getDocumentFromLayout(view.getCurrentLayout());
+      doc.setFileModified(true);
+
+      // refresh view
+      view.refreshTitle(view.getCurrentLayout());
+      
+      // update Graph2D node
+      this.view.getCurrentLayout().firePropertyChange("nodeRenamed", null, species);
+    }
   }
   
   /**
