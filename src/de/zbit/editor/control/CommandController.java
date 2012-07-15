@@ -888,7 +888,7 @@ public class CommandController implements PropertyChangeListener {
         copySpeciesGlyph(layout, selectedDoc, copySpeciesGlyph);
       }
       else if (glyph instanceof ReactionGlyph) {
-        SpeciesGlyph copyReactionGlyph = (SpeciesGlyph) glyph;
+        ReactionGlyph copyReactionGlyph = (ReactionGlyph) glyph;
         copyReactionGlyph(layout, selectedDoc, copyReactionGlyph);
       }
     }
@@ -901,7 +901,7 @@ public class CommandController implements PropertyChangeListener {
    * @param copyReactionGlyph
    */
   private void copyReactionGlyph(Layout layout, OpenedSBMLDocument selectedDoc,
-      SpeciesGlyph copyReactionGlyph) {
+      ReactionGlyph copyReactionGlyph) {
     logger.info("Reactionglyph");    
   }
 
