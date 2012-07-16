@@ -191,6 +191,11 @@ public class GUIFactory {
       title, JOptionPane.YES_NO_CANCEL_OPTION);
   }
 
+  public static int createQuestionDelete(JFrame frame) {
+    return JOptionPane.showConfirmDialog(frame,
+      Resources.getString("DIALOG_DELETE_LAYOUT_QUESTION"),
+      Resources.getString("DIALOG_DELETE_LAYOUT_TITLE"), JOptionPane.YES_NO_OPTION);
+  }
 
   public static JPopupMenu createTabPopupMenu(TabComponent component) {
     JMenuItem menuItem;

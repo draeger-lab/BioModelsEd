@@ -37,6 +37,18 @@ import de.zbit.editor.control.OpenedSBMLDocument;
  * @author Jakob Matthes
  * @version $Rev$
  */
+/**
+ * @author Alexander Diamantikos
+ * @version $Rev$
+ */
+/**
+ * @author Alexander Diamantikos
+ * @version $Rev$
+ */
+/**
+ * @author Alexander Diamantikos
+ * @version $Rev$
+ */
 public class TabManager extends JTabbedPane {
 
   private static final long serialVersionUID = -905908829761611472L;
@@ -71,7 +83,6 @@ public class TabManager extends JTabbedPane {
     
     addTab("", panel);
     setSelectedIndex(getIndexFromLayout(layout));
-    //setSelectedComponent(panel);
     setTabComponentAt(getSelectedIndex(), new TabComponent(this));
 
     refreshTitle(layout);
@@ -137,18 +148,11 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @param currentLayout
+   * @param layout
    */
   public void refreshTitle(Layout layout) {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getModel().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
 
-    /*TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(layout));
-    String title = doc.getAssociatedFilename()+": "+ layout.getName();
-    if(doc.isFileModified()) {
-      title = "*"+title;
-    }
-    component.setTitle(title);
-    */
     for(Layout l : doc.getListOfLayouts()) {
       if(isLayoutOpen(l)) {
         TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(l));
@@ -163,7 +167,7 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @param l
+   * @param layout
    * @return
    */
   public boolean isLayoutOpen(Layout layout) {
@@ -175,10 +179,17 @@ public class TabManager extends JTabbedPane {
     return false;
   }  
   
+  /**
+   * @return
+   */
   public boolean isAnySelected() {
     return getSelectedIndex() != -1;
   }
   
+  /**
+   * @param layout
+   * @return
+   */
   private int getIndexFromLayout(Layout layout) {
     int index = 0;
     for(Layout l : this.listOfLayouts) {
@@ -190,6 +201,10 @@ public class TabManager extends JTabbedPane {
     return -1;
   }
   
+  /**
+   * @param layout
+   * @return Returns if any other layout from the same document is open 
+   */
   public boolean isAnyOpenFromDocument(Layout layout) {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
@@ -206,8 +221,9 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @param currentLayout
-   * @param layout
+   * Change the the tab with oldLayout to newLayout
+   * @param oldLayout
+   * @param newLayout
    */
   public void changeTab(Layout oldLayout, Layout newLayout) {
     int index = getIndexFromLayout(oldLayout);
@@ -224,7 +240,12 @@ public class TabManager extends JTabbedPane {
 
   }
   
-  public GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
+  /**
+   * @param layout
+   * @param autoLayout
+   * @return
+   */
+  private GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     GraphLayoutPanel panel = new GraphLayoutPanel(layout, editMode);
     Graph2DView view = panel.getGraph2DView();
@@ -239,11 +260,11 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @param panel 
-   * 
+   * @param layout
+   * @return
    */
   public boolean layoutAuto(Layout layout) {
-    GraphLayoutPanel panel = (GraphLayoutPanel) getComponentAt(getIndexFromLayout(layout));
+    GraphLayoutPanel panel = getPanelFromLayout(layout);
     Graph2DView view = panel.getGraph2DView();
     view.applyLayout(new OrganicLayouter());
     view.updateView();
@@ -258,5 +279,13 @@ public class TabManager extends JTabbedPane {
     }
     
     return true;
+  }
+  
+  /**
+   * @param layout
+   * @return
+   */
+  public GraphLayoutPanel getPanelFromLayout(Layout layout) {
+    return (GraphLayoutPanel) getComponentAt(getIndexFromLayout(layout));
   }
 }

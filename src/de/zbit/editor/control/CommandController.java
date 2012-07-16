@@ -60,6 +60,7 @@ import y.base.Node;
 import y.view.Graph2D;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.GUIFactory;
+import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
 
@@ -727,18 +728,16 @@ public class CommandController implements PropertyChangeListener {
   public void layoutDelete(Layout layout) {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    boolean anyopen = view.getTabManager().isAnyOpenFromDocument(layout);
     if(doc.getListOfLayouts().size() == 1) {
       logger.info("Document doesn't have 2 or more layouts");
+      this.view.showError("ERROR_LAYOUT_DELETE");
     }
-    else if (view.getTabManager().isAnyOpenFromDocument(layout)){
+    else if (anyopen || !anyopen && GUIFactory.createQuestionDelete(this.view.getFrame()) == JOptionPane.YES_OPTION){
       logger.info("Try to delete Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
       doc.getListOfLayouts().remove(layout);
+      doc.setFileModified(true);
       view.closeTab(layout);
-      //view.updateComboBox(doc.getListOfLayouts());
-    }
-    else {
-        logger.info("No other layout opened");
-      //TODO Ask user for Save
     }
   }
   
@@ -746,7 +745,7 @@ public class CommandController implements PropertyChangeListener {
    * @param doc
    * @return if user did not cancel saving progress
    */
-  public boolean askUserSave(OpenedSBMLDocument doc) {
+  private boolean askUserSave(OpenedSBMLDocument doc) {
     if (doc.isFileModified()) {
       int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
       if (returnVal == JOptionPane.YES_OPTION) {
@@ -878,14 +877,16 @@ public class CommandController implements PropertyChangeListener {
       species.setName(newName);
       
       // set file as modified
-      OpenedSBMLDocument doc = getDocumentFromLayout(view.getCurrentLayout());
-      doc.setFileModified(true);
-
-      // refresh view
-      view.refreshTitle(view.getCurrentLayout());
+      Layout layout = view.getCurrentLayout();
+      layoutModified(layout);
       
       // update Graph2D node
-      this.view.getCurrentLayout().firePropertyChange("nodeRenamed", null, species);
+      // Property change does not work
+      // this.view.getCurrentLayout().firePropertyChange("nodeRenamed", null, species);
+      // 
+      Graph2D graph2d = this.view.getTabManager().getPanelFromLayout(layout).getGraph2DView().getGraph2D();
+      graph2d.setLabelText(nodeToRename, newName);
+      graph2d.updateViews();
     }
   }
   
