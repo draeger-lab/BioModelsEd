@@ -744,8 +744,7 @@ public class CommandController implements PropertyChangeListener {
       int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
       if (returnVal == JOptionPane.YES_OPTION) {
         logger.info("User chose to save file");
-        fileSave();
-        return true;
+        return fileSave();
       }
       else if (returnVal == JOptionPane.NO_OPTION) {
         logger.info("User chose to not save file");

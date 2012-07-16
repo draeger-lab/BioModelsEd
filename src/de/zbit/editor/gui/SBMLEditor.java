@@ -173,11 +173,12 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     File file = null;
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       file = fc.getSelectedFile();
+      // add extension
+      if (! fc.getFileFilter().accept(file)) {
+        file = new File(file.getAbsolutePath() + ".sbml");
+      }
     }
-    // add extension
-    if (! fc.getFileFilter().accept(file)) {
-      file = new File(file.getAbsolutePath() + ".sbml");
-    }
+    
     return file;
   }
   
@@ -187,13 +188,14 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     File file = null;
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       file = fc.getSelectedFile();
+      // add extension
+      FileNameExtensionFilter filter = (FileNameExtensionFilter) fc.getFileFilter();
+      if (! filter.accept(file)) {
+        file = new File(file.getAbsolutePath() + "." + filter.getExtensions()[0]);
+      }
+      logger.info("Path to save image: " + file.getAbsolutePath());
     }
-    // add extension
-    FileNameExtensionFilter filter = (FileNameExtensionFilter) fc.getFileFilter();
-    if (! filter.accept(file)) {
-      file = new File(file.getAbsolutePath() + "." + filter.getExtensions()[0]);
-    }
-    logger.info("Path to save image: " + file.getAbsolutePath());
+    
     return file;
   }
   

@@ -186,14 +186,6 @@ public class FileManager {
         return fileSaveAs(doc);
       }
       
-      /*String associatedFilename = doc.getAssociatedFilename();
-      logger.info("assoc filename: " + associatedFilename);
-      // check for Filename set, if not ask user
-      File file = associatedFilename == null ? 
-        commandController.askUserSaveDialog() : new File(doc.getAssociatedFilepath());
-      logger.info("chosen file: " + file.getAbsolutePath());
-      doc.setAssociatedFilepath(file.getAbsolutePath());
-      assert doc.getAssociatedFilepath() != null;*/
       File file = new File(doc.getAssociatedFilepath());
       
       SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
@@ -209,8 +201,11 @@ public class FileManager {
 
   public boolean fileSaveAs(OpenedSBMLDocument doc) {
     File file = commandController.askUserSaveDialog();
-    doc.setAssociatedFilepath(file.getAbsolutePath());
-    return fileSave(doc);
+    if (file != null) {
+      doc.setAssociatedFilepath(file.getAbsolutePath());
+      return fileSave(doc);
+    }
+    return false;
   }
   
   public boolean isFileNameUsed(String name) { 
