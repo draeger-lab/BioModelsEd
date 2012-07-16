@@ -178,7 +178,37 @@ public class GUIFactory {
     return fileChooser;
   }
 
+  public static JFileChooser createFileChooserExport() {
+    JFileChooser fileChooser = new JFileChooser();
 
+    /*
+     * no filtering
+     */
+    fileChooser.setAcceptAllFileFilterUsed(true);
+
+    /*
+     * *.gif and *.jpeg filter
+     */
+    FileNameExtensionFilter extensionFilter =  createFilterGIF();
+    
+    fileChooser.addChoosableFileFilter(extensionFilter);
+    
+    extensionFilter =  createFilterJPEG();
+    fileChooser.addChoosableFileFilter(extensionFilter);
+    
+    fileChooser.setFileFilter(extensionFilter);
+
+    return fileChooser;
+  }
+  
+  public static FileNameExtensionFilter createFilterJPEG() {
+    return new FileNameExtensionFilter("JPEG", "jpeg", "JPEG", "jpg");
+  }
+
+  public static FileNameExtensionFilter createFilterGIF() {
+    return new FileNameExtensionFilter("GIF", "gif", "GIF");
+  }
+  
   public static int createQuestionClose(JFrame frame) {
     return JOptionPane.showConfirmDialog(frame,
       Resources.getString("DIALOG_QUIT_QUESTION"),

@@ -60,7 +60,7 @@ public class EditorMenu extends JMenuBar {
           SBMLEditorConstants.fileSave));
     GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_SAVEAS), Resources.iconButtonSave,
         EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.fileSaveAs));
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_EXPORT), null,
+    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_EXPORT), Resources.iconButtonExport,
         EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.fileExport));
     menuFile.addSeparator();
     GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_QUIT), Resources.iconButtonQuit,
@@ -89,7 +89,7 @@ public class EditorMenu extends JMenuBar {
     GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_NEW), Resources.iconButtonNew,
         SBMLEditorConstants.MENU_LAYOUT_NEW_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutNew));
     
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_RENAME), Resources.iconRename,
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_RENAME), Resources.iconButtonRename,
       SBMLEditorConstants.MENU_LAYOUT_RENAME_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutRename));
     
     GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_CLONE), Resources.iconButtonCopy,
@@ -98,7 +98,7 @@ public class EditorMenu extends JMenuBar {
     GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_DELETE), Resources.iconButtonDelete, 
         SBMLEditorConstants.MENU_LAYOUT_DELETE_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutDelete));
     
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_AUTO), Resources.iconAuto,
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_AUTO), Resources.iconButtonAuto,
       SBMLEditorConstants.MENU_LAYOUT_AUTO_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutAuto));
     
     JMenu menuHelp = GUIFactory.createMenu(this, Resources.getString(SBMLEditorConstants.MENU_HELP));

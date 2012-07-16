@@ -16,13 +16,13 @@
  */
 package de.zbit.editor.control;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,27 +40,21 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.ext.layout.TextGlyph;
-import org.sbml.jsbml.ext.render.AbstractRenderPlugin;
-import org.sbml.jsbml.ext.render.ColorDefinition;
-import org.sbml.jsbml.ext.render.GlobalRenderInformation;
-import org.sbml.jsbml.ext.render.RenderConstants;
-import org.sbml.jsbml.ext.render.RenderModelPlugin;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
+import y.io.GIFIOHandler;
+import y.io.JPGIOHandler;
 import y.view.Graph2D;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.GUIFactory;
-import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
 
@@ -1027,5 +1021,34 @@ public class CommandController implements PropertyChangeListener {
     layoutModified(layout);
     this.view.updateComboBox(getDocumentFromLayout(layout).getListOfLayouts());
     return true;
+  }
+
+  /**
+   * @return
+   */
+  public boolean fileExport(File file) {
+    Graph2D graph2d = this.view.getTabManager().getPanelFromLayout(this.view.getCurrentLayout()).getGraph2DView().getGraph2D();
+    if(GUIFactory.createFilterGIF().accept(file)) {
+      logger.info("Exporting gif file: " + file.getAbsolutePath());
+      GIFIOHandler gifIO = new GIFIOHandler();
+      try {
+        gifIO.write(graph2d, file.getAbsolutePath());
+      } catch (IOException e) {
+        logger.info(e.getMessage());
+        return false;
+      }
+    }
+    else if (GUIFactory.createFilterJPEG().accept(file)) {
+      logger.info("Exporting jpeg file: " + file.getAbsolutePath());
+      JPGIOHandler jpegIO = new JPGIOHandler();
+      try {
+        jpegIO.write(graph2d, file.getAbsolutePath());
+        return true;
+      } catch (IOException e) {
+        logger.info(e.getMessage());
+        return false;
+      }
+    }
+    return false;
   }
 }

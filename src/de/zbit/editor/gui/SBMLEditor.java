@@ -29,6 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.BoundingBox;
@@ -180,6 +181,22 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return file;
   }
   
+  public File askUserSaveDialogExport() {
+    JFileChooser fc = GUIFactory.createFileChooserExport();
+    int returnVal = fc.showSaveDialog(this.frame);
+    File file = null;
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      file = fc.getSelectedFile();
+    }
+    // add extension
+    FileNameExtensionFilter filter = (FileNameExtensionFilter) fc.getFileFilter();
+    if (! filter.accept(file)) {
+      file = new File(file.getAbsolutePath() + "." + filter.getExtensions()[0]);
+    }
+    logger.info("Path to save image: " + file.getAbsolutePath());
+    return file;
+  }
+  
   public String askUserFileNew() {
     return JOptionPane.showInputDialog(Resources.getString("NEW_FILE"), Resources.getString("GENERIC_FILE_NAME"));
   }
@@ -231,6 +248,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return success;
   }
 
+  public boolean fileExport() {
+    File file = askUserSaveDialogExport();
+    return (file == null) ? false :  this.commandController.fileExport(file);
+  }
 
   @Override
   public boolean fileQuit() {
