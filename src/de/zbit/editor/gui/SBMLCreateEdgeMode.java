@@ -16,6 +16,8 @@
  */
 package de.zbit.editor.gui;
 
+import org.sbml.jsbml.SBO;
+
 import y.base.Edge;
 import y.base.Node;
 import y.view.Arrow;
@@ -48,13 +50,15 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
     return reactionNode;
   }
   
-  public void createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer, String modifier) {
+  public void createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer, int sbo) {
     if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
       Edge e = super.createEdge(graph, start, target, realizer);
-      if (modifier.equals("Catalysis")) {
-        graph.getRealizer(e).setArrow(Arrow.CIRCLE);
-      } else if (modifier.equals("Inhibition")) {
-        graph.getRealizer(e).setArrow(Arrow.DASH);
+      if (sbo == SBO.getCatalyst()) {
+        graph.getRealizer(e).setArrow(Arrow.TRANSPARENT_CIRCLE);
+      } else if (sbo == SBO.getInhibitor()) {
+        graph.getRealizer(e).setArrow(Arrow.T_SHAPE);
+      } else {
+        graph.getRealizer(e).setArrow(Arrow.CONCAVE);
       }
     }
   }

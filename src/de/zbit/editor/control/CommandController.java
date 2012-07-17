@@ -244,14 +244,21 @@ public class CommandController implements PropertyChangeListener {
     modifier.setId(selectedDoc.nextGenericId(SBMLEditorConstants.genericModifierReferenceIdPrefix));
     modifier.setLevel(model.getLevel());
     modifier.setVersion(model.getVersion());
-    modifier.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
+    int sbo = 0;
+    if (this.state == States.catalysis) {
+      sbo = SBO.getCatalyst();
+    } else {
+      sbo = SBO.getInhibitor();
+    }
+    modifier.setSBOTerm(sbo);
     modifier.setSpecies(source.getSpecies());
     modifier.setName(modifier.getId());
     targetReaction.addModifier(modifier);
     
     //Creation of a modifier glyph
-    SpeciesReferenceGlyph modifierGlyph = new SpeciesReferenceGlyph();
-    if (this.state == States.catalysis) {
+    //SpeciesReferenceGlyph modifierGlyph = new SpeciesReferenceGlyph();
+    SpeciesReferenceGlyph modifierGlyph = SBMLFactory.createSpeciesReferenceGlyph(selectedDoc, source, target, sbo);
+    /*if (this.state == States.catalysis) {
       modifierGlyph.setRole(SpeciesReferenceRole.MODIFIER);
     } else if (this.state == States.inhibition) {
       modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
@@ -261,7 +268,7 @@ public class CommandController implements PropertyChangeListener {
     modifierGlyph.setVersion(model.getVersion());
     modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
     modifierGlyph.setSpeciesGlyph(source.getId());
-    modifierGlyph.setName(modifierGlyph.getId());
+    modifierGlyph.setName(modifierGlyph.getId()); */
     target.addSpeciesReferenceGlyph(modifierGlyph);
     
   }
@@ -439,7 +446,7 @@ public class CommandController implements PropertyChangeListener {
       logger.info("Document has layout information: " + hasLayout);
       if (!hasLayout) {
          int newInformation = this.view.askUserCreateLayoutInformation();
-         if (newInformation == 0) {
+         if (newInformation == JOptionPane.YES_OPTION) {
            doc.createLayoutInformation();
            autoLayout = true;
          }
@@ -638,9 +645,9 @@ public class CommandController implements PropertyChangeListener {
         list.add(this.node);
         list.add(evt.getNewValue());
         if (this.state == States.catalysis) {
-          list.add("Catalysis");
+          list.add(SBO.getCatalyst());
         } else if (this.state == States.inhibition) {
-          list.add("Inhibition");
+          list.add(SBO.getInhibitor());
         }
         
         layout.firePropertyChange("modifierCreated", null, list);

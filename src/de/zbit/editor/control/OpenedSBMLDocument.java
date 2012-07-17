@@ -28,9 +28,11 @@ import javax.swing.tree.TreeNode;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.NamedSBase;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
@@ -299,6 +301,13 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
         (ExtendedLayoutModel) model.getExtension(LayoutConstants.namespaceURI);
     Layout layout = extendedLayoutModel.getLayout(0);
     
+
+    List<Compartment> compartments = model.getListOfCompartments();
+    for (Compartment c : compartments) {
+      layout.createCompartmentGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix), c.getId());
+      logger.info("CompartmentGlyph created.");
+    }
+    
     List<Species> species = model.getListOfSpecies();
     for (Species s : species) {
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix),
@@ -307,29 +316,49 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       TextGlyph tGlyph = SBMLFactory.createTextGlyph(this.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix),
         model.getLevel(), model.getVersion(), sGlyph, s.getId());
       layout.addTextGlyph(tGlyph);
+      logger.info("SpeciesGlyph created.");
     }
     
     List<Reaction> reactions = model.getListOfReactions();
     for (Reaction r : reactions) {
       SpeciesGlyph source = null;
       SpeciesGlyph target = null;
+      logger.info("Reaction read.");
       List<SpeciesGlyph> sGlyphs = layout.getListOfSpeciesGlyphs();
       for (SpeciesGlyph sGlyph : sGlyphs) {
-        if (sGlyph.getSpecies() == r.getListOfReactants().get(0).getSpecies()) {
+        if (sGlyph.getSpecies().equals(r.getListOfReactants().get(0).getSpecies())) {
           source = sGlyph;
-        } else if (sGlyph.getSpecies() == r.getListOfProducts().get(0).getSpecies()) {
+          r.getListOfReactants().get(sGlyph.getSpecies());
+          logger.info("Source Glyph for ReactionGlyph set.");
+        } else if (sGlyph.getSpecies().equals(r.getListOfProducts().get(0).getSpecies())) {
           target = sGlyph;
+          logger.info("Target Glyph for ReactionGlyph set.");
         }
       }
       if ((source != null) && (target != null)) {
-        ReactionGlyph rGlyph = SBMLFactory.createReactionGlyph(this, r, source, target, r.getLevel(), r.getVersion());
+        ReactionGlyph rGlyph = SBMLFactory.createReactionGlyph(this, r, source,
+          target, r.getLevel(), r.getVersion());
+        ListOf<ModifierSpeciesReference> MSRList = r.getListOfModifiers();
+        for (ModifierSpeciesReference sR : MSRList) {
+          SpeciesGlyph modSource = null;
+          for (SpeciesGlyph sGlyph : layout.getListOfSpeciesGlyphs()) {
+            if (sR.getSpecies().equals(sGlyph.getSpecies())) {
+              modSource = sGlyph;
+            }
+          }
+          if (modSource != null) {
+            SpeciesReferenceGlyph srGlyph = SBMLFactory.createSpeciesReferenceGlyph(
+                                              this, modSource, rGlyph, sR.getSBOTerm());
+            rGlyph.addSpeciesReferenceGlyph(srGlyph);
+            logger.info("SpeciesReferenceGlyph created.");
+          } else {
+            logger.info("SpeciesReferenceGlyph not created.");
+          }
+        }
+        
         layout.add(rGlyph);
+        logger.info("ReactionGlyph created.");
       }
-    }
-    
-    List<Compartment> compartments = model.getListOfCompartments();
-    for (Compartment c : compartments) {
-      layout.createCompartmentGlyph(this.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix), c.getId());
     }
     
     return true;

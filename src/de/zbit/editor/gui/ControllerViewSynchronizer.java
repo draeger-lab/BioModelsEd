@@ -121,10 +121,10 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
       Node source = (Node) list.get(0);
       Node target = (Node) list.get(1);
-      String state = (String) list.get(2);
+      int sbo = (Integer) list.get(2);
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
       createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), source, target,
-        new GenericEdgeRealizer(), state);
+        new GenericEdgeRealizer(), sbo);
       logger.info("CVS : Modifier Drawn");
     }
     

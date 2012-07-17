@@ -74,28 +74,22 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	}
 
 	private void initReactionModifiers(Layout layout) {
-	  SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
-	  ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
+    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode
+                                                                          .getCreateEdgeMode();
+    ListOf<ReactionGlyph> list = layout.getListOfReactionGlyphs();
     for (ReactionGlyph r : list) {
       ListOf<SpeciesReferenceGlyph> refList = r.getListOfSpeciesReferenceGlyphs();
       for (SpeciesReferenceGlyph sRef : refList) {
-        if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.MODIFIER) {
+        if ((sRef.getSpeciesReferenceRole() != SpeciesReferenceRole.PRODUCT) && (sRef.getSpeciesReferenceRole() != SpeciesReferenceRole.SUBSTRATE)) {
           Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
           Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
           if ((source != null) && (target != null)) {
-            createEdgeMode.createEdge(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Catalysis");
-          }
-        }
-        if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.INHIBITOR) {
-          Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-          Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-          if ((source != null) && (target != null)) {
-            createEdgeMode.createEdge(this.simpleGraph, source, target, new GenericEdgeRealizer(), "Inhibition");
+            createEdgeMode.createEdge(this.simpleGraph, source, target,
+              new GenericEdgeRealizer(), sRef.getSBOTerm());
           }
         }
       }
     }
-    
   }
 
   /**
@@ -134,7 +128,10 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
 	    Node n = createEdgeMode.createEdgeNode(this.simpleGraph, source, target,
 	      new GenericEdgeRealizer(), reaction.getReversible());	
-	    this.simpleGraph.setLocation(n, r.getBoundingBox().getPosition().getX(), r.getBoundingBox().getPosition().getY());
+	    
+	    if (r.isSetBoundingBox()) {
+	      this.simpleGraph.setLocation(n, r.getBoundingBox().getPosition().getX(), r.getBoundingBox().getPosition().getY());
+	    }
 	    r.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
 	  }
 	}

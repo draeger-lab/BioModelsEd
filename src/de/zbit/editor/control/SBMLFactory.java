@@ -18,6 +18,7 @@ package de.zbit.editor.control;
 
 import java.util.List;
 
+import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
@@ -146,14 +147,19 @@ public class SBMLFactory {
   public static ReactionGlyph createReactionGlyph(OpenedSBMLDocument selectedDoc, Reaction reaction, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
     String id = selectedDoc.nextGenericId(SBMLEditorConstants.genericReactionGlyphIdPrefix);
     ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);
-    double x = source.getBoundingBox().getPosition().getX() + target.getBoundingBox().getPosition().getX() / 2d;
-    double y = source.getBoundingBox().getPosition().getY() + target.getBoundingBox().getPosition().getY() / 2d;
-    BoundingBox bb = new BoundingBox();
-    bb.setLevel(source.getLevel());
-    bb.setVersion(source.getVersion());
-    bb.setDimensions(new Dimensions(10, 10, 0, source.getLevel(), source.getVersion()));
-    bb.setPosition(new Point(x, y, 0, source.getLevel(), source.getVersion()));
-    reactionGlyph.setBoundingBox(bb);
+    if (source.isSetBoundingBox() && target.isSetBoundingBox()) {
+      double x = source.getBoundingBox().getPosition().getX()
+        + target.getBoundingBox().getPosition().getX() / 2d;
+      double y = source.getBoundingBox().getPosition().getY()
+        + target.getBoundingBox().getPosition().getY() / 2d;
+      BoundingBox bb = new BoundingBox();
+      bb.setLevel(source.getLevel());
+      bb.setVersion(source.getVersion());
+      bb.setDimensions(new Dimensions(10, 10, 0, source.getLevel(),
+        source.getVersion()));
+      bb.setPosition(new Point(x, y, 0, source.getLevel(), source.getVersion()));
+      reactionGlyph.setBoundingBox(bb);
+    }
     
     id = selectedDoc.nextGenericId(SBMLEditorConstants.genericSpeciesReferenceGlyphIdPrefix);
     SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(id, level, version);
@@ -171,6 +177,27 @@ public class SBMLFactory {
     reactionGlyph.setReaction(reaction);
     
     return reactionGlyph;
+  }
+  
+  public static SpeciesReferenceGlyph createSpeciesReferenceGlyph(OpenedSBMLDocument doc, SpeciesGlyph source, ReactionGlyph target, int sbo) {
+    SpeciesReferenceGlyph modifierGlyph = new SpeciesReferenceGlyph();
+    if (sbo == SBO.getCatalyst()) {
+      modifierGlyph.setRole(SpeciesReferenceRole.MODIFIER);
+    } else if (sbo == SBO.getInhibitor()) {
+      modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
+    }
+    Model model = doc.getDocument().getModel();
+    
+    modifierGlyph.setId(doc.nextGenericId(SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix));
+    modifierGlyph.setLevel(model.getLevel());
+    modifierGlyph.setVersion(model.getVersion());
+    if (sbo >= 0) {
+      modifierGlyph.setSBOTerm(sbo);
+    }
+    modifierGlyph.setSpeciesGlyph(source.getId());
+    modifierGlyph.setName(modifierGlyph.getId());
+    
+    return modifierGlyph;
   }
   
   /**
