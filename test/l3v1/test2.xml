@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model id="m1">
+    <listOfCompartments>
+      <compartment id="default"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="s1" name="Species 1" sboTerm="SBO:0000253" compartment="default"/>
+    </listOfSpecies>
+  </model>
+</sbml>

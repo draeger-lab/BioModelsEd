@@ -78,7 +78,10 @@ public class CellDesignerAnnotationParser implements Runnable {
 			SBMLWriter.write(parser.getSBMLDocument(), System.out, ' ', (short) 2);
 		}
 	}
-
+	/**
+	 * Set true if there is Layout information to parse
+	 */
+	private boolean needToParse = false;
 	/**
 	 * Direct link to the layout.
 	 */
@@ -136,7 +139,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	 * @throws XMLStreamException 
 	 */
 	private void readCDLayout(BufferedReader inputStream) throws XMLStreamException {
-		initializeLayout(sbmlDocument);
+		if(needToParse) initializeLayout(sbmlDocument);
 		if (!sbmlDocument.isSetModel() || (sbmlDocument.getModel().getExtension(LayoutConstants.namespaceURI) == null)) {
 			logger.info("SBMLDocument didn't contain any model.");
 			return;
@@ -497,6 +500,8 @@ public class CellDesignerAnnotationParser implements Runnable {
 					CellDesignerContstants.footer;
 			System.err.print(annotation);
 			try {
+			  if(!needToParse) return;
+			  logger.info(Boolean.toString(needToParse));
 				readCDLayout(new BufferedReader(new StringReader(annotation)));
 				sbmlDocument.setLevelAndVersion(3, 1);
 			// FIXME annotations should be filtered properly
@@ -527,6 +532,7 @@ public class CellDesignerAnnotationParser implements Runnable {
         
         while((line != null) && (!line.startsWith("</annotation>"))) {
           annotations.append(line + "\n");
+          needToParse = true;
           line = bufferedReader.readLine();
         }
         while((line != null) && (!line.startsWith("<listOfSpecies>"))) {
