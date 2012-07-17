@@ -17,6 +17,8 @@
 package de.zbit.editor.control;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -51,8 +53,10 @@ import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
 import y.io.GIFIOHandler;
+import y.io.ImageOutputHandler;
 import y.io.JPGIOHandler;
 import y.view.Graph2D;
+import y.view.Graph2DView;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.GUIFactory;
 import de.zbit.editor.gui.Resources;
@@ -1026,28 +1030,54 @@ public class CommandController implements PropertyChangeListener {
    * @return
    */
   public boolean fileExport(File file) {
-    Graph2D graph2d = this.view.getTabManager().getPanelFromLayout(this.view.getCurrentLayout()).getGraph2DView().getGraph2D();
+    Graph2DView view = this.view.getTabManager().getPanelFromLayout(this.view.getCurrentLayout()).getGraph2DView();
+    Graph2D graph = view.getGraph2D();
+       
     if(GUIFactory.createFilterGIF().accept(file)) {
       logger.info("Exporting gif file: " + file.getAbsolutePath());
-      GIFIOHandler gifIO = new GIFIOHandler();
-      try {
-        gifIO.write(graph2d, file.getAbsolutePath());
-      } catch (IOException e) {
-        logger.info(e.getMessage());
-        return false;
-      }
+      exportGraphToImageFileFormat(graph, new GIFIOHandler(), file.getAbsolutePath());
     }
     else if (GUIFactory.createFilterJPEG().accept(file)) {
       logger.info("Exporting jpeg file: " + file.getAbsolutePath());
-      JPGIOHandler jpegIO = new JPGIOHandler();
-      try {
-        jpegIO.write(graph2d, file.getAbsolutePath());
-        return true;
-      } catch (IOException e) {
-        logger.info(e.getMessage());
-        return false;
-      }
+      exportGraphToImageFileFormat(graph, new JPGIOHandler(), file.getAbsolutePath());      
     }
     return false;
   }
+  
+  private void exportGraphToImageFileFormat(Graph2D graph, ImageOutputHandler ioh, String outFile) {  
+
+    // Save the currently active view.   
+    Graph2DView originalView = (Graph2DView)graph.getCurrentView();  
+
+    // Create a new Graph2DView instance with the graph. This will be the   
+    // dedicated view for image export.   
+    Graph2DView exportView = ioh.createDefaultGraph2DView(graph);  
+
+    Rectangle box = exportView.getGraph2D().getBoundingBox();  
+    Dimension dim = box.getSize();  
+
+    // Set the view's width and height, in turn this also sets the image's size.   
+    exportView.setSize(dim);  
+    // The clipping should show the entire graph. (The graph's bounding is a   
+    // little enlarged.)   
+    exportView.zoomToArea(box.getX() - 10, box.getY() - 10,   
+        box.getWidth() + 20, box.getHeight() + 20);  
+
+    // Set the detail threshold so that it is never switched to less detail mode.   
+    exportView.setPaintDetailThreshold(0.0); 
+
+    // Replace the currently active view containing the graph with the "export" view.   
+    graph.setCurrentView(exportView);  
+
+    try {
+      ioh.write(graph, outFile);
+    } catch (IOException e) {
+      logger.info(e.getMessage());
+    }
+
+    // Remove the "export" view from the graph.   
+    graph.removeView(graph.getCurrentView());  
+    // Reset the current view to the originally active view.   
+    graph.setCurrentView(originalView);    
+  }  
 }
