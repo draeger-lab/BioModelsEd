@@ -32,7 +32,6 @@ import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.NamedSBase;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
@@ -48,6 +47,9 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 import de.zbit.editor.SBMLEditorConstants;
 
 /**
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
+ * @author Eugen Netz
  * @author Jan Rudolph
  * @version $Rev$
  */
@@ -58,6 +60,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 
 	
 	/**
+	 * Constructor.
 	 * @param document
 	 * @param associatedFilepath
 	 */
@@ -69,6 +72,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	
 	
 	/**
+	 * Constructor.
 	 * @param document
 	 */
 	public OpenedSBMLDocument(SBMLDocument document) {
@@ -78,7 +82,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	}
 	
 	/**
-	 * do all necessary initialisations
+	 * Do all necessary initialisations.
 	 */
 	private void initialize() {
 	  Model model = this.document.getModel();
@@ -89,7 +93,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	}
 
 	/**
-	 * keep track of ids to enable automatic naming
+	 * Keep track of ids to enable automatic naming.
 	 */
 	private void initializeIds() {
 		Model model = this.document.getModel();
@@ -115,7 +119,9 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	}
 	
 	/**
-	 * get next generic species id
+	 * Get next generic unused id with a given prefix.
+	 * @param prefix
+	 * @return an id
 	 */
 	public String nextGenericId(String prefix) {
 		int count = 0;
@@ -131,22 +137,14 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	
 		
 	/**
-	 * check if given id is available
+	 * Check if given id is available.
 	 */
 	public boolean isIdAvailable(String id) {
 	  return !this.listOfUsedIds.contains(id);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-	}
-
 	/**
-	 * add id of added species to usedIds
+	 * Add id of added species to usedIds.
 	 */
 	@Override
 	public void nodeAdded(TreeNode node) {
@@ -157,7 +155,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 	}
 
 	/**
-	 * remove id of removed species from usedIds
+	 * Remove id of removed species from usedIds.
 	 */
 	@Override
 	public void nodeRemoved(TreeNodeRemovedEvent evt) {
@@ -170,7 +168,8 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 
 	
 	/**
-	 * @return
+	 * Creates a default layout and adds it to the model.
+	 * @return the created layout
 	 */
 	public Layout createDefaultLayout() {
 	  Model model = getDocument().getModel();
@@ -183,7 +182,8 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 
 
   /**
-   * @return
+   * Gets the first layout in the document, if it exists. Otherwise calls {@link #createDefaultLayout}.
+   * @return the first layout or a new layout.
    */
   public Layout getFirstLayoutOrNew() {
     ExtendedLayoutModel extendedLayoutModel =
@@ -201,7 +201,6 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
   
   /**
    * Check, if this Document has a Layout
-   * 
    * @return true, if Document has a Layout
    */
   public boolean hasLayout() {
@@ -214,9 +213,11 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
     }
     return hasLayout;
   }
+  
   /**
+   * Creates a new empty layout.
    * @param name
-   * @return
+   * @return the created layout
    */
   public Layout createNewLayout(String name) {
     Model model = this.document.getModel();
@@ -231,8 +232,9 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
   }
   
   /**
+   * Clones the given layout and adds it to the model.
    * @param layout
-   * @return
+   * @return the clone of the layout
    */
   public Layout addLayout (Layout layout) {
     Model model = this.document.getModel();
@@ -292,8 +294,8 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
   }
   
   /**
-   * create layout information for every element of the model
-   * @return
+   * Create layout information for every element of the model.
+   * @return true
    */
   public boolean createLayoutInformation() {
     Model model = this.document.getModel();
@@ -334,6 +336,9 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
           target = sGlyph;
           logger.info("Target Glyph for ReactionGlyph set.");
         }
+        if ((source != null) && (target != null)) {
+          break;
+        }
       }
       if ((source != null) && (target != null)) {
         ReactionGlyph rGlyph = SBMLFactory.createReactionGlyph(this, r, source,
@@ -344,6 +349,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
           for (SpeciesGlyph sGlyph : layout.getListOfSpeciesGlyphs()) {
             if (sR.getSpecies().equals(sGlyph.getSpecies())) {
               modSource = sGlyph;
+              break;
             }
           }
           if (modSource != null) {
@@ -365,7 +371,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
   }
   
   /**
-   * @return
+   * @return the list of layouts from this document, if it exists. An empty list otherwise.
    */
   public ListOf<Layout> getListOfLayouts() {
     ExtendedLayoutModel extendedLayoutModel =
@@ -380,7 +386,7 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 
 
   /**
-   * @return
+   * @return the id of the first Compartment. Returns an empty String if it doesn't exist.
    */
   public String getDefaultCompartment() {
     Model model = this.document.getModel();
@@ -395,8 +401,9 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
 
 
   /**
+   * Cheks, if there is at least one SpeciesGlyph for the given Species in the model.
    * @param speciesId
-   * @return
+   * @return true, if there is a SpeciesGlyph
    */
   public boolean hasAnySpeciesGlyphForSpeciesId(String speciesId) {
     boolean hasAnyGlyph = false;
@@ -406,6 +413,13 @@ public class OpenedSBMLDocument extends OpenedDocument<SBMLDocument> implements 
       }
     }
     return hasAnyGlyph;
+  }
+
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    // TODO Auto-generated method stub
+    
   }
     
 }

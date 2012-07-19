@@ -63,13 +63,16 @@ import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
 
 /**
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class CommandController implements PropertyChangeListener {
 
   /**
-   * States
+   * States, which determine, which action will be taken on the next mouse click.
    * 
    */
   private enum States {
@@ -77,9 +80,6 @@ public class CommandController implements PropertyChangeListener {
     emptySet,
     inhibition,
     macromolecule,
-    mousePressedCatalysis,
-    mousePressedInhibition,
-    mousePressedReaction,
     normal,
     reaction,
     simpleMolecule,
@@ -100,7 +100,8 @@ public class CommandController implements PropertyChangeListener {
   private List<NamedSBaseGlyph> nodeCopyList = new ArrayList<NamedSBaseGlyph>();
   
   /**
-   * @param editorInstance
+   * Constructor
+   * @param editorInstance must implement SBMLView
    */
   public CommandController(SBMLView editorInstance) {
     this.view = editorInstance;
@@ -110,8 +111,10 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
+   * Creates a Species and adds it to the model.
+   * Creates a SpeciesGlyph and adds it to the layout. Its Position is determined by the ValuePair in NewValue of evt.
    * @param evt
-   * @param sboTerm
+   * @param sboTerm the SBO-Term of the Species
    */
   private void createSpecies(PropertyChangeEvent evt, int sboTerm) {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
@@ -168,14 +171,22 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
+   * Finds the innermost Compartment, in which the Position determined by the parameters lies.
    * @param x
    * @param y
-   * @return
+   * @return The Id of the Compartment
    */
   private String findCompartmentId(Double x, Double y) {
     return view.findCompartmentId(x, y);
   }
 
+  /**
+   * Creates a ReactionGlyph with the SpeciesGlyph corresponding to the sourceNode as the Substrate
+   * and the SpeciesGlyph corresponding to the targetNode as the Product and adds it to the layout.
+   * @param sourceNode
+   * @param targetNode
+   * @return the ReactionGlyph
+   */
   private ReactionGlyph createReaction(Node sourceNode, Node targetNode) {
       OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
         .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
@@ -210,6 +221,12 @@ public class CommandController implements PropertyChangeListener {
       return reactionGlyph;
     }
   
+  /**
+   * Creates a ModifierSpeciesReference and adds it to the model.
+   * Creates a SpeciesReferenceGlyph and adds it to the Layout.
+   * @param sourceNode corresponding to the SpeciesGlyph
+   * @param targetNode corresponding to the ReactionGlyph
+   */
   private void createModifier(Node sourceNode, Node targetNode) {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
     .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
@@ -273,26 +290,42 @@ public class CommandController implements PropertyChangeListener {
     
   }
 
+  /**
+   * Calls the {@link #createSpecies} method with the SBO-term for an EmptySet.
+   * @param evt
+   */
   private void createEmptySet(PropertyChangeEvent evt) {
     createSpecies(evt, SBO.getEmptySet());
   }
 
+  /**
+   * Calls the {@link #createSpecies} method with the SBO-term for a Macromolecule.
+   * @param evt
+   */
   private void createMacromolecule(PropertyChangeEvent evt) {
     createSpecies(evt, SBO.getMacromolecule());
 
   }
 
+  /**
+   * Calls the {@link #createSpecies} method with the SBO-term for a SimpleMolecule.
+   * @param evt
+   */
   private void createSimpleMolecule(PropertyChangeEvent evt) {
     createSpecies(evt, SBO.getSimpleMolecule());
 
   }
 
+  /**
+   * Calls the {@link #createSpecies} method with the SBO-term for an UnknownMolecule.
+   * @param evt
+   */
   private void createUnknownMolecule(PropertyChangeEvent evt) {
     createSpecies(evt, SBO.getUnknownMolecule());
   }
 
   /**
-   * opens empty sbml document
+   * Opens an empty {@link #SBMLDocument}.
    * @param name of new file
    * @return true if successful
    */
@@ -337,7 +370,8 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
-   * quits program
+   * Quits the program.
+   * @return true, if succesful.
    */
   public boolean fileQuit() {
     if (this.fileManager.anyFileIsModified()) {
@@ -352,8 +386,8 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
-   * gets currently selected doc from view and forwards it to filemanager for saving
-   * @return true if successful 
+   * Gets currently selected doc from view and forwards it to filemanager for saving.
+   * @return true if successful. 
    */
   public boolean fileSave() {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
@@ -363,8 +397,8 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
-   * gets currently selected doc from view and forwards it to filemanager for saving
-   * @return true if successful 
+   * Gets currently selected doc from view and forwards it to filemanager for saving.
+   * @return true if successful. 
    */
   public boolean fileSaveAs() {
     OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
@@ -374,8 +408,8 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * forwards fileOpen request to file manager
-   * @return true if successful
+   * Forwards fileOpen request to file manager.
+   * @return true if successful.
    * @throws FileNotFoundException 
    */
   public boolean fileOpen() throws FileNotFoundException {
@@ -383,8 +417,8 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * forwards fileClose request to file manager
-   * @return true if successful
+   * Forwards fileClose request to file manager.
+   * @return true if successful.
    */
   public boolean fileClose() {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) this.view
@@ -400,7 +434,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * forwards OpenDialog request to view
+   * Forwards OpenDialog request to view.
    * @return file chosen by user
    */
   public File askUserOpenDialog() {
@@ -408,7 +442,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * forwards save dialog request to view
+   * Forwards save dialog request to view.
    * @return chosen filepath
    */
   public File askUserSaveDialog() {
@@ -423,12 +457,8 @@ public class CommandController implements PropertyChangeListener {
     return view;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent
-   * )
+  /**
+   * Is called by a fired PropertyChange and determines the followed action.
    */
   @SuppressWarnings("unchecked")
   public void propertyChange(PropertyChangeEvent evt) {
@@ -508,6 +538,7 @@ public class CommandController implements PropertyChangeListener {
 
 
   /**
+   * Calls {@link #updateGlyphFromNode} for every node in {@link #nodeList}.
    * @param evt
    */
   private void updateNodes(PropertyChangeEvent evt) {
@@ -518,6 +549,12 @@ public class CommandController implements PropertyChangeListener {
     }
   }
   
+  /**
+   * Updates the BoundingBox of the Glyph corresponding to the node with the size and position from the node.
+   * @param node
+   * @param graph
+   * @return true, if the Glyph was updated. false, if the Glyph wasn't found.
+   */
   public boolean updateGlyphFromNode(Node node, Graph2D graph) {
     NamedSBaseGlyph glyph =  getGlyphFromNode(node);
     if (glyph == null) {
@@ -541,6 +578,11 @@ public class CommandController implements PropertyChangeListener {
     }
   }
   
+  /**
+   * Finds the SpeciesGlyph or ReactionGlyph corresponding to the node.
+   * @param node
+   * @return the Glyph or null, if it wasn't found within the SpeciesGlyph or ReactionGlyph lists.
+   */
   private NamedSBaseGlyph getGlyphFromNode(Node node) {
     
     Layout layout = this.view.getCurrentLayout();
@@ -564,6 +606,7 @@ public class CommandController implements PropertyChangeListener {
   
 
   /**
+   * Creates and shows PopupMenu on right mouse click on empty space.
    * @param evt
    */
   private void mousePressedRight(PropertyChangeEvent evt) {
@@ -574,6 +617,7 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
+   * Creates and shows PopupMenu on right mouse click on a node.
    * @param evt
    */
   private void nodePressedRight(PropertyChangeEvent evt) {    
@@ -595,6 +639,7 @@ public class CommandController implements PropertyChangeListener {
 
   
   /**
+   * Calls a method, that creates a Species, determined by {@link #state}.
    * @param evt
    */
   private void mousePressedLeft(PropertyChangeEvent evt) {
@@ -613,6 +658,7 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
+   * Creates either a Reaction or a Modifier, if the right conditions are met.
    * @param evt
    */
   private void nodePressedLeft(PropertyChangeEvent evt) {
@@ -659,63 +705,103 @@ public class CommandController implements PropertyChangeListener {
     
   }
 
+  /**
+   * Changes the {@link #state} to catalysis.
+   */
   public void stateCatalysis() {
     this.state = States.catalysis;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to emptySet.
+   */
   public void stateEmptySet() {
     this.state = States.emptySet;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to inhibition.
+   */
   public void stateInhibition() {
     this.state = States.inhibition;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to macromolecule.
+   */
   public void stateMacromolecule() {
     this.state = States.macromolecule;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to normal.
+   */
   public void stateNormal() {
     this.state = States.normal;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to reaction.
+   */
   public void stateReaction() {
     this.state = States.reaction;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to simpleMolecule
+   */
   public void stateSimpleMolecule() {
     this.state = States.simpleMolecule;
     logger.info(this.state.toString());
   }
 
+  /**
+   *  Changes the {@link #state} to unknownMolecule
+   */
   public void stateUnknownMolecule() {
     this.state = States.unknownMolecule;
     logger.info(this.state.toString());
   }
   
+  /**
+   * Toggles {@link #reversible}, which determines, whether a created Reaction is reversible.
+   */
   public void changeReversible() {
     this.reversible = !this.reversible;
   }
 
+  /**
+   * Closes the tab, that shows the given layout.
+   * @param layout
+   * @return true, if a tab was found and closed. false otherwise.
+   */
   public boolean closeTab(Layout layout) {
     return this.view.closeTab(layout);
   }
 
+  /**
+   * @return the Frame
+   */
   public Component getFrame() {
     return this.view.getFrame();
   }
 
+  /**
+   * Shows a File-Not-Found error.
+   */
   public void fileNotFound() {
     view.showError(SBMLEditorConstants.fileNotFound);
   }
 
   /**
+   * Closes the tab, that shows the given layout.
+   * If no other layout from the same document is shown in another tab, the document is closed as well.
    * @param layout
    */
   public boolean layoutClose(Layout layout) {
@@ -728,6 +814,7 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
+   * Removes the given layout from the model and closes the corresponding tab.
    * @param currentLayout
    */
   public void layoutDelete(Layout layout) {
@@ -747,6 +834,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
+   * Asks the user, if the file should be saved and carries out the task.
    * @param doc
    * @return if user did not cancel saving progress
    */
@@ -769,6 +857,9 @@ public class CommandController implements PropertyChangeListener {
     return true;
   }
     
+  /**
+   * Deletes all currently selected nodes.
+   */
   public void nodeDelete() {
     Layout layout = this.view.getCurrentLayout();
     OpenedSBMLDocument selectedDoc = getDocumentFromLayout(layout);
@@ -803,14 +894,20 @@ public class CommandController implements PropertyChangeListener {
     layoutModified(layout);
   }
   
-  public List<ReactionGlyph> findReactionGlyphs(SpeciesGlyph sGlyph, Layout layout) {
+  /**
+   * Finds the ReactionGlyphs, that hold SpeciesReferenceGlyphs of the given SpeciesGlyph.
+   * @param speciesGlyph
+   * @param layout
+   * @return a list of the found ReactionGlyphs.
+   */
+  public List<ReactionGlyph> findReactionGlyphs(SpeciesGlyph speciesGlyph, Layout layout) {
     ArrayList<ReactionGlyph> list = new ArrayList<ReactionGlyph>();
     
     for (ReactionGlyph rGlyph : layout.getListOfReactionGlyphs()) {
       List<SpeciesReferenceGlyph> sRefList = rGlyph.getListOfSpeciesReferenceGlyphs();
       
       for (int i = 0; i < sRefList.size(); i++) {
-        if((sGlyph.getId().equals(sRefList.get(i).getSpeciesGlyph())) && 
+        if((speciesGlyph.getId().equals(sRefList.get(i).getSpeciesGlyph())) && 
           ((sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT) ||
            (sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE))){
           logger.info("Reaktionen löschen: Reaction"+ rGlyph.getId() + " zur Liste hinzugefügt.");
@@ -822,8 +919,13 @@ public class CommandController implements PropertyChangeListener {
     return list;
   }
   
-  private void deleteReactionGlyphs(SpeciesGlyph sGlyph, Layout layout) {
-    List<ReactionGlyph> list = findReactionGlyphs(sGlyph, layout);
+  /**
+   * Deletes the ReactionGlyphs, that hold SpeciesReferenceGlyphs of the given SpeciesGlyph.
+   * @param speciesGlyph
+   * @param layout
+   */
+  private void deleteReactionGlyphs(SpeciesGlyph speciesGlyph, Layout layout) {
+    List<ReactionGlyph> list = findReactionGlyphs(speciesGlyph, layout);
     
     for (ReactionGlyph rGlyph : list) {
       layout.getListOfReactionGlyphs().remove(rGlyph);
@@ -844,7 +946,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * 
+   * Memorizes the selected nodes to paste them later with {@link #nodePaste}.
    */
   public void nodeCopy() {
     this.copyEnabled = true;
@@ -866,7 +968,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * 
+   * Pops up a dialogue and renames the SpeciesGlyph and Species corresponding to the selected node.
    */
   public void nodeRename() {
     Node nodeToRename = this.nodeList.get(0);
@@ -895,7 +997,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * 
+   * Pastes the nodes memorized with {@link #nodeCopy}.
    */
   public void nodePaste() {
     logger.info("Pasting...");
@@ -917,6 +1019,7 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
+   * Not implemented.
    * @param layout
    * @param selectedDoc
    * @param copyReactionGlyph
@@ -927,6 +1030,7 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
+   * Copies a SpeciesGlyph
    * @param selectedDoc
    * @param layout
    * @param copySpeciesGlyph
@@ -1012,6 +1116,11 @@ public class CommandController implements PropertyChangeListener {
     this.nodePaste();
   }
   
+  /**
+   * Finds the document, that holds the given layout.
+   * @param layout
+   * @return the found document.
+   */
   private OpenedSBMLDocument getDocumentFromLayout(Layout layout) {
     return (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
@@ -1024,7 +1133,9 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
+   * Renames the given layout.
    * @param currentLayout
+   * @param name
    */
   public boolean layoutRename(Layout layout, String name) {
     layout.setName(name);
@@ -1034,7 +1145,8 @@ public class CommandController implements PropertyChangeListener {
   }
 
   /**
-   * @return
+   * Exports the current view as a JPED or GIF.
+   * @return true, if file was exported succesfully. false otherwise.
    */
   public boolean fileExport(File file) {
     Graph2DView view = this.view.getTabManager().getPanelFromLayout(this.view.getCurrentLayout()).getGraph2DView();
@@ -1051,6 +1163,12 @@ public class CommandController implements PropertyChangeListener {
     return false;
   }
   
+  /**
+   * Exports the graph in the format specified by ioh.
+   * @param graph
+   * @param ioh
+   * @param outFile
+   */
   private void exportGraphToImageFileFormat(Graph2D graph, ImageOutputHandler ioh, String outFile) {  
 
     // Save the currently active view.   

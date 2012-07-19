@@ -18,6 +18,9 @@ package de.zbit.editor;
 
 /**
  * 
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
+ * @author Eugen Netz
  * @author Jan Rudolph
  * @version $Rev$
  */

@@ -31,9 +31,11 @@ import de.zbit.editor.gui.SBMLReadingTask;
 import de.zbit.editor.gui.SBMLWritingTask;
 
 /**
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
+ * @author Eugen Netz
  * @author Jan Rudolph
- *	
- * @version $Rev
+ * @version $Rev$
  */
 public class FileManager {
 	/**
@@ -43,21 +45,17 @@ public class FileManager {
 	CommandController commandController;
 	Logger logger = Logger.getLogger(FileManager.class.getName());
 
+
 	/**
-	 * @param listOfOpenedDocuments
-	 */
-	public FileManager() {
-	}
-	
-	/**
-	 * @param listOfOpenedDocuments
+	 * Constructor.
+	 * @param commandController
 	 */
 	public FileManager(CommandController commandController) {
 		this.commandController = commandController;
 	}
 	
 	/**
-	 * add Document only if not already added
+	 * Add Document only if not already added.
 	 * @return returns true if document was added successfully
 	 */
 	public boolean addDocument(OpenedDocument<?> openedDocument) {
@@ -112,9 +110,9 @@ public class FileManager {
 	}*/
 	
 	/**
-	 * check if filePath is already in use
+	 * Check if filePath is already in use.
 	 * @param filePath
-	 * @return
+	 * @return true, if it is used. false otherwise.
 	 */
 	private boolean isFilePathUsed(String filePath) {
 		for (OpenedDocument<?> doc : listOfOpenedDocuments) {
@@ -126,8 +124,8 @@ public class FileManager {
 	}
 	
 	/**
-	 * check if any file has been modified
-	 * @return
+	 * Check if any file has been modified.
+	 * @return true, if any file is modified. false otherwise.
 	 */
 	public boolean anyFileIsModified() {
 	  boolean anyModified = false;
@@ -138,7 +136,7 @@ public class FileManager {
 	}
 	
 	/**
-	 * open File
+	 * Open File.
 	 * @return true if successful
 	 */
   public boolean fileOpen() throws FileNotFoundException {
@@ -160,9 +158,9 @@ public class FileManager {
   }
 
   /**
-   * closes all tabs assoc to this doc
+   * Closes all tabs associated to this doc.
    * @param doc 
-   * @return
+   * @return true, if succesful.
    */
   public boolean fileClose(OpenedSBMLDocument doc) {
     boolean success = true;
@@ -179,6 +177,11 @@ public class FileManager {
     return success;
   }
 
+  /**
+   * Saves the given document to a file.
+   * @param doc
+   * @return true, if succesful
+   */
   public boolean fileSave(OpenedSBMLDocument doc) {
     try {
       
@@ -199,6 +202,11 @@ public class FileManager {
     return false;
   }
 
+  /**
+   * Asks user, where to save the file and calls {@link #fileSave}.
+   * @param doc
+   * @return true, if succesful
+   */
   public boolean fileSaveAs(OpenedSBMLDocument doc) {
     File file = commandController.askUserSaveDialog();
     if (file != null) {
@@ -208,6 +216,11 @@ public class FileManager {
     return false;
   }
   
+  /**
+   * Checks, if the name is already used as a filename.
+   * @param name
+   * @return true, if it is used
+   */
   public boolean isFileNameUsed(String name) { 
     for (OpenedDocument<?> doc : listOfOpenedDocuments) {
       if(doc.getAssociatedFilename().equals(name)){

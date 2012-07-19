@@ -28,19 +28,37 @@ import org.sbml.jsbml.util.ValuePair;
 import de.zbit.editor.gui.TabManager;
 
 /**
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
+ * @author Jan Rudolph
  * @since 1.0
  * @version $Rev$
  */
 public interface SBMLView {
 
+  /**
+   * The SBML Level and Version supported by this program
+   */
   public static final ValuePair<Integer, Integer> DEFAULT_LEVEL_VERSION = new ValuePair<Integer, Integer>(
       3, 1);
 
+  /**
+   * Forwards fileNew request to commandController to open an empty {@link #SBMLDocument}.
+   * @return true if succesful
+   */
   public boolean fileNew();
 
+  /**
+   * Forwards fileOpen request to commandController.
+   * @return true if succesful
+   */
   public boolean fileOpen() throws FileNotFoundException;
 
+  /**
+   * Forwards fileClose request to commandController.
+   * @return true if succesful
+   */
   public boolean fileClose();
 
   public boolean fileSave();

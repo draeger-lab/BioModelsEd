@@ -136,8 +136,9 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#fileNew()
+  /**
+   * Forwards fileNew request to commandController.
+   * @return true if succesful
    */
   @Override
   public boolean fileNew() {
@@ -218,12 +219,19 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return JOptionPane.showConfirmDialog(null, Resources.getString("DIALOG_CREATE_LAYOUT_QUESTION"), Resources.getString("DIALOG_CREATE_LAYOUT_TITLE"), 0);
   }
   
+  /**
+   * Forwards fileOpen request to commandController.
+   * @return true if succesful
+   */
   @Override
   public boolean fileOpen() throws FileNotFoundException {
     return commandController.fileOpen();
   }
 
-
+  /**
+   * Forwards fileClose request to commandController.
+   * @return true if succesful
+   */
   @Override
   public boolean fileClose() {
 	  return commandController.fileClose();

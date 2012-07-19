@@ -19,7 +19,10 @@ package de.zbit.editor.control;
 import java.io.File;
 
 /**
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class OpenedDocument<T> {
@@ -36,11 +39,19 @@ public class OpenedDocument<T> {
   private boolean fileModified = false;
 
 
+  /**
+   * Constructor.
+   * @param document
+   */
   public OpenedDocument(T document) {
     this.document = document;
   }
 
-
+  /**
+   * Constructor.
+   * @param document
+   * @param associatedFilepath
+   */
   public OpenedDocument(T document, String associatedFilepath) {
     this.document = document;
     this.associatedFilepath = associatedFilepath;
@@ -63,16 +74,26 @@ public class OpenedDocument<T> {
     return associatedFilepath;
   }
 
-
+  /**
+   * 
+   * @return the associatedFilename
+   */
   public String getAssociatedFilename() {
     return associatedFilename;
   }
   
+  /**
+   * 
+   * @param name
+   */
   public void setAssociatedFilename(String name) {
     this.associatedFilename = name;
   }
 
-
+  /**
+   * 
+   * @return the filename
+   */
   public String getFilename(){
 	  return new File(getAssociatedFilepath()).getName();
   }
@@ -90,7 +111,7 @@ public class OpenedDocument<T> {
   /**
    * Check if filepath is set
    *
-   * @return
+   * @return true, if it is set
    */
   public boolean hasAssociatedFilepath() {
     return (getAssociatedFilepath() != null);
@@ -98,7 +119,7 @@ public class OpenedDocument<T> {
 
 
   /**
-   * @return the fileModified
+   * @return true, if the file is modified
    */
   public boolean isFileModified() {
     return fileModified;
