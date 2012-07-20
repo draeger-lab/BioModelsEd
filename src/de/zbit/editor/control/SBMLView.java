@@ -28,11 +28,12 @@ import org.sbml.jsbml.util.ValuePair;
 import de.zbit.editor.gui.TabManager;
 
 /**
+ * The Interface, that a view of this program must implement.
+ * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes
  * @author Eugen Netz
  * @author Jan Rudolph
- * @since 1.0
  * @version $Rev$
  */
 public interface SBMLView {
@@ -61,85 +62,161 @@ public interface SBMLView {
    */
   public boolean fileClose();
 
+  /**
+   * Forwards fileSave request to commandController.
+   * @return true if succesful
+   */
   public boolean fileSave();
 
+  /**
+   * Forwards fileSaveAs request to commandController.
+   * @return true if succesful
+   */
   public boolean fileSaveAs();
 
+  /**
+   * Forwards a fileQuit request to the commandController
+   * @return true if succesful
+   */
   public boolean fileQuit();
 
+  /**
+   * Opens the layout in a new tab.
+   * @param layout, the layout to open
+   * @param autoLayout, if true the autoLayout Algorithm is used on the layout
+   * @return true if succesful
+   */
   public boolean addLayout(Layout layout, boolean autoLayout);
 
+  /**
+   * Forwards a getCurrentLayout request to the TabManager.
+   * @return the current layout from the TabManager
+   */
   public Layout getCurrentLayout();
 
+  /**
+   * Creates popup for the input of a Species name.
+   * @param s, the default name
+   * @return the name
+   */
   public String nameDialogue(String id);
 
+  /**
+   * @return the tabManager
+   */
   public TabManager getTabManager();
 
-
+  /**
+   * Creates popup to request File Open Input.
+   * @return the file to open
+   */
   public File askUserOpenDialog();
+  
+  /**
+   * Creates popup to request File Save Input.
+   * @return the file to save
+   */
   public File askUserSaveDialog();
+  
+  /**
+   * Asks user, if Glyphs should be created for all Structures in the model.
+   * @return the Integer representing the JOptionPane Option
+   */
   public int askUserCreateLayoutInformation();
 
+  /**
+   * @return the frame
+   */
   public JFrame getFrame();
 
+  /**
+   * Creates popup for the input of a filename.
+   * @eturn the filename
+   */
   public String askUserFileNew();
 
+  /**
+   * Shows a warning message corresponding to the given String.
+   * @param warning
+   */
   public void showWarning(String warning);
+  
+  /**
+   * Shows an error message corresponding to the given String.
+   * @param error
+   */
   public void showError(String error);
 
+  /**
+   * Forwards a closeTab request to the TabManager, that closes the tab, that shows the layout.
+   * @param layout, the layout to be closed
+   * @return true if succesful
+   */
   public boolean closeTab(Layout layout);
 
   /**
-   * @param layout
+   * Refreshes the title of the layout shown in the tab.
+   * @param layout 
    */
   public void refreshTitle(Layout layout);
 
   /**
+   * Updates the ComboBox for choice of layout.
    * @param list
    */
   public void updateComboBox(ListOf<Layout> list);
   
+  /**
+   * Shows the "About"-message.
+   */
   public void helpAbout();
 
   /**
-   * 
+   * Clones the layout shown in the current tab and opens it in a new tab.
    */
   public void layoutClone();
 
   /**
-   * 
+   * Deletes the layout shown in the current tab.
    */
   public void layoutDelete();
 
   /**
+   * Closes the tab, that shows the given layout.
    * @param layout
-   * @return
    */
   public boolean layoutClose(Layout layout);
 
   /**
-   * @return 
-   * 
+   * Creates a new empty layout and opens it in a new tab.
    */
   public boolean layoutNew();
   
+  /**
+   * Renames the current layout.
+   */
   public boolean layoutRename();
   
+  /**
+   * Applies an algorithm for an automated layout to the current layout.
+   */
   public boolean layoutAuto();
 
   /**
-   * 
+   * Opens the layout selected in the ComboBox in the current tab.
    */
   public void openLayoutInTab();
 
   /**
-   * 
+   * Opens the layout selected in the ComboBox in a new tab.
    */
   public void openLayoutInNewTab();
 
   /**
+   * Returns the innermost compartment glyph of the current layout at the specified position.
    * @param x
    * @param y
+   * @return the id of the compartment
    */
   public String findCompartmentId(Double x, Double y);
 }

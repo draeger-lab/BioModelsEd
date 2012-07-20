@@ -17,6 +17,7 @@
 package de.zbit.editor;
 
 /**
+ * Constants, that are used in the whole program.
  * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes

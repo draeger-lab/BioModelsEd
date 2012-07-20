@@ -19,6 +19,8 @@ package de.zbit.editor.control;
 import java.io.File;
 
 /**
+ * Represents a file as a Document.
+ * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes
  * @author Eugen Netz

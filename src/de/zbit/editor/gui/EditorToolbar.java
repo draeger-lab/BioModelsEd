@@ -33,7 +33,12 @@ import de.zbit.editor.SBMLEditorConstants;
 
 
 /**
+ * Represents the toolbar.
+ * 
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class EditorToolbar extends JToolBar {
@@ -44,7 +49,8 @@ public class EditorToolbar extends JToolBar {
   private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
 
   /**
-   * @param commandController
+   * Constructor.
+   * @param parent
    */
   public EditorToolbar(SBMLEditor parent) {
     GUIFactory.addButton(this,
@@ -136,7 +142,9 @@ public class EditorToolbar extends JToolBar {
     setEnableState(false);
   }
   
-  
+  /**
+   * Represents the items in the ComboBox
+   */
   private static class ListItem {
     private final String text;
 
@@ -147,10 +155,10 @@ public class EditorToolbar extends JToolBar {
     public String toString() {
         return text;
     }
-}
-
+  }
 
   /**
+   * Updates the ComboBox, so that it has all the layouts in the given list.
    * @param list
    */
   public void updateComboBox(ListOf<Layout> list) {
@@ -161,6 +169,10 @@ public class EditorToolbar extends JToolBar {
     }
   }
   
+  /**
+   * Gets the layout selected in the ComboBox from the listOfLayouts.
+   * @return the layout
+   */
   public Layout getSelectedLayout() {
     String msg = "";
     for(Layout l: listOfLayouts){
@@ -173,6 +185,8 @@ public class EditorToolbar extends JToolBar {
   }
 
   /**
+   * Enables or disables the toolbar, depending on the input.
+   * Enables, if anyDocumentsOpen is true.
    * @param anyDocumentsOpen
    */
   public void setEnableState(boolean anyDocumentsOpen) {

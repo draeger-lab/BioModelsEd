@@ -44,7 +44,10 @@ import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.editor.control.SBMLView;
 
 /**
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class SBMLEditor extends WindowAdapter implements SBMLView {
@@ -58,7 +61,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
   
   /**
-   * 
+   * Constructor, which creates a CommandController and TabManager and sets up the GUI.
    */
   public SBMLEditor() {
     commandController = new CommandController(this);
@@ -86,12 +89,15 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return tabManager;
   }
 
+  /**
+   * @return the commandController
+   */
   public CommandController getController(){
     return this.commandController;
   }
 
   /**
-   * @return
+   * Sets up the GUI.
    * @throws Throwable
    */
   private void setUpGUI() throws Throwable {
@@ -151,7 +157,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
   
   /**
-   * create popup to request File Open Input
+   * Creates popup to request File Open Input.
+   * @return the file to open
    */
   @Override
   public File askUserOpenDialog() {
@@ -165,7 +172,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
   
   /**
-   * create popup to request File Save Input
+   * Creates popup to request File Save Input.
+   * @return the file to save
    */
   @Override
   public File askUserSaveDialog() {
@@ -183,6 +191,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return file;
   }
   
+  /**
+   * Creates popup to request an Image Export.
+   * @return the image file to export
+   */
   public File askUserSaveDialogExport() {
     JFileChooser fc = GUIFactory.createFileChooserExport();
     int returnVal = fc.showSaveDialog(this.frame);
@@ -200,20 +212,33 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return file;
   }
   
+  /**
+   * Creates popup for the input of a filename.
+   * @eturn the filename
+   */
   public String askUserFileNew() {
     return JOptionPane.showInputDialog(Resources.getString("NEW_FILE"), Resources.getString("GENERIC_FILE_NAME"));
   }
   
+  /**
+   * Creates popup for the input of a layoutname.
+   * @return the layoutname
+   */
   public String askUserLayoutNew() {
     return JOptionPane.showInputDialog(Resources.getString("NEW_LAYOUT"), Resources.getString("GENERIC_LAYOUT_NAME"));
   }
   
+  /**
+   * Creates popup for the input of a layoutname.
+   * @return the layoutname
+   */
   public String askUserLayoutRename() {
     return JOptionPane.showInputDialog(Resources.getString("NEW_NAME"), this.getCurrentLayout().getName());
   }
 
   /**
-   * Asks user, if Glyphs should be created for all Structures in the model
+   * Asks user, if Glyphs should be created for all Structures in the model.
+   * @return the Integer representing the JOptionPane Option
    */
   public int askUserCreateLayoutInformation() {
     return JOptionPane.showConfirmDialog(null, Resources.getString("DIALOG_CREATE_LAYOUT_QUESTION"), Resources.getString("DIALOG_CREATE_LAYOUT_TITLE"), 0);
@@ -237,7 +262,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 	  return commandController.fileClose();
   }
 
-
+  /**
+   * Forwards fileSave request to commandController.
+   * @return true if succesful
+   */
   @Override
   public boolean fileSave() {
 	  boolean success = commandController.fileSave();
@@ -248,7 +276,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return success;
   }
 
-
+  /**
+   * Forwards fileSaveAs request to commandController.
+   * @return true if succesful
+   */
   @Override
   public boolean fileSaveAs() {
     boolean success = commandController.fileSaveAs();
@@ -258,19 +289,30 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return success;
   }
 
+  /**
+   * Calls a SaveDialog for the export and forwards the request to the commandController.
+   * @return true if succesful
+   */
   public boolean fileExport() {
     File file = askUserSaveDialogExport();
     return (file == null) ? false :  this.commandController.fileExport(file);
   }
 
+  /**
+   * Forwards a fileQuit request to the commandController
+   * @return true if succesful
+   */
   @Override
   public boolean fileQuit() {
     return commandController.fileQuit();
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#addDocument(de.zbit.editor.control.OpenedSBMLDocument)
+  /**
+   * Opens the layout in a new tab.
+   * @param layout, the layout to open
+   * @param autoLayout, if true the autoLayout Algorithm is used on the layout
+   * @return true if succesful
    */
   @Override
   public boolean addLayout(Layout layout, boolean autoLayout) {
@@ -278,68 +320,102 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#getSelectedLayout()
+  /**
+   * Forwards a getCurrentLayout request to the TabManager.
+   * @return the current layout from the TabManager
    */
   @Override
   public Layout getCurrentLayout() {
     return tabManager.getCurrentLayout();
   }
 
-  /* (non-Javadoc)
-   * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
+  /**
+   * Forwards a fileQuit request to the commandController
    */
   @Override
   public void windowClosing(WindowEvent e) {
     fileQuit();
   }
 
-
+  /**
+   * Changes the State of the commandController to unknownMolecule.
+   */
   public void addUnknownMolecule() {
-    //this.getTabManager().addUnspecified();
     this.commandController.stateUnknownMolecule();
   }
 
-
+  /**
+   * Changes the State of the commandController to simpleMolecule.
+   */
   public void addSimpleMolecule() {
     this.commandController.stateSimpleMolecule();
   }
 
-
+  /**
+   * Changes the State of the commandController to macromolecule.
+   */
   public void addMacromolecule() {
     this.commandController.stateMacromolecule();
   }
 
-
+  /**
+   * Changes the State of the commandController to unknownMolecule.
+   */
   public void addEmptySet() {
     this.commandController.stateEmptySet();
   }
   
+  /**
+   * Changes the State of the commandController to reaction.
+   */
   public void addReaction() {
     this.commandController.stateReaction();
   }
   
+  /**
+   * Changes the State of the commandController to catalysis.
+   */
   public void addCatalysis() {
     this.commandController.stateCatalysis();
   }
   
+  /**
+   * Changes the State of the commandController to inhibition.
+   */
   public void addInhibition() {
     this.commandController.stateInhibition();
   }
   
+  /**
+   * Toggles the reversible field in the commandController, which determines, whether a created Reaction is reversible.
+   */
   public void reversible() {
     this.commandController.changeReversible();
   }
   
+  /**
+   * Creates popup for the input of a Species name.
+   * @param s, the default name
+   * @return the name
+   */
   public String nameDialogue(String s) {
     return JOptionPane.showInputDialog(Resources.getString("NEW_SPECIES"), s);
   }
   
+  /**
+   * Forwards a closeTab request to the TabManager, that closes the tab, that shows the layout.
+   * @param layout, the layout to be closed
+   * @return true if succesful
+   */
   @Override
   public boolean closeTab(Layout layout) {
     return this.tabManager.closeTab(layout);
   }
 
+  /**
+   * Shows a warning message corresponding to the given String.
+   * @param warning
+   */
   @Override
   public void showWarning(String warning) {
     JOptionPane.showMessageDialog(
@@ -348,6 +424,11 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
       Resources.getString(SBMLEditorConstants.warningTitle), 
       JOptionPane.WARNING_MESSAGE);
   }
+  
+  /**
+   * Shows an error message corresponding to the given String.
+   * @param error
+   */
   @Override
   public void showError(String error) {
     JOptionPane.showMessageDialog(
@@ -357,6 +438,10 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
       JOptionPane.ERROR_MESSAGE);
   }
 
+  /**
+   * Refreshes the title of the layout shown in the tab.
+   * @param layout 
+   */
   @Override
   public void refreshTitle(Layout layout) {
     this.tabManager.refreshTitle(layout);
@@ -364,6 +449,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
   
   /**
+   * Updates the ComboBox for choice of layout.
    * @param list
    */
   @Override
@@ -371,8 +457,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     editorToolbar.updateComboBox(list);    
   }
   
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#openLayoutInNewTab()
+  /**
+   * Opens the layout selected in the ComboBox in a new tab.
    */
   @Override
   public void openLayoutInNewTab() {
@@ -388,8 +474,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     }
   }
   
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#openLayoutInTab()
+  /**
+   * Opens the layout selected in the ComboBox in the current tab.
    */
   @Override
   public void openLayoutInTab() {
@@ -406,7 +492,7 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
   
   /**
-   * 
+   * Creates a new empty layout and opens it in a new tab.
    */
   @Override
   public boolean layoutNew() {
@@ -421,8 +507,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     return addLayout(layout, false);
   }
   
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#layoutClone()
+  /**
+   * Clones the layout shown in the current tab and opens it in a new tab.
    */
   @Override
   public void layoutClone() {
@@ -436,16 +522,17 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
     addLayout(clonedLayout, false);
   }
   
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#layoutDelete()
+  /**
+   * Deletes the layout shown in the current tab.
    */
   @Override
   public void layoutDelete() {
     commandController.layoutDelete(getCurrentLayout());
   }
   
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#layoutClose(org.sbml.jsbml.ext.layout.Layout)
+  /**
+   * Closes the tab, that shows the given layout.
+   * @param layout
    */
   @Override
   public boolean layoutClose(Layout layout) {
@@ -454,8 +541,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#helpAbout()
+  /**
+   * Shows the "About"-message.
    */
   @Override
   public void helpAbout() {
@@ -467,8 +554,11 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#findCompartmentId(java.lang.Double, java.lang.Double)
+  /**
+   * Returns the innermost compartment glyph of the current layout at the specified position.
+   * @param x
+   * @param y
+   * @return the id of the compartment
    */
   @Override
   public String findCompartmentId(Double x, Double y) {
@@ -495,8 +585,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   /**
-   * returns the innermost compartment glyph of the given list
-   * all bounding boxes need to be set
+   * Returns the innermost compartment glyph of the given list.
+   * All bounding boxes need to be set.
    * @param listOfCompartmentGlyphs
    * @return
    */
@@ -521,11 +611,11 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
 
 
   /**
-   * Checks if given Coordinates x,y hit BoundingBox bb
+   * Checks if given Coordinates x,y are inside of the BoundingBox.
    * @param x
    * @param y
    * @param bb
-   * @return
+   * @return true if position is inside the BoundingBox
    */
   private boolean inside(Double x, Double y, BoundingBox bb) {
     if (bb == null) return false;
@@ -541,8 +631,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#layoutRename()
+  /**
+   * Renames the current layout.
    */
   @Override
   public boolean layoutRename() {
@@ -556,8 +646,8 @@ public class SBMLEditor extends WindowAdapter implements SBMLView {
   }
 
 
-  /* (non-Javadoc)
-   * @see de.zbit.editor.control.SBMLView#layoutAuto()
+  /**
+   * Applies an algorithm for an automated layout to the current layout.
    */
   @Override
   public boolean layoutAuto() {

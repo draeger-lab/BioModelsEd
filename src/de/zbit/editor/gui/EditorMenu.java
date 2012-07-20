@@ -29,7 +29,12 @@ import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 
 /**
+ * Represents the menu bar.
+ * 
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class EditorMenu extends JMenuBar {
@@ -39,7 +44,11 @@ public class EditorMenu extends JMenuBar {
    */
   private static final long serialVersionUID = -3245574503778953826L;
   
-
+  /**
+   * Constructor.
+   * @param commandcontroller
+   * @param parent
+   */
   public EditorMenu(CommandController commandcontroller, SBMLView parent) {
     JMenu menuFile = GUIFactory.createMenu(this,
       Resources.getString(SBMLEditorConstants.MENU_FILE));
@@ -109,6 +118,11 @@ public class EditorMenu extends JMenuBar {
         
   }
   
+  /**
+   * Enables or disables several options in the menu bar, depending on the input.
+   * Enables, if anyDocumentsOpen is true.
+   * @param anyDocumentsOpen
+   */
   public void setEnableState(boolean anyDocumentsOpen) {
     
     this.getMenu(0).getItem(3).setEnabled(anyDocumentsOpen);
@@ -119,6 +133,11 @@ public class EditorMenu extends JMenuBar {
     this.getMenu(2).setEnabled(anyDocumentsOpen);
   }
   
+  /**
+   * Enables or disables the Save option.
+   * Enables if enabled is true.
+   * @param enabled
+   */
   public void setSaveState(boolean enabled) {
     this.getMenu(0).getItem(5).setEnabled(enabled);
   }

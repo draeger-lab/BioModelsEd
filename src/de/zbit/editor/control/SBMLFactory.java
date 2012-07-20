@@ -38,6 +38,8 @@ import org.sbml.jsbml.ext.layout.TextGlyph;
 import de.zbit.editor.SBMLEditorConstants;
 
 /**
+ * Offers static methods for the creation of JSBML objects.
+ * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes
  * @author Eugen Netz

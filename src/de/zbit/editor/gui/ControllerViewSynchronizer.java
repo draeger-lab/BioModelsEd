@@ -38,8 +38,12 @@ import de.zbit.editor.SBMLEditorConstants;
 
 
 /**
+ * Updates the view on changes in the model.
+ * 
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
@@ -49,14 +53,21 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   private Layout layout;
   private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
   
+  /**
+   * Constructor.
+   * @param panel
+   * @param layout
+   * @param editMode
+   */
   public ControllerViewSynchronizer(GraphLayoutPanel panel, Layout layout, SBMLEditMode editMode) {
     this.panel = panel;
     this.layout = layout;
     this.editMode = editMode;
   }
   
-  /* (non-Javadoc)
-   * @see org.sbml.jsbml.util.TreeNodeChangeListener#nodeAdded(javax.swing.tree.TreeNode)
+  /**
+   * Adds a node to the view after the corresponding Glyph was added to the model.
+   * @param the added node in the model
    */
   @Override
   public void nodeAdded(TreeNode node) {
@@ -71,9 +82,6 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
       Species s = layout.getModel().getSpecies(speciesGlyph.getSpecies());
-      //FIXME speciesGlyph hat Aufgrund eines fehlers in clone() kein Model,
-      //folgende Zeile würde einen fehler ausgeben:
-      //Species s = speciesGlyph.getModel().getSpecies(speciesGlyph.getSpecies());
       
       if (boundingBox != null) {
         Node n = panel.getConverter().createNode(speciesGlyph.getId(),
@@ -89,8 +97,8 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     }
   }
 
-  /* (non-Javadoc)
-   * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+  /**
+   * Updates the view on several changes.
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -149,11 +157,11 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     }
   }
 
+  /**
+   * Determines the actions taken, after a node was removed from the model.
+   */
   @Override
   public void nodeRemoved(TreeNodeRemovedEvent evt) {
 	  logger.info("Node Removed Event in CVS");
-
   }
-
-
 }

@@ -47,6 +47,8 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 import de.zbit.editor.SBMLEditorConstants;
 
 /**
+ * Manages a SBMLDocument.
+ * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes
  * @author Eugen Netz

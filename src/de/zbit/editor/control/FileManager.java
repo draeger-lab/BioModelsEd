@@ -31,6 +31,8 @@ import de.zbit.editor.gui.SBMLReadingTask;
 import de.zbit.editor.gui.SBMLWritingTask;
 
 /**
+ * Manages the opened Documents.
+ * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes
  * @author Eugen Netz

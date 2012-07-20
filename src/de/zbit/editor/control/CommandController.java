@@ -63,6 +63,8 @@ import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
 
 /**
+ * Controlls the execution of all commands and conveys them to the View and the Document.
+ * 
  * @author Alexander Diamantikos
  * @author Jakob Matthes
  * @author Eugen Netz

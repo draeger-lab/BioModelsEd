@@ -38,7 +38,12 @@ import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 
 /**
+ * Offers static methods for creation of Java Swing objects.
+ * 
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class GUIFactory {
@@ -48,7 +53,7 @@ public class GUIFactory {
    * 
    * @param menuBar
    * @param name
-   * @return
+   * @return the created JMenu
    */
   public static JMenu createMenu(JMenuBar menuBar, String name) {
     JMenu menu = new JMenu(name);
@@ -62,8 +67,10 @@ public class GUIFactory {
    * 
    * @param menu
    * @param label
-   * @param key
-   * @param modifier
+   * @param icon
+   * @param keystroke
+   * @param l
+   * @return the created item
    */
   public static JMenuItem createMenuItem(JMenu menu, String label, ImageIcon icon,
     String keystroke, ActionListener... l) {
@@ -72,7 +79,17 @@ public class GUIFactory {
     return item;
   }
 
-
+  /**
+   * Add a new item with keystroke to given menu.
+   * 
+   * @param menu
+   * @param label
+   * @param icon
+   * @param ctrl
+   * @param keyCode
+   * @param l
+   * @return the created item
+   */
   public static JMenuItem createMenuItem(JMenu menu, String label, ImageIcon icon,
     Integer ctrl, int keyCode, ActionListener... l) {
     JMenuItem item = createMenuItem(menu, label, icon, l);
@@ -86,7 +103,9 @@ public class GUIFactory {
    * 
    * @param menu
    * @param label
-   * @param key
+   * @param icon
+   * @param l
+   * @return the created item
    */
   public static JMenuItem createMenuItem(JMenu menu, String label, ImageIcon icon,
     ActionListener... l) {
@@ -105,10 +124,12 @@ public class GUIFactory {
    * Add a button to given toolbar.
    * 
    * @param toolbar
-   * @param name
-   * @param l
+   * @param tooltip
    * @param icon 
-   * @return
+   * @param width
+   * @param height
+   * @param l
+   * @return the created button
    */
   public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, int width, int height,
     ActionListener... l) {
@@ -124,7 +145,7 @@ public class GUIFactory {
    * @param toolbar
    * @param name
    * @param l
-   * @return
+   * @return the created button
    */
   public static JButton addButton(JToolBar toolbar, String name,
     ActionListener... l) {
@@ -144,7 +165,7 @@ public class GUIFactory {
    * @param toolbar
    * @param name
    * @param l
-   * @return
+   * @return the created checkbox
    */
   public static JCheckBox addCheckbox(JToolBar toolbar, String name,
     ActionListener... l) {
@@ -158,7 +179,10 @@ public class GUIFactory {
     return checkbox;
   }
 
-
+  /**
+   * Creates a filechooser for xml and sbml files.
+   * @return the created filechooser
+   */
   public static JFileChooser createFileChooser() {
     JFileChooser fileChooser = new JFileChooser();
     
@@ -178,6 +202,10 @@ public class GUIFactory {
     return fileChooser;
   }
 
+  /**
+   * Creates a filechooser for exportable image files.
+   * @return the created filechooser
+   */
   public static JFileChooser createFileChooserExport() {
     JFileChooser fileChooser = new JFileChooser();
 
@@ -201,32 +229,61 @@ public class GUIFactory {
     return fileChooser;
   }
   
+  /**
+   * Creates a filename extension filter for JPEG files.
+   * @return the created filter
+   */
   public static FileNameExtensionFilter createFilterJPEG() {
     return new FileNameExtensionFilter("JPEG", "jpeg", "JPEG", "jpg");
   }
 
+  /**
+   * Creates a filename extension filter for GIF files.
+   * @return the created filter
+   */
   public static FileNameExtensionFilter createFilterGIF() {
     return new FileNameExtensionFilter("GIF", "gif", "GIF");
   }
   
+  /**
+   * Shows an option dialogue for closing a tab in the given frame. 
+   * @param frame
+   * @return the Integer corresponding to the JOptionPane option
+   */
   public static int createQuestionClose(JFrame frame) {
     return JOptionPane.showConfirmDialog(frame,
       Resources.getString("DIALOG_QUIT_QUESTION"),
       Resources.getString("DIALOG_QUIT_TITLE"), JOptionPane.YES_NO_OPTION);
   }
   
+  /**
+   * Shows an option dialogue for saving a file in the given frame. 
+   * @param frame
+   * @param title
+   * @return the Integer corresponding to the JOptionPane option
+   */
   public static int createQuestionSave(JFrame frame, String title) {
     return JOptionPane.showConfirmDialog(frame,
       Resources.getString("DIALOG_SAVE_QUESTION"),
       title, JOptionPane.YES_NO_CANCEL_OPTION);
   }
 
+  /**
+   * Shows an option dialogue for deleting a layout in the given frame.
+   * @param frame
+   * @return the Integer corresponding to the JOptionPane option
+   */
   public static int createQuestionDelete(JFrame frame) {
     return JOptionPane.showConfirmDialog(frame,
       Resources.getString("DIALOG_DELETE_LAYOUT_QUESTION"),
       Resources.getString("DIALOG_DELETE_LAYOUT_TITLE"), JOptionPane.YES_NO_OPTION);
   }
 
+  /**
+   * Creates a popup menu for tab component.
+   * @param component
+   * @return the created menu
+   */
   public static JPopupMenu createTabPopupMenu(TabComponent component) {
     JMenuItem menuItem;
     // Create the popup menu.
@@ -248,6 +305,11 @@ public class GUIFactory {
     return popup;
   }
   
+  /**
+   * Creates a popup menu for a SpeciesGlyph.
+   * @param controller
+   * @return the created menu
+   */
   public static JPopupMenu createSpeciesGlyphPopupMenu(CommandController controller) {
     JMenuItem menuItem;
     // Create the popup menu.
@@ -271,6 +333,11 @@ public class GUIFactory {
     return popup;
   }
   
+  /**
+   * Creates a popup menu for a ReactionGlyph.
+   * @param controller
+   * @return the created menu
+   */
   public static JPopupMenu createReactionGlyphPopupMenu(CommandController controller) {
     JMenuItem menuItem;
     // Create the popup menu.
@@ -284,6 +351,12 @@ public class GUIFactory {
     return popup;
   }
   
+  /**
+   * Creates a popup menu for pasting nodes.
+   * @param controller
+   * @param nodeCopy
+   * @return the created menu
+   */
   public static JPopupMenu createPastePopupMenu(CommandController controller, boolean nodeCopy) {
     JMenuItem menuItem;
     
@@ -297,6 +370,15 @@ public class GUIFactory {
     return popup;
   }
   
+  /**
+   * Creates a button.
+   * @param icon
+   * @param tooltip
+   * @param width
+   * @param height
+   * @param l
+   * @return the created button
+   */
   public static JButton createButtonIcon(ImageIcon icon, String tooltip, int width, int height, ActionListener... l) {
     JButton button = new JButton(icon);
     if (l != null) {
