@@ -23,10 +23,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 
 /**
+ * Offers static methods for several GUI actions.
  * 
  * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class GUITools {

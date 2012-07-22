@@ -1,6 +1,6 @@
 /*
- * $$Id${file_name} ${time} ${user}$$
- * $$URL${file_name}$$
+ * $Id: SBMLEditMode.java 137 2012-07-14 17:43:39Z se-ss-12.netz$
+ * $URL: https://cis.informatik.uni-tuebingen.de/svn/R4f8845abdec88/trunk/src/de/zbit/editor/gui/SBMLEditMode.java$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
@@ -29,8 +29,12 @@ import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.CommandController;
 
 /**
+ * This class accepts user input on the yFiles interface panel and decides the resulting actions.
+ * 
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class SBMLEditMode extends EditMode  {
@@ -39,6 +43,10 @@ public class SBMLEditMode extends EditMode  {
   //private ValuePair<Double, Double> oldNodePosition;
   //private Node node;
  
+  /**
+   * Constructor.
+   * @param controller
+   */
   public SBMLEditMode(CommandController controller) {
     super();
     this.allowBendCreation(false);
@@ -48,6 +56,9 @@ public class SBMLEditMode extends EditMode  {
     this.addPropertyChangeListener(controller);
   }
   
+  /**
+   * Fires a property change with the current mouse position, when the left mouse is pressed.
+   */
   @Override
   public void mousePressedLeft(double x, double y) {
     
@@ -68,6 +79,9 @@ public class SBMLEditMode extends EditMode  {
     
   }
   
+  /**
+   * Fires a property change with the current mouse position, when the pressed left mouse is released.
+   */
   @Override
   public void mouseReleasedLeft(double x, double y) {
    
@@ -85,7 +99,8 @@ public class SBMLEditMode extends EditMode  {
   } 
   
   /**
-   * @return
+   * Gets all nodes inside a multiple selection.
+   * @return a list of the selected nodes
    */
   private List<Node> getSelectedNodes() {
     NodeCursor cursor = this.getGraph2D().selectedNodes();
@@ -100,6 +115,9 @@ public class SBMLEditMode extends EditMode  {
     return list;
   }
 
+  /**
+   * Fires a property change with the current mouse position and the targeted node selection, when the right mouse is pressed.
+   */
   @Override
   public void mousePressedRight(double x, double y) {
     HitInfo info = this.getGraph2D().getHitInfo(x, y);
@@ -129,10 +147,11 @@ public class SBMLEditMode extends EditMode  {
     }
   }
   
+  /**
+   * Removes the node from the graph.
+   * @param node
+   */
   public void nodeDelete(Node node) {
     this.getGraph2D().removeNode(node);
   }
-  
-  
-  
 }

@@ -17,7 +17,15 @@
 
 package de.zbit.graph.io.CellDesignerAnnotationsParser;
 
-
+/**
+ * Has constants for the CellDesignerAnnotationParser.
+ * 
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
+ * @version $Rev$
+ */
 public class CellDesignerContstants {
   
   public static final String speciesAlias = "speciesAlias";

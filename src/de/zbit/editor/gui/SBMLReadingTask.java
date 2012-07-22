@@ -30,8 +30,12 @@ import de.zbit.editor.control.OpenedSBMLDocument;
 import de.zbit.graph.io.CellDesignerAnnotationsParser.CellDesignerAnnotationParser;
 
 /**
+ * This class represents a file reading task for a SBMLDocument.
+ * 
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
@@ -41,6 +45,8 @@ public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
 
   
   /**
+   * Constructor.
+   * 
    * @param file
    * @param parent
    * @throws FileNotFoundException
@@ -53,8 +59,8 @@ public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
   }
 
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#doInBackground()
+  /**
+   * Runs the CellDesignerAnnotationParser on the file and creates an OpenedSBMLDocument with the modified file.
    */
   protected OpenedSBMLDocument doInBackground() throws Exception {
     //return new OpenedSBMLDocument(SBMLReader.read(stream), file.getAbsolutePath());
@@ -64,8 +70,8 @@ public class SBMLReadingTask extends SwingWorker<OpenedSBMLDocument, Void> {
   }
 
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#done()
+  /**
+   * Fires a property change with the created document, when the reding task is done.
    */
   @Override
   protected void done() {

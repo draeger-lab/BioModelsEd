@@ -34,19 +34,12 @@ import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
 
 /**
+ * Manages all the TabComponents and the tab bar.
+ * 
+ * @author Alexander Diamantikos
  * @author Jakob Matthes
- * @version $Rev$
- */
-/**
- * @author Alexander Diamantikos
- * @version $Rev$
- */
-/**
- * @author Alexander Diamantikos
- * @version $Rev$
- */
-/**
- * @author Alexander Diamantikos
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class TabManager extends JTabbedPane {
@@ -57,6 +50,7 @@ public class TabManager extends JTabbedPane {
   private List<Layout> listOfLayouts = new ArrayList<Layout>();
   
   /**
+   * Constructor.
    * @param editorInstance
    */
   public TabManager(SBMLEditor editorInstance) {
@@ -71,7 +65,10 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @param doc
+   * Adds a tab for the given layout and runs the autoLayout algorithm on it, when autoLayout is true.
+   * @param layout
+   * @param autolayout
+   * return true if succesful
    */
   public boolean addTab(Layout layout, boolean autoLayout) {
     if(listOfLayouts.contains(layout)) {
@@ -92,8 +89,9 @@ public class TabManager extends JTabbedPane {
   }
   
   /**
+   * Closes the tab, that shows the given layout
    * @param layout
-   * @return
+   * @return true if succesful
    */
   public boolean closeTab(Layout layout) {
     if (isLayoutOpen(layout)) {
@@ -109,7 +107,9 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * @return
+   * Gets the layout shown i the currently active tab.
+   * 
+   * @return the layout
    */
   public Layout getCurrentLayout() {
     if (isAnySelected()) {
@@ -121,6 +121,8 @@ public class TabManager extends JTabbedPane {
   }
   
   /**
+   * Sets the active tab to the tab that shows the given layout.
+   * 
    * @param layout
    */
   public void showTab(Layout layout) {
@@ -136,7 +138,7 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
-   * 
+   * Closes all tabs.
    */
   public boolean closeAllTabs() {
     while (isAnySelected()) {
@@ -148,6 +150,7 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
+   * Refreshes the title of the tab, that shows the given layout.
    * @param layout
    */
   public void refreshTitle(Layout layout) {
@@ -167,8 +170,9 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
+   * Checks whether the given layout is open in any tab.
    * @param layout
-   * @return
+   * @return true if it is shown
    */
   public boolean isLayoutOpen(Layout layout) {
     for(Layout l : this.listOfLayouts) {
@@ -180,15 +184,17 @@ public class TabManager extends JTabbedPane {
   }  
   
   /**
-   * @return
+   * Checks whether any tab is selected.
+   * @return true if one is selected
    */
   public boolean isAnySelected() {
     return getSelectedIndex() != -1;
   }
   
   /**
+   * Gets the tab index of the tab, that shows the given layout.
    * @param layout
-   * @return
+   * @return the index if the layout is shown, -1 if the layout isn't shown in any tab
    */
   private int getIndexFromLayout(Layout layout) {
     int index = 0;
@@ -203,7 +209,7 @@ public class TabManager extends JTabbedPane {
   
   /**
    * @param layout
-   * @return Returns if any other layout from the same document is open 
+   * @return true if any other layout from the same document is open 
    */
   public boolean isAnyOpenFromDocument(Layout layout) {
     OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
@@ -241,9 +247,10 @@ public class TabManager extends JTabbedPane {
   }
   
   /**
+   * Creates a panel, that shows the given layout and runs the autoLayout algorithm on it, if autoLayout is true.
    * @param layout
    * @param autoLayout
-   * @return
+   * @return the created panel
    */
   private GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
@@ -260,6 +267,7 @@ public class TabManager extends JTabbedPane {
   }
 
   /**
+   * Runs the OrganicLayouter on the given layout.
    * @param layout
    * @return
    */
@@ -282,8 +290,9 @@ public class TabManager extends JTabbedPane {
   }
   
   /**
+   * Gets the panel, that shows the given layout.
    * @param layout
-   * @return
+   * @return the panel
    */
   public GraphLayoutPanel getPanelFromLayout(Layout layout) {
     return (GraphLayoutPanel) getComponentAt(getIndexFromLayout(layout));

@@ -59,7 +59,7 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	private Map<String, List<String>> idMap;
 	
 	/**
-	 * 
+	 * Constructor.
 	 * @param layout
 	 */
 	public GraphLayoutPanel(Layout layout, SBMLEditMode editMode) {
@@ -78,8 +78,10 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.zbit.graph.gui.TranslatorGraphLayerPanel#createGraphFromDocument(java.lang.Layout)
+	/**
+	 * Creates a graph from the given layout.
+	 * @param layout
+	 * @return the created graph
 	 */
 	@Override
 	protected Graph2D createGraphFromDocument(Layout layout) {
@@ -87,6 +89,9 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 		return converter.createGraph(layout, editMode);
 	}
 
+	/**
+	 * @return the converter
+	 */
   public Layout2GraphML getConverter() {
     return this.converter;
   }

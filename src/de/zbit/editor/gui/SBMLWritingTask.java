@@ -29,9 +29,12 @@ import org.sbml.jsbml.SBMLWriter;
 import de.zbit.editor.SBMLEditorConstants;
 
 /**
+ * This class represents a file writing task for a SBMLDocument.
+ * 
  * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class SBMLWritingTask extends SwingWorker<Void, Void> {
@@ -41,6 +44,7 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
   private SBMLDocument doc;
 
   /**
+   * Constructor.
    * @param file
    * @param doc
    * @throws FileNotFoundException
@@ -53,8 +57,8 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
   }
 
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#doInBackground()
+  /**
+   * Writes the document into a file using a SBMLWriter.
    */
   protected Void doInBackground() throws Exception {
     new SBMLWriter().write(doc, stream);
@@ -62,8 +66,8 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
   }
 
 
-  /* (non-Javadoc)
-   * @see javax.swing.SwingWorker#done()
+  /**
+   * Fires a property change, when the writing task is done.
    */
   @Override
   protected void done() {

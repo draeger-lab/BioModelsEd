@@ -54,7 +54,13 @@ import de.zbit.editor.control.SBMLFactory;
 
 
 /**
+ * Parses CompartmentGlyph,SpeciesGlyph and ReactionGlyph information from CellDesigner annotations.
+ * 
  * @author Stephanie Tscherneck
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class CellDesignerAnnotationParser implements Runnable {
@@ -94,7 +100,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	private File xmlFile;
 
 	/**
-	 * 
+	 * Constructor for use when opening a new file.
 	 * @param inputFile
 	 * @throws XMLStreamException
 	 * @throws IOException
@@ -105,7 +111,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Constructor.
 	 * @param doc
 	 */
 	public CellDesignerAnnotationParser(SBMLDocument doc) {
@@ -120,7 +126,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	}
 
 	/**
-	 * 
+	 * Creates an empty layout and adds it to the model.
 	 * @param doc
 	 */
 	private void initializeLayout(SBMLDocument doc) {

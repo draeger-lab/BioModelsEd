@@ -39,8 +39,13 @@ import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.SBMLCreateEdgeMode;
 
 /**
+ * Creates yFiles graph information from a JSBML layout and draws it on the graph.
+ * 
  * @author Andreas Dr&aum;ger
- * @since 1.0
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class Layout2GraphML extends SB_2GraphML<Layout> {
@@ -48,14 +53,15 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
   private Logger logger = Logger.getLogger(Layout2GraphML.class.getName());
 
 	/**
-	 * 
+	 * Constructor.
 	 */
 	public Layout2GraphML() {
 		super();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.zbit.graph.io.SB_2GraphML#createNodesAndEdges(java.lang.Object)
+	/**
+	 * Creates nodes and edges for all the CompartmentGlyphs, SpeciesGlyph, ReactionGlyphs and TextGlyphs in the layout.
+	 * @param layout
 	 */
 	@Override
 	protected void createNodesAndEdges(Layout layout) {
@@ -73,6 +79,10 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 		logger.info("Layout Information Initialized.");
 	}
 
+	/**
+	 * Creates the edges for ReactionModifiers.
+	 * @param layout
+	 */
 	private void initReactionModifiers(Layout layout) {
     SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode
                                                                           .getCreateEdgeMode();
@@ -93,6 +103,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
   }
 
   /**
+   * Initializes the TextGlyphs.
 	 * @param layout
 	 */
 	private void initTextGlyphs(Layout layout) {
@@ -106,6 +117,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	}
 
 	/**
+	 * Creates the nodes for ReactionGlyphs and the corresponding edges.
 	 * @param layout
 	 */
 	private void initReactionGlyphs(Layout layout) {
@@ -137,6 +149,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	}
 
 	/**
+	 * Creates the nodes for SpeciesGlyphs.
 	 * @param layout
 	 */
 	private void initSpeciesGlyphs(Layout layout) {
@@ -175,6 +188,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	}
 
 	/**
+	 * Creates the nodes for CompartmentGlyphs.
 	 * @param layout
 	 */
 	private void initCompartments(Layout layout) {
@@ -209,23 +223,22 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 			}
 	}
 	
+	
 	/**
 	 * @param a
 	 * @param b
 	 * @return whether {@link BoundingBox} a contains {@link BoundingBox} b 
 	 */
 	private static boolean containsBoundingBox(BoundingBox a, BoundingBox b) {
-	  // TODO
+	  // TODO Auto-generated method stub
 	  return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.zbit.graph.io.SB_2GraphML#isAnyLayoutInformationAvailable()
-	 */
+	
 	@Override
 	protected boolean isAnyLayoutInformationAvailable() {
 		// TODO Auto-generated method stub
 		return false;
-	}
+	} 
 
 }

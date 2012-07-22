@@ -22,8 +22,12 @@ import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 
 /**
+ * Manages resources, like button icons and localized strings.
+ * 
  * @author Alexander Diamantikos
- * @since 1.0
+ * @author Jakob Matthes
+ * @author Eugen Netz
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class Resources {
@@ -58,7 +62,10 @@ public class Resources {
   public static final ImageIcon iconButtonRename = Resources.createImageIcon("images/ButtonRename.png", null);
   public static final ImageIcon iconButtonExport = Resources.createImageIcon("images/ButtonExport.png", null);
   
-	// Get localized String in default language
+	/**
+	 * @param key
+	 * @return a localized string in the default language
+	 */
 	public static String getString(String key){
 		return bundleDefault.getString(key);
 	}

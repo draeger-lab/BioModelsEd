@@ -28,12 +28,26 @@ import de.zbit.graph.sbgn.ReactionNodeRealizer;
 
 
 /**
+ * Offers methods to draw reaction nodes and edges.
+ * 
+ * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class SBMLCreateEdgeMode extends CreateEdgeMode {
    
+  /**
+   * Creates a reaction node and the edges to and from that node.
+   * 
+   * @param graph
+   * @param start
+   * @param target
+   * @param realizer
+   * @param reversible
+   * @return the created node
+   */
   public Node createEdgeNode(Graph2D graph, Node start, Node target, EdgeRealizer realizer, boolean reversible) {
     ReactionNodeRealizer nre = new ReactionNodeRealizer();
     Node reactionNode = graph.createNode(nre);
@@ -50,6 +64,16 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
     return reactionNode;
   }
   
+  /**
+   * Creates an edge between the start SpeciesGlyph node and the target ReactionGlyph node for a modifier.
+   * If the SBO-term for the modifier isn't Inhibitor or Catalyst, the edge has a CONCAVE arrow by default.
+   * 
+   * @param graph
+   * @param start
+   * @param target
+   * @param realizer
+   * @param sbo
+   */
   public void createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer, int sbo) {
     if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
       Edge e = super.createEdge(graph, start, target, realizer);

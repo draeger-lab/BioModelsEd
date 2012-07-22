@@ -34,9 +34,12 @@ import javax.swing.JPopupMenu;
 import de.zbit.editor.control.OpenedSBMLDocument;
 
 /**
+ * This class represents a single tab of the tab bar.
+ * 
  * @author Alexander Diamantikos
+ * @author Jakob Matthes
  * @author Eugen Netz
- * @since 1.0
+ * @author Jan Rudolph
  * @version $Rev$
  */
 public class TabComponent extends JPanel {
@@ -46,7 +49,10 @@ public class TabComponent extends JPanel {
   private JLabel            label;
   private static Logger logger = Logger.getLogger(OpenedSBMLDocument.class.toString());
 
-
+  /**
+   * Constructor.
+   * @param tabManager
+   */
   public TabComponent(TabManager tabManager) {
 	super(new BorderLayout());
     this.tabManager = tabManager;
@@ -65,49 +71,78 @@ public class TabComponent extends JPanel {
     addMouseListener(tabListener);
   }
 
+  /**
+   * Sets the title shown in the tab.
+   * @param title
+   */
   public void setTitle(String title) {
     this.label.setText(title);
   }
 
+  /**
+   * Closes this tab.
+   */
   public void close() {
     GraphLayoutPanel panel = (GraphLayoutPanel) tabManager.getComponentAt(tabManager.indexOfTabComponent(this));
     tabManager.showTab(panel.getDocument());
     tabManager.getEditorInstance().layoutClose(panel.getDocument());
   }
 
+  /**
+   * Closes all tabs.
+   */
   public void closeAll() {
     tabManager.closeAllTabs();
   }
   
+  /**
+   * Runs the autoLayout algorithm on the layout shown in this tab.
+   */
   public void autoLayout() {
     GraphLayoutPanel panel = (GraphLayoutPanel) tabManager.getComponentAt(tabManager.indexOfTabComponent(this));
     tabManager.layoutAuto(panel.getDocument());
   }
-
+  
+  /**
+   * 
+   */
   class TabListener extends MouseAdapter {
 
     JPopupMenu popup;
 
-
+    /**
+     * Constructor.
+     * @param popupMenu
+     */
     TabListener(JPopupMenu popupMenu) {
       popup = popupMenu;
     }
 
-
+    /**
+     * Determines the action for a dragged mouse.
+     */
     public void mouseDragged(MouseEvent e) {
       logger.info("Dragged");
     }
     
+    /**
+     * Calls maybeShowPopup on a pressed mouse button.
+     */
     public void mousePressed(MouseEvent e) {
       maybeShowPopup(e);
     }
 
-
+    /**
+     * Calls maybeShowPopup on a released mouse button.
+     */
     public void mouseReleased(MouseEvent e) {
       maybeShowPopup(e);
     }
 
-
+    /**
+     * Determines whether the mouse event should trigger a popup and triggers it when it should.
+     * @param e
+     */
     private void maybeShowPopup(MouseEvent e) {
       if (e.isPopupTrigger()) {
         popup.show(e.getComponent(), e.getX(), e.getY());
