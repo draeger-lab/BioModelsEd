@@ -35,32 +35,32 @@ public class Resources {
 	private final static ResourceBundle bundleDefault = ResourceBundle.getBundle("de.zbit.editor.gui.SBMLEditor", Locale.getDefault());
 	
 	//Icons
-	public static final ImageIcon iconButtonAbout = Resources.createImageIcon("images/ButtonAbout.png", null);
-	public static final ImageIcon iconButtonAdd = Resources.createImageIcon("images/ButtonAdd.png", null);
-  public static final ImageIcon iconButtonClose = Resources.createImageIcon("images/ButtonClose.png", null);
-  public static final ImageIcon iconButtonCopy = Resources.createImageIcon("images/ButtonCopy.png", null);
-  public static final ImageIcon iconButtonCut = Resources.createImageIcon("images/ButtonCut.png", null);
-  public static final ImageIcon iconButtonDelete = Resources.createImageIcon("images/ButtonDelete.png", null);
-  public static final ImageIcon iconButtonNew = Resources.createImageIcon("images/ButtonNew.png", null);
-  public static final ImageIcon iconButtonOpen = Resources.createImageIcon("images/ButtonOpen.png", null);
-  public static final ImageIcon iconButtonPaste = Resources.createImageIcon("images/ButtonPaste.png", null);
-  public static final ImageIcon iconButtonQuit = Resources.createImageIcon("images/ButtonQuit.png", null);
-  public static final ImageIcon iconButtonRedo = Resources.createImageIcon("images/ButtonRedo.png", null);
-  public static final ImageIcon iconButtonSave = Resources.createImageIcon("images/ButtonSave.png", null);
-  public static final ImageIcon iconButtonUndo = Resources.createImageIcon("images/ButtonUndo.png", null);
-  public static final ImageIcon iconUnknown = Resources.createImageIcon("images/ButtonUnknown.png", null);
-  public static final ImageIcon iconSimpleMolecule = Resources.createImageIcon("images/ButtonSimpleMolecule.png", null);
-  public static final ImageIcon iconMacromolecule = Resources.createImageIcon("images/ButtonMacromolecule.png", null);
-  public static final ImageIcon iconEmptySet = Resources.createImageIcon("images/ButtonEmptySet.png", null);
-  public static final ImageIcon iconTransition = Resources.createImageIcon("images/ButtonTransition.png", null);
-  public static final ImageIcon iconCatalysis = Resources.createImageIcon("images/ButtonCatalysis.png", null);
-  public static final ImageIcon iconInhibition = Resources.createImageIcon("images/ButtonInhibition.png", null);
-  public static final ImageIcon iconPositive = Resources.createImageIcon("images/Positive.png", null);
-  public static final ImageIcon iconTab = Resources.createImageIcon("images/ButtonTab.png", null);
-  public static final ImageIcon iconTabNew = Resources.createImageIcon("images/ButtonTabNew.png", null);
-  public static final ImageIcon iconButtonAuto = Resources.createImageIcon("images/ButtonAuto.png", null);
-  public static final ImageIcon iconButtonRename = Resources.createImageIcon("images/ButtonRename.png", null);
-  public static final ImageIcon iconButtonExport = Resources.createImageIcon("images/ButtonExport.png", null);
+	public static final ImageIcon iconButtonAbout = Resources.createImageIcon("img/ButtonAbout.png", null);
+	public static final ImageIcon iconButtonAdd = Resources.createImageIcon("img/ButtonAdd.png", null);
+  public static final ImageIcon iconButtonClose = Resources.createImageIcon("img/ButtonClose.png", null);
+  public static final ImageIcon iconButtonCopy = Resources.createImageIcon("img/ButtonCopy.png", null);
+  public static final ImageIcon iconButtonCut = Resources.createImageIcon("img/ButtonCut.png", null);
+  public static final ImageIcon iconButtonDelete = Resources.createImageIcon("img/ButtonDelete.png", null);
+  public static final ImageIcon iconButtonNew = Resources.createImageIcon("img/ButtonNew.png", null);
+  public static final ImageIcon iconButtonOpen = Resources.createImageIcon("img/ButtonOpen.png", null);
+  public static final ImageIcon iconButtonPaste = Resources.createImageIcon("img/ButtonPaste.png", null);
+  public static final ImageIcon iconButtonQuit = Resources.createImageIcon("img/ButtonQuit.png", null);
+  public static final ImageIcon iconButtonRedo = Resources.createImageIcon("img/ButtonRedo.png", null);
+  public static final ImageIcon iconButtonSave = Resources.createImageIcon("img/ButtonSave.png", null);
+  public static final ImageIcon iconButtonUndo = Resources.createImageIcon("img/ButtonUndo.png", null);
+  public static final ImageIcon iconUnknown = Resources.createImageIcon("img/ButtonUnknown.png", null);
+  public static final ImageIcon iconSimpleMolecule = Resources.createImageIcon("img/ButtonSimpleMolecule.png", null);
+  public static final ImageIcon iconMacromolecule = Resources.createImageIcon("img/ButtonMacromolecule.png", null);
+  public static final ImageIcon iconEmptySet = Resources.createImageIcon("img/ButtonEmptySet.png", null);
+  public static final ImageIcon iconTransition = Resources.createImageIcon("img/ButtonTransition.png", null);
+  public static final ImageIcon iconCatalysis = Resources.createImageIcon("img/ButtonCatalysis.png", null);
+  public static final ImageIcon iconInhibition = Resources.createImageIcon("img/ButtonInhibition.png", null);
+  public static final ImageIcon iconPositive = Resources.createImageIcon("img/Positive.png", null);
+  public static final ImageIcon iconTab = Resources.createImageIcon("img/ButtonTab.png", null);
+  public static final ImageIcon iconTabNew = Resources.createImageIcon("img/ButtonTabNew.png", null);
+  public static final ImageIcon iconButtonAuto = Resources.createImageIcon("img/ButtonAuto.png", null);
+  public static final ImageIcon iconButtonRename = Resources.createImageIcon("img/ButtonRename.png", null);
+  public static final ImageIcon iconButtonExport = Resources.createImageIcon("img/ButtonExport.png", null);
   
 	/**
 	 * @param key
