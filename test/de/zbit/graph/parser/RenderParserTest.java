@@ -1,8 +1,5 @@
 package de.zbit.graph.parser;
 
-import static org.junit.Assert.*;
-
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,23 +7,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sbml.jsbml.Compartment;
-import org.sbml.jsbml.Model;
-import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
-import org.sbml.jsbml.SBO;
-import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
-import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstants;
-import org.sbml.jsbml.ext.layout.SpeciesGlyph;
-import org.sbml.jsbml.ext.render.ColorDefinition;
-import org.sbml.jsbml.ext.render.LocalRenderInformation;
-import org.sbml.jsbml.ext.render.RenderConstants;
-import org.sbml.jsbml.ext.render.RenderLayoutPlugin;
-import org.sbml.jsbml.ext.render.RenderModelPlugin;
 
 
 public class RenderParserTest {

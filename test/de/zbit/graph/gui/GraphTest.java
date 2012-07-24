@@ -32,7 +32,7 @@ import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.render.RenderConstants;
-import org.sbml.jsbml.ext.render.RenderModelPlugin;
+import org.sbml.jsbml.ext.render.RenderListOfLayoutsPlugin;
 
 import y.view.EditMode;
 import y.view.Graph2DView;
@@ -71,7 +71,7 @@ public class GraphTest {
 		ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
 		Layout layout = extLayout.createLayout();
 		
-		RenderModelPlugin render = new RenderModelPlugin(extLayout.getListOfLayouts());
+		RenderListOfLayoutsPlugin render = new RenderListOfLayoutsPlugin(extLayout.getListOfLayouts());
 		extLayout.getListOfLayouts().addExtension(RenderConstants.namespaceURI, render);
 		SpeciesGlyph sGlyph = layout.createSpeciesGlyph("glyph_" + s1.getId(), s1.getId());
 		sGlyph.createBoundingBox(60, 60, 10);
