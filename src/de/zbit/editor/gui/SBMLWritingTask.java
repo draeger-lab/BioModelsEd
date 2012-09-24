@@ -1,6 +1,6 @@
 /*
- * $$Id${file_name} ${time} ${user}$$
- * $$URL${file_name}$$
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBML Editor.
  *
