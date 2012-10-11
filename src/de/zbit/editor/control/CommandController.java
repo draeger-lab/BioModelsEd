@@ -42,8 +42,12 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
+import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
+import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
@@ -106,12 +110,28 @@ public class CommandController implements PropertyChangeListener {
    * @param editorInstance must implement SBMLView
    */
   public CommandController(SBMLView editorInstance) {
-    this.view = editorInstance;
+    this();
+    this.setView(editorInstance);
+  }
+  /**
+   * Constructor 
+   * @param editorInstance must implement SBMLView
+   */
+  public CommandController() {
     this.state = States.normal;
     this.fileManager = new FileManager(this);
     this.logger.setLevel(Level.CONFIG);
   }
-
+  
+  /**
+   * setting view for command controller
+   * @param view
+   */
+  public void setView(SBMLView view) {
+  	this.view = view;
+  }
+  
+  
   /**
    * Creates a Species and adds it to the model.
    * Creates a SpeciesGlyph and adds it to the layout. Its Position is determined by the ValuePair in NewValue of evt.
@@ -179,8 +199,86 @@ public class CommandController implements PropertyChangeListener {
    * @return The Id of the Compartment
    */
   private String findCompartmentId(Double x, Double y) {
-    return view.findCompartmentId(x, y);
+    //FIXME findCompartmentId
+  	return SBMLEditorConstants.compartmentDefaultName;
   }
+  
+//  /**
+//   * Returns the innermost compartment glyph of the current layout at the specified position.
+//   * @param x
+//   * @param y
+//   * @return the id of the compartment
+//   */
+//  @Override
+//  public String findCompartmentId(Double x, Double y) {
+//    Layout layout = this.getCurrentLayout();
+//    if (layout == null) {
+//      logger.info("layout null"); 
+//      return SBMLEditorConstants.compartmentDefaultName;
+//    }
+//    
+//    ListOf<CompartmentGlyph> listOfCompartmentGlyphs = layout.getListOfCompartmentGlyphs();
+//    if (listOfCompartmentGlyphs == null) {
+//      logger.info("listOfCompartmentGlyphs null");
+//      return SBMLEditorConstants.compartmentDefaultName;
+//    }
+//    
+//    for(CompartmentGlyph c : listOfCompartmentGlyphs) {
+//      BoundingBox bb = c.getBoundingBox();
+//      if (!inside(x,y,bb)) {
+//        listOfCompartmentGlyphs.remove(c);
+//      }
+//    }
+//    return getInnermostCompartmentId(listOfCompartmentGlyphs);
+//  }
+//
+//
+//  /**
+//   * Returns the innermost compartment glyph of the given list.
+//   * All bounding boxes need to be set.
+//   * @param listOfCompartmentGlyphs
+//   * @return
+//   */
+//  private String getInnermostCompartmentId(ListOf<CompartmentGlyph> listOfCompartmentGlyphs) {
+//    if (listOfCompartmentGlyphs.size() > 0) {
+//      CompartmentGlyph innermost = listOfCompartmentGlyphs.get(0);
+//      for(CompartmentGlyph cg : listOfCompartmentGlyphs) {
+//        BoundingBox bb = cg.getBoundingBox();
+//        Point p = bb.getPosition();
+//        if (p == null) continue;
+//        BoundingBox innermostBb = innermost.getBoundingBox();
+//        if (inside(p.getX(),p.getY(),innermostBb)) {
+//          innermost = cg;
+//        }
+//      }
+//      return innermost.getCompartment();
+//    }
+//    else {
+//      return SBMLEditorConstants.compartmentDefaultName;
+//    }
+//  }
+//
+//
+//  /**
+//   * Checks if given Coordinates x,y are inside of the BoundingBox.
+//   * @param x
+//   * @param y
+//   * @param bb
+//   * @return true if position is inside the BoundingBox
+//   */
+//  private boolean inside(Double x, Double y, BoundingBox bb) {
+//    if (bb == null) return false;
+//    Dimensions dimensions = bb.getDimensions();
+//    if (dimensions == null) return false;
+//    Point point = bb.getPosition();
+//    if (point == null) return false;
+//    double bx = point.getX();
+//    double by = point.getY();
+//    double width = dimensions.getWidth();
+//    double height = dimensions.getHeight();
+//    return (bx <= x && x <= bx+width && by <= y && y <= by+height);
+//  }
+
 
   /**
    * Creates a ReactionGlyph with the SpeciesGlyph corresponding to the sourceNode as the Substrate
@@ -376,14 +474,15 @@ public class CommandController implements PropertyChangeListener {
    * @return true, if succesful.
    */
   public boolean fileQuit() {
-    if (this.fileManager.anyFileIsModified()) {
+    //TODO implement fileQuit
+  	/*if (this.fileManager.anyFileIsModified()) {
       int returnVal = GUIFactory.createQuestionClose(this.view.getFrame());
       if (returnVal == JOptionPane.YES_OPTION && this.view.getTabManager().closeAllTabs()) {
         System.exit(0);
       }
     } else {
       System.exit(0);
-    }
+    }*/
     return true;
   }
 
@@ -410,14 +509,12 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * Forwards fileOpen request to file manager.
-   * @return true if successful.
-   * @throws FileNotFoundException 
+   * Open files and return all successful for history
    */
-  public boolean fileOpen() throws FileNotFoundException {
-      return fileManager.fileOpen();
+  public File[] openFile(File... arg0) {
+  	logger.info("openFile");
+  	return fileManager.openFile(arg0);
   }
-  
   /**
    * Forwards fileClose request to file manager.
    * @return true if successful.
@@ -467,12 +564,14 @@ public class CommandController implements PropertyChangeListener {
     logger.info(evt.getPropertyName());
 
     if (evt.getPropertyName().equals(SBMLEditorConstants.openingDone)) {
+    	//FIXME jsbml.SBMLDocument -> openenedSBMLDocument
       OpenedSBMLDocument doc = (OpenedSBMLDocument) evt.getNewValue();
       
       /*
        * add first or new default layout to view
        */
       boolean hasLayout = doc.hasLayout();
+      //TODO read autoLayout from settings
       boolean autoLayout = false;
       Layout layout = doc.getFirstLayoutOrNew();
       logger.info("Document has layout information: " + hasLayout);
@@ -791,6 +890,7 @@ public class CommandController implements PropertyChangeListener {
    * @return the Frame
    */
   public Component getFrame() {
+  	logger.info("getFrame");
     return this.view.getFrame();
   }
 
@@ -811,7 +911,7 @@ public class CommandController implements PropertyChangeListener {
       return view.closeTab(layout);
     }
     else {
-      return view.fileClose();
+      return false; //FIXME view.fileClose();
     }    
   }
 
@@ -820,7 +920,8 @@ public class CommandController implements PropertyChangeListener {
    * @param currentLayout
    */
   public void layoutDelete(Layout layout) {
-    OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
+    //TODO implement layoutDelete
+  	/*OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
         .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
     boolean anyopen = view.getTabManager().isAnyOpenFromDocument(layout);
     if(doc.getListOfLayouts().size() == 1) {
@@ -832,7 +933,7 @@ public class CommandController implements PropertyChangeListener {
       doc.getListOfLayouts().remove(layout);
       doc.setFileModified(true);
       view.closeTab(layout);
-    }
+    }*/
   }
   
   /**
@@ -841,7 +942,8 @@ public class CommandController implements PropertyChangeListener {
    * @return if user did not cancel saving progress
    */
   private boolean askUserSave(OpenedSBMLDocument doc) {
-    if (doc.isFileModified()) {
+    //TODO impelement askUserSave
+  	/*if (doc.isFileModified()) {
       int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
       if (returnVal == JOptionPane.YES_OPTION) {
         logger.info("User chose to save file");
@@ -855,7 +957,7 @@ public class CommandController implements PropertyChangeListener {
         logger.info("User canceled closing");
         return false;
       }
-    }
+    } */
     return true;
   }
     

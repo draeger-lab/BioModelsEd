@@ -30,6 +30,7 @@ import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.control.SBMLView;
 
 
 /**
@@ -52,7 +53,7 @@ public class EditorToolbar extends JToolBar {
    * Constructor.
    * @param parent
    */
-  public EditorToolbar(SBMLEditor parent) {
+  public EditorToolbar(SBMLView parent) {
     GUIFactory.addButton(this,
         Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE),
         Resources.iconUnknown,

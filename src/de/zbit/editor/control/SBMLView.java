@@ -16,6 +16,7 @@
  */
 package de.zbit.editor.control;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -45,46 +46,10 @@ public interface SBMLView {
       3, 1);
 
   /**
-   * Forwards fileNew request to commandController to open an empty {@link #SBMLDocument}.
-   * @return true if succesful
-   */
-  public boolean fileNew();
-
-  /**
-   * Forwards fileOpen request to commandController.
-   * @return true if succesful
-   */
-  public boolean fileOpen() throws FileNotFoundException;
-
-  /**
-   * Forwards fileClose request to commandController.
-   * @return true if succesful
-   */
-  public boolean fileClose();
-
-  /**
-   * Forwards fileSave request to commandController.
-   * @return true if succesful
-   */
-  public boolean fileSave();
-
-  /**
-   * Forwards fileSaveAs request to commandController.
-   * @return true if succesful
-   */
-  public boolean fileSaveAs();
-
-  /**
-   * Forwards a fileQuit request to the commandController
-   * @return true if succesful
-   */
-  public boolean fileQuit();
-
-  /**
    * Opens the layout in a new tab.
    * @param layout, the layout to open
    * @param autoLayout, if true the autoLayout Algorithm is used on the layout
-   * @return true if succesful
+   * @return true if successful
    */
   public boolean addLayout(Layout layout, boolean autoLayout);
 
@@ -95,7 +60,7 @@ public interface SBMLView {
   public Layout getCurrentLayout();
 
   /**
-   * Creates popup for the input of a Species name.
+   * Creates pop-up for the input of a Species name.
    * @param s, the default name
    * @return the name
    */
@@ -107,13 +72,13 @@ public interface SBMLView {
   public TabManager getTabManager();
 
   /**
-   * Creates popup to request File Open Input.
+   * Creates pop-up to request File Open Input.
    * @return the file to open
    */
   public File askUserOpenDialog();
   
   /**
-   * Creates popup to request File Save Input.
+   * Creates pop-up to request File Save Input.
    * @return the file to save
    */
   public File askUserSaveDialog();
@@ -127,7 +92,7 @@ public interface SBMLView {
   /**
    * @return the frame
    */
-  public JFrame getFrame();
+  public Component getFrame();
 
   /**
    * Creates popup for the input of a filename.
@@ -212,11 +177,16 @@ public interface SBMLView {
    */
   public void openLayoutInNewTab();
 
+
   /**
-   * Returns the innermost compartment glyph of the current layout at the specified position.
-   * @param x
-   * @param y
-   * @return the id of the compartment
+   * Returns associated CommandController
+   * @return
    */
-  public String findCompartmentId(Double x, Double y);
+  public CommandController getController();
+
+  /**
+   * Use to unable control buttons when no document is opened
+   * @param b
+   */
+  public void setEnableState(boolean b);
 }

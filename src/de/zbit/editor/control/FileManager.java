@@ -27,8 +27,8 @@ import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.gui.Resources;
-import de.zbit.editor.gui.SBMLReadingTask;
 import de.zbit.editor.gui.SBMLWritingTask;
+import de.zbit.sbml.gui.SBMLReadingTask;
 
 /**
  * Manages the opened Documents.
@@ -141,8 +141,8 @@ public class FileManager {
 	 * Open File.
 	 * @return true if successful
 	 */
-  public boolean fileOpen() throws FileNotFoundException {
-    File file = this.commandController.askUserOpenDialog();
+  public boolean fileOpen(File file) {
+  	//FIXME Check for right filetype
     if (file == null || isFilePathUsed(file.getAbsolutePath())) {
       return false;
     }
@@ -157,6 +157,22 @@ public class FileManager {
         return false;
       }
     }
+  }
+  
+  /**
+   * Open files and returns all successful for history
+   */
+  public File[] openFile(File... arg0) {
+  	logger.info("openFile");
+  	ArrayList<File> list = new ArrayList<File>();
+  	for (File f : arg0) {
+  		if(fileOpen(f)) {
+  			list.add(f);
+  		}
+  	}
+  	File[] successful = new File[list.size()];
+  	list.toArray(successful);
+  	return successful;
   }
 
   /**

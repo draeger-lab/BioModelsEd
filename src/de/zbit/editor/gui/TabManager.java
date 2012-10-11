@@ -32,6 +32,8 @@ import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
 import de.zbit.editor.SBMLEditorConstants;
 import de.zbit.editor.control.OpenedSBMLDocument;
+import de.zbit.editor.control.SBMLView;
+import de.zbit.gui.JTabbedPaneDraggableAndCloseable;
 
 /**
  * Manages all the TabComponents and the tab bar.
@@ -42,25 +44,25 @@ import de.zbit.editor.control.OpenedSBMLDocument;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class TabManager extends JTabbedPane {
+public class TabManager extends JTabbedPaneDraggableAndCloseable {
 
   private static final long serialVersionUID = -905908829761611472L;
   private static Logger logger = Logger.getLogger(OpenedSBMLDocument.class.toString());
-  private SBMLEditor editorInstance;
+  private SBMLView editorInstance;
   private List<Layout> listOfLayouts = new ArrayList<Layout>();
   
   /**
    * Constructor.
    * @param editorInstance
    */
-  public TabManager(SBMLEditor editorInstance) {
+  public TabManager(SBMLView editorInstance) {
     this.editorInstance = editorInstance;
   }
 
   /**
    * @return the editorInstance
    */
-  public SBMLEditor getEditorInstance() {
+  public SBMLView getEditorInstance() {
     return editorInstance;
   }
 
@@ -68,20 +70,16 @@ public class TabManager extends JTabbedPane {
    * Adds a tab for the given layout and runs the autoLayout algorithm on it, when autoLayout is true.
    * @param layout
    * @param autolayout
-   * return true if succesful
+   * return true if successful
    */
   public boolean addTab(Layout layout, boolean autoLayout) {
     if(listOfLayouts.contains(layout)) {
       logger.warning("List contains layout: ID: "+ layout.getId() + " Name: " +layout.getName());
     }
-    listOfLayouts.add(layout);
-      
-    GraphLayoutPanel panel = createPanelFromLayout(layout, autoLayout);
     
-    addTab("", panel);
-    setSelectedIndex(getIndexFromLayout(layout));
-    setTabComponentAt(getSelectedIndex(), new TabComponent(this));
-
+    listOfLayouts.add(layout);
+    GraphLayoutPanel panel = createPanelFromLayout(layout, autoLayout);
+    addTab("tab", panel);
     refreshTitle(layout);
     showTab(layout);
     this.editorInstance.setEnableState(true);
@@ -158,16 +156,18 @@ public class TabManager extends JTabbedPane {
 
     for(Layout l : doc.getListOfLayouts()) {
       if(isLayoutOpen(l)) {
-        TabComponent component = (TabComponent) getTabComponentAt(getIndexFromLayout(l));
+        int index = getIndexFromLayout(l);
         String title = doc.getAssociatedFilename()+": "+ l.getName();
         if(doc.isFileModified()) {
           title = "*"+title;
         }
-        component.setTitle(title);
-        logger.info("Tab title changed: Index: " + getIndexFromLayout(l) +" Name: " + title);
+        this.setTitleAt(index, title);
+        //FIXME setTitleAt for JTBDAC does not work
+        logger.info("Tab title changed: Index: " + index +" Name: " + getTitleAt(index));
       }
     }
   }
+  
 
   /**
    * Checks whether the given layout is open in any tab.
@@ -252,7 +252,7 @@ public class TabManager extends JTabbedPane {
    * @param autoLayout
    * @return the created panel
    */
-  private GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
+  public GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
     SBMLEditMode editMode = new SBMLEditMode(this.editorInstance.getController());
     GraphLayoutPanel panel = new GraphLayoutPanel(layout, editMode);
     Graph2DView view = panel.getGraph2DView();
