@@ -3,25 +3,28 @@ package de.zbit.graph;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
-import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.Model;
+import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
 
-import de.zbit.gui.BaseFrame;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 import de.zbit.editor.gui.GraphLayoutPanel;
-import de.zbit.editor.gui.TabComponent;
 import de.zbit.editor.gui.TabManager;
+import de.zbit.gui.BaseFrame;
+import de.zbit.io.OpenedFile;
 
 public class BaseFrameTest extends BaseFrame implements SBMLView {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5905194830302864398L;
 	private TabManager tabManager;
 	private Layout layout;
 	
@@ -79,48 +82,6 @@ public class BaseFrameTest extends BaseFrame implements SBMLView {
 	public File saveFile() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean fileNew() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean fileOpen() throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean fileClose() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean fileSave() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean fileSaveAs() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean fileQuit() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addLayout(Layout layout, boolean autoLayout) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -195,11 +156,6 @@ public class BaseFrameTest extends BaseFrame implements SBMLView {
 		
 	}
 
-	@Override
-	public void updateComboBox(ListOf<Layout> list) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void helpAbout() {
@@ -262,7 +218,7 @@ public class BaseFrameTest extends BaseFrame implements SBMLView {
 	}
 
 	@Override
-	public void setEnableState(boolean b) {
+	public void setControlsOn(boolean b) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -277,6 +233,25 @@ public class BaseFrameTest extends BaseFrame implements SBMLView {
 	public File saveFileAs() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.editor.control.SBMLView#updateComboBox(java.util.List)
+	 */
+	@Override
+	public void updateComboBox(List<Layout> list) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.editor.control.SBMLView#addTab(de.zbit.io.OpenedFile, java.lang.String, boolean)
+	 */
+	@Override
+	public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId,
+		boolean autoLayout) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

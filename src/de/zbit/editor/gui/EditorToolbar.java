@@ -29,7 +29,8 @@ import javax.swing.JToolBar;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEd;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.SBMLView;
 
 
@@ -47,7 +48,7 @@ public class EditorToolbar extends JToolBar {
   private static final long serialVersionUID = 4238837776010510727L;
   private JComboBox layoutComboBox = new JComboBox();
   private ListOf<Layout> listOfLayouts = new ListOf<Layout>();
-  private static Logger logger = Logger.getLogger(SBMLEditor.class.toString());
+  private static Logger logger = Logger.getLogger(BioModelsEd.class.toString());
 
   /**
    * Constructor.
@@ -55,90 +56,90 @@ public class EditorToolbar extends JToolBar {
    */
   public EditorToolbar(SBMLView parent) {
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.UNKNOWN_MOLECULE),
+        Resources.getString(BioModelsEdConstants.UNKNOWN_MOLECULE),
         Resources.iconUnknown,
         0,
         0,
         EventHandler.create(ActionListener.class,
             parent,
-            SBMLEditorConstants.addUnknownMolecule));
+            BioModelsEdConstants.addUnknownMolecule));
     
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.SIMPLE_MOLECULE),
+        Resources.getString(BioModelsEdConstants.SIMPLE_MOLECULE),
         Resources.iconSimpleMolecule,
         0,
         0,
         EventHandler.create(ActionListener.class,
             parent,
-            SBMLEditorConstants.addSimpleMolecule));
+            BioModelsEdConstants.addSimpleMolecule));
     
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.MACROMOLECULE),
+        Resources.getString(BioModelsEdConstants.MACROMOLECULE),
         Resources.iconMacromolecule,
         0,
         0,
         EventHandler.create(ActionListener.class,
             parent,
-            SBMLEditorConstants.addMacromolecule));
+            BioModelsEdConstants.addMacromolecule));
     
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.EMPTY_SET),
+        Resources.getString(BioModelsEdConstants.EMPTY_SET),
         Resources.iconEmptySet,
         0,
         0,
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addEmptySet));
+        EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.addEmptySet));
     
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.REACTION),
+        Resources.getString(BioModelsEdConstants.REACTION),
         Resources.iconTransition,
         0,
         0,
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.addReaction));
+        EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.addReaction));
     
     GUIFactory
         .addButton(this,
-            Resources.getString(SBMLEditorConstants.CATALYSIS),
+            Resources.getString(BioModelsEdConstants.CATALYSIS),
             Resources.iconCatalysis,
             0,
             0,
             EventHandler.create(ActionListener.class,
                 parent,
-                SBMLEditorConstants.addCatalysis));
+                BioModelsEdConstants.addCatalysis));
     
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.INHIBITION),
+        Resources.getString(BioModelsEdConstants.INHIBITION),
         Resources.iconInhibition,
         0,
         0,
         EventHandler
-            .create(ActionListener.class, parent, SBMLEditorConstants.addInhibition));
+            .create(ActionListener.class, parent, BioModelsEdConstants.addInhibition));
     
     
     layoutComboBox.setMaximumSize(new Dimension(150, 24));
     add(layoutComboBox);
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN),
+        Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN),
         Resources.iconTab,
         0,
         0,
         EventHandler.create(ActionListener.class,
             parent,
-            SBMLEditorConstants.openLayoutInTab));
+            BioModelsEdConstants.openLayoutInTab));
  
     GUIFactory.addButton(this,
-        Resources.getString(SBMLEditorConstants.MENU_TAB_OPEN_NEW),
+        Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN_NEW),
         Resources.iconTabNew,
         0,
         0,
         EventHandler.create(ActionListener.class,
             parent,
-            SBMLEditorConstants.openLayoutInNewTab));
+            BioModelsEdConstants.openLayoutInNewTab));
     
     GUIFactory.addCheckbox(this, 
-      Resources.getString(SBMLEditorConstants.REVERSIBLE),
+      Resources.getString(BioModelsEdConstants.REVERSIBLE),
       EventHandler.create(ActionListener.class,
         parent,
-        SBMLEditorConstants.reversible));
+        BioModelsEdConstants.reversible));
     
     setEnableState(false);
   }

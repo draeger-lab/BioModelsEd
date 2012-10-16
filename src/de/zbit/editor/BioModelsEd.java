@@ -35,6 +35,10 @@ import de.zbit.util.prefs.KeyProvider;
  */
 public class BioModelsEd extends Launcher {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7695361498192546438L;
 	BioModelsEdGUI gui;
 	CommandController controller;
 	

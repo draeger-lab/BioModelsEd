@@ -19,14 +19,17 @@ package de.zbit.editor.control;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.gui.TabManager;
+import de.zbit.io.OpenedFile;
 
 /**
  * The Interface, that a view of this program must implement.
@@ -51,7 +54,7 @@ public interface SBMLView {
    * @param autoLayout, if true the autoLayout Algorithm is used on the layout
    * @return true if successful
    */
-  public boolean addLayout(Layout layout, boolean autoLayout);
+  public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId, boolean autoLayout);
 
   /**
    * Forwards a getCurrentLayout request to the TabManager.
@@ -129,7 +132,7 @@ public interface SBMLView {
    * Updates the ComboBox for choice of layout.
    * @param list
    */
-  public void updateComboBox(ListOf<Layout> list);
+  public void updateComboBox(List<Layout> list);
   
   /**
    * Shows the "About"-message.
@@ -188,5 +191,6 @@ public interface SBMLView {
    * Use to unable control buttons when no document is opened
    * @param b
    */
-  public void setEnableState(boolean b);
+  public void setControlsOn(boolean b);
+
 }

@@ -26,7 +26,7 @@ import javax.swing.SwingWorker;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLWriter;
 
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 
 /**
  * This class represents a file writing task for a SBMLDocument.
@@ -71,6 +71,6 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
    */
   @Override
   protected void done() {
-    firePropertyChange(SBMLEditorConstants.savingDone, null, null);
+    firePropertyChange(BioModelsEdConstants.savingDone, null, null);
   }
 }

@@ -35,7 +35,7 @@ import org.sbml.jsbml.ext.layout.TextGlyph;
 
 import y.base.Node;
 import y.view.GenericEdgeRealizer;
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.gui.SBMLCreateEdgeMode;
 
 /**
@@ -91,8 +91,8 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
       ListOf<SpeciesReferenceGlyph> refList = r.getListOfSpeciesReferenceGlyphs();
       for (SpeciesReferenceGlyph sRef : refList) {
         if ((sRef.getSpeciesReferenceRole() != SpeciesReferenceRole.PRODUCT) && (sRef.getSpeciesReferenceRole() != SpeciesReferenceRole.SUBSTRATE)) {
-          Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-          Node target = (Node) r.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          Node source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+          Node target = (Node) r.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
           if ((source != null) && (target != null)) {
             createEdgeMode.createEdge(this.simpleGraph, source, target,
               new GenericEdgeRealizer(), sRef.getSBOTerm());
@@ -111,7 +111,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	  for (TextGlyph textGlyph : list) {
 	    SpeciesGlyph s = layout.getSpeciesGlyph(textGlyph.getGraphicalObject());
 	    if (s != null) {
-	      s.putUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY, textGlyph);
+	      s.putUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY, textGlyph);
 	    }
 	  }
 	}
@@ -131,10 +131,10 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	    ListOf<SpeciesReferenceGlyph> refList = r.getListOfSpeciesReferenceGlyphs();
 	    for (SpeciesReferenceGlyph sRef : refList) {
 	      if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE) {
-	        source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+	        source = (Node) sRef.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
 	      }
 	      if (sRef.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT) {
-	        target = (Node) sRef.getSpeciesGlyphInstance().getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+	        target = (Node) sRef.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
 	      }
 	    }
 	    SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) this.editMode.getCreateEdgeMode();
@@ -144,7 +144,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	    if (r.isSetBoundingBox()) {
 	      this.simpleGraph.setLocation(n, r.getBoundingBox().getPosition().getX(), r.getBoundingBox().getPosition().getY());
 	    }
-	    r.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+	    r.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, n);
 	  }
 	}
 
@@ -163,7 +163,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	    }
 
 	    String name = "(" + species.getName() + ")";
-	    TextGlyph textGlyph = (TextGlyph) glyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+	    TextGlyph textGlyph = (TextGlyph) glyph.getUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
 	    if (textGlyph != null && textGlyph.isSetNamedSBase()) {
 	      String namedSBase = textGlyph.getNamedSBase();
 	      Species originSpecies = textGlyph.getModel().getSpecies(namedSBase);
@@ -183,7 +183,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 	    else {
 	      n = createNode(speciesId, name, species.getSBOTerm());
 	    }
-	    glyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+	    glyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, n);
 	  }
 	}
 
@@ -218,7 +218,7 @@ public class Layout2GraphML extends SB_2GraphML<Layout> {
 			    else {
 			      n = createNode(c.getId(), c.getName(), c.getSBOTerm());
 			    }
-			    c.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+			    c.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, n);
 			  }
 			}
 	}

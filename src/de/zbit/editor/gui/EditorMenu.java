@@ -24,7 +24,7 @@ import java.beans.EventHandler;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 
@@ -51,68 +51,68 @@ public class EditorMenu extends JMenuBar {
    */
   public EditorMenu(CommandController commandcontroller, SBMLView parent) {
     JMenu menuFile = GUIFactory.createMenu(this,
-      Resources.getString(SBMLEditorConstants.MENU_FILE));
+      Resources.getString(BioModelsEdConstants.MENU_FILE));
     int ctrl = GUITools.getControlKey();
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_NEW), Resources.iconButtonNew,
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_NEW), Resources.iconButtonNew,
       ctrl, KeyEvent.VK_N, EventHandler.create(ActionListener.class, parent,
-        SBMLEditorConstants.fileNew));
+        BioModelsEdConstants.fileNew));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_OPEN), Resources.iconButtonOpen,
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_OPEN), Resources.iconButtonOpen,
       ctrl, KeyEvent.VK_O, EventHandler.create(ActionListener.class, parent,
-          SBMLEditorConstants.fileOpen));
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_CLOSE), Resources.iconButtonDelete,
+          BioModelsEdConstants.fileOpen));
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_CLOSE), Resources.iconButtonDelete,
       ctrl, KeyEvent.VK_W, EventHandler.create(ActionListener.class, parent,
-          SBMLEditorConstants.fileClose));
+          BioModelsEdConstants.fileClose));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_SAVE), Resources.iconButtonSave,
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_SAVE), Resources.iconButtonSave,
       ctrl, KeyEvent.VK_S, EventHandler.create(ActionListener.class, parent,
-          SBMLEditorConstants.fileSave));
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_SAVEAS), Resources.iconButtonSave,
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.fileSaveAs));
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_EXPORT), Resources.iconButtonExport,
-        EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.fileExport));
+          BioModelsEdConstants.fileSave));
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_SAVEAS), Resources.iconButtonSave,
+        EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.fileSaveAs));
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_EXPORT), Resources.iconButtonExport,
+        EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.fileExport));
     menuFile.addSeparator();
-    GUIFactory.createMenuItem(menuFile, Resources.getString(SBMLEditorConstants.MENU_FILE_QUIT), Resources.iconButtonQuit,
+    GUIFactory.createMenuItem(menuFile, Resources.getString(BioModelsEdConstants.MENU_FILE_QUIT), Resources.iconButtonQuit,
       ctrl, KeyEvent.VK_Q, EventHandler.create(ActionListener.class, parent,
-          SBMLEditorConstants.fileQuit));
+          BioModelsEdConstants.fileQuit));
     JMenu menuEdit = GUIFactory.createMenu(this,
-      Resources.getString(SBMLEditorConstants.MENU_EDIT));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_UNDO), Resources.iconButtonUndo,
+      Resources.getString(BioModelsEdConstants.MENU_EDIT));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(BioModelsEdConstants.MENU_EDIT_UNDO), Resources.iconButtonUndo,
       ctrl, KeyEvent.VK_Z, EventHandler.create(ActionListener.class,
-        parent, SBMLEditorConstants.editUndo));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_REDO), Resources.iconButtonRedo,
-      ctrl, KeyEvent.VK_Y, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.editRedo));
-    GUIFactory.createMenuItem(menuEdit,  Resources.getString(SBMLEditorConstants.MENU_EDIT_DELETE), Resources.iconButtonDelete, 
-        "DELETE", EventHandler.create(ActionListener.class, commandcontroller, SBMLEditorConstants.editDelete));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_COPY), Resources.iconButtonCopy,
+        parent, BioModelsEdConstants.editUndo));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(BioModelsEdConstants.MENU_EDIT_REDO), Resources.iconButtonRedo,
+      ctrl, KeyEvent.VK_Y, EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.editRedo));
+    GUIFactory.createMenuItem(menuEdit,  Resources.getString(BioModelsEdConstants.MENU_EDIT_DELETE), Resources.iconButtonDelete, 
+        "DELETE", EventHandler.create(ActionListener.class, commandcontroller, BioModelsEdConstants.editDelete));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(BioModelsEdConstants.MENU_EDIT_COPY), Resources.iconButtonCopy,
       ctrl, KeyEvent.VK_C, EventHandler.create(ActionListener.class,
-        commandcontroller, SBMLEditorConstants.editCopy));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_CUT), Resources.iconButtonCut,
+        commandcontroller, BioModelsEdConstants.editCopy));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(BioModelsEdConstants.MENU_EDIT_CUT), Resources.iconButtonCut,
       ctrl, KeyEvent.VK_X, EventHandler.create(ActionListener.class,
-        parent, SBMLEditorConstants.editCut));
-    GUIFactory.createMenuItem(menuEdit, Resources.getString(SBMLEditorConstants.MENU_EDIT_PASTE), Resources.iconButtonPaste,
+        parent, BioModelsEdConstants.editCut));
+    GUIFactory.createMenuItem(menuEdit, Resources.getString(BioModelsEdConstants.MENU_EDIT_PASTE), Resources.iconButtonPaste,
       ctrl, KeyEvent.VK_V, EventHandler.create(ActionListener.class,
-        commandcontroller, SBMLEditorConstants.editPaste));
+        commandcontroller, BioModelsEdConstants.editPaste));
     JMenu menuLayout = GUIFactory.createMenu(this,
-      Resources.getString(SBMLEditorConstants.MENU_LAYOUT));
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_NEW), Resources.iconButtonNew,
-        SBMLEditorConstants.MENU_LAYOUT_NEW_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutNew));
+      Resources.getString(BioModelsEdConstants.MENU_LAYOUT));
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(BioModelsEdConstants.MENU_LAYOUT_NEW), Resources.iconButtonNew,
+        BioModelsEdConstants.MENU_LAYOUT_NEW_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.layoutNew));
     
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_RENAME), Resources.iconButtonRename,
-      SBMLEditorConstants.MENU_LAYOUT_RENAME_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutRename));
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(BioModelsEdConstants.MENU_LAYOUT_RENAME), Resources.iconButtonRename,
+      BioModelsEdConstants.MENU_LAYOUT_RENAME_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.layoutRename));
     
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_CLONE), Resources.iconButtonCopy,
-        SBMLEditorConstants.MENU_LAYOUT_CLONE_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutClone));
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(BioModelsEdConstants.MENU_LAYOUT_CLONE), Resources.iconButtonCopy,
+        BioModelsEdConstants.MENU_LAYOUT_CLONE_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.layoutClone));
     
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_DELETE), Resources.iconButtonDelete, 
-        SBMLEditorConstants.MENU_LAYOUT_DELETE_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutDelete));
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(BioModelsEdConstants.MENU_LAYOUT_DELETE), Resources.iconButtonDelete, 
+        BioModelsEdConstants.MENU_LAYOUT_DELETE_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.layoutDelete));
     
-    GUIFactory.createMenuItem(menuLayout, Resources.getString(SBMLEditorConstants.MENU_LAYOUT_AUTO), Resources.iconButtonAuto,
-      SBMLEditorConstants.MENU_LAYOUT_AUTO_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.layoutAuto));
+    GUIFactory.createMenuItem(menuLayout, Resources.getString(BioModelsEdConstants.MENU_LAYOUT_AUTO), Resources.iconButtonAuto,
+      BioModelsEdConstants.MENU_LAYOUT_AUTO_KEYSTROKE, null, EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.layoutAuto));
     
-    JMenu menuHelp = GUIFactory.createMenu(this, Resources.getString(SBMLEditorConstants.MENU_HELP));
-    GUIFactory.createMenuItem(menuHelp, Resources.getString(SBMLEditorConstants.MENU_HELP_ABOUT), Resources.iconButtonAbout,
-                EventHandler.create(ActionListener.class, parent, SBMLEditorConstants.helpAbout));
+    JMenu menuHelp = GUIFactory.createMenu(this, Resources.getString(BioModelsEdConstants.MENU_HELP));
+    GUIFactory.createMenuItem(menuHelp, Resources.getString(BioModelsEdConstants.MENU_HELP_ABOUT), Resources.iconButtonAbout,
+                EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.helpAbout));
     
     setEnableState(false);
         

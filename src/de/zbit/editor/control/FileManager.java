@@ -22,12 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLWritingTask;
+import de.zbit.io.OpenedFile;
 import de.zbit.sbml.gui.SBMLReadingTask;
 
 /**
@@ -43,7 +47,7 @@ public class FileManager {
 	/**
 	 * List of all opened Documents
 	 */
-	List<OpenedDocument<?>> listOfOpenedDocuments = new ArrayList<OpenedDocument<?>>();
+	List<OpenedFile<?>> listOfOpenedFiles = new ArrayList<OpenedFile<?>>();
 	CommandController commandController;
 	Logger logger = Logger.getLogger(FileManager.class.getName());
 
@@ -60,24 +64,24 @@ public class FileManager {
 	 * Add Document only if not already added.
 	 * @return returns true if document was added successfully
 	 */
-	public boolean addDocument(OpenedDocument<?> openedDocument) {
-	  if (openedDocument.getAssociatedFilename() == null) {
+	public boolean addDocument(OpenedFile<?> openedFile) {
+	  if (!openedFile.isSetFile()) {
 	    int i = 0;
 	    String name;
       do {
-        logger.info("Filename: " + Resources.getString(SBMLEditorConstants.genericFileName) +" (" + i + ")" + " not availible.");
+        logger.info("Filename: " + Resources.getString(BioModelsEdConstants.genericFileName) +" (" + i + ")" + " not availible.");
 	      i+=1;
-	      name = Resources.getString(SBMLEditorConstants.genericFileName) +" (" + i + ")";
+	      name = Resources.getString(BioModelsEdConstants.genericFileName) +" (" + i + ")";
 	    }while(isFileNameUsed(name));
       
-      openedDocument.setAssociatedFilename(name);
+      openedFile.setFile(new File(name));
 	  }
-		if (listOfOpenedDocuments.contains(openedDocument)) {
+		if (listOfOpenedFiles.contains(openedFile)) {
 		  logger.info("Failed to add: List already contains document");
 			return false;
 		}
 		else {
-			this.listOfOpenedDocuments.add(openedDocument);
+			this.listOfOpenedFiles.add(openedFile);
 			logger.info("Succes");
 			return true;
 		}
@@ -117,8 +121,8 @@ public class FileManager {
 	 * @return true, if it is used. false otherwise.
 	 */
 	private boolean isFilePathUsed(String filePath) {
-		for (OpenedDocument<?> doc : listOfOpenedDocuments) {
-			if (doc.hasAssociatedFilepath() && doc.getAssociatedFilepath().equals(filePath)) {
+		for (OpenedFile<?> doc : listOfOpenedFiles) {
+			if (doc.isSetFile() && doc.getFile().getAbsolutePath().equals(filePath)) {
 				return true;
 			}
 		}
@@ -131,8 +135,8 @@ public class FileManager {
 	 */
 	public boolean anyFileIsModified() {
 	  boolean anyModified = false;
-    for (OpenedDocument<?> doc : listOfOpenedDocuments) {
-      anyModified = anyModified || doc.isFileModified();
+    for (OpenedFile<?> doc : listOfOpenedFiles) {
+      anyModified = anyModified || doc.isChanged();
     }
     return anyModified;
 	}
@@ -148,7 +152,7 @@ public class FileManager {
     }
     else {
       try {
-        SBMLReadingTask task = new SBMLReadingTask(file, this.commandController.getFrame());
+        SBMLReadingTask task = new SBMLReadingTask(file, commandController.getFrame());
         task.addPropertyChangeListener(commandController);
         task.execute();
         return true;
@@ -180,16 +184,21 @@ public class FileManager {
    * @param doc 
    * @return true, if succesful.
    */
-  public boolean fileClose(OpenedSBMLDocument doc) {
+  public boolean fileClose(OpenedFile<SBMLDocument> doc) {
     boolean success = true;
-    logger.info(doc.getAssociatedFilename());
-    for (Layout layout : doc.getListOfLayouts()) {
+    logger.info(doc.getFile().getName());
+    // unwrap opened file
+    Model model = doc.getDocument().getModel();
+    ExtendedLayoutModel layoutModel = (ExtendedLayoutModel) model.getExtension(
+    	LayoutConstants.getNamespaceURI(model.getVersion(), model.getVersion()));
+    
+    for (Layout layout : layoutModel.getListOfLayouts()) {
       boolean s = commandController.closeTab(layout);
       logger.info(layout.getName() + " closing succes? : " + s);
       success |= s;
     }
     if(success) {
-      this.listOfOpenedDocuments.remove(doc);
+      this.listOfOpenedFiles.remove(doc);
     }
     
     return success;
@@ -200,19 +209,15 @@ public class FileManager {
    * @param doc
    * @return true, if succesful
    */
-  public boolean fileSave(OpenedSBMLDocument doc) {
+  public boolean fileSave(OpenedFile<SBMLDocument> doc) {
     try {
-      
-      if(!doc.hasAssociatedFilepath()) {
+      if(!doc.isSetFile()) {
         return fileSaveAs(doc);
       }
-      
-      File file = new File(doc.getAssociatedFilepath());
-      
-      SBMLWritingTask task = new SBMLWritingTask(file, (SBMLDocument) doc.getDocument());
+      SBMLWritingTask task = new SBMLWritingTask(doc.getFile(), doc.getDocument());
       task.addPropertyChangeListener(commandController);
       task.execute();
-      doc.setFileModified(false);
+      doc.setChanged(false);
       return true;
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -225,10 +230,10 @@ public class FileManager {
    * @param doc
    * @return true, if succesful
    */
-  public boolean fileSaveAs(OpenedSBMLDocument doc) {
+  public boolean fileSaveAs(OpenedFile<SBMLDocument> doc) {
     File file = commandController.askUserSaveDialog();
     if (file != null) {
-      doc.setAssociatedFilepath(file.getAbsolutePath());
+      doc.setFile(file);
       return fileSave(doc);
     }
     return false;
@@ -240,8 +245,8 @@ public class FileManager {
    * @return true, if it is used
    */
   public boolean isFileNameUsed(String name) { 
-    for (OpenedDocument<?> doc : listOfOpenedDocuments) {
-      if(doc.getAssociatedFilename().equals(name)){
+    for (OpenedFile<?> doc : listOfOpenedFiles) {
+      if(doc.getFile().getName().equals(name)){
         return true;
       }
     }

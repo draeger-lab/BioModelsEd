@@ -34,7 +34,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.CommandController;
 
 /**
@@ -278,32 +278,6 @@ public class GUIFactory {
       Resources.getString("DIALOG_DELETE_LAYOUT_QUESTION"),
       Resources.getString("DIALOG_DELETE_LAYOUT_TITLE"), JOptionPane.YES_NO_OPTION);
   }
-
-  /**
-   * Creates a popup menu for tab component.
-   * @param component
-   * @return the created menu
-   */
-  public static JPopupMenu createTabPopupMenu(TabComponent component) {
-    JMenuItem menuItem;
-    // Create the popup menu.
-    JPopupMenu popup = new JPopupMenu();
-    menuItem = new JMenuItem(Resources.getString("TAB_CLOSE"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      component, "close"));
-    popup.add(menuItem);
-    menuItem = new JMenuItem(Resources.getString("TAB_CLOSE_ALL"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      component, "closeAll"));
-    popup.add(menuItem);
-    
-    menuItem = new JMenuItem("Autolayout");
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      component, "autoLayout"));
-    popup.add(menuItem);
-    
-    return popup;
-  }
   
   /**
    * Creates a popup menu for a SpeciesGlyph.
@@ -317,17 +291,17 @@ public class GUIFactory {
 
     menuItem = new JMenuItem(Resources.getString("NODE_RENAME"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, SBMLEditorConstants.nodeRename));
+      controller, BioModelsEdConstants.nodeRename));
     popup.add(menuItem);
     
     menuItem = new JMenuItem(Resources.getString("NODE_COPY"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, SBMLEditorConstants.nodeCopy));
+      controller, BioModelsEdConstants.nodeCopy));
     popup.add(menuItem);
     
     menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, SBMLEditorConstants.nodeDelete));
+      controller, BioModelsEdConstants.nodeDelete));
     popup.add(menuItem);
     
     return popup;
@@ -345,7 +319,7 @@ public class GUIFactory {
        
     menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
     menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, SBMLEditorConstants.nodeDelete));
+      controller, BioModelsEdConstants.nodeDelete));
     popup.add(menuItem);
     
     return popup;

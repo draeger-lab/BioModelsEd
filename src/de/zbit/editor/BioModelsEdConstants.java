@@ -25,9 +25,9 @@ package de.zbit.editor;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class SBMLEditorConstants {
+public class BioModelsEdConstants {
 
-  public static final String associatedOpenedSBMLDocument = "associatedOpenedSBMLDocument";
+  public static final String associatedOpenedFile = "associatedOpenedFile";
   public static final String EditModeMouseClicked = "mouseClicked in EditMode";
   public static final String EditModeNodeClickedLeft = "nodeClickedLeft in EditMode";
   public static final String EditModeMousePressedLeft = "mousePressedLeft in EditMode";
@@ -65,7 +65,7 @@ public class SBMLEditorConstants {
   public static final String layoutDefaultName = "default_layout";
   public static final String modelDefaultName = "defalt_model";
   public static final String compartmentDefaultName = "default";
-  public static final String openingDone = "SBML_READING_SUCCESSFULLY_DONE";
+  public static final String openingDone = "SBML_READING_SUCCESSFULLY_DONE_OPENED_FILE";
   public static final String savingDone = "savingDone";
   public static final String fileNotFound = "FILE_NOT_FOUND";
   public static final String genericFileName = "GENERIC_FILE_NAME";
@@ -160,5 +160,8 @@ public class SBMLEditorConstants {
   public static final String addEmptySet = "addEmptySet";
   public static final String openLayoutInNewTab = "openLayoutInNewTab";
   public static final String openLayoutInTab = "openLayoutInTab";
-  public static final String reversible = "reversible";  
+  public static final String reversible = "reversible";
+	public static final String SBML_READING_SUCCESSFULLY_DONE = "SBML_READING_SUCCESSFULLY_DONE";
+	public static final String genricModelId = "model1";
+	public static final String defaultCompartmentId = "default_compartment";  
 }

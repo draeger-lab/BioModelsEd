@@ -25,7 +25,7 @@ import y.base.Node;
 import y.base.NodeCursor;
 import y.view.EditMode;
 import y.view.HitInfo;
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.CommandController;
 
 /**
@@ -67,12 +67,12 @@ public class SBMLEditMode extends EditMode  {
     if (hit instanceof Node) {
       Node node = (Node) hit;
       
-      firePropertyChange(SBMLEditorConstants.EditModeNodePressedLeft, null, node);      
+      firePropertyChange(BioModelsEdConstants.EditModeNodePressedLeft, null, node);      
       //oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
     }
     else {
       ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-      firePropertyChange(SBMLEditorConstants.EditModeMousePressedLeft, null, newPositionMouseClicked);
+      firePropertyChange(BioModelsEdConstants.EditModeMousePressedLeft, null, newPositionMouseClicked);
       //lastPositionMouseClicked = newPositionMouseClicked;
             
     }  
@@ -88,14 +88,14 @@ public class SBMLEditMode extends EditMode  {
     List<Node> list = getSelectedNodes();      
     
     // Set list of nodes in CommandController
-    firePropertyChange(SBMLEditorConstants.EditModeSelectionChanged, null, list);
+    firePropertyChange(BioModelsEdConstants.EditModeSelectionChanged, null, list);
     // Initiate updating of glyphs
     if (!list.isEmpty()) {
-      firePropertyChange(SBMLEditorConstants.EditModeUpdateNodes, null, this.getGraph2D());
+      firePropertyChange(BioModelsEdConstants.EditModeUpdateNodes, null, this.getGraph2D());
     }
     // Send mouse position
     ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
-    firePropertyChange(SBMLEditorConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  
+    firePropertyChange(BioModelsEdConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  
   } 
   
   /**
@@ -133,16 +133,16 @@ public class SBMLEditMode extends EditMode  {
       List<Node> list = this.getSelectedNodes();
       
       // Set list of nodes in CommandController
-      firePropertyChange(SBMLEditorConstants.EditModeSelectionChanged, null, list);
+      firePropertyChange(BioModelsEdConstants.EditModeSelectionChanged, null, list);
       
-      firePropertyChange(SBMLEditorConstants.EditModeNodePressedRight, null, node);      
+      firePropertyChange(BioModelsEdConstants.EditModeNodePressedRight, null, node);      
       //oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
     }
     else {
 
       
       ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-      firePropertyChange(SBMLEditorConstants.EditModeMousePressedRight, null, newPositionMouseClicked);
+      firePropertyChange(BioModelsEdConstants.EditModeMousePressedRight, null, newPositionMouseClicked);
       //lastPositionMouseClicked = newPositionMouseClicked;
     }
   }

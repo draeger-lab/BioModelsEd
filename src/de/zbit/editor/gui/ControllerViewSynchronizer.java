@@ -34,7 +34,7 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import y.base.Node;
 import y.view.GenericEdgeRealizer;
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 
 
 /**
@@ -92,7 +92,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
             boundingBox.getDimensions().getWidth(),
             boundingBox.getDimensions().getHeight());
         panel.getGraph2DView().updateView();
-        speciesGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, n);
+        speciesGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, n);
       }
     }
   }
@@ -122,7 +122,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
       Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
          new GenericEdgeRealizer(), reaction.getReversible());
-      reactionGlyph.putUserObject(SBMLEditorConstants.GLYPH_NODE_KEY, reactionNode);
+      reactionGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, reactionNode);
       logger.info("CVS : Reaction Drawn");
       
     } else if (evt.getPropertyName().equals("modifierCreated")) {
@@ -144,7 +144,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       List<SpeciesGlyph> listOfGlyphs = layout.getListOfSpeciesGlyphs();
       for (SpeciesGlyph glyph : listOfGlyphs) {
         if (glyph.isSetSpecies() && glyph.getSpecies().equals(species.getId())) {
-          Node n = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+          Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
           this.panel.getGraph2DView().getGraph2D().setLabelText(n, species.getName());
         }
       }

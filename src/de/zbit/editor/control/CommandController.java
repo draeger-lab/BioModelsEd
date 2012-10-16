@@ -23,7 +23,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,12 +41,8 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.BoundingBox;
-import org.sbml.jsbml.ext.layout.CompartmentGlyph;
-import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
-import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
@@ -61,10 +56,12 @@ import y.io.ImageOutputHandler;
 import y.io.JPGIOHandler;
 import y.view.Graph2D;
 import y.view.Graph2DView;
-import de.zbit.editor.SBMLEditorConstants;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.gui.GUIFactory;
+import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
+import de.zbit.io.OpenedFile;
 
 /**
  * Controlls the execution of all commands and conveys them to the View and the Document.
@@ -138,20 +135,20 @@ public class CommandController implements PropertyChangeListener {
    * @param evt
    * @param sboTerm the SBO-Term of the Species
    */
+  @SuppressWarnings("unchecked")
   private void createSpecies(PropertyChangeEvent evt, int sboTerm) {
-    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+    OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
         .getCurrentLayout().getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+        .getUserObject(BioModelsEdConstants.associatedOpenedFile);
 
     // generate generic id
-    String speciesId = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
+    String speciesId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericId);
     String nameFromPopup = this.getEditorInstance().nameDialogue(Resources.getString("GENERIC_SPECIES_NAME"));
     if (nameFromPopup == null) {
       return;
     }
     logger.info("popup: " + nameFromPopup);
 
-    @SuppressWarnings("unchecked")
     ValuePair<Double, Double> newMousePosition = (ValuePair<Double, Double>) evt.getNewValue();
     Double x = newMousePosition.getL();
     Double y = newMousePosition.getV();
@@ -162,8 +159,8 @@ public class CommandController implements PropertyChangeListener {
     final int level = model.getLevel();
     final int version = model.getVersion();
 
-    String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
-    String textglyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix);
+    String glyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericGlyphIdPrefix);
+    String textglyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericTextGlyphIdPrefix);
 
     String compartmentId = findCompartmentId(x, y);
     Species s = SBMLFactory.createSpecies(speciesId, nameFromPopup, sboTerm, level, version, compartmentId);
@@ -174,7 +171,7 @@ public class CommandController implements PropertyChangeListener {
     SBMLFactory.addSpeciesGlyphToLayout(layout, sGlyph, x, y, s.getName());
     layout.addTextGlyph(tGlyph);
 
-    selectedDoc.setFileModified(true);
+    selectedDoc.setChanged(true);
     view.refreshTitle(layout);
 
     // keep a list of all glyphs which are associated with the species
@@ -184,7 +181,7 @@ public class CommandController implements PropertyChangeListener {
     Map<String, List<String>> layoutGlyphMap = new HashMap<String, List<String>>();
     layoutGlyphMap.put(layout.getId(), glyphList);
 
-    s.putUserObject(SBMLEditorConstants.GLYPH_LINK_KEY, layoutGlyphMap);
+    s.putUserObject(BioModelsEdConstants.GLYPH_LINK_KEY, layoutGlyphMap);
 
     //      GraphLayoutPanel panel = (GraphLayoutPanel) this.view.getTabManager().getSelectedComponent();
     //      s.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, this.view.getCurrentLayout()));
@@ -200,7 +197,7 @@ public class CommandController implements PropertyChangeListener {
    */
   private String findCompartmentId(Double x, Double y) {
     //FIXME findCompartmentId
-  	return SBMLEditorConstants.compartmentDefaultName;
+  	return BioModelsEdConstants.compartmentDefaultName;
   }
   
 //  /**
@@ -287,9 +284,10 @@ public class CommandController implements PropertyChangeListener {
    * @param targetNode
    * @return the ReactionGlyph
    */
+  @SuppressWarnings("unchecked")
   private ReactionGlyph createReaction(Node sourceNode, Node targetNode) {
-      OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
-        .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+      OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
+        .getCurrentLayout().getSBMLDocument().getUserObject(BioModelsEdConstants.associatedOpenedFile);
 
       Layout layout = this.view.getCurrentLayout();
       ListOf<SpeciesGlyph> list = layout.getListOfSpeciesGlyphs();
@@ -297,7 +295,7 @@ public class CommandController implements PropertyChangeListener {
       SpeciesGlyph target = null;
      
       for (SpeciesGlyph glyph : list) {
-        Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+        Node node = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
         if (node == sourceNode) {
           source = glyph;
         } else if (node == targetNode) {
@@ -327,9 +325,10 @@ public class CommandController implements PropertyChangeListener {
    * @param sourceNode corresponding to the SpeciesGlyph
    * @param targetNode corresponding to the ReactionGlyph
    */
+  @SuppressWarnings("unchecked")
   private void createModifier(Node sourceNode, Node targetNode) {
-    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
-    .getCurrentLayout().getSBMLDocument().getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+    OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
+    .getCurrentLayout().getSBMLDocument().getUserObject(BioModelsEdConstants.associatedOpenedFile);
 
     Layout layout = this.view.getCurrentLayout();
     ListOf<SpeciesGlyph> speciesList = layout.getListOfSpeciesGlyphs();
@@ -338,13 +337,13 @@ public class CommandController implements PropertyChangeListener {
     ReactionGlyph target = null;
   
     for (SpeciesGlyph glyph : speciesList) {
-      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      Node node = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
       if (sourceNode == node) {
         source = glyph;
       }
     }
     for (ReactionGlyph glyph : reactionList) {
-      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      Node node = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
       if (targetNode == node) {
         target = glyph;
       }
@@ -358,7 +357,7 @@ public class CommandController implements PropertyChangeListener {
     
     //Creation of a modifier
     ModifierSpeciesReference modifier = new ModifierSpeciesReference();
-    modifier.setId(selectedDoc.nextGenericId(SBMLEditorConstants.genericModifierReferenceIdPrefix));
+    modifier.setId(SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericModifierReferenceIdPrefix));
     modifier.setLevel(model.getLevel());
     modifier.setVersion(model.getVersion());
     int sbo = 0;
@@ -380,7 +379,7 @@ public class CommandController implements PropertyChangeListener {
     } else if (this.state == States.inhibition) {
       modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
     }
-    modifierGlyph.setId(selectedDoc.nextGenericId(SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix));
+    modifierGlyph.setId(selectedDoc.getNextGenericId(SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix));
     modifierGlyph.setLevel(model.getLevel());
     modifierGlyph.setVersion(model.getVersion());
     modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
@@ -435,7 +434,7 @@ public class CommandController implements PropertyChangeListener {
       return false;
     }
     if (name.isEmpty()) {
-      name = Resources.getString(SBMLEditorConstants.genericFileName);
+      name = Resources.getString(BioModelsEdConstants.genericFileName);
     }
 
     /*
@@ -444,16 +443,16 @@ public class CommandController implements PropertyChangeListener {
     SBMLDocument sbmlDocument = new SBMLDocument(
         SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV());
-    Model model = sbmlDocument.createModel(SBMLEditorConstants.modelDefaultName);
+    Model model = sbmlDocument.createModel(BioModelsEdConstants.modelDefaultName);
     model.setName(name);
-    model.createCompartment(SBMLEditorConstants.compartmentDefaultName);
+    model.createCompartment(BioModelsEdConstants.compartmentDefaultName);
 
     /*
-     * embed the new SBMLDocument in an OpenedSBMLDocument and tell the
+     * embed the new SBMLDocument in an OpenedFile<SBMLDocument> and tell the
      * fileManager about it
      */
-    OpenedSBMLDocument doc = new OpenedSBMLDocument(sbmlDocument);
-    doc.setFileModified(true);
+    OpenedFile<SBMLDocument> doc = new OpenedFile<SBMLDocument>(sbmlDocument);
+    doc.setChanged(true);
     if(!this.fileManager.addDocument(doc)) {
       return false;
     }
@@ -461,8 +460,8 @@ public class CommandController implements PropertyChangeListener {
     /*
      * create a new default layout and tell the view to display it
      */
-    Layout layout = doc.createDefaultLayout();
-    if (!this.view.addLayout(layout, false)) {
+    SBMLTools.getOrCreateDefaultLayout(doc);
+    if (!this.view.addTab(doc, "", false)) {
       return false;
     }
     
@@ -488,23 +487,46 @@ public class CommandController implements PropertyChangeListener {
 
   /**
    * Gets currently selected doc from view and forwards it to filemanager for saving.
+   * wrapper for fileSave(OpenedFile<SBMLDocument> doc)
    * @return true if successful. 
    */
+  @SuppressWarnings("unchecked")
   public boolean fileSave() {
-    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+    OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
         .getCurrentLayout().getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
-    return fileManager.fileSave(selectedDoc);
+        .getUserObject(BioModelsEdConstants.associatedOpenedFile);
+    return fileSave(selectedDoc);
   }
 
+  /**
+   * forwards doc to filemanager for saving.
+   * @return true if successful. 
+   */
+  public boolean fileSave(OpenedFile<SBMLDocument> selectedDoc) {
+    return fileManager.fileSave(selectedDoc);
+  }
+  
+  /**
+   * forwards doc to filemanager for saving.
+   * @return true if successful. 
+   */
+  public boolean fileSaveAll() {
+  	boolean success = true;
+  	for (OpenedFile<SBMLDocument> file : view.getTabManager().getOpenedFiles()) {
+  		success |= fileSave(file);
+  	}
+  	return success;
+  }
+  
   /**
    * Gets currently selected doc from view and forwards it to filemanager for saving.
    * @return true if successful. 
    */
+  @SuppressWarnings("unchecked")
   public boolean fileSaveAs() {
-    OpenedSBMLDocument selectedDoc = (OpenedSBMLDocument) this.view
+    OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
         .getCurrentLayout().getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+        .getUserObject(BioModelsEdConstants.associatedOpenedFile);
     return fileManager.fileSaveAs(selectedDoc);
   }
   
@@ -513,16 +535,17 @@ public class CommandController implements PropertyChangeListener {
    */
   public File[] openFile(File... arg0) {
   	logger.info("openFile");
-  	return fileManager.openFile(arg0);
+  	return arg0 != null ? fileManager.openFile(arg0) : null;
   }
   /**
    * Forwards fileClose request to file manager.
    * @return true if successful.
    */
-  public boolean fileClose() {
-    OpenedSBMLDocument doc = (OpenedSBMLDocument) this.view
+  @SuppressWarnings("unchecked")
+	public boolean fileClose() {
+    OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) this.view
         .getCurrentLayout().getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+        .getUserObject(BioModelsEdConstants.associatedOpenedFile);
     
     if (askUserSave(doc)) {
       return fileManager.fileClose(doc);
@@ -563,26 +586,23 @@ public class CommandController implements PropertyChangeListener {
   public void propertyChange(PropertyChangeEvent evt) {
     logger.info(evt.getPropertyName());
 
-    if (evt.getPropertyName().equals(SBMLEditorConstants.openingDone)) {
-    	//FIXME jsbml.SBMLDocument -> openenedSBMLDocument
-      OpenedSBMLDocument doc = (OpenedSBMLDocument) evt.getNewValue();
+    if (evt.getPropertyName().equals(BioModelsEdConstants.openingDone)) {
+      OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) evt.getNewValue();
       
-      /*
-       * add first or new default layout to view
-       */
-      boolean hasLayout = doc.hasLayout();
+      //add first or new default layout to view
+      boolean hasLayout = SBMLTools.hasLayout(doc);
       //TODO read autoLayout from settings
       boolean autoLayout = false;
-      Layout layout = doc.getFirstLayoutOrNew();
+      Layout layout = SBMLTools.getOrCreateDefaultLayout(doc);
       logger.info("Document has layout information: " + hasLayout);
       if (!hasLayout) {
          int newInformation = this.view.askUserCreateLayoutInformation();
          if (newInformation == JOptionPane.YES_OPTION) {
-           doc.createLayoutInformation();
+           SBMLTools.createLayoutInformation(doc);
            autoLayout = true;
          }
       }
-      this.view.addLayout(layout, autoLayout);
+      this.view.addTab(doc, layout.getId(), autoLayout);
       /*
        * notify fileManager about newly opened document
        */
@@ -609,30 +629,30 @@ public class CommandController implements PropertyChangeListener {
         }
       }*/
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMousePressedLeft)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMousePressedLeft)) {
       mousePressedLeft(evt);    
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMouseDraggedLeft)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMouseDraggedLeft)) {
       
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedLeft)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeNodePressedLeft)) {
       nodePressedLeft(evt);
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodeReleasedLeft)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeNodeReleasedLeft)) {
       
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeNodePressedRight)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeNodePressedRight)) {
       nodePressedRight(evt);
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeMousePressedRight)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMousePressedRight)) {
       mousePressedRight(evt);
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeSelectionChanged)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeSelectionChanged)) {
       this.nodeList = (List<Node>) evt.getNewValue();
      
       logger.info("Size of list: " + nodeList.size());
     }
-    else if (evt.getPropertyName().equals(SBMLEditorConstants.EditModeUpdateNodes)) {
+    else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeUpdateNodes)) {
       updateNodes(evt);
     }
   }
@@ -667,7 +687,7 @@ public class CommandController implements PropertyChangeListener {
       double y = graph.getY(node);
       double width = graph.getWidth(node);
       double height = graph.getHeight(node);
-      glyph.createBoundingBox(width, height, SBMLEditorConstants.glyphDefaultDepth, x, y, SBMLEditorConstants.glyphDefaultZ);
+      glyph.createBoundingBox(width, height, BioModelsEdConstants.glyphDefaultDepth, x, y, BioModelsEdConstants.glyphDefaultZ);
       logger.info("Updating glyph information: " + 
           "Id: " + glyph.getId() + 
           " X: " + x +
@@ -689,14 +709,14 @@ public class CommandController implements PropertyChangeListener {
     Layout layout = this.view.getCurrentLayout();
     
     for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
-      Node n = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
       if (node == n) {
         return glyph;
       }
     }
     
     for (ReactionGlyph glyph : layout.getListOfReactionGlyphs()) {
-      Node n = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
+      Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
       if (node == n) {
         return glyph;
       }
@@ -898,22 +918,9 @@ public class CommandController implements PropertyChangeListener {
    * Shows a File-Not-Found error.
    */
   public void fileNotFound() {
-    view.showError(SBMLEditorConstants.fileNotFound);
+    view.showError(BioModelsEdConstants.fileNotFound);
   }
 
-  /**
-   * Closes the tab, that shows the given layout.
-   * If no other layout from the same document is shown in another tab, the document is closed as well.
-   * @param layout
-   */
-  public boolean layoutClose(Layout layout) {
-    if (view.getTabManager().isAnyOpenFromDocument(layout)) {
-      return view.closeTab(layout);
-    }
-    else {
-      return false; //FIXME view.fileClose();
-    }    
-  }
 
   /**
    * Removes the given layout from the model and closes the corresponding tab.
@@ -921,8 +928,8 @@ public class CommandController implements PropertyChangeListener {
    */
   public void layoutDelete(Layout layout) {
     //TODO implement layoutDelete
-  	/*OpenedSBMLDocument doc = (OpenedSBMLDocument) layout.getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+  	/*OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) layout.getSBMLDocument()
+        .getUserObject(SBMLEditorConstants.associatedOpenedFile<SBMLDocument>);
     boolean anyopen = view.getTabManager().isAnyOpenFromDocument(layout);
     if(doc.getListOfLayouts().size() == 1) {
       logger.info("Document doesn't have 2 or more layouts");
@@ -941,7 +948,7 @@ public class CommandController implements PropertyChangeListener {
    * @param doc
    * @return if user did not cancel saving progress
    */
-  private boolean askUserSave(OpenedSBMLDocument doc) {
+  private boolean askUserSave(OpenedFile<SBMLDocument> doc) {
     //TODO impelement askUserSave
   	/*if (doc.isFileModified()) {
       int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
@@ -966,7 +973,7 @@ public class CommandController implements PropertyChangeListener {
    */
   public void nodeDelete() {
     Layout layout = this.view.getCurrentLayout();
-    OpenedSBMLDocument selectedDoc = getDocumentFromLayout(layout);
+    OpenedFile<SBMLDocument> selectedDoc = getDocumentFromLayout(layout);
     
     for (Node node : this.nodeList) {
       NamedSBaseGlyph glyph = getGlyphFromNode(node);
@@ -981,8 +988,8 @@ public class CommandController implements PropertyChangeListener {
           logger.info("Removed glyph from copylist");
         }
         layout.getListOfSpeciesGlyphs().remove(glyph);
-        layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
-        if (!selectedDoc.hasAnySpeciesGlyphForSpeciesId(speciesId)) {
+        layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
+        if (!SBMLTools.hasAnySpeciesGlyphForSpeciesId(selectedDoc, speciesId)) {
           logger.info("No glyph left for species: Deleting species id: " + speciesId);
           layout.getModel().removeSpecies(speciesId);
         }
@@ -990,7 +997,7 @@ public class CommandController implements PropertyChangeListener {
       else if (glyph instanceof ReactionGlyph) {
         this.nodeCopyList.remove(glyph);
         layout.getListOfReactionGlyphs().remove(glyph);
-        layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
+        layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
       }
     }
             
@@ -1033,7 +1040,7 @@ public class CommandController implements PropertyChangeListener {
     
     for (ReactionGlyph rGlyph : list) {
       layout.getListOfReactionGlyphs().remove(rGlyph);
-      layout.firePropertyChange("nodeDelete", null, rGlyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY));
+      layout.firePropertyChange("nodeDelete", null, rGlyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
       
       if (this.nodeCopyList.remove(rGlyph)){
         logger.info("Removed glyph from copylist");
@@ -1075,9 +1082,10 @@ public class CommandController implements PropertyChangeListener {
    * Pops up a dialogue and renames the SpeciesGlyph and Species corresponding to the selected node.
    */
   public void nodeRename() {
+  	logger.info("Renaming Node");
     Node nodeToRename = this.nodeList.get(0);
     SpeciesGlyph selectedGlyph = (SpeciesGlyph) getGlyphFromNode(nodeToRename);
-    TextGlyph textGlyph = (TextGlyph) selectedGlyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+    TextGlyph textGlyph = (TextGlyph) selectedGlyph.getUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
     Species species = selectedGlyph.getModel().getSpecies(textGlyph.getNamedSBase());
     String oldName = species != null ? species.getName() : "";
     String newName = JOptionPane.showInputDialog(Resources.getString("NEW_NODE_NAME"),
@@ -1086,15 +1094,13 @@ public class CommandController implements PropertyChangeListener {
       // set name
       species.setName(newName);
       
-      // set file as modified
-      Layout layout = view.getCurrentLayout();
-      layoutModified(layout);
-      
-      // update Graph2D node
-      // Property change does not work
-      // this.view.getCurrentLayout().firePropertyChange("nodeRenamed", null, species);
-      // 
-      Graph2D graph2d = this.view.getTabManager().getPanelFromLayout(layout).getGraph2DView().getGraph2D();
+      /*
+       * TODO
+       * Set File as modified
+       * get Panel from view
+       */
+      GraphLayoutPanel panel = null;
+      Graph2D graph2d = panel.getGraph2DView().getGraph2D();
       graph2d.setLabelText(nodeToRename, newName);
       graph2d.updateViews();
     }
@@ -1106,7 +1112,7 @@ public class CommandController implements PropertyChangeListener {
   public void nodePaste() {
     logger.info("Pasting...");
     Layout layout = this.view.getCurrentLayout();
-    OpenedSBMLDocument selectedDoc = getDocumentFromLayout(layout);
+    OpenedFile<SBMLDocument> selectedDoc = getDocumentFromLayout(layout);
     
     for (NamedSBaseGlyph glyph : this.nodeCopyList) {
       
@@ -1128,7 +1134,7 @@ public class CommandController implements PropertyChangeListener {
    * @param selectedDoc
    * @param copyReactionGlyph
    */
-  private void copyReactionGlyph(Layout layout, OpenedSBMLDocument selectedDoc,
+  private void copyReactionGlyph(Layout layout, OpenedFile<SBMLDocument> selectedDoc,
       ReactionGlyph copyReactionGlyph) {
     logger.info("Reactionglyph");    
   }
@@ -1139,14 +1145,14 @@ public class CommandController implements PropertyChangeListener {
    * @param layout
    * @param copySpeciesGlyph
    */
-  private void copySpeciesGlyph(Layout layout, OpenedSBMLDocument selectedDoc, SpeciesGlyph copySpeciesGlyph) {
+  private void copySpeciesGlyph(Layout layout, OpenedFile<SBMLDocument> selectedDoc, SpeciesGlyph copySpeciesGlyph) {
         
     String speciesId = copySpeciesGlyph.getSpecies();
     Species species = copySpeciesGlyph.getModel().getSpecies(speciesId);
     
-    TextGlyph originalTextGlyph = (TextGlyph) copySpeciesGlyph.getUserObject(SBMLEditorConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
-    String glyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericGlyphIdPrefix);
-    String textGlyphId = selectedDoc.nextGenericId(SBMLEditorConstants.genericTextGlyphIdPrefix);
+    TextGlyph originalTextGlyph = (TextGlyph) copySpeciesGlyph.getUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+    String glyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericGlyphIdPrefix);
+    String textGlyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericTextGlyphIdPrefix);
     
     double x = copySpeciesGlyph.getBoundingBox().getPosition().getX();
     double y = copySpeciesGlyph.getBoundingBox().getPosition().getY();
@@ -1177,13 +1183,13 @@ public class CommandController implements PropertyChangeListener {
     }
     else {
       logger.info("nodePaste: Different Model");
-      String speciesIdNew = selectedDoc.nextGenericId(SBMLEditorConstants.genericId);
+      String speciesIdNew = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericId);
       Species s = SBMLFactory.createSpecies(speciesIdNew,
           species.getName(),
           species.getSBOTerm(),
           SBMLView.DEFAULT_LEVEL_VERSION.getL(),
           SBMLView.DEFAULT_LEVEL_VERSION.getV(),
-          selectedDoc.getDefaultCompartment());
+          SBMLTools.getDefaultCompartmentId(selectedDoc));
       layout.getModel().addSpecies(s);
       SpeciesGlyph speciesGlyph = SBMLFactory.createSpeciesGlyph(glyphId,
           SBMLView.DEFAULT_LEVEL_VERSION.getL(),
@@ -1225,14 +1231,15 @@ public class CommandController implements PropertyChangeListener {
    * @param layout
    * @return the found document.
    */
-  private OpenedSBMLDocument getDocumentFromLayout(Layout layout) {
-    return (OpenedSBMLDocument) layout.getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedSBMLDocument);
+  @SuppressWarnings("unchecked")
+  private OpenedFile<SBMLDocument> getDocumentFromLayout(Layout layout) {
+    return (OpenedFile<SBMLDocument>) layout.getSBMLDocument()
+        .getUserObject(BioModelsEdConstants.associatedOpenedFile);
   }
   
   private void layoutModified(Layout layout) {
-    OpenedSBMLDocument doc = getDocumentFromLayout(layout);
-    doc.setFileModified(true);
+    OpenedFile<SBMLDocument> doc = getDocumentFromLayout(layout);
+    doc.setChanged(true);
     this.view.refreshTitle(layout);
   }
 
@@ -1244,7 +1251,9 @@ public class CommandController implements PropertyChangeListener {
   public boolean layoutRename(Layout layout, String name) {
     layout.setName(name);
     layoutModified(layout);
-    this.view.updateComboBox(getDocumentFromLayout(layout).getListOfLayouts());
+    //TODO implement combobox updating
+    this.view.updateComboBox(
+    	SBMLTools.getListOfLayouts(layout.getSBMLDocument()));
     return true;
   }
 
@@ -1253,7 +1262,9 @@ public class CommandController implements PropertyChangeListener {
    * @return true, if file was exported succesfully. false otherwise.
    */
   public boolean fileExport(File file) {
-    Graph2DView view = this.view.getTabManager().getPanelFromLayout(this.view.getCurrentLayout()).getGraph2DView();
+  	// FIXME
+  	GraphLayoutPanel panel = null;
+    Graph2DView view = panel.getGraph2DView();
     Graph2D graph = view.getGraph2D();
        
     if(GUIFactory.createFilterGIF().accept(file)) {

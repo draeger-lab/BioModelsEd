@@ -17,30 +17,25 @@
 package de.zbit.editor.gui;
 
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.logging.Level;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 
-import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
 
-import de.zbit.AppConf;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 import de.zbit.gui.BaseFrame;
-import de.zbit.gui.BaseFrameTab;
 import de.zbit.gui.GUIOptions;
 import de.zbit.gui.GUITools;
+import de.zbit.io.OpenedFile;
 import de.zbit.io.filefilter.SBFileFilter;
 import de.zbit.util.prefs.SBPreferences;
 
@@ -50,6 +45,10 @@ import de.zbit.util.prefs.SBPreferences;
  */
 public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8556637237458666164L;
 	private TabManager tabManager;
 	private CommandController controller;
 	private final static Logger logger = Logger.getLogger(BioModelsEdGUI.class.getName());
@@ -120,11 +119,6 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	public File saveFile() {
 		return null;
 		//return controller.saveFile();
-	}
-
-	@Override
-	public boolean addLayout(Layout layout, boolean autoLayout) {
-		return tabManager.addTab(layout, autoLayout);
 	}
 
 	@Override
@@ -199,7 +193,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	}
 
 	@Override
-	public void updateComboBox(ListOf<Layout> list) {
+	public void updateComboBox(List<Layout> list) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -264,7 +258,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	}
 
 	@Override
-	public void setEnableState(boolean b) {
+	public void setControlsOn(boolean b) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -286,5 +280,14 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	 */
 	public void setController(CommandController controller) {
 		this.controller = controller;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.editor.control.SBMLView#addTab(de.zbit.io.OpenedFile, java.lang.String, boolean)
+	 */
+	@Override
+	public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId,
+		boolean autoLayout) {
+		return tabManager.addTab(file, layoutId, autoLayout);
 	}
 }
