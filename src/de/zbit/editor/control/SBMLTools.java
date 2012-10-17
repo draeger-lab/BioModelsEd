@@ -286,13 +286,23 @@ public class SBMLTools {
 
 
 	/**
+	 * returns the layout from {@code file} with id {@code layoutId}
 	 * @param file
 	 * @param layoutId
 	 * @return
 	 */
 	public static Layout getLayout(OpenedFile<SBMLDocument> file, String layoutId) {
-		// TODO Auto-generated method stub
-		return null;
+		SBMLDocument sbmlDoc = file.getDocument();
+		Model model = sbmlDoc.getModel();
+		ExtendedLayoutModel extLayoutModel = (ExtendedLayoutModel) model.getExtension(
+			LayoutConstants.getNamespaceURI(model.getLevel(), model.getVersion()));
+		ListOf<Layout> listOfLayouts = extLayoutModel.getListOfLayouts();
+		for (Layout layout : listOfLayouts) {
+			if (layout.getId().equals(layoutId)) {
+				return layout;
+			}
+		}
+		throw new AssertionError(file.getFile().getName() + " does not contain layout " + layoutId);
 	}
 	
 }

@@ -16,7 +16,7 @@
  */
 package de.zbit.editor.gui;
 
-import java.util.ArrayList;
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,17 +27,11 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.ReactionGlyph;
-import org.sbml.jsbml.ext.layout.SpeciesGlyph;
-import org.sbml.jsbml.util.ValuePair;
 
-import y.base.Node;
 import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
-import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.SBMLTools;
 import de.zbit.editor.control.SBMLView;
 import de.zbit.gui.JTabbedPaneDraggableAndCloseable;
@@ -58,8 +52,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
   private static final long serialVersionUID = -905908829761611472L;
   private static Logger logger = Logger.getLogger(TabManager.class.getName());
   private SBMLView view;
-  private Map<OpenedFile<SBMLDocument>, List<String>> openedLayouts;
-  private Map<String, Layout> layoutTitles;
+  private List<OpenedFile<SBMLDocument>> openedFiles;
   
   private static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
 
@@ -69,8 +62,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
    */
   public TabManager(SBMLView view) {
     this.view = view;
-    openedLayouts = new HashMap<OpenedFile<SBMLDocument>, List<String>>();
-    layoutTitles = new HashMap<String, Layout>();
+    openedFiles = new LinkedList<OpenedFile<SBMLDocument>>();
   }
 
   /**
@@ -87,68 +79,57 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
    * return true if successful
    */
   public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId, boolean autoLayout) {
-    List<String> layouts = openedLayouts.get(file);
-    String title = generateTitle(file, layoutId);
-    if (layouts == null) {
-    	// initialize
-    	layouts = new LinkedList<String>();
-    	openedLayouts.put(file, layouts);
+    if (openedFiles.contains(file)) {
+    	int index = isOpen(file, layoutId);
+			if (index != -1) {
+    		logger.info("Layout already opened, switching to right tab");
+    		setSelectedIndex(index);
+    		return false;
+    	}
     }
-    if (layouts.contains(layoutId)) {
-    	logger.info("Layout already opened, switching to right tab");
-    	showTab(title);
-    	return false;
+    else {
+    	openedFiles.add(file);
     }
-    layouts.add(layoutId);
-    
     Layout layout = SBMLTools.getLayout(file, layoutId);
-    layoutTitles.put(title, layout);
-		GraphLayoutPanel panel = createPanelFromLayout(layout, autoLayout);
+    GraphLayoutPanel panel = createPanelFromLayout(layout, autoLayout);
+    String title = createTitle(file, layout);
     addTab(title, panel);
-    refreshTitle(title);
-    showTab(title);
+    setSelectedComponent(panel);
     view.setControlsOn(true);
     return true;
   }
   
   /**
-	 * @param title
-	 */
-	private void showTab(String title) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * @param title
-	 */
-	private void refreshTitle(String title) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
 	 * @param file
-	 * @param layoutId
+	 * @param layout
 	 * @return
 	 */
-	private String generateTitle(OpenedFile<SBMLDocument> file, String layoutId) {
-		// TODO Auto-generated method stub
-		return null;
+	private String createTitle(OpenedFile<SBMLDocument> file, Layout layout) {
+		return file.getFile().getName() + ":" 
+				+ (layout.isSetName() ? layout.getName() : layout.getId());
 	}
 
 	/**
+	 * checks if a layout identified by id and the corresponding file
+	 * is already shown in some tab
 	 * @param file
 	 * @param layoutId
+	 * @return index where layout is shown or -1 if not opened
 	 */
-	private void switchTo(OpenedFile<SBMLDocument> file, String layoutId) {
-		// TODO Auto-generated method stub
-		
+	private int isOpen(OpenedFile<SBMLDocument> file, String layoutId) {
+		Layout layout = SBMLTools.getLayout(file, layoutId);
+		Component[] components = getComponents();
+		for (int i = 0; i < getComponentCount(); i++) {
+			GraphLayoutPanel panel = (GraphLayoutPanel) components[i];
+			if (panel.getDocument().equals(layout)) {
+				return i;
+			}
+		}
+		return -1;
 	}
   
-
   /**
-   * Closes all tabs.
+   * Closes all tabs except the focused one
    */
   public boolean closeAllTabsExceptOne() {
     String message = MESSAGES.getString("SAVE_BEFORE_CLOSE");
@@ -167,31 +148,42 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
     	logger.info("saving befor closing tabs");
     	view.getController().fileSaveAll();
     }
-    int selectedIndex = getSelectedIndex();
-    setComponentAt(0, getComponent(selectedIndex));
-    
+    GraphLayoutPanel selected = (GraphLayoutPanel) getSelectedComponent();
+    Layout layout = selected.getDocument();
+    OpenedFile<SBMLDocument> openedFile = getFile(layout);
+    openedFiles.clear();
+    openedFiles.add(openedFile);
+    setComponentAt(0, selected);
+    for (int i = 1; i < this.getComponentCount(); i ++) {
+    	removeTabAt(i);
+    }
     return true;
   }
 
   /**
-   * Refreshes the title of the tab, that shows the given layout.
-   * @param layout
-   */
-	public void refreshTitle(Layout layout) {
-    // TODO
-  }
+   * retrieves a sbml document from layout and the associated
+   * opened file from openedFiles
+	 * @param layout
+	 * @return
+	 */
+	private OpenedFile<SBMLDocument> getFile(Layout layout) {
+		SBMLDocument sbmlDoc = layout.getSBMLDocument();
+		for (OpenedFile<SBMLDocument> file : openedFiles) {
+			if (file.getDocument().equals(sbmlDoc)) {
+				return file;
+			}
+		}
+		throw new AssertionError("No file for layout " + layout + " opened");
+	}
   
+  /**
+	 * @return the openedFiles
+	 */
+	public List<OpenedFile<SBMLDocument>> getOpenedFiles() {
+		return openedFiles;
+	}
 
-  /**
-   * Checks whether the given layout is open in any tab.
-   * @param layout
-   * @return true if it is shown
-   */
-  public boolean isLayoutOpen(String title) {
-    return indexOfTab(title) != -1;
-  }  
-  
-  /**
+	/**
    * Checks whether any tab is selected.
    * @return true if one is selected
    */
@@ -218,35 +210,5 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
         
     layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, layout, editMode));
     return panel;
-  }
-
-  /**
-   * Runs the OrganicLayouter on the given layout.
-   * @param layout
-   * @return
-   */
- /* public boolean layoutAuto(Layout layout) {
-    GraphLayoutPanel panel = getPanelFromLayout(layout);
-    Graph2DView view = panel.getGraph2DView();
-    view.applyLayout(new OrganicLayouter());
-    view.updateView();
-    
-    for(SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
-      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-      this.view.getController().updateGlyphFromNode(node, view.getGraph2D());
-    }
-    for(ReactionGlyph glyph : layout.getListOfReactionGlyphs()) {
-      Node node = (Node) glyph.getUserObject(SBMLEditorConstants.GLYPH_NODE_KEY);
-      this.view.getController().updateGlyphFromNode(node, view.getGraph2D());
-    }
-    
-    return true;
-  }*/
-  
-  /**
-   * return all opened files
-   */
-  public Set<OpenedFile<SBMLDocument>> getOpenedFiles() {
-  	return openedLayouts.keySet();
   }
 }

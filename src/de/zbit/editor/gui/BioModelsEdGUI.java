@@ -17,6 +17,7 @@
 package de.zbit.editor.gui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
@@ -258,9 +259,18 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	}
 
 	@Override
-	public void setControlsOn(boolean b) {
-		// TODO Auto-generated method stub
-		
+	public void setControlsOn(boolean enable) {
+		enableComponents(this, enable);
+  }
+	
+	public void enableComponents(Container container, boolean enable) {
+		Component[] components = container.getComponents();
+		for (Component component : components) {
+			component.setEnabled(enable);
+			if (component instanceof Container) {
+				enableComponents((Container)component, enable);
+			}
+		}
 	}
 
 	@Override
