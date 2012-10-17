@@ -18,14 +18,19 @@ package de.zbit.editor.gui;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 
 import org.sbml.jsbml.SBMLDocument;
@@ -36,15 +41,17 @@ import de.zbit.editor.control.SBMLView;
 import de.zbit.gui.BaseFrame;
 import de.zbit.gui.GUIOptions;
 import de.zbit.gui.GUITools;
+import de.zbit.gui.actioncommand.ActionCommand;
 import de.zbit.io.OpenedFile;
 import de.zbit.io.filefilter.SBFileFilter;
+import de.zbit.util.ResourceManager;
 import de.zbit.util.prefs.SBPreferences;
 
 /**
  * @author Jan Rudoplph
  * @version $Rev$
  */
-public class BioModelsEdGUI extends BaseFrame implements SBMLView {
+public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListener {
 	
 	/**
 	 * 
@@ -52,7 +59,9 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	private static final long serialVersionUID = -8556637237458666164L;
 	private TabManager tabManager;
 	private CommandController controller;
+	private JToolBar toolBar;
 	private final static Logger logger = Logger.getLogger(BioModelsEdGUI.class.getName());
+	private final static ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
 	
 	/**
 	 * Constructor
@@ -70,8 +79,8 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	@Override
 	protected JToolBar createJToolBar() {
 		logger.info("creating toolbar");
-		EditorToolbar toolbar = new EditorToolbar(this);
-		return toolbar;
+		toolBar = new EditorToolBar(this);
+		return toolBar;
 	}
 
 	@Override
@@ -139,16 +148,10 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 		return this.tabManager;
 	}
 
-	@Override
-	public File askUserOpenDialog() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public File askUserSaveDialog() {
-		// TODO Auto-generated method stub
-		return null;
+		return GUITools.saveFileDialog(this);
 	}
 
 	@Override
@@ -164,9 +167,8 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	}
 
 	@Override
-	public String askUserFileNew() {
-		// TODO Auto-generated method stub
-		return null;
+	public File askUserFileNew() {
+		return GUITools.saveFileDialog(this);
 	}
 
 	@Override
@@ -257,27 +259,11 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 	public CommandController getController() {
 		return this.controller;
 	}
-
-	@Override
-	public void setControlsOn(boolean enable) {
-		enableComponents(this, enable);
-  }
 	
-	public void enableComponents(Container container, boolean enable) {
-		Component[] components = container.getComponents();
-		for (Component component : components) {
-			component.setEnabled(enable);
-			if (component instanceof Container) {
-				enableComponents((Container)component, enable);
-			}
-		}
-	}
-
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void propertyChange(PropertyChangeEvent evt) {
+		logger.info("Property changed: " + evt.getPropertyName());
+	} 
 
 	@Override
 	public File saveFileAs() {
@@ -300,4 +286,75 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView {
 		boolean autoLayout) {
 		return tabManager.addTab(file, layoutId, autoLayout);
 	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.gui.BaseFrame#additionalEditMenuItems()
+	 */
+	@Override
+	protected JMenuItem[] additionalEditMenuItems() {
+		return new JMenuItem[] {
+				GUITools.createJMenuItem(this, Command.UNDO),
+				GUITools.createJMenuItem(this, Command.REDO),
+				GUITools.createJMenuItem(this, Command.COPY),
+				GUITools.createJMenuItem(this, Command.CUT),
+				GUITools.createJMenuItem(this, Command.PASTE),
+				GUITools.createJMenuItem(this, Command.DELETE),
+				GUITools.createJMenuItem(this, Command.SELECT_ALL),
+		};
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.gui.BaseFrame#additionalFileMenuItems()
+	 */
+	@Override
+	protected JMenuItem[] additionalFileMenuItems() {
+		return new JMenuItem[] {
+				GUITools.createJMenuItem(this, Command.NEW),
+				GUITools.createJMenuItem(this, Command.CLOSE),
+		};
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.gui.BaseFrame#additionalMenus()
+	 */
+	@Override
+	protected JMenu[] additionalMenus() {
+		return new JMenu[] {
+			GUITools.createJMenu(
+				MESSAGES.getString("LAYOUT_MENU"), 
+				MESSAGES.getString("LAYOUT_MENU_TOOLTIP"), 
+				GUITools.createJMenuItem(this, Command.NEW_LAYOUT),
+				GUITools.createJMenuItem(this, Command.RENAME_LAYOUT),
+				GUITools.createJMenuItem(this, Command.DELETE_LAYOUT),
+				GUITools.createJMenuItem(this, Command.CLONE_LAYOUT),
+				GUITools.createJMenuItem(this, Command.AUTOMATIC_LAYOUT))
+		};
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		logger.info("action performed: " + evt.getActionCommand());
+		switch (Command.valueOf(evt.getActionCommand())) {
+			case NEW :
+				controller.fileNew(); 
+				break;
+			case CLOSE :
+				controller.fileClose();
+				break;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.editor.control.SBMLView#getToolBar()
+	 */
+	@Override
+	public JToolBar getToolBar() {
+		return toolBar;
+	}
+	
+	
 }

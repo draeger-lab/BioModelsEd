@@ -46,7 +46,7 @@ import de.zbit.editor.control.CommandController;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class GUIFactory {
+public class BioModelsEdGUIFactory {
 
   /**
    * Create a JMenu on given menubar.

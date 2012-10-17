@@ -57,10 +57,11 @@ import y.io.JPGIOHandler;
 import y.view.Graph2D;
 import y.view.Graph2DView;
 import de.zbit.editor.BioModelsEdConstants;
-import de.zbit.editor.gui.GUIFactory;
+import de.zbit.editor.gui.BioModelsEdGUIFactory;
 import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLEditMode;
+import de.zbit.gui.GUITools;
 import de.zbit.io.OpenedFile;
 
 /**
@@ -429,12 +430,9 @@ public class CommandController implements PropertyChangeListener {
    * @return true if successful
    */
   public boolean fileNew() {
-    String name = view.askUserFileNew();
-    if (name == null) {
+    File file = view.askUserFileNew();
+    if (file == null) {
       return false;
-    }
-    if (name.isEmpty()) {
-      name = Resources.getString(BioModelsEdConstants.genericFileName);
     }
 
     /*
@@ -444,7 +442,7 @@ public class CommandController implements PropertyChangeListener {
         SBMLView.DEFAULT_LEVEL_VERSION.getL(),
         SBMLView.DEFAULT_LEVEL_VERSION.getV());
     Model model = sbmlDocument.createModel(BioModelsEdConstants.modelDefaultName);
-    model.setName(name);
+    model.setName(file.getName());
     model.createCompartment(BioModelsEdConstants.compartmentDefaultName);
 
     /*
@@ -556,14 +554,6 @@ public class CommandController implements PropertyChangeListener {
   }
   
   /**
-   * Forwards OpenDialog request to view.
-   * @return file chosen by user
-   */
-  public File askUserOpenDialog() {
-    return view.askUserOpenDialog();
-  }
-  
-  /**
    * Forwards save dialog request to view.
    * @return chosen filepath
    */
@@ -607,27 +597,6 @@ public class CommandController implements PropertyChangeListener {
        * notify fileManager about newly opened document
        */
       this.fileManager.addDocument(doc);
-      
-      //Test to save and write Colors
-      /*
-        if (this.fileManager.addDocument(doc)) {
-        AbstractRenderPlugin absRenderPlugin = 
-          (AbstractRenderPlugin) doc.getDocument().getModel().getExtension(RenderConstants.namespaceURI);
-        
-        if (absRenderPlugin == null) {
-          GlobalRenderInformation renderInfo = new GlobalRenderInformation(
-            "defaultGlobalRenderInformation", 3, 1);
-          renderInfo.setListOfColorDefinitions(renderInfo.getListOfColorDefinitions());
-          renderInfo.addColorDefinition(new ColorDefinition("RED", new Color(255, 0, 0)));
-          renderInfo.addColorDefinition(new ColorDefinition("GREEN", new Color(0, 255, 0)));
-          renderInfo.addColorDefinition(new ColorDefinition("BLUE", new Color(0, 0, 255)));
-          ExtendedLayoutModel extendedLayoutModel = 
-            (ExtendedLayoutModel) doc.getDocument().getModel().getExtension(LayoutConstants.namespaceURI);
-          RenderModelPlugin renderPlugin = new RenderModelPlugin(extendedLayoutModel.getListOfLayouts());
-          renderPlugin.addGlobalRenderInformation(renderInfo);
-          doc.getDocument().getModel().addExtension(RenderConstants.namespaceURI, renderPlugin);
-        }
-      }*/
     }
     else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMousePressedLeft)) {
       mousePressedLeft(evt);    
@@ -731,7 +700,7 @@ public class CommandController implements PropertyChangeListener {
    * @param evt
    */
   private void mousePressedRight(PropertyChangeEvent evt) {
-    JPopupMenu popup = GUIFactory.createPastePopupMenu(this, this.copyEnabled);
+    JPopupMenu popup = BioModelsEdGUIFactory.createPastePopupMenu(this, this.copyEnabled);
     SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
     MouseEvent e = editmode.getLastPressEvent();
     popup.show(e.getComponent(), e.getX(), e.getY());    
@@ -746,10 +715,10 @@ public class CommandController implements PropertyChangeListener {
     Node node = (Node) evt.getNewValue();
     NamedSBaseGlyph glyph = getGlyphFromNode(node);
     if (glyph instanceof SpeciesGlyph) {
-      popup = GUIFactory.createSpeciesGlyphPopupMenu(this);
+      popup = BioModelsEdGUIFactory.createSpeciesGlyphPopupMenu(this);
     }
     else {
-      popup = GUIFactory.createReactionGlyphPopupMenu(this);
+      popup = BioModelsEdGUIFactory.createReactionGlyphPopupMenu(this);
     }
     SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
     MouseEvent e = editmode.getLastPressEvent();
@@ -1262,16 +1231,15 @@ public class CommandController implements PropertyChangeListener {
    * @return true, if file was exported succesfully. false otherwise.
    */
   public boolean fileExport(File file) {
-  	// FIXME
-  	GraphLayoutPanel panel = null;
+  	GraphLayoutPanel panel = (GraphLayoutPanel) view.getTabManager().getSelectedComponent();
     Graph2DView view = panel.getGraph2DView();
     Graph2D graph = view.getGraph2D();
        
-    if(GUIFactory.createFilterGIF().accept(file)) {
+    if(BioModelsEdGUIFactory.createFilterGIF().accept(file)) {
       logger.info("Exporting gif file: " + file.getAbsolutePath());
       exportGraphToImageFileFormat(graph, new GIFIOHandler(), file.getAbsolutePath());
     }
-    else if (GUIFactory.createFilterJPEG().accept(file)) {
+    else if (BioModelsEdGUIFactory.createFilterJPEG().accept(file)) {
       logger.info("Exporting jpeg file: " + file.getAbsolutePath());
       exportGraphToImageFileFormat(graph, new JPGIOHandler(), file.getAbsolutePath());      
     }

@@ -16,6 +16,8 @@
  */
 package de.zbit.editor.gui;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
@@ -31,35 +33,20 @@ import javax.swing.JToolBar;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class GUITools {
-
+public class BioModelsEdGUITools {
+    
   /**
-   * Detect if system is a Mac OS
-   * 
-   * @return
+   * set components enabled recursively
+   * @param container
+   * @param enable
    */
-  public static boolean onMac() {
-    return (System.getProperty("os.name").toLowerCase().contains("mac") ||
-        System.getProperty("mrj.version") != null);
-  }
-
-
-  public static int getControlKey() {
-    if (onMac()) {
-      return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    } else {
-      return KeyEvent.CTRL_MASK;
-    }
-  }
-  
-  /**
-   * Enable Button/MenuItem for user interaction
-   * @param isEnabled
-   * @param command
-   * @param menuBar
-   * @param toolBars
-   */
-  public static void setEnabled(boolean isEnabled, String command, 
-    JMenuBar menuBar, JToolBar... toolBars) {
-  }
+  public static void setEnabled(Container container, boolean enable) {
+		Component[] components = container.getComponents();
+		for (Component component : components) {
+			component.setEnabled(enable);
+			if (component instanceof Container) {
+				setEnabled((Container)component, enable);
+			}
+		}
+	}
 }

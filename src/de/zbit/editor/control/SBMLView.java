@@ -17,11 +17,13 @@
 package de.zbit.editor.control;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JToolBar;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
@@ -73,12 +75,6 @@ public interface SBMLView {
    * @return the tabManager
    */
   public TabManager getTabManager();
-
-  /**
-   * Creates pop-up to request File Open Input.
-   * @return the file to open
-   */
-  public File askUserOpenDialog();
   
   /**
    * Creates pop-up to request File Save Input.
@@ -101,7 +97,7 @@ public interface SBMLView {
    * Creates popup for the input of a filename.
    * @eturn the filename
    */
-  public String askUserFileNew();
+  public File askUserFileNew();
 
   /**
    * Shows a warning message corresponding to the given String.
@@ -187,10 +183,10 @@ public interface SBMLView {
    */
   public CommandController getController();
 
-  /**
-   * Use to unable control buttons when no document is opened
-   * @param b
-   */
-  public void setControlsOn(boolean b);
+	/**
+	 * returns the toolbar
+	 * @return
+	 */
+	public JToolBar getToolBar();
 
 }

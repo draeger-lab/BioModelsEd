@@ -17,12 +17,9 @@
 package de.zbit.editor.gui;
 
 import java.awt.Component;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -79,7 +76,10 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
    * return true if successful
    */
   public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId, boolean autoLayout) {
-    if (openedFiles.contains(file)) {
+    if (openedFiles.isEmpty()) {
+    	BioModelsEdGUITools.setEnabled(view.getToolBar(),true);
+    }
+  	if (openedFiles.contains(file)) {
     	int index = isOpen(file, layoutId);
 			if (index != -1) {
     		logger.info("Layout already opened, switching to right tab");
@@ -95,7 +95,6 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
     String title = createTitle(file, layout);
     addTab(title, panel);
     setSelectedComponent(panel);
-    view.setControlsOn(true);
     return true;
   }
   

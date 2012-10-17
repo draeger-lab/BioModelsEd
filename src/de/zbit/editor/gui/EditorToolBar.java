@@ -17,7 +17,6 @@
 
 package de.zbit.editor.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
@@ -32,6 +31,7 @@ import org.sbml.jsbml.ext.layout.Layout;
 import de.zbit.editor.BioModelsEd;
 import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.SBMLView;
+import de.zbit.gui.GUITools;
 
 
 /**
@@ -43,7 +43,7 @@ import de.zbit.editor.control.SBMLView;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class EditorToolbar extends JToolBar {
+public class EditorToolBar extends JToolBar {
 
   private static final long serialVersionUID = 4238837776010510727L;
   private JComboBox layoutComboBox = new JComboBox();
@@ -54,8 +54,8 @@ public class EditorToolbar extends JToolBar {
    * Constructor.
    * @param parent
    */
-  public EditorToolbar(SBMLView parent) {
-    GUIFactory.addButton(this,
+  public EditorToolBar(SBMLView parent) {
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.UNKNOWN_MOLECULE),
         Resources.iconUnknown,
         0,
@@ -64,7 +64,7 @@ public class EditorToolbar extends JToolBar {
             parent,
             BioModelsEdConstants.addUnknownMolecule));
     
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.SIMPLE_MOLECULE),
         Resources.iconSimpleMolecule,
         0,
@@ -73,7 +73,7 @@ public class EditorToolbar extends JToolBar {
             parent,
             BioModelsEdConstants.addSimpleMolecule));
     
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.MACROMOLECULE),
         Resources.iconMacromolecule,
         0,
@@ -82,21 +82,21 @@ public class EditorToolbar extends JToolBar {
             parent,
             BioModelsEdConstants.addMacromolecule));
     
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.EMPTY_SET),
         Resources.iconEmptySet,
         0,
         0,
         EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.addEmptySet));
     
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.REACTION),
         Resources.iconTransition,
         0,
         0,
         EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.addReaction));
     
-    GUIFactory
+    BioModelsEdGUIFactory
         .addButton(this,
             Resources.getString(BioModelsEdConstants.CATALYSIS),
             Resources.iconCatalysis,
@@ -106,7 +106,7 @@ public class EditorToolbar extends JToolBar {
                 parent,
                 BioModelsEdConstants.addCatalysis));
     
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.INHIBITION),
         Resources.iconInhibition,
         0,
@@ -117,7 +117,7 @@ public class EditorToolbar extends JToolBar {
     
     layoutComboBox.setMaximumSize(new Dimension(150, 24));
     add(layoutComboBox);
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN),
         Resources.iconTab,
         0,
@@ -126,7 +126,7 @@ public class EditorToolbar extends JToolBar {
             parent,
             BioModelsEdConstants.openLayoutInTab));
  
-    GUIFactory.addButton(this,
+    BioModelsEdGUIFactory.addButton(this,
         Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN_NEW),
         Resources.iconTabNew,
         0,
@@ -135,13 +135,13 @@ public class EditorToolbar extends JToolBar {
             parent,
             BioModelsEdConstants.openLayoutInNewTab));
     
-    GUIFactory.addCheckbox(this, 
+    BioModelsEdGUIFactory.addCheckbox(this, 
       Resources.getString(BioModelsEdConstants.REVERSIBLE),
       EventHandler.create(ActionListener.class,
         parent,
         BioModelsEdConstants.reversible));
     
-    setEnableState(false);
+    BioModelsEdGUITools.setEnabled(this, false);
   }
   
   /**
@@ -184,18 +184,5 @@ public class EditorToolbar extends JToolBar {
     int sel = layoutComboBox.getSelectedIndex();
     logger.info(msg + "selected index: " + sel);
     return listOfLayouts.get(sel);
-  }
-
-  /**
-   * Enables or disables the toolbar, depending on the input.
-   * Enables, if anyDocumentsOpen is true.
-   * @param anyDocumentsOpen
-   */
-  public void setEnableState(boolean anyDocumentsOpen) {
-    Component[] array = this.getComponents();
-    
-    for (int i = 0; i < array.length; i++) {
-      array[i].setEnabled(anyDocumentsOpen);
-    }    
   }
 }

@@ -7,7 +7,55 @@
   
   <!-- File IO -->
   
-  <entry key="SAVE_BEFORE_CLOSE">Do you want to save before closing?:</entry>
+  <entry key="SAVE_BEFORE_CLOSE">Do you want to save before closing?</entry>
   <entry key="Save_BEFORE_CLOSE_TITLE">Save before closings</entry>
+  
+  <!-- Edit menu items -->
+  <entry key="UNDO">Undo</entry>
+  <entry key="UNDO_TOOLTIP">Undo the last command</entry>
+  
+  <entry key="REDO">Redo</entry>
+  <entry key="REDO_TOOLTIP">Redo the last command</entry>
+  
+  <entry key="COPY">Copy</entry>
+  <entry key="COPY_TOOLTIP">Copy selected content into clipboard</entry>
+  
+  <entry key="CUT">Cut</entry>
+  <entry key="CUT_TOOLTIP">Remove selected content and store in clipboard</entry>
+  
+  <entry key="PASTE">Paste</entry>
+  <entry key="PASTE_TOOLTIP">Paste clipboard content to current cursor position</entry>
+  
+  <entry key="DELETE">Delete</entry>
+  <entry key="DELETE_TOOLTIP">Delete selected content</entry>
+  
+  <entry key="SELECT_ALL">Select all</entry>
+  <entry key="SELECT_ALL_TOOLTIP">Select all nodes in current tab</entry>
+  
+  <!-- File menu items -->
+  <entry key="NEW">New</entry>
+  <entry key="NEW_TOOLTIP">Create a new empty bio model</entry>
+  
+  <entry key="CLOSE">Close</entry>
+  <entry key="CLOSE_TOOLTIP">Close file and layouts of currently selected tab</entry>
+  
+  <!-- Layout menu items -->
+  <entry key="LAYOUT_MENU">Layout</entry>
+  <entry key="LAYOUT_MENU_TOOLTIP">Manipulate layouts</entry>
+  
+  <entry key="NEW_LAYOUT">New</entry>
+  <entry key="NEW_LAYOUT_TOOLTIP">Create a new Layout for this model</entry>
+  
+  <entry key="DELETE_LAYOUT">Delete</entry>
+  <entry key="DELETE_LAYOUT_TOOLTIP">Delete this Layout</entry>
+  
+  <entry key="CLONE_LAYOUT">Clone</entry>
+  <entry key="CLONE_LAYOUT_TOOLTIP">Clone this Layout</entry>
+  
+  <entry key="AUTOMATIC_LAYOUT">Automatic Layout</entry>
+  <entry key="AUTOMATIC_LAYOUT_TOOLTIP">Rearrange all Nodes using an automatic layouting algorithm</entry>
+  
+  <entry key="RENAME_LAYOUT">Rename</entry>
+  <entry key="RENAME_LAYOUT_TOOLTIP">Rename the current layout</entry>
   
 </properties>
