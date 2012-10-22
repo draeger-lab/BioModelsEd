@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model id="defalt_model" name="macromolecule">
+    <listOfCompartments>
+      <compartment id="default"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="s0" name="Macromolecule one" sboTerm="SBO:0000245" compartment="default"/>
+    </listOfSpecies>
+      <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1">
+      <layout:layout id="layout0" name="default_layout">
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph layout:id="glyph0" layout:species="s0">
+            <layout:boundingBox>
+              <layout:position layout:x="446" layout:y="57" layout:z="0"/>
+              <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfTextGlyphs>
+          <layout:textGlyph layout:graphicalObject="glyph0" layout:id="textglyph0" layout:originOfText="s0"/>
+        </layout:listOfTextGlyphs>
+      </layout:layout>
+    </layout:listOfLayouts>
+  </model>
+</sbml>

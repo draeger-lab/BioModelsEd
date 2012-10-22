@@ -1,0 +1,39 @@
+Description of example files
+
+macromolecule_missing_coordinates.sbml
+	Macromolecule (incl. glyph and textglyph) with no position.
+
+macromolecule.sbml
+	Macromolecule (incl. glyph and textglyph).
+
+macromolecule_source.sbml
+	Macromolecule and source (incl. glyph and textglyph).
+
+macromolecule_source_unspecified.sbml
+	Macromolecule, source and unspecified (incl. glyph and textglyph).
+
+reaction_override_text.sbml
+	Simple reaction with overridden text for product species  (incl. glyph and
+	textglyph).
+
+reaction.sbml
+	Simple reaction (incl. glyph and textglyph).
+
+reaction_secondcompartment.sbml
+	Simple reaction in second compartment (incl. glyph and textglyph).
+
+species_and_independent_text.sbml
+	Species (incl. glyph and textglyph) and an independent text glyph.
+
+species_missing_coordinates.sbml
+	Species (incl. glyph and textglyph) with no position.
+	
+three_species_missing_coordinates.sbml
+	Three species (incl. glyph and textglyph) with no positions.
+	
+three_species.sbml
+	Three species (incl. glyph and textglyph).
+	
+two_species_cloned.sbml
+	Simple molecule (incl. glyph and textglyph) and one macromolecule with two
+	glyphs and textglyphs.
