@@ -147,13 +147,12 @@ public class FileManager {
 	 */
   public boolean fileOpen(File file) {
   	//FIXME Check for right filetype
-    if (file == null || isFilePathUsed(file.getAbsolutePath())) {
+    if ((file == null) || isFilePathUsed(file.getAbsolutePath())) {
       return false;
     }
     else {
       try {
-        SBMLReadingTask task = new SBMLReadingTask(file, commandController.getFrame());
-        task.addPropertyChangeListener(commandController);
+        SBMLReadingTask task = new SBMLReadingTask(file, commandController.getFrame(), commandController);
         task.execute();
         return true;
       } catch (FileNotFoundException e) {
