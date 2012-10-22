@@ -65,7 +65,7 @@ public class BioModelsEdConstants {
   public static final String layoutDefaultName = "default_layout";
   public static final String modelDefaultName = "defalt_model";
   public static final String compartmentDefaultName = "default";
-  public static final String openingDone = "SBML_READING_SUCCESSFULLY_DONE_OPENED_FILE";
+  public static final String openingDone = "SBML_READING_SUCCESSFULLY_DONE";
   public static final String savingDone = "savingDone";
   public static final String fileNotFound = "FILE_NOT_FOUND";
   public static final String genericFileName = "GENERIC_FILE_NAME";
