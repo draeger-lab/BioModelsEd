@@ -37,3 +37,6 @@ three_species.sbml
 two_species_cloned.sbml
 	Simple molecule (incl. glyph and textglyph) and one macromolecule with two
 	glyphs and textglyphs.
+	
+no_layout.sbml
+	SBML document without layout extension.

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model id="defalt_model" name="two_species">
+    <listOfCompartments>
+      <compartment id="default"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="s0" name="simple molecule" sboTerm="SBO:0000247" compartment="default"/>
+      <species id="s1" name="macromolecule" sboTerm="SBO:0000245" compartment="default"/>
+    </listOfSpecies>
+  </model>
+</sbml>
