@@ -128,17 +128,33 @@ public class BioModelsEdGUIFactory {
    * @param icon 
    * @param width
    * @param height
+   * @param actionCommand
    * @param l
    * @return the created button
    */
-  public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, int width, int height,
-    ActionListener... l) {
+  public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, 
+  	int width, int height, String actionCommand, ActionListener... l) {
     JButton button = createButtonIcon(icon, tooltip, width, height, l);
-    
+    button.setActionCommand(actionCommand);
     toolbar.add(button);
     return button;
   }
-  
+  /**
+   * Add a button to given toolbar.
+   * 
+   * @param toolbar
+   * @param tooltip
+   * @param icon 
+   * @param width
+   * @param height
+   * @param l
+   * @return the created button
+   */
+  public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, 
+  	int width, int height, ActionListener... l) {
+    JButton button = createButtonIcon(icon, tooltip, width, height, l);
+    return button;
+  }
   /**
    * Add a button to given toolbar.
    * 

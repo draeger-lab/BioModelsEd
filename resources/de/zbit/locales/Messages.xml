@@ -58,4 +58,8 @@
   <entry key="RENAME_LAYOUT">Rename</entry>
   <entry key="RENAME_LAYOUT_TOOLTIP">Rename the current layout</entry>
   
+  <!-- Popup Windows -->
+  <entry key="NAME_SPECIES">Enter species name</entry>
+  <entry key="NAME_SPECIES_TITLE">Create Species</entry>
+  
 </properties>

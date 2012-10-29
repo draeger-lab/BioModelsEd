@@ -17,6 +17,10 @@
 package de.zbit.editor.gui;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -44,7 +48,7 @@ import de.zbit.util.ResourceManager;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class TabManager extends JTabbedPaneDraggableAndCloseable {
+public class TabManager extends JTabbedPaneDraggableAndCloseable implements ActionListener, PropertyChangeListener{
 
   private static final long serialVersionUID = -905908829761611472L;
   private static Logger logger = Logger.getLogger(TabManager.class.getName());
@@ -91,7 +95,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
     	openedFiles.add(file);
     }
     Layout layout = SBMLTools.getLayout(file, layoutId);
-    GraphLayoutPanel panel = createPanelFromLayout(layout, autoLayout);
+    BioModelsEdPanel panel = createPanelFromLayout(layout, autoLayout, file);
     String title = createTitle(file, layout);
     addTab(title, panel);
     setSelectedComponent(panel);
@@ -119,7 +123,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
 		Layout layout = SBMLTools.getLayout(file, layoutId);
 		Component[] components = getComponents();
 		for (int i = 0; i < getComponentCount(); i++) {
-			GraphLayoutPanel panel = (GraphLayoutPanel) components[i];
+			BioModelsEdPanel panel = (BioModelsEdPanel) components[i];
 			if (panel.getDocument().equals(layout)) {
 				return i;
 			}
@@ -147,7 +151,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
     	logger.info("saving befor closing tabs");
     	view.getController().fileSaveAll();
     }
-    GraphLayoutPanel selected = (GraphLayoutPanel) getSelectedComponent();
+    BioModelsEdPanel selected = (BioModelsEdPanel) getSelectedComponent();
     Layout layout = selected.getDocument();
     OpenedFile<SBMLDocument> openedFile = getFile(layout);
     openedFiles.clear();
@@ -172,7 +176,18 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
 				return file;
 			}
 		}
-		throw new AssertionError("No file for layout " + layout + " opened");
+		return null;
+	}
+	
+	public OpenedFile<SBMLDocument> getCurrentFile() {
+		return getFile(getCurrentLayout());
+	}
+
+	/**
+	 * @return
+	 */
+	public Layout getCurrentLayout() {
+		return ((GraphLayoutPanel) getSelectedComponent()).getDocument();
 	}
   
   /**
@@ -197,9 +212,9 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
    * @param autoLayout
    * @return the created panel
    */
-  public GraphLayoutPanel createPanelFromLayout (Layout layout, boolean autoLayout) { 
-    SBMLEditMode editMode = new SBMLEditMode(this.view.getController());
-    GraphLayoutPanel panel = new GraphLayoutPanel(layout, editMode);
+  public BioModelsEdPanel createPanelFromLayout (Layout layout, boolean autoLayout,  OpenedFile<SBMLDocument> file) { 
+    SBMLEditMode editMode = new SBMLEditMode(this);
+    BioModelsEdPanel panel = new BioModelsEdPanel(layout, editMode, view.getController(), file);
     Graph2DView view = panel.getGraph2DView();
     if (autoLayout) {
       view.applyLayout(new OrganicLayouter());
@@ -210,4 +225,24 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable {
     layout.addTreeNodeChangeListener(new ControllerViewSynchronizer(panel, layout, editMode));
     return panel;
   }
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		BioModelsEdPanel panel = (BioModelsEdPanel) this.getSelectedComponent();
+		panel.receive(e);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		BioModelsEdPanel panel = (BioModelsEdPanel) this.getSelectedComponent();
+		if(panel != null) {
+			panel.receive(evt);
+		}
+	}
 }

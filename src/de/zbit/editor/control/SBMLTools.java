@@ -48,7 +48,6 @@ public class SBMLTools {
 
 	/**
 	 * @param selectedDoc
-	 * @param genericid
 	 * @return
 	 */
 	public static String getNextGenericId(OpenedFile<SBMLDocument> selectedDoc,
@@ -294,15 +293,17 @@ public class SBMLTools {
 	public static Layout getLayout(OpenedFile<SBMLDocument> file, String layoutId) {
 		SBMLDocument sbmlDoc = file.getDocument();
 		Model model = sbmlDoc.getModel();
-		ExtendedLayoutModel extLayoutModel = (ExtendedLayoutModel) model.getExtension(
-			LayoutConstants.getNamespaceURI(model.getLevel(), model.getVersion()));
-		ListOf<Layout> listOfLayouts = extLayoutModel.getListOfLayouts();
-		for (Layout layout : listOfLayouts) {
-			if (layout.getId().equals(layoutId)) {
-				return layout;
-			}
-		}
-		throw new AssertionError(file.getFile().getName() + " does not contain layout " + layoutId);
+		return (Layout) model.findNamedSBase(layoutId);
+	}
+
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public static String findCompartmentId(Double x, Double y) {
+		// TODO implement this
+		return BioModelsEdConstants.defaultCompartmentId;
 	}
 	
 }

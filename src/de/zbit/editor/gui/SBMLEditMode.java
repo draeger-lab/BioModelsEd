@@ -16,6 +16,7 @@
  */
 package de.zbit.editor.gui;
 
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,11 @@ import org.sbml.jsbml.util.ValuePair;
 import y.base.Node;
 import y.base.NodeCursor;
 import y.view.EditMode;
+import y.view.Graph2D;
 import y.view.HitInfo;
 import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.CommandController;
+import de.zbit.editor.control.SBMLView;
 
 /**
  * This class accepts user input on the yFiles interface panel and decides the resulting actions.
@@ -45,46 +48,41 @@ public class SBMLEditMode extends EditMode  {
  
   /**
    * Constructor.
-   * @param controller
+   * @param view
    */
-  public SBMLEditMode(CommandController controller) {
+  public SBMLEditMode(PropertyChangeListener listener) {
     super();
     this.allowBendCreation(false);
     this.allowNodeCreation(true);
     this.setCreateEdgeMode(new SBMLCreateEdgeMode());
     this.allowEdgeCreation(true);
-    this.addPropertyChangeListener(controller);
+    this.addPropertyChangeListener(listener);
   }
   
-  /**
-   * Fires a property change with the current mouse position, when the left mouse is pressed.
-   */
+  /* (non-Javadoc)
+	 * @see y.view.EditMode#mousePressedLeft(double, double)
+	 */
   @Override
   public void mousePressedLeft(double x, double y) {
-    
-    HitInfo info = this.getGraph2D().getHitInfo(x, y);
-    Object hit = info.getFirstHit();
-    if (hit instanceof Node) {
-      Node node = (Node) hit;
-      
-      firePropertyChange(BioModelsEdConstants.EditModeNodePressedLeft, null, node);      
-      //oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
-    }
-    else {
-      ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-      firePropertyChange(BioModelsEdConstants.EditModeMousePressedLeft, null, newPositionMouseClicked);
-      //lastPositionMouseClicked = newPositionMouseClicked;
-            
-    }  
-    
+  	super.mousePressedLeft(x, y);
+  	ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
+  	firePropertyChange(BioModelsEdConstants.EditModeMousePressedLeft, null, newPositionMouseClicked);
   }
-  
-  /**
+  /* (non-Javadoc)
+	 * @see y.view.EditMode#nodeClicked(y.base.Node)
+	 */
+	@Override
+	protected void nodeClicked(Node node) {
+		super.nodeClicked(node);
+		firePropertyChange(BioModelsEdConstants.nodeClicked, null, node);
+	}
+
+	/**
    * Fires a property change with the current mouse position, when the pressed left mouse is released.
    */
   @Override
   public void mouseReleasedLeft(double x, double y) {
-   
+   super.mouseReleasedLeft(x, y);
     List<Node> list = getSelectedNodes();      
     
     // Set list of nodes in CommandController
@@ -146,8 +144,8 @@ public class SBMLEditMode extends EditMode  {
       //lastPositionMouseClicked = newPositionMouseClicked;
     }
   }
-  
-  /**
+
+	/**
    * Removes the node from the graph.
    * @param node
    */

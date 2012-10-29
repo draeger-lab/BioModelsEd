@@ -44,145 +44,142 @@ import de.zbit.gui.GUITools;
  * @version $Rev$
  */
 public class EditorToolBar extends JToolBar {
-
-  private static final long serialVersionUID = 4238837776010510727L;
-  private JComboBox layoutComboBox = new JComboBox();
-  private ListOf<Layout> listOfLayouts = new ListOf<Layout>();
-  private static Logger logger = Logger.getLogger(BioModelsEd.class.toString());
-
-  /**
-   * Constructor.
-   * @param parent
-   */
-  public EditorToolBar(SBMLView parent) {
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.UNKNOWN_MOLECULE),
-        Resources.iconUnknown,
-        0,
-        0,
-        EventHandler.create(ActionListener.class,
-            parent,
-            BioModelsEdConstants.addUnknownMolecule));
-    
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.SIMPLE_MOLECULE),
-        Resources.iconSimpleMolecule,
-        0,
-        0,
-        EventHandler.create(ActionListener.class,
-            parent,
-            BioModelsEdConstants.addSimpleMolecule));
-    
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.MACROMOLECULE),
-        Resources.iconMacromolecule,
-        0,
-        0,
-        EventHandler.create(ActionListener.class,
-            parent,
-            BioModelsEdConstants.addMacromolecule));
-    
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.EMPTY_SET),
-        Resources.iconEmptySet,
-        0,
-        0,
-        EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.addEmptySet));
-    
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.REACTION),
-        Resources.iconTransition,
-        0,
-        0,
-        EventHandler.create(ActionListener.class, parent, BioModelsEdConstants.addReaction));
-    
-    BioModelsEdGUIFactory
-        .addButton(this,
-            Resources.getString(BioModelsEdConstants.CATALYSIS),
-            Resources.iconCatalysis,
-            0,
-            0,
-            EventHandler.create(ActionListener.class,
-                parent,
-                BioModelsEdConstants.addCatalysis));
-    
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.INHIBITION),
-        Resources.iconInhibition,
-        0,
-        0,
-        EventHandler
-            .create(ActionListener.class, parent, BioModelsEdConstants.addInhibition));
-    
-    
-    layoutComboBox.setMaximumSize(new Dimension(150, 24));
-    add(layoutComboBox);
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN),
-        Resources.iconTab,
-        0,
-        0,
-        EventHandler.create(ActionListener.class,
-            parent,
-            BioModelsEdConstants.openLayoutInTab));
- 
-    BioModelsEdGUIFactory.addButton(this,
-        Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN_NEW),
-        Resources.iconTabNew,
-        0,
-        0,
-        EventHandler.create(ActionListener.class,
-            parent,
-            BioModelsEdConstants.openLayoutInNewTab));
-    
-    BioModelsEdGUIFactory.addCheckbox(this, 
-      Resources.getString(BioModelsEdConstants.REVERSIBLE),
-      EventHandler.create(ActionListener.class,
-        parent,
-        BioModelsEdConstants.reversible));
-    
-    BioModelsEdGUITools.setEnabled(this, false);
-  }
-  
-  /**
-   * Represents the items in the ComboBox
-   */
-  private static class ListItem {
-    private final String text;
-
-    private ListItem(String text) {
-        this.text = text;
-    }
-
-    public String toString() {
-        return text;
-    }
-  }
-
-  /**
-   * Updates the ComboBox, so that it has all the layouts in the given list.
-   * @param list
-   */
-  public void updateComboBox(ListOf<Layout> list) {
-    this.listOfLayouts = list;
-    layoutComboBox.removeAllItems();
-    for(Layout l: listOfLayouts){
-      layoutComboBox.addItem(new ListItem(l.getName()));
-    }
-  }
-  
-  /**
-   * Gets the layout selected in the ComboBox from the listOfLayouts.
-   * @return the layout
-   */
-  public Layout getSelectedLayout() {
-    String msg = "";
-    for(Layout l: listOfLayouts){
-      msg += l.getId() +";";
-    }
-    
-    int sel = layoutComboBox.getSelectedIndex();
-    logger.info(msg + "selected index: " + sel);
-    return listOfLayouts.get(sel);
-  }
+	
+	private static final long serialVersionUID = 4238837776010510727L;
+	private JComboBox layoutComboBox = new JComboBox();
+	private ListOf<Layout> listOfLayouts = new ListOf<Layout>();
+	private static Logger logger = Logger.getLogger(BioModelsEd.class.toString());
+	
+	/**
+	 * Constructor.
+	 * @param parent
+	 */
+	public EditorToolBar(SBMLView parent) {
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.UNKNOWN_MOLECULE),
+			Resources.iconUnknown,
+			0,
+			0,
+			BioModelsEdConstants.addUnknownMolecule,
+			parent.getTabManager());
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.SIMPLE_MOLECULE),
+			Resources.iconSimpleMolecule,
+			0,
+			0,
+			BioModelsEdConstants.addSimpleMolecule,
+			parent.getTabManager());
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.MACROMOLECULE),
+			Resources.iconMacromolecule,
+			0,
+			0,
+			BioModelsEdConstants.addMacromolecule,
+			parent.getTabManager());
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.EMPTY_SET),
+			Resources.iconEmptySet,
+			0,
+			0,
+			BioModelsEdConstants.addEmptySet,
+			parent.getTabManager());
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.REACTION),
+			Resources.iconTransition,
+			0,
+			0,
+			BioModelsEdConstants.addReaction,
+			parent.getTabManager());
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.CATALYSIS),
+			Resources.iconCatalysis,
+			0,
+			0,
+			BioModelsEdConstants.addCatalysis,
+			parent.getTabManager());
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.INHIBITION),
+			Resources.iconInhibition,
+			0,
+			0,
+			BioModelsEdConstants.addInhibition,
+			parent.getTabManager());
+		
+		
+		layoutComboBox.setMaximumSize(new Dimension(150, 24));
+		add(layoutComboBox);
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN),
+			Resources.iconTab,
+			0,
+			0,
+			EventHandler.create(ActionListener.class,
+				parent,
+				BioModelsEdConstants.openLayoutInTab));
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN_NEW),
+			Resources.iconTabNew,
+			0,
+			0,
+			EventHandler.create(ActionListener.class,
+				parent,
+				BioModelsEdConstants.openLayoutInNewTab));
+		
+		BioModelsEdGUIFactory.addCheckbox(this, 
+			Resources.getString(BioModelsEdConstants.REVERSIBLE),
+			EventHandler.create(ActionListener.class,
+				parent,
+				BioModelsEdConstants.reversible));
+		
+		BioModelsEdGUITools.setEnabled(this, false);
+	}
+	
+	/**
+	 * Represents the items in the ComboBox
+	 */
+	private static class ListItem {
+		private final String text;
+		
+		private ListItem(String text) {
+			this.text = text;
+		}
+		
+		public String toString() {
+			return text;
+		}
+	}
+	
+	/**
+	 * Updates the ComboBox, so that it has all the layouts in the given list.
+	 * @param list
+	 */
+	public void updateComboBox(ListOf<Layout> list) {
+		this.listOfLayouts = list;
+		layoutComboBox.removeAllItems();
+		for(Layout l: listOfLayouts){
+			layoutComboBox.addItem(new ListItem(l.getName()));
+		}
+	}
+	
+	/**
+	 * Gets the layout selected in the ComboBox from the listOfLayouts.
+	 * @return the layout
+	 */
+	public Layout getSelectedLayout() {
+		String msg = "";
+		for(Layout l: listOfLayouts){
+			msg += l.getId() +";";
+		}
+		
+		int sel = layoutComboBox.getSelectedIndex();
+		logger.info(msg + "selected index: " + sel);
+		return listOfLayouts.get(sel);
+	}
 }

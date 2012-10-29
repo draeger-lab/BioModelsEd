@@ -61,6 +61,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	private CommandController controller;
 	private JToolBar toolBar;
 	private final static Logger logger = Logger.getLogger(BioModelsEdGUI.class.getName());
+	//TODO rename package
 	private final static ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
 	
 	/**
@@ -79,6 +80,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	@Override
 	protected JToolBar createJToolBar() {
 		logger.info("creating toolbar");
+		tabManager = new TabManager(this);
 		toolBar = new EditorToolBar(this);
 		return toolBar;
 	}
@@ -86,7 +88,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	@Override
 	protected Component createMainComponent() {
 		logger.info("creating main component");
-		tabManager = new TabManager(this);
+		//FIXME creating Tabmanager before Toolbar
 		return tabManager;
 	}
 
@@ -356,5 +358,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 		return toolBar;
 	}
 	
-	
+	public void addUnknownMolecule() {
+		controller.stateUnknownMolecule();
+	}
 }

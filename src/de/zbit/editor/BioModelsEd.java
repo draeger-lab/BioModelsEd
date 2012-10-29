@@ -39,8 +39,7 @@ public class BioModelsEd extends Launcher {
 	 * 
 	 */
 	private static final long serialVersionUID = 7695361498192546438L;
-	BioModelsEdGUI gui;
-	CommandController controller;
+	private CommandController controller;
 	
 	/**
 	 * 
@@ -48,9 +47,7 @@ public class BioModelsEd extends Launcher {
 	public BioModelsEd() {
 		super();
 		controller = new CommandController();
-		gui = new BioModelsEdGUI();
-		controller.setView(gui);
-		gui.setController(controller);
+		
 	}
 
 	/**
@@ -111,6 +108,9 @@ public class BioModelsEd extends Launcher {
 
 	@Override
 	public Window initGUI(AppConf appConf) {
+		BioModelsEdGUI gui = new BioModelsEdGUI();
+		controller.setView(gui);
+		gui.setController(controller);
 		return gui;
 	}
 

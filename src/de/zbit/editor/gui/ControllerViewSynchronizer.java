@@ -95,6 +95,9 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
         speciesGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, n);
       }
     }
+    else if (node instanceof ReactionGlyph) {
+    	logger.info("hallo");
+    }
   }
 
   /**

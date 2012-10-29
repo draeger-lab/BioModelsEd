@@ -32,7 +32,7 @@ public class BioModelsEdConstants {
   public static final String EditModeNodeClickedLeft = "nodeClickedLeft in EditMode";
   public static final String EditModeMousePressedLeft = "mousePressedLeft in EditMode";
   public static final String EditModeMouseReleasedLeft = "mouseReleasedLeft in EditMode";
-  public static final String EditModeNodePressedLeft = "nodePressedLeft in EditMode";
+  public static final String nodeClicked = "nodeClicked in EditMode";
   public static final String EditModeNodeReleasedLeft = "nodeReleasedLeft in EditMode";
   public static final String EditModeMouseDraggedLeft = "mouseDraggedLeft in EditMode";
   public static final String EditModeNodeReleasedRight = "nodeReleasedRight in EditMode";
