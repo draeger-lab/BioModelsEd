@@ -25,9 +25,11 @@ import javax.swing.tree.TreeNode;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.BoundingBox;
+import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
@@ -101,11 +103,9 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       Node target = null;
       for (SpeciesReferenceGlyph glyph : listOfSpeciesReferenceGlyphs) {
       	SpeciesReferenceRole role = glyph.getSpeciesReferenceRole();
-      	if (role.equals(SpeciesReferenceRole.SUBSTRATE)) {
-      		source = (Node) glyph.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
-      	}
-      	if (role.equals(SpeciesReferenceRole.PRODUCT)) {
-      		target = (Node) glyph.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      	switch (role) {
+      		case SUBSTRATE: source = getNode(glyph.getSpeciesGlyphInstance()); break;
+      		case PRODUCT: target = getNode(glyph.getSpeciesGlyphInstance()); break;
       	}
       }
       if (source == null || target == null) {
@@ -114,9 +114,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       }
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
 			Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), 
-      	source, 
-      	target,
-         new GenericEdgeRealizer(), reaction.getReversible());
+      	source, target, new GenericEdgeRealizer(), reaction.getReversible());
       reactionGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, reactionNode);
       logger.info("CVS : Reaction Drawn");
     }
@@ -124,20 +122,52 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     	//TODO
     }
     else if (node instanceof SpeciesReferenceGlyph) {
-    	/*SpeciesReferenceGlyph referenceGlyph = (SpeciesReferenceGlyph) node;
+    	SpeciesReferenceGlyph referenceGlyph = (SpeciesReferenceGlyph) node;
+    	
     	// Navigating ReactionGlyph <- ListOf<SpeciesReferenceGlyph> <- SpeciesReferenceGlyph
     	ReactionGlyph reactionGlyph = (ReactionGlyph) referenceGlyph.getParentSBMLObject().getParentSBMLObject();
-    	SpeciesReferenceRole role = referenceGlyph.getSpeciesReferenceRole();
+    	//TODO get role from SpeciesReference 
+    	int sbo = getSBO(referenceGlyph.getSpeciesReferenceRole());
     	
-    	Node source = referenceGlyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+    	Node source = getNode(referenceGlyph.getSpeciesGlyphInstance());
+    	Node target = getNode(reactionGlyph);
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
       createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), source, target,
-        new GenericEdgeRealizer(), reactionGlyph.getS);
-      logger.info("CVS : Modifier Drawn"); */
+        new GenericEdgeRealizer(), sbo);
+      logger.info("CVS : Modifier Drawn"); 
     }
   }
 
   /**
+   * wraps Node extraction from graphical objects
+	 * @param GraphicalObject
+	 * @return
+	 */
+	private Node getNode(GraphicalObject g) {
+		return (Node) g.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+	}
+
+	/**
+	 * @param speciesReferenceRole
+	 * @return
+	 */
+	private int getSBO(SpeciesReferenceRole role) {
+		switch (role) {
+			// TODO catalyst vs. catalytic activator, changes affect SBMLCreateEdgeNode
+			case ACTIVATOR : return SBO.getCatalyst();
+			case INHIBITOR : return SBO.getInhibitor(); 
+			case MODIFIER : return SBO.getModifier(); 
+			case PRODUCT : return SBO.getProduct(); 
+			case SIDEPRODUCT : return SBO.getProduct(); 
+			case SIDESUBSTRATE : return SBO.getReactant(); 
+			case SUBSTRATE : return SBO.getReactant();
+			// TODO not sure about default value
+			case UNDEFINED : return SBO.getParticipant();
+		}
+		return 0;
+	}
+
+	/**
    * Updates the view on several changes.
    */
   @SuppressWarnings("unchecked")
@@ -156,7 +186,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       List<SpeciesGlyph> listOfGlyphs = layout.getListOfSpeciesGlyphs();
       for (SpeciesGlyph glyph : listOfGlyphs) {
         if (glyph.isSetSpecies() && glyph.getSpecies().equals(species.getId())) {
-          Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+          Node n = getNode(glyph);
           this.panel.getGraph2DView().getGraph2D().setLabelText(n, species.getName());
         }
       }

@@ -294,25 +294,12 @@ public class CommandController implements PropertyChangeListener {
 	 * @param sourceNode corresponding to the SpeciesGlyph
 	 * @param targetNode corresponding to the ReactionGlyph
 	 */
-	@SuppressWarnings("unchecked")
 	public void createModifier(OpenedFile<SBMLDocument>  file, Layout layout, 
 		SpeciesGlyph source, ReactionGlyph target, int sbo) {
 		
 		Model model = layout.getModel();
-		Reaction targetReaction = (Reaction) target.getReactionInstance();
-		
-		//Creation of a modifier
-		ModifierSpeciesReference modifier = new ModifierSpeciesReference();
-		modifier.setId(SBMLTools.getNextGenericId(file, BioModelsEdConstants.genericModifierReferenceIdPrefix));
-		modifier.setLevel(model.getLevel());
-		modifier.setVersion(model.getVersion());
-		modifier.setSBOTerm(sbo);
-		modifier.setSpecies(source.getSpecies());
-		modifier.setName(modifier.getId());
-		targetReaction.addModifier(modifier);
-		
-		//Creation of a modifier glyph
-		//SpeciesReferenceGlyph modifierGlyph = new SpeciesReferenceGlyph();
+		Reaction reaction = (Reaction) target.getReactionInstance();
+		reaction.addModifier(SBMLFactory.createModifierSpeciesReference(file, model, sbo, source));
 		SpeciesReferenceGlyph modifierGlyph = SBMLFactory.createSpeciesReferenceGlyph(file, source, target, sbo);
 		target.addSpeciesReferenceGlyph(modifierGlyph);
 		logger.info("created Modifier");

@@ -36,9 +36,11 @@ import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 import y.base.Node;
+import y.view.NodeRealizer;
 import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLTools;
+import de.zbit.graph.sbgn.ReactionNodeRealizer;
 import de.zbit.io.OpenedFile;
 import de.zbit.util.ResourceManager;
 
@@ -136,7 +138,7 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	}
 	public void receive(PropertyChangeEvent evt) {
 		String action = evt.getPropertyName();
-		logger.info(action);
+		//logger.info(action);
 		if (action.equals(BioModelsEdConstants.EditModeMousePressedLeft)) {
 			if (isSimple()) {
 				String name = askForName();
@@ -151,28 +153,31 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
       
     }
     else if (action.equals(BioModelsEdConstants.nodeClicked)) {
+    	Node node = (Node) evt.getNewValue();
+    	NodeRealizer shape = getGraph2DView().getGraph2D().getRealizer(node);
+			
+    	// reaction or modification created?
     	if (state.equals(State.catalysis) || state.equals(State.reaction) || state.equals(State.inhibition)) {
     		SpeciesGlyph source = (SpeciesGlyph) additionalInformation;
-    		Node node = (Node) evt.getNewValue();
     		if (source == null) {
-    			GraphicalObject g = getGlyphFromNode(node);
-    			if (!(g instanceof SpeciesGlyph)) return;
-    			g = (SpeciesGlyph) g;
-    			logger.info("source: " + g);
-    			additionalInformation = g;
+    			if (!(shape instanceof ReactionNodeRealizer)) {
+    				GraphicalObject g = (SpeciesGlyph) getGlyphFromNode(node);
+    				additionalInformation = g;
+    			}
     		}
     		else {
     			GraphicalObject target = getGlyphFromNode(node);
     			if (target == null) return;
-    			logger.info("target: " + target);
-    			if (state.equals(State.reaction)) {
+    			//TODO enable adding sideproducts via reaction mode
+    			if (!(shape instanceof ReactionNodeRealizer) && state.equals(State.reaction)) {
     				controller.createReaction(file, this.document, source, (SpeciesGlyph) target, 
     					modifier.equals(Modifier.reversible));
+    				state = State.idle;
     			}
-    			if (state.equals(State.catalysis) || state.equals(State.inhibition)) {
+    			else if ((shape instanceof ReactionNodeRealizer) && state.equals(State.catalysis) || state.equals(State.inhibition)) {
     				controller.createModifier(file, this.document, source, (ReactionGlyph) target, getSBOTerm());
+    				state = State.idle;
     			}
-    			state = State.idle;
     		}
     	}
     }
@@ -219,14 +224,19 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	 * @return SBOTerm according to current state
 	 */
 	private int getSBOTerm() {
+	/*
+	 * all reaction like states are converted into the resulting
+	 * SBO term of the added node e.g. catalysis -> catalyst
+	 * TODO rename states?
+	 */
 		if (state.equals(State.catalysis)) {
-			return SBO.getCatalysis();
+			return SBO.getCatalyst();
 		}
 		else if (state.equals(State.emptySet)) {
 			return SBO.getEmptySet();
 		}
 		else if (state.equals(State.inhibition)) {
-			return SBO.getModifier();
+			return SBO.getInhibitor();
 		}
 		else if (state.equals(State.macromolecule)) {
 			return SBO.getMacromolecule();

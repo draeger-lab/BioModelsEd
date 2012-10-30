@@ -231,7 +231,6 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		logger.info(e.getActionCommand());
 		BioModelsEdPanel panel = (BioModelsEdPanel) this.getSelectedComponent();
 		panel.receive(e);
 	}

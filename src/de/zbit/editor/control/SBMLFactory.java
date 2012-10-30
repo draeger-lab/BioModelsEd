@@ -19,6 +19,7 @@ package de.zbit.editor.control;
 import java.util.List;
 
 import org.sbml.jsbml.Model;
+import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
@@ -415,4 +416,29 @@ public class SBMLFactory {
     sg.setSpecies(speciesId);
     return sg;
   }
+
+
+
+
+	/**
+	 * creates a modifier species reference role used in catalysis/inhibition ect
+	 * to represent the connection between speciesglyph and reactionglyph
+	 * @param file
+	 * @param model
+	 * @param sbo
+	 * @param source
+	 * @param target
+	 * @return
+	 */
+	public static ModifierSpeciesReference createModifierSpeciesReference(
+		OpenedFile<SBMLDocument> file, Model model, int sbo, SpeciesGlyph source) {
+		ModifierSpeciesReference modifier = new ModifierSpeciesReference();
+		modifier.setId(SBMLTools.getNextGenericId(file, BioModelsEdConstants.genericModifierReferenceIdPrefix));
+		modifier.setLevel(model.getLevel());
+		modifier.setVersion(model.getVersion());
+		modifier.setSBOTerm(sbo);
+		modifier.setSpecies(source.getSpecies());
+		modifier.setName(modifier.getId());
+		return modifier;
+	}
 }

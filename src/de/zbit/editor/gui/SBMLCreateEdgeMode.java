@@ -16,6 +16,8 @@
  */
 package de.zbit.editor.gui;
 
+import java.util.logging.Logger;
+
 import org.sbml.jsbml.SBO;
 
 import y.base.Edge;
@@ -38,7 +40,8 @@ import de.zbit.graph.sbgn.ReactionNodeRealizer;
  */
 public class SBMLCreateEdgeMode extends CreateEdgeMode {
    
-  /**
+  Logger logger = Logger.getLogger(SBMLCreateEdgeMode.class.getName());
+	/**
    * Creates a reaction node and the edges to and from that node.
    * 
    * @param graph
@@ -75,9 +78,11 @@ public class SBMLCreateEdgeMode extends CreateEdgeMode {
    * @param sbo
    */
   public void createEdge(Graph2D graph, Node start, Node target, EdgeRealizer realizer, int sbo) {
+  	logger.info("SBO: " + SBO.convertSBO2Alias(sbo));
     if (graph.getRealizer(target) instanceof ReactionNodeRealizer) {
-      Edge e = super.createEdge(graph, start, target, realizer);
+    	Edge e = super.createEdge(graph, start, target, realizer);
       if (sbo == SBO.getCatalyst()) {
+      	// FIXME never entered -> SBO: MODULATION
         graph.getRealizer(e).setArrow(Arrow.TRANSPARENT_CIRCLE);
       } else if (sbo == SBO.getInhibitor()) {
         graph.getRealizer(e).setArrow(Arrow.T_SHAPE);
