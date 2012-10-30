@@ -81,7 +81,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	protected JToolBar createJToolBar() {
 		logger.info("creating toolbar");
 		tabManager = new TabManager(this);
-		toolBar = new EditorToolBar(this);
+		toolBar = new EditorToolBar(this, tabManager);
 		return toolBar;
 	}
 

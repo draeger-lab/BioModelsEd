@@ -295,46 +295,17 @@ public class CommandController implements PropertyChangeListener {
 	 * @param targetNode corresponding to the ReactionGlyph
 	 */
 	@SuppressWarnings("unchecked")
-	private void createModifier(Node sourceNode, Node targetNode) {
-		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
-				.getCurrentLayout().getSBMLDocument().getUserObject(BioModelsEdConstants.associatedOpenedFile);
-		
-		Layout layout = this.view.getCurrentLayout();
-		ListOf<SpeciesGlyph> speciesList = layout.getListOfSpeciesGlyphs();
-		ListOf<ReactionGlyph> reactionList = layout.getListOfReactionGlyphs();
-		SpeciesGlyph source = null;
-		ReactionGlyph target = null;
-		
-		for (SpeciesGlyph glyph : speciesList) {
-			Node node = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
-			if (sourceNode == node) {
-				source = glyph;
-			}
-		}
-		for (ReactionGlyph glyph : reactionList) {
-			Node node = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
-			if (targetNode == node) {
-				target = glyph;
-			}
-		}
-		if ((source == null) || (target == null)) {
-			return;
-		}
+	public void createModifier(OpenedFile<SBMLDocument>  file, Layout layout, 
+		SpeciesGlyph source, ReactionGlyph target, int sbo) {
 		
 		Model model = layout.getModel();
 		Reaction targetReaction = (Reaction) target.getReactionInstance();
 		
 		//Creation of a modifier
 		ModifierSpeciesReference modifier = new ModifierSpeciesReference();
-		modifier.setId(SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericModifierReferenceIdPrefix));
+		modifier.setId(SBMLTools.getNextGenericId(file, BioModelsEdConstants.genericModifierReferenceIdPrefix));
 		modifier.setLevel(model.getLevel());
 		modifier.setVersion(model.getVersion());
-		int sbo = 0;
-		if (this.state == States.catalysis) {
-			sbo = SBO.getCatalyst();
-		} else {
-			sbo = SBO.getInhibitor();
-		}
 		modifier.setSBOTerm(sbo);
 		modifier.setSpecies(source.getSpecies());
 		modifier.setName(modifier.getId());
@@ -342,20 +313,9 @@ public class CommandController implements PropertyChangeListener {
 		
 		//Creation of a modifier glyph
 		//SpeciesReferenceGlyph modifierGlyph = new SpeciesReferenceGlyph();
-		SpeciesReferenceGlyph modifierGlyph = SBMLFactory.createSpeciesReferenceGlyph(selectedDoc, source, target, sbo);
-		/*if (this.state == States.catalysis) {
-      modifierGlyph.setRole(SpeciesReferenceRole.MODIFIER);
-    } else if (this.state == States.inhibition) {
-      modifierGlyph.setRole(SpeciesReferenceRole.INHIBITOR);
-    }
-    modifierGlyph.setId(selectedDoc.getNextGenericId(SBMLEditorConstants.genericModifierReferenceGlyphIdPrefix));
-    modifierGlyph.setLevel(model.getLevel());
-    modifierGlyph.setVersion(model.getVersion());
-    modifierGlyph.setSBOTerm(source.getSpeciesInstance().getSBOTerm());
-    modifierGlyph.setSpeciesGlyph(source.getId());
-    modifierGlyph.setName(modifierGlyph.getId()); */
+		SpeciesReferenceGlyph modifierGlyph = SBMLFactory.createSpeciesReferenceGlyph(file, source, target, sbo);
 		target.addSpeciesReferenceGlyph(modifierGlyph);
-		
+		logger.info("created Modifier");
 	}
 	/**
 	 * Opens an empty {@link #SBMLDocument}.
@@ -700,21 +660,21 @@ public class CommandController implements PropertyChangeListener {
 				this.node = (Node) evt.getNewValue();
 				logger.info("Source Node for " + this.state + " set.");
 			} else {
-				createModifier(this.node, (Node) evt.getNewValue());
-				Layout layout = this.view.getCurrentLayout();
-				ArrayList<Object> list = new ArrayList<Object>();
-				list.add(this.node);
-				list.add(evt.getNewValue());
-				if (this.state == States.catalysis) {
-					list.add(SBO.getCatalyst());
-				} else if (this.state == States.inhibition) {
-					list.add(SBO.getInhibitor());
-				}
-				
-				layout.firePropertyChange("modifierCreated", null, list);
-				logger.info("Target Node for " + this.state + " set.");
-				this.state = States.normal;
-				this.node = null;
+//				createModifier(this.node, (Node) evt.getNewValue());
+//				Layout layout = this.view.getCurrentLayout();
+//				ArrayList<Object> list = new ArrayList<Object>();
+//				list.add(this.node);
+//				list.add(evt.getNewValue());
+//				if (this.state == States.catalysis) {
+//					list.add(SBO.getCatalyst());
+//				} else if (this.state == States.inhibition) {
+//					list.add(SBO.getInhibitor());
+//				}
+//				
+//				layout.firePropertyChange("modifierCreated", null, list);
+//				logger.info("Target Node for " + this.state + " set.");
+//				this.state = States.normal;
+//				this.node = null;
 			}
 		}
 		

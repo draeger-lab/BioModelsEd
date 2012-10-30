@@ -54,14 +54,14 @@ public class EditorToolBar extends JToolBar {
 	 * Constructor.
 	 * @param parent
 	 */
-	public EditorToolBar(SBMLView parent) {
+	public EditorToolBar(SBMLView parent, ActionListener listener) {
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.UNKNOWN_MOLECULE),
 			Resources.iconUnknown,
 			0,
 			0,
 			BioModelsEdConstants.addUnknownMolecule,
-			parent.getTabManager());
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.SIMPLE_MOLECULE),
@@ -69,7 +69,7 @@ public class EditorToolBar extends JToolBar {
 			0,
 			0,
 			BioModelsEdConstants.addSimpleMolecule,
-			parent.getTabManager());
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.MACROMOLECULE),
@@ -77,7 +77,7 @@ public class EditorToolBar extends JToolBar {
 			0,
 			0,
 			BioModelsEdConstants.addMacromolecule,
-			parent.getTabManager());
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.EMPTY_SET),
@@ -85,7 +85,7 @@ public class EditorToolBar extends JToolBar {
 			0,
 			0,
 			BioModelsEdConstants.addEmptySet,
-			parent.getTabManager());
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.REACTION),
@@ -93,7 +93,7 @@ public class EditorToolBar extends JToolBar {
 			0,
 			0,
 			BioModelsEdConstants.addReaction,
-			parent.getTabManager());
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.CATALYSIS),
@@ -101,7 +101,7 @@ public class EditorToolBar extends JToolBar {
 			0,
 			0,
 			BioModelsEdConstants.addCatalysis,
-			parent.getTabManager());
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
 			Resources.getString(BioModelsEdConstants.INHIBITION),
@@ -109,7 +109,7 @@ public class EditorToolBar extends JToolBar {
 			0,
 			0,
 			BioModelsEdConstants.addInhibition,
-			parent.getTabManager());
+			listener);
 		
 		
 		layoutComboBox.setMaximumSize(new Dimension(150, 24));

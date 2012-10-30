@@ -30,7 +30,9 @@ import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.SBase;
+import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 import y.base.Node;
@@ -149,20 +151,28 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
       
     }
     else if (action.equals(BioModelsEdConstants.nodeClicked)) {
-    	if (state.equals(State.catalysis) || state.equals(State.reaction)) {
+    	if (state.equals(State.catalysis) || state.equals(State.reaction) || state.equals(State.inhibition)) {
     		SpeciesGlyph source = (SpeciesGlyph) additionalInformation;
     		Node node = (Node) evt.getNewValue();
     		if (source == null) {
-    			SpeciesGlyph g = getGlyphFromNode(node);
+    			GraphicalObject g = getGlyphFromNode(node);
+    			if (!(g instanceof SpeciesGlyph)) return;
+    			g = (SpeciesGlyph) g;
     			logger.info("source: " + g);
     			additionalInformation = g;
     		}
     		else {
-    			SpeciesGlyph target = getGlyphFromNode(node);
+    			GraphicalObject target = getGlyphFromNode(node);
     			if (target == null) return;
     			logger.info("target: " + target);
-    			controller.createReaction(file, this.document, source, target, 
-    				modifier.equals(Modifier.reversible));
+    			if (state.equals(State.reaction)) {
+    				controller.createReaction(file, this.document, source, (SpeciesGlyph) target, 
+    					modifier.equals(Modifier.reversible));
+    			}
+    			if (state.equals(State.catalysis) || state.equals(State.inhibition)) {
+    				controller.createModifier(file, this.document, source, (ReactionGlyph) target, getSBOTerm());
+    			}
+    			state = State.idle;
     		}
     	}
     }
@@ -187,9 +197,16 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	 * @param node
 	 * @return
 	 */
-	private SpeciesGlyph getGlyphFromNode(Node node) {
+	private GraphicalObject getGlyphFromNode(Node node) {
 		ListOf<SpeciesGlyph> list = this.document.getListOfSpeciesGlyphs();
 		for (SpeciesGlyph glyph : list) {
+      Node glyphNode = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      if (glyphNode == node) {
+        return glyph;
+      } 
+    }
+		ListOf<ReactionGlyph> reactions = this.document.getListOfReactionGlyphs();
+		for (ReactionGlyph glyph : reactions) {
       Node glyphNode = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
       if (glyphNode == node) {
         return glyph;

@@ -23,12 +23,16 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
+import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.util.TreeNodeChangeListener;
 import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
@@ -71,18 +75,12 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void nodeAdded(TreeNode node) {
+  	logger.info("node added: " + node.getClass().getName());
     // React only if *Glyphs are added
     if (node instanceof SpeciesGlyph) {
       SpeciesGlyph speciesGlyph = (SpeciesGlyph) node;
-
-      /*if (this.layout != this.tabmanager.getCurrentLayout()) {
-        logger.info("glyph not relevant to this layout");
-        return;
-      }*/
-      
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
       Species s = layout.getModel().getSpecies(speciesGlyph.getSpecies());
-      
       if (boundingBox != null) {
         Node n = panel.getConverter().createNode(speciesGlyph.getId(),
             s.getName(),
@@ -96,7 +94,46 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       }
     }
     else if (node instanceof ReactionGlyph) {
-    	logger.info("hallo");
+      ReactionGlyph reactionGlyph = (ReactionGlyph) node;
+      Reaction reaction = (Reaction) reactionGlyph.getReactionInstance();
+      ListOf<SpeciesReferenceGlyph> listOfSpeciesReferenceGlyphs = reactionGlyph.getListOfSpeciesReferenceGlyphs();
+      Node source = null;
+      Node target = null;
+      for (SpeciesReferenceGlyph glyph : listOfSpeciesReferenceGlyphs) {
+      	SpeciesReferenceRole role = glyph.getSpeciesReferenceRole();
+      	if (role.equals(SpeciesReferenceRole.SUBSTRATE)) {
+      		source = (Node) glyph.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      	}
+      	if (role.equals(SpeciesReferenceRole.PRODUCT)) {
+      		target = (Node) glyph.getSpeciesGlyphInstance().getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      	}
+      }
+      if (source == null || target == null) {
+      	logger.info("reaction creation failed, source: " + source + " , target: " + target);
+      	return;
+      }
+      SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
+			Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), 
+      	source, 
+      	target,
+         new GenericEdgeRealizer(), reaction.getReversible());
+      reactionGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, reactionNode);
+      logger.info("CVS : Reaction Drawn");
+    }
+    else if (node instanceof ListOf<?>) {
+    	//TODO
+    }
+    else if (node instanceof SpeciesReferenceGlyph) {
+    	/*SpeciesReferenceGlyph referenceGlyph = (SpeciesReferenceGlyph) node;
+    	// Navigating ReactionGlyph <- ListOf<SpeciesReferenceGlyph> <- SpeciesReferenceGlyph
+    	ReactionGlyph reactionGlyph = (ReactionGlyph) referenceGlyph.getParentSBMLObject().getParentSBMLObject();
+    	SpeciesReferenceRole role = referenceGlyph.getSpeciesReferenceRole();
+    	
+    	Node source = referenceGlyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
+      createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), source, target,
+        new GenericEdgeRealizer(), reactionGlyph.getS);
+      logger.info("CVS : Modifier Drawn"); */
     }
   }
 
@@ -107,36 +144,8 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     logger.info(evt.getPropertyName());
-    if(evt.getPropertyName().equals("nodeDelete")){
-      Node node = (Node) evt.getNewValue();
-      this.panel.getGraph2DView().getGraph2D().removeNode(node);
-      panel.getGraph2DView().updateView();
-      logger.info("CVS : Removed node");
+    if (evt.getPropertyName().equals("modifierCreated")) {
       
-    } else if (evt.getPropertyName().equals("reactionCreated")) {
-     
-      ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
-      Node source = (Node) list.get(0);
-      Node target = (Node) list.get(1);
-      ReactionGlyph reactionGlyph = (ReactionGlyph) list.get(2);
-      
-      Reaction reaction = (Reaction) reactionGlyph.getReactionInstance();
-      
-      SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
-      Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), source, target,
-         new GenericEdgeRealizer(), reaction.getReversible());
-      reactionGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, reactionNode);
-      logger.info("CVS : Reaction Drawn");
-      
-    } else if (evt.getPropertyName().equals("modifierCreated")) {
-      ArrayList<Object> list = (ArrayList<Object>) evt.getNewValue();
-      Node source = (Node) list.get(0);
-      Node target = (Node) list.get(1);
-      int sbo = (Integer) list.get(2);
-      SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
-      createEdgeMode.createEdge(panel.getGraph2DView().getGraph2D(), source, target,
-        new GenericEdgeRealizer(), sbo);
-      logger.info("CVS : Modifier Drawn");
     }
     
     else if (evt.getPropertyName().equals("nodeRenamed")) {
@@ -156,7 +165,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
     }
     
     else {
-      logger.info("CVS : Unknown property change event");
+      logger.info("not handled");
     }
   }
 
@@ -165,6 +174,6 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    */
   @Override
   public void nodeRemoved(TreeNodeRemovedEvent evt) {
-	  logger.info("Node Removed Event in CVS");
+    logger.info("..not yet implemented, source: " + evt.getSource().getClass());
   }
 }
