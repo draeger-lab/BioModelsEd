@@ -82,18 +82,18 @@ public class SBMLEditMode extends EditMode  {
    */
   @Override
   public void mouseReleasedLeft(double x, double y) {
-   super.mouseReleasedLeft(x, y);
-    List<Node> list = getSelectedNodes();      
-    
-    // Set list of nodes in CommandController
-    firePropertyChange(BioModelsEdConstants.EditModeSelectionChanged, null, list);
-    // Initiate updating of glyphs
-    if (!list.isEmpty()) {
-      firePropertyChange(BioModelsEdConstants.EditModeUpdateNodes, null, this.getGraph2D());
-    }
-    // Send mouse position
-    ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
-    firePropertyChange(BioModelsEdConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  
+  	//TODO not sure if needed super.mouseReleasedLeft(x, y);
+  	List<Node> list = getSelectedNodes();      
+  	
+  	// Set list of nodes in CommandController
+  	firePropertyChange(BioModelsEdConstants.EditModeSelectionChanged, null, list);
+  	// Initiate updating of glyphs
+  	if (!list.isEmpty()) {
+  		firePropertyChange(BioModelsEdConstants.EditModeUpdateNodes, null, this.getGraph2D());
+  	}
+  	// Send mouse position
+  	ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
+  	firePropertyChange(BioModelsEdConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  
   } 
   
   /**

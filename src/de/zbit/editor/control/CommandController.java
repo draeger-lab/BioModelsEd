@@ -75,35 +75,13 @@ import de.zbit.io.OpenedFile;
  */
 public class CommandController implements PropertyChangeListener {
 	
-	/**
-	 * States, which determine, which action will be taken on the next mouse click.
-	 * 
-	 */
-	private enum States {
-		catalysis,
-		emptySet,
-		inhibition,
-		macromolecule,
-		normal,
-		reaction,
-		simpleMolecule,
-		unknownMolecule
-	}
-	
 	private FileManager fileManager;
 	private Logger logger = Logger.getLogger(CommandController.class.getName());
-	private States state;
-	private boolean reversible;
 	private SBMLView view;
 	
-	private boolean copyEnabled = false;
-	
-	private Node node = null;
 	
 	private List<Node> nodeList = new ArrayList<Node>();
 	private List<NamedSBaseGlyph> nodeCopyList = new ArrayList<NamedSBaseGlyph>();
-	
-	private Action action = null;
 	
 	/**
 	 * Constructor
@@ -118,7 +96,6 @@ public class CommandController implements PropertyChangeListener {
 	 * @param editorInstance must implement SBMLView
 	 */
 	public CommandController() {
-		this.state = States.normal;
 		this.fileManager = new FileManager(this);
 		this.logger.setLevel(Level.CONFIG);
 	}
@@ -176,95 +153,7 @@ public class CommandController implements PropertyChangeListener {
 		
 		s.putUserObject(BioModelsEdConstants.GLYPH_LINK_KEY, layoutGlyphMap);
 		
-		this.stateNormal();
 	}
-	
-	/**
-	 * Finds the innermost Compartment, in which the Position determined by the parameters lies.
-	 * @param x
-	 * @param y
-	 * @return The Id of the Compartment
-	 */
-	private String findCompartmentId(Double x, Double y) {
-		//FIXME findCompartmentId
-		return BioModelsEdConstants.compartmentDefaultName;
-	}
-	
-	//  /**
-	//   * Returns the innermost compartment glyph of the current layout at the specified position.
-	//   * @param x
-	//   * @param y
-	//   * @return the id of the compartment
-	//   */
-	//  @Override
-	//  public String findCompartmentId(Double x, Double y) {
-	//    Layout layout = this.getCurrentLayout();
-	//    if (layout == null) {
-	//      logger.info("layout null"); 
-	//      return SBMLEditorConstants.compartmentDefaultName;
-	//    }
-	//    
-	//    ListOf<CompartmentGlyph> listOfCompartmentGlyphs = layout.getListOfCompartmentGlyphs();
-	//    if (listOfCompartmentGlyphs == null) {
-	//      logger.info("listOfCompartmentGlyphs null");
-	//      return SBMLEditorConstants.compartmentDefaultName;
-	//    }
-	//    
-	//    for(CompartmentGlyph c : listOfCompartmentGlyphs) {
-	//      BoundingBox bb = c.getBoundingBox();
-	//      if (!inside(x,y,bb)) {
-	//        listOfCompartmentGlyphs.remove(c);
-	//      }
-	//    }
-	//    return getInnermostCompartmentId(listOfCompartmentGlyphs);
-	//  }
-	//
-	//
-	//  /**
-	//   * Returns the innermost compartment glyph of the given list.
-	//   * All bounding boxes need to be set.
-	//   * @param listOfCompartmentGlyphs
-	//   * @return
-	//   */
-	//  private String getInnermostCompartmentId(ListOf<CompartmentGlyph> listOfCompartmentGlyphs) {
-	//    if (listOfCompartmentGlyphs.size() > 0) {
-	//      CompartmentGlyph innermost = listOfCompartmentGlyphs.get(0);
-	//      for(CompartmentGlyph cg : listOfCompartmentGlyphs) {
-	//        BoundingBox bb = cg.getBoundingBox();
-	//        Point p = bb.getPosition();
-	//        if (p == null) continue;
-	//        BoundingBox innermostBb = innermost.getBoundingBox();
-	//        if (inside(p.getX(),p.getY(),innermostBb)) {
-	//          innermost = cg;
-	//        }
-	//      }
-	//      return innermost.getCompartment();
-	//    }
-	//    else {
-	//      return SBMLEditorConstants.compartmentDefaultName;
-	//    }
-	//  }
-	//
-	//
-	//  /**
-	//   * Checks if given Coordinates x,y are inside of the BoundingBox.
-	//   * @param x
-	//   * @param y
-	//   * @param bb
-	//   * @return true if position is inside the BoundingBox
-	//   */
-	//  private boolean inside(Double x, Double y, BoundingBox bb) {
-	//    if (bb == null) return false;
-	//    Dimensions dimensions = bb.getDimensions();
-	//    if (dimensions == null) return false;
-	//    Point point = bb.getPosition();
-	//    if (point == null) return false;
-	//    double bx = point.getX();
-	//    double by = point.getY();
-	//    double width = dimensions.getWidth();
-	//    double height = dimensions.getHeight();
-	//    return (bx <= x && x <= bx+width && by <= y && y <= by+height);
-	//  }
 	
 	
 	/**
@@ -310,40 +199,9 @@ public class CommandController implements PropertyChangeListener {
 	 * @return true if successful
 	 */
 	public boolean fileNew() {
-		File file = view.askUserFileNew();
-		if (file == null) {
-			return false;
-		}
-		
-		/*
-		 * first, create a new SBMLDocument
-		 */
-		SBMLDocument sbmlDocument = new SBMLDocument(
-			SBMLView.DEFAULT_LEVEL_VERSION.getL(),
-			SBMLView.DEFAULT_LEVEL_VERSION.getV());
-		Model model = sbmlDocument.createModel(BioModelsEdConstants.modelDefaultName);
-		model.setName(file.getName());
-		model.createCompartment(BioModelsEdConstants.compartmentDefaultName);
-		
-		/*
-		 * embed the new SBMLDocument in an OpenedFile<SBMLDocument> and tell the
-		 * fileManager about it
-		 */
+		SBMLDocument sbmlDocument = SBMLFactory.createNewDocument();
 		OpenedFile<SBMLDocument> doc = new OpenedFile<SBMLDocument>(sbmlDocument);
-		doc.setChanged(true);
-		if(!this.fileManager.addDocument(doc)) {
-			return false;
-		}
-		
-		/*
-		 * create a new default layout and tell the view to display it
-		 */
-		SBMLTools.getOrCreateDefaultLayout(doc);
-		if (!this.view.addTab(doc, "", false)) {
-			return false;
-		}
-		
-		return true;
+		return fileManager.addDocument(doc) && view.addTab(doc);
 	}
 	
 	/**
@@ -370,10 +228,11 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean fileSave() {
-		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
-				.getCurrentLayout().getSBMLDocument()
-				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
-		return fileSave(selectedDoc);
+//		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
+//				.getCurrentLayout().getSBMLDocument()
+//				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
+//		return fileSave(selectedDoc);
+		return false;
 	}
 	
 	/**
@@ -402,10 +261,11 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean fileSaveAs() {
-		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
-				.getCurrentLayout().getSBMLDocument()
-				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
-		return fileManager.fileSaveAs(selectedDoc);
+//		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
+//				.getCurrentLayout().getSBMLDocument()
+//				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
+//		return fileManager.fileSaveAs(selectedDoc);
+		return false;
 	}
 	
 	/**
@@ -419,7 +279,6 @@ public class CommandController implements PropertyChangeListener {
 	 * Forwards fileClose request to file manager.
 	 * @return true if successful.
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean fileClose() {
 		// TODO
 		return false;
@@ -446,55 +305,10 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public void propertyChange(PropertyChangeEvent evt) {
-		logger.info(evt.getPropertyName());
-		
 		if (evt.getPropertyName().equals(BioModelsEdConstants.openingDone)) {
 			OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) evt.getNewValue();
-			
-			//add first or new default layout to view
-			boolean hasLayout = SBMLTools.hasLayout(doc);
-			//TODO read autoLayout from settings
-			boolean autoLayout = false;
-			Layout layout = SBMLTools.getOrCreateDefaultLayout(doc);
-			logger.info("Document has layout information: " + hasLayout);
-			if (!hasLayout) {
-				int newInformation = this.view.askUserCreateLayoutInformation();
-				if (newInformation == JOptionPane.YES_OPTION) {
-					SBMLTools.createLayoutInformation(doc);
-					autoLayout = true;
-				}
-			}
-			this.view.addTab(doc, layout.getId(), autoLayout);
-			/*
-			 * notify fileManager about newly opened document
-			 */
+			this.view.addTab(doc);
 			this.fileManager.addDocument(doc);
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMousePressedLeft)) {
-			mousePressedLeft(evt);    
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMouseDraggedLeft)) {
-			
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.nodeClicked)) {
-			nodePressedLeft(evt);
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeNodeReleasedLeft)) {
-			
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeNodePressedRight)) {
-			nodePressedRight(evt);
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeMousePressedRight)) {
-			mousePressedRight(evt);
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeSelectionChanged)) {
-			this.nodeList = (List<Node>) evt.getNewValue();
-			
-			logger.info("Size of list: " + nodeList.size());
-		}
-		else if (evt.getPropertyName().equals(BioModelsEdConstants.EditModeUpdateNodes)) {
-			updateNodes(evt);
 		}
 	}
 	
@@ -518,26 +332,27 @@ public class CommandController implements PropertyChangeListener {
 	 * @return true, if the Glyph was updated. false, if the Glyph wasn't found.
 	 */
 	public boolean updateGlyphFromNode(Node node, Graph2D graph) {
-		NamedSBaseGlyph glyph =  getGlyphFromNode(node);
-		if (glyph == null) {
-			logger.info("Couldn't find glyph for node");
-			return false;
-		}
-		else {
-			double x = graph.getX(node);
-			double y = graph.getY(node);
-			double width = graph.getWidth(node);
-			double height = graph.getHeight(node);
-			glyph.createBoundingBox(width, height, BioModelsEdConstants.glyphDefaultDepth, x, y, BioModelsEdConstants.glyphDefaultZ);
-			logger.info("Updating glyph information: " + 
-					"Id: " + glyph.getId() + 
-					" X: " + x +
-					" Y:" + y +
-					" Width: " + width +
-					" Height: "+ height);
-			this.layoutModified(this.view.getCurrentLayout());
-			return true;
-		}
+//		NamedSBaseGlyph glyph =  getGlyphFromNode(node);
+//		if (glyph == null) {
+//			logger.info("Couldn't find glyph for node");
+//			return false;
+//		}
+//		else {
+//			double x = graph.getX(node);
+//			double y = graph.getY(node);
+//			double width = graph.getWidth(node);
+//			double height = graph.getHeight(node);
+//			glyph.createBoundingBox(width, height, BioModelsEdConstants.glyphDefaultDepth, x, y, BioModelsEdConstants.glyphDefaultZ);
+//			logger.info("Updating glyph information: " + 
+//					"Id: " + glyph.getId() + 
+//					" X: " + x +
+//					" Y:" + y +
+//					" Width: " + width +
+//					" Height: "+ height);
+//			this.layoutModified(this.view.getCurrentLayout());
+//			return true;
+//		} 
+		return false;
 	}
 	
 	/**
@@ -545,198 +360,22 @@ public class CommandController implements PropertyChangeListener {
 	 * @param node
 	 * @return the Glyph or null, if it wasn't found within the SpeciesGlyph or ReactionGlyph lists.
 	 */
-	private NamedSBaseGlyph getGlyphFromNode(Node node) {
-		
-		Layout layout = this.view.getCurrentLayout();
-		
+	private NamedSBaseGlyph getGlyphFromNode(Node node, Layout layout) {
 		for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
 			Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
 			if (node == n) {
 				return glyph;
 			}
 		}
-		
 		for (ReactionGlyph glyph : layout.getListOfReactionGlyphs()) {
 			Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
 			if (node == n) {
 				return glyph;
 			}
 		}
-		
 		return null;
 	}
 	
-	
-	/**
-	 * Creates and shows PopupMenu on right mouse click on empty space.
-	 * @param evt
-	 */
-	private void mousePressedRight(PropertyChangeEvent evt) {
-		JPopupMenu popup = BioModelsEdGUIFactory.createPastePopupMenu(this, this.copyEnabled);
-		SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
-		MouseEvent e = editmode.getLastPressEvent();
-		popup.show(e.getComponent(), e.getX(), e.getY());    
-	}
-	
-	/**
-	 * Creates and shows PopupMenu on right mouse click on a node.
-	 * @param evt
-	 */
-	private void nodePressedRight(PropertyChangeEvent evt) {    
-		JPopupMenu popup;
-		Node node = (Node) evt.getNewValue();
-		NamedSBaseGlyph glyph = getGlyphFromNode(node);
-		if (glyph instanceof SpeciesGlyph) {
-			popup = BioModelsEdGUIFactory.createSpeciesGlyphPopupMenu(this);
-		}
-		else {
-			popup = BioModelsEdGUIFactory.createReactionGlyphPopupMenu(this);
-		}
-		SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
-		MouseEvent e = editmode.getLastPressEvent();
-		popup.show(e.getComponent(), e.getX(), e.getY());
-	}
-	
-	
-	
-	
-	/**
-	 * Calls a method, that creates a Species, determined by {@link #state}.
-	 * @param evt
-	 */
-	private void mousePressedLeft(PropertyChangeEvent evt) {
-		//    if (this.state == States.unknownMolecule) {
-		//      createUnknownMolecule(evt);
-		//    }
-		//    else if (this.state == States.simpleMolecule) {
-		//      createSimpleMolecule(evt);
-		//    }
-		//    else if (this.state == States.macromolecule) {
-		//      createMacromolecule(evt);
-		//    }
-		//    else if (this.state == States.emptySet) {
-		//      createEmptySet(evt);
-		//    }    
-	}
-	
-	/**
-	 * Creates either a Reaction or a Modifier, if the right conditions are met.
-	 * @param evt
-	 */
-	private void nodePressedLeft(PropertyChangeEvent evt) {
-		
-		if (this.state == States.reaction) {
-			if (this.node == null) {
-				this.node = (Node) evt.getNewValue();
-				logger.info("Source Node for Reaction set.");
-			} else {
-				//        ReactionGlyph rGlyph = createReaction(this.node, (Node) evt.getNewValue());  
-				//        Layout layout = this.view.getCurrentLayout();
-				//        ArrayList<Object> list = new ArrayList<Object>();
-				//        list.add(this.node);
-				//        list.add(evt.getNewValue());
-				//        list.add(rGlyph);
-				//        layout.firePropertyChange("reactionCreated", null, list);
-				//        logger.info("Target Node for Reaction set. Created Reaction");
-				//        this.state = States.normal;
-				//        this.node = null;
-			}
-		}
-		if ((this.state == States.catalysis) || (this.state == States.inhibition)) {
-			if (this.node == null) {
-				this.node = (Node) evt.getNewValue();
-				logger.info("Source Node for " + this.state + " set.");
-			} else {
-//				createModifier(this.node, (Node) evt.getNewValue());
-//				Layout layout = this.view.getCurrentLayout();
-//				ArrayList<Object> list = new ArrayList<Object>();
-//				list.add(this.node);
-//				list.add(evt.getNewValue());
-//				if (this.state == States.catalysis) {
-//					list.add(SBO.getCatalyst());
-//				} else if (this.state == States.inhibition) {
-//					list.add(SBO.getInhibitor());
-//				}
-//				
-//				layout.firePropertyChange("modifierCreated", null, list);
-//				logger.info("Target Node for " + this.state + " set.");
-//				this.state = States.normal;
-//				this.node = null;
-			}
-		}
-		
-	}
-	
-	/**
-	 * Changes the {@link #state} to catalysis.
-	 */
-	public void stateCatalysis() {
-		this.state = States.catalysis;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to emptySet.
-	 */
-	public void stateEmptySet() {
-		this.state = States.emptySet;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to inhibition.
-	 */
-	public void stateInhibition() {
-		this.state = States.inhibition;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to macromolecule.
-	 */
-	public void stateMacromolecule() {
-		this.state = States.macromolecule;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to normal.
-	 */
-	public void stateNormal() {
-		this.state = States.normal;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to reaction.
-	 */
-	public void stateReaction() {
-		this.state = States.reaction;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to simpleMolecule
-	 */
-	public void stateSimpleMolecule() {
-		this.state = States.simpleMolecule;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 *  Changes the {@link #state} to unknownMolecule
-	 */
-	public void stateUnknownMolecule() {
-		this.state = States.unknownMolecule;
-		logger.info(this.state.toString());
-	}
-	
-	/**
-	 * Toggles {@link #reversible}, which determines, whether a created Reaction is reversible.
-	 */
-	public void changeReversible() {
-		this.reversible = !this.reversible;
-	}
 	
 	/**
 	 * Closes the tab, that shows the given layout.
@@ -745,14 +384,6 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	public boolean closeTab(Layout layout) {
 		return this.view.closeTab(layout);
-	}
-	
-	/**
-	 * @return the Frame
-	 */
-	public Component getFrame() {
-		logger.info("getFrame");
-		return this.view.getFrame();
 	}
 	
 	/**
@@ -813,37 +444,37 @@ public class CommandController implements PropertyChangeListener {
 	 * Deletes all currently selected nodes.
 	 */
 	public void nodeDelete() {
-		Layout layout = this.view.getCurrentLayout();
-		OpenedFile<SBMLDocument> selectedDoc = getDocumentFromLayout(layout);
-		
-		for (Node node : this.nodeList) {
-			NamedSBaseGlyph glyph = getGlyphFromNode(node);
-			if (glyph == null) {
-				logger.info("Couldn't find glyph for node");
-			}
-			else if (glyph instanceof SpeciesGlyph) {
-				String speciesId = ((SpeciesGlyph) glyph).getSpecies();
-				deleteReactionGlyphs((SpeciesGlyph) glyph, layout);
-				
-				if (this.nodeCopyList.remove(glyph)){
-					logger.info("Removed glyph from copylist");
-				}
-				layout.getListOfSpeciesGlyphs().remove(glyph);
-				layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
-				if (!SBMLTools.hasAnySpeciesGlyphForSpeciesId(selectedDoc, speciesId)) {
-					logger.info("No glyph left for species: Deleting species id: " + speciesId);
-					layout.getModel().removeSpecies(speciesId);
-				}
-			}
-			else if (glyph instanceof ReactionGlyph) {
-				this.nodeCopyList.remove(glyph);
-				layout.getListOfReactionGlyphs().remove(glyph);
-				layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
-			}
-		}
-		
-		logger.info("nodeDelete in CC");
-		layoutModified(layout);
+//		Layout layout = this.view.getCurrentLayout();
+//		OpenedFile<SBMLDocument> selectedDoc = getDocumentFromLayout(layout);
+//		
+//		for (Node node : this.nodeList) {
+//			NamedSBaseGlyph glyph = getGlyphFromNode(node);
+//			if (glyph == null) {
+//				logger.info("Couldn't find glyph for node");
+//			}
+//			else if (glyph instanceof SpeciesGlyph) {
+//				String speciesId = ((SpeciesGlyph) glyph).getSpecies();
+//				deleteReactionGlyphs((SpeciesGlyph) glyph, layout);
+//				
+//				if (this.nodeCopyList.remove(glyph)){
+//					logger.info("Removed glyph from copylist");
+//				}
+//				layout.getListOfSpeciesGlyphs().remove(glyph);
+//				layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
+//				if (!SBMLTools.hasAnySpeciesGlyphForSpeciesId(selectedDoc, speciesId)) {
+//					logger.info("No glyph left for species: Deleting species id: " + speciesId);
+//					layout.getModel().removeSpecies(speciesId);
+//				}
+//			}
+//			else if (glyph instanceof ReactionGlyph) {
+//				this.nodeCopyList.remove(glyph);
+//				layout.getListOfReactionGlyphs().remove(glyph);
+//				layout.firePropertyChange("nodeDelete", null, glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
+//			}
+//		}
+//		
+//		logger.info("nodeDelete in CC");
+//		layoutModified(layout);
 	}
 	
 	/**
@@ -901,15 +532,14 @@ public class CommandController implements PropertyChangeListener {
 	 * Memorizes the selected nodes to paste them later with {@link #nodePaste}.
 	 */
 	public void nodeCopy() {
-		this.copyEnabled = true;
-		this.nodeCopyList.clear();
-		for(Node n : this.nodeList) {
-			NamedSBaseGlyph glyph = getGlyphFromNode(n);
-			if (glyph != null) {
-				this.nodeCopyList.add(glyph);
-			}
-		}
-		logger.info("Copy list has changed: Size: " + this.nodeCopyList.size());
+//		this.nodeCopyList.clear();
+//		for(Node n : this.nodeList) {
+//			NamedSBaseGlyph glyph = getGlyphFromNode(n);
+//			if (glyph != null) {
+//				this.nodeCopyList.add(glyph);
+//			}
+//		}
+//		logger.info("Copy list has changed: Size: " + this.nodeCopyList.size());
 	}
 	
 	/**
@@ -919,54 +549,28 @@ public class CommandController implements PropertyChangeListener {
 		this.nodeCopy();
 	}
 	
-	/**
-	 * Pops up a dialogue and renames the SpeciesGlyph and Species corresponding to the selected node.
-	 */
-	public void nodeRename() {
-		logger.info("Renaming Node");
-		Node nodeToRename = this.nodeList.get(0);
-		SpeciesGlyph selectedGlyph = (SpeciesGlyph) getGlyphFromNode(nodeToRename);
-		TextGlyph textGlyph = (TextGlyph) selectedGlyph.getUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
-		Species species = selectedGlyph.getModel().getSpecies(textGlyph.getNamedSBase());
-		String oldName = species != null ? species.getName() : "";
-		String newName = JOptionPane.showInputDialog(Resources.getString("NEW_NODE_NAME"),
-			oldName);
-		if (newName != null) {
-			// set name
-			species.setName(newName);
-			
-			/*
-			 * TODO
-			 * Set File as modified
-			 * get Panel from view
-			 */
-			GraphLayoutPanel panel = null;
-			Graph2D graph2d = panel.getGraph2DView().getGraph2D();
-			graph2d.setLabelText(nodeToRename, newName);
-			graph2d.updateViews();
-		}
-	}
+	
 	
 	/**
 	 * Pastes the nodes memorized with {@link #nodeCopy}.
 	 */
 	public void nodePaste() {
-		logger.info("Pasting...");
-		Layout layout = this.view.getCurrentLayout();
-		OpenedFile<SBMLDocument> selectedDoc = getDocumentFromLayout(layout);
-		
-		for (NamedSBaseGlyph glyph : this.nodeCopyList) {
-			
-			if (glyph instanceof SpeciesGlyph) {
-				SpeciesGlyph copySpeciesGlyph = (SpeciesGlyph) glyph;
-				copySpeciesGlyph(layout, selectedDoc, copySpeciesGlyph);
-			}
-			else if (glyph instanceof ReactionGlyph) {
-				ReactionGlyph copyReactionGlyph = (ReactionGlyph) glyph;
-				copyReactionGlyph(layout, selectedDoc, copyReactionGlyph);
-			}
-		}
-		layoutModified(layout);
+//		logger.info("Pasting...");
+//		Layout layout = this.view.getCurrentLayout();
+//		OpenedFile<SBMLDocument> selectedDoc = getDocumentFromLayout(layout);
+//		
+//		for (NamedSBaseGlyph glyph : this.nodeCopyList) {
+//			
+//			if (glyph instanceof SpeciesGlyph) {
+//				SpeciesGlyph copySpeciesGlyph = (SpeciesGlyph) glyph;
+//				copySpeciesGlyph(layout, selectedDoc, copySpeciesGlyph);
+//			}
+//			else if (glyph instanceof ReactionGlyph) {
+//				ReactionGlyph copyReactionGlyph = (ReactionGlyph) glyph;
+//				copyReactionGlyph(layout, selectedDoc, copyReactionGlyph);
+//			}
+//		}
+//		layoutModified(layout);
 	}
 	
 	/**
@@ -1160,4 +764,91 @@ public class CommandController implements PropertyChangeListener {
 		// Reset the current view to the originally active view.   
 		graph.setCurrentView(originalView);    
 	}  
+	
+	/**
+	 * Finds the innermost Compartment, in which the Position determined by the parameters lies.
+	 * @param x
+	 * @param y
+	 * @return The Id of the Compartment
+	 */
+	private String findCompartmentId(Double x, Double y) {
+		//FIXME findCompartmentId
+		return BioModelsEdConstants.compartmentDefaultName;
+	}
+	
+	//  /**
+	//   * Returns the innermost compartment glyph of the current layout at the specified position.
+	//   * @param x
+	//   * @param y
+	//   * @return the id of the compartment
+	//   */
+	//  @Override
+	//  public String findCompartmentId(Double x, Double y) {
+	//    Layout layout = this.getCurrentLayout();
+	//    if (layout == null) {
+	//      logger.info("layout null"); 
+	//      return SBMLEditorConstants.compartmentDefaultName;
+	//    }
+	//    
+	//    ListOf<CompartmentGlyph> listOfCompartmentGlyphs = layout.getListOfCompartmentGlyphs();
+	//    if (listOfCompartmentGlyphs == null) {
+	//      logger.info("listOfCompartmentGlyphs null");
+	//      return SBMLEditorConstants.compartmentDefaultName;
+	//    }
+	//    
+	//    for(CompartmentGlyph c : listOfCompartmentGlyphs) {
+	//      BoundingBox bb = c.getBoundingBox();
+	//      if (!inside(x,y,bb)) {
+	//        listOfCompartmentGlyphs.remove(c);
+	//      }
+	//    }
+	//    return getInnermostCompartmentId(listOfCompartmentGlyphs);
+	//  }
+	//
+	//
+	//  /**
+	//   * Returns the innermost compartment glyph of the given list.
+	//   * All bounding boxes need to be set.
+	//   * @param listOfCompartmentGlyphs
+	//   * @return
+	//   */
+	//  private String getInnermostCompartmentId(ListOf<CompartmentGlyph> listOfCompartmentGlyphs) {
+	//    if (listOfCompartmentGlyphs.size() > 0) {
+	//      CompartmentGlyph innermost = listOfCompartmentGlyphs.get(0);
+	//      for(CompartmentGlyph cg : listOfCompartmentGlyphs) {
+	//        BoundingBox bb = cg.getBoundingBox();
+	//        Point p = bb.getPosition();
+	//        if (p == null) continue;
+	//        BoundingBox innermostBb = innermost.getBoundingBox();
+	//        if (inside(p.getX(),p.getY(),innermostBb)) {
+	//          innermost = cg;
+	//        }
+	//      }
+	//      return innermost.getCompartment();
+	//    }
+	//    else {
+	//      return SBMLEditorConstants.compartmentDefaultName;
+	//    }
+	//  }
+	//
+	//
+	//  /**
+	//   * Checks if given Coordinates x,y are inside of the BoundingBox.
+	//   * @param x
+	//   * @param y
+	//   * @param bb
+	//   * @return true if position is inside the BoundingBox
+	//   */
+	//  private boolean inside(Double x, Double y, BoundingBox bb) {
+	//    if (bb == null) return false;
+	//    Dimensions dimensions = bb.getDimensions();
+	//    if (dimensions == null) return false;
+	//    Point point = bb.getPosition();
+	//    if (point == null) return false;
+	//    double bx = point.getX();
+	//    double by = point.getY();
+	//    double width = dimensions.getWidth();
+	//    double height = dimensions.getHeight();
+	//    return (bx <= x && x <= bx+width && by <= y && y <= by+height);
+	//  }
 }

@@ -18,6 +18,7 @@ package de.zbit.editor.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
@@ -32,6 +34,7 @@ import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
+import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
@@ -83,7 +86,6 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
   private Modifier modifier;
   private CommandController controller;
   private OpenedFile<SBMLDocument> file;
-  private List<SBase> listOfSelectedNodes;
   private Object additionalInformation;
   private static Logger logger = Logger.getLogger(BioModelsEdPanel.class.getName());
   
@@ -103,7 +105,6 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 		this.modifier = Modifier.none;
 		this.controller = controller;
 		this.file = file;
-		this.listOfSelectedNodes = new LinkedList<SBase>();
 	}
 	
 	/**
@@ -185,10 +186,36 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
     	
     }
     else if (action.equals(BioModelsEdConstants.EditModeNodePressedRight)) {
-    	
+    	/**
+    	 * Creates and shows PopupMenu on right mouse click on a node.
+    	 * @param evt
+    	 */
+//    	TODO private void nodePressedRight(PropertyChangeEvent evt) {    
+//    		JPopupMenu popup;
+//    		Node node = (Node) evt.getNewValue();
+//    		NamedSBaseGlyph glyph = getGlyphFromNode(node);
+//    		if (glyph instanceof SpeciesGlyph) {
+//    			popup = BioModelsEdGUIFactory.createSpeciesGlyphPopupMenu(this);
+//    		}
+//    		else {
+//    			popup = BioModelsEdGUIFactory.createReactionGlyphPopupMenu(this);
+//    		}
+//    		SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
+//    		MouseEvent e = editmode.getLastPressEvent();
+//    		popup.show(e.getComponent(), e.getX(), e.getY());
+//    	}
     }
     else if (action.equals(BioModelsEdConstants.EditModeMousePressedRight)) {
-    	
+    	/**
+    	 * Creates and shows PopupMenu on right mouse click on empty space.
+    	 * @param evt
+    	 */
+//    	TODO private void mousePressedRight(PropertyChangeEvent evt) {
+//    		JPopupMenu popup = BioModelsEdGUIFactory.createPastePopupMenu(this, this.copyEnabled);
+//    		SBMLEditMode editmode =  (SBMLEditMode) evt.getSource();
+//    		MouseEvent e = editmode.getLastPressEvent();
+//    		popup.show(e.getComponent(), e.getX(), e.getY());    
+//    	}
     }
     else if (action.equals(BioModelsEdConstants.EditModeSelectionChanged)) {
     	
@@ -199,6 +226,7 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	}
 
 	/**
+	 * search in model for matching glyph
 	 * @param node
 	 * @return
 	 */
@@ -304,4 +332,32 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 			return "unknown";
 		}
 	}
+	
+	/**
+	 * Pops up a dialogue and renames the SpeciesGlyph and Species corresponding to the selected node.
+	 */
+//	TODO public void nodeRename() {
+//		logger.info("Renaming Node");
+//		Node nodeToRename = this.nodeList.get(0);
+//		SpeciesGlyph selectedGlyph = (SpeciesGlyph) getGlyphFromNode(nodeToRename);
+//		TextGlyph textGlyph = (TextGlyph) selectedGlyph.getUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
+//		Species species = selectedGlyph.getModel().getSpecies(textGlyph.getNamedSBase());
+//		String oldName = species != null ? species.getName() : "";
+//		String newName = JOptionPane.showInputDialog(Resources.getString("NEW_NODE_NAME"),
+//			oldName);
+//		if (newName != null) {
+//			// set name
+//			species.setName(newName);
+//			
+//			/*
+//			 * TODO
+//			 * Set File as modified
+//			 * get Panel from view
+//			 */
+//			GraphLayoutPanel panel = null;
+//			Graph2D graph2d = panel.getGraph2DView().getGraph2D();
+//			graph2d.setLabelText(nodeToRename, newName);
+//			graph2d.updateViews();
+//		}
+//	}
 }

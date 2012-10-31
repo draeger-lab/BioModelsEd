@@ -3,19 +3,37 @@ digraph g {
 	label = "program structure";
 #view:
 	subgraph cluster_view {
-		Editor [label = "SBMLEditor"];
+		BaseFrame;
+		BMEPanel1;
+		BMEPanel2;
+		BMEPanel3;
+		BaseFrame -> BMEGUI;
+		BMEGUI -> TabM
 		TabM [label = "TabManager"];
+		TabM -> BMEPanel1;
+		TabM -> BMEPanel2;
+		TabM -> BMEPanel3;
 		label = "view";
-		Editor -> TabM [dir = "both", label = ""];
-		TabM -> Y;
 		style = filled
 		color = papayawhip;
-	}
-
+	EditMode -> BMEPanel1;
+	EditMode -> BMEPanel2;
+	EditMode -> BMEPanel3 [label= "mouse events"];
+	
+subgraph cluster_yFiles {
+		Y [label = "Graph"];
+		Y -> EditMode [dir="back", label = "manipulates"];
+		label = "yFiles";
+		style = filled;
+		color = darkseagreen1;
+}
+}
 #controller
 	subgraph cluster_cc {
-		CVS [label = "ControllerViewSynchronizer"];
 		CC [label = "CommandController"];
+		FM [label = "FileManager"];
+		FM -> OSD;
+		SD [label = "SBMLDocument"]; 	
 		label = "controller";
 		style = filled;
 		color = lightgrey;
@@ -24,26 +42,24 @@ digraph g {
 
 #model
 	subgraph cluster_model {
-	FM [label = "FileManager"];
 		label = "model";
-		FM -> OSD [label = "handles Documents"];
 		style = filled;
 		color = lightblue;
-	}	OSD [label = "OpenedSBMLDocument"];
+		OSD [label = "OpenedFile<SBMLDocument>"];
+		Model [label = "JSBML model"];
+		Layout [label = "JSBML layout extension"];
+		Layout -> Model -> SD -> OSD;
+	}
+	
+#yFiles 
+#system
+	
 	
 
-#system
-	Y [label = "yFiles"];
-	System;
-
 #dependencies
-	System -> Editor [label = "user input"];
-
-	Editor -> CC [label = "sends commands"];
-
-	CC -> Editor [label = "requests information"];
-
-	CC -> FM [dir = "both", label = ""];
-
-	FM -> System [dir = "both", label = "reads/writes to file system"];
+	System -> Y [label = "mouse"];
+	BMEGUI -> CC [dir = "both"];
+	CC -> FM [dir = "both"];	
+	FM -> System [dir = "both", label = "reads/writes"];
+	{rank="max"; System;}
 }

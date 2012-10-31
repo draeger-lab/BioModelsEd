@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 
 import org.sbml.jsbml.ListOf;
@@ -52,17 +53,9 @@ public interface SBMLView {
 
   /**
    * Opens the layout in a new tab.
-   * @param layout, the layout to open
-   * @param autoLayout, if true the autoLayout Algorithm is used on the layout
    * @return true if successful
    */
-  public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId, boolean autoLayout);
-
-  /**
-   * Forwards a getCurrentLayout request to the TabManager.
-   * @return the current layout from the TabManager
-   */
-  public Layout getCurrentLayout();
+  public boolean addTab(OpenedFile<SBMLDocument> file);
 
   /**
    * Creates pop-up for the input of a Species name.
@@ -81,17 +74,6 @@ public interface SBMLView {
    * @return the file to save
    */
   public File askUserSaveDialog();
-  
-  /**
-   * Asks user, if Glyphs should be created for all Structures in the model.
-   * @return the Integer representing the JOptionPane Option
-   */
-  public int askUserCreateLayoutInformation();
-
-  /**
-   * @return the frame
-   */
-  public Component getFrame();
 
   /**
    * Creates popup for the input of a filename.
@@ -182,11 +164,5 @@ public interface SBMLView {
    * @return
    */
   public CommandController getController();
-
-	/**
-	 * returns the toolbar
-	 * @return
-	 */
-	public JToolBar getToolBar();
 
 }

@@ -441,4 +441,22 @@ public class SBMLFactory {
 		modifier.setName(modifier.getId());
 		return modifier;
 	}
+
+
+
+
+	/**
+	 * creates empty SBMLDocument with model and default compartment
+	 * used in fileNew
+	 * @return
+	 */
+	public static SBMLDocument createNewDocument() {
+		SBMLDocument sbmlDocument = new SBMLDocument(
+			SBMLView.DEFAULT_LEVEL_VERSION.getL(),
+			SBMLView.DEFAULT_LEVEL_VERSION.getV());
+		Model model = sbmlDocument.createModel(BioModelsEdConstants.modelDefaultName);
+		model.setName(BioModelsEdConstants.genricModelId);
+		model.createCompartment(BioModelsEdConstants.compartmentDefaultName);
+		return sbmlDocument;
+	}
 }

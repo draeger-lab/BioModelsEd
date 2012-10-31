@@ -59,7 +59,6 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	private static final long serialVersionUID = -8556637237458666164L;
 	private TabManager tabManager;
 	private CommandController controller;
-	private JToolBar toolBar;
 	private final static Logger logger = Logger.getLogger(BioModelsEdGUI.class.getName());
 	//TODO rename package
 	private final static ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
@@ -79,16 +78,15 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 
 	@Override
 	protected JToolBar createJToolBar() {
-		logger.info("creating toolbar");
 		tabManager = new TabManager(this);
-		toolBar = new EditorToolBar(this, tabManager);
+		EditorToolBar toolBar = new EditorToolBar(this, tabManager);
 		return toolBar;
 	}
 
 	@Override
 	protected Component createMainComponent() {
-		logger.info("creating main component");
-		//FIXME creating Tabmanager before Toolbar
+		tabManager.setToolBar(this.getJToolBar());
+		tabManager.setMenuBar(this.getJMenuBar());
 		return tabManager;
 	}
 
@@ -123,20 +121,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 				SBFileFilter.createSBMLFileFilter()
 			);
 		}
-		logger.info("openFile" + Arrays.toString(files));
 		return controller.openFile(files);
-	}
-
-	@Override
-	public File saveFile() {
-		return null;
-		//return controller.saveFile();
-	}
-
-	@Override
-	public Layout getCurrentLayout() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -156,17 +141,6 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 		return GUITools.saveFileDialog(this);
 	}
 
-	@Override
-	public int askUserCreateLayoutInformation() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Component getFrame() {
-		logger.info("getFrame");
-		return this.tabManager;
-	}
 
 	@Override
 	public File askUserFileNew() {
@@ -284,9 +258,8 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	 * @see de.zbit.editor.control.SBMLView#addTab(de.zbit.io.OpenedFile, java.lang.String, boolean)
 	 */
 	@Override
-	public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId,
-		boolean autoLayout) {
-		return tabManager.addTab(file, layoutId, autoLayout);
+	public boolean addTab(OpenedFile<SBMLDocument> file) {
+		return tabManager.addTab(file, null);
 	}
 
 	/* (non-Javadoc)
@@ -341,24 +314,8 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	public void actionPerformed(ActionEvent evt) {
 		logger.info("action performed: " + evt.getActionCommand());
 		switch (Command.valueOf(evt.getActionCommand())) {
-			case NEW :
-				controller.fileNew(); 
-				break;
-			case CLOSE :
-				controller.fileClose();
-				break;
+			case NEW : controller.fileNew(); break;
+			case CLOSE : controller.fileClose(); break;
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see de.zbit.editor.control.SBMLView#getToolBar()
-	 */
-	@Override
-	public JToolBar getToolBar() {
-		return toolBar;
-	}
-	
-	public void addUnknownMolecule() {
-		controller.stateUnknownMolecule();
 	}
 }

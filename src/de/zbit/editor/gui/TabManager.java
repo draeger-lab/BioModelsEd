@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JToolBar;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -35,6 +37,9 @@ import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
 import de.zbit.editor.control.SBMLTools;
 import de.zbit.editor.control.SBMLView;
+import de.zbit.gui.BaseFrame;
+import de.zbit.gui.BaseFrame.BaseAction;
+import de.zbit.gui.GUITools;
 import de.zbit.gui.JTabbedPaneDraggableAndCloseable;
 import de.zbit.io.OpenedFile;
 import de.zbit.util.ResourceManager;
@@ -54,11 +59,13 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
   private static Logger logger = Logger.getLogger(TabManager.class.getName());
   private SBMLView view;
   private List<OpenedFile<SBMLDocument>> openedFiles;
-  
+  private JMenuBar menuBar;
+  private JToolBar toolBar;
   private static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
 
   /**
    * Constructor.
+   * menuBar and toolBar need to be set seperately!
    * @param view
    */
   public TabManager(SBMLView view) {
@@ -67,6 +74,20 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
   }
 
   /**
+	 * @param menuBar the menuBar to set
+	 */
+	public void setMenuBar(JMenuBar menuBar) {
+		this.menuBar = menuBar;
+	}
+
+	/**
+	 * @param toolBar the toolBar to set
+	 */
+	public void setToolBar(JToolBar toolBar) {
+		this.toolBar = toolBar;
+	}
+
+	/**
    * @return the view
    */
   public SBMLView getView() {
@@ -79,9 +100,10 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
    * @param autolayout
    * return true if successful
    */
-  public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId, boolean autoLayout) {
+  public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId) {
     if (openedFiles.isEmpty()) {
-    	BioModelsEdGUITools.setEnabled(view.getToolBar(),true);
+    	// FIXME use GUITools.setEnabled (squeezer)
+    	BioModelsEdGUITools.setEnabled(toolBar,true);
     }
   	if (openedFiles.contains(file)) {
     	int index = isOpen(file, layoutId);
@@ -94,14 +116,25 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
     else {
     	openedFiles.add(file);
     }
-    Layout layout = SBMLTools.getLayout(file, layoutId);
-    BioModelsEdPanel panel = createPanelFromLayout(layout, autoLayout, file);
+    Layout layout = (layoutId != null) ?
+    		SBMLTools.getLayout(file, layoutId) : SBMLTools.getOrCreateDefaultLayout(file);
+    BioModelsEdPanel panel = createPanelFromLayout(layout, file);
     String title = createTitle(file, layout);
     addTab(title, panel);
-    setSelectedComponent(panel);
+    switchTo(panel);
     return true;
   }
   
+
+  private void switchTo(BioModelsEdPanel panel) {
+  	setSelectedComponent(panel);
+  	OpenedFile<SBMLDocument> file = getFile(panel.getDocument());
+  	if ((file == null) || file.isChanged()) {
+  		GUITools.setEnabled(true, menuBar, toolBar, 
+  				BaseAction.FILE_SAVE_AS,
+  				BaseAction.FILE_CLOSE);
+  	}
+  }
   /**
 	 * @param file
 	 * @param layout
@@ -212,10 +245,11 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
    * @param autoLayout
    * @return the created panel
    */
-  public BioModelsEdPanel createPanelFromLayout (Layout layout, boolean autoLayout,  OpenedFile<SBMLDocument> file) { 
+  public BioModelsEdPanel createPanelFromLayout (Layout layout, OpenedFile<SBMLDocument> file) { 
     SBMLEditMode editMode = new SBMLEditMode(this);
     BioModelsEdPanel panel = new BioModelsEdPanel(layout, editMode, view.getController(), file);
     Graph2DView view = panel.getGraph2DView();
+    boolean autoLayout = true; //TODO read from options 
     if (autoLayout) {
       view.applyLayout(new OrganicLayouter());
     }

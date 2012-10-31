@@ -152,7 +152,8 @@ public class FileManager {
     }
     else {
       try {
-        SBMLReadingTask task = new SBMLReadingTask(file, commandController.getFrame(), commandController);
+      	// FIXME frame for reading task
+        SBMLReadingTask task = new SBMLReadingTask(file, null, commandController);
         task.execute();
         return true;
       } catch (FileNotFoundException e) {
