@@ -35,6 +35,7 @@ import org.sbml.jsbml.ext.layout.Layout;
 
 import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
+import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.SBMLTools;
 import de.zbit.editor.control.SBMLView;
 import de.zbit.gui.BaseFrame;
@@ -141,8 +142,11 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
 	 * @return
 	 */
 	private String createTitle(OpenedFile<SBMLDocument> file, Layout layout) {
-		return file.getFile().getName() + ":" 
-				+ (layout.isSetName() ? layout.getName() : layout.getId());
+		String title = "";
+		title += file.isChanged() ? "*" : "";
+		title += file.isSetFile() ? file.getFile().getName() : BioModelsEdConstants.genericFileName; 
+		title += ":" + (layout.isSetName() ? layout.getName() : layout.getId());
+		return title;
 	}
 
 	/**

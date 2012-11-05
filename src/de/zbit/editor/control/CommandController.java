@@ -142,7 +142,6 @@ public class CommandController implements PropertyChangeListener {
 		layout.addTextGlyph(tGlyph);
 		
 		selectedDoc.setChanged(true);
-		view.refreshTitle(layout);
 		
 		// keep a list of all glyphs which are associated with the species
 		List<String> glyphList = new ArrayList<String>();
@@ -208,17 +207,8 @@ public class CommandController implements PropertyChangeListener {
 	 * Quits the program.
 	 * @return true, if succesful.
 	 */
-	public boolean fileQuit() {
-		//TODO implement fileQuit
-		/*if (this.fileManager.anyFileIsModified()) {
-      int returnVal = GUIFactory.createQuestionClose(this.view.getFrame());
-      if (returnVal == JOptionPane.YES_OPTION && this.view.getTabManager().closeAllTabs()) {
-        System.exit(0);
-      }
-    } else {
-      System.exit(0);
-    }*/
-		return true;
+	public boolean closeFile(OpenedFile<SBMLDocument> file) {
+		return fileManager.fileClose(file);
 	}
 	
 	/**
@@ -226,21 +216,16 @@ public class CommandController implements PropertyChangeListener {
 	 * wrapper for fileSave(OpenedFile<SBMLDocument> doc)
 	 * @return true if successful. 
 	 */
-	@SuppressWarnings("unchecked")
-	public boolean fileSave() {
-//		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
-//				.getCurrentLayout().getSBMLDocument()
-//				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
-//		return fileSave(selectedDoc);
-		return false;
+	public boolean saveFileAs(File file, OpenedFile<SBMLDocument> openedFile) {
+		return fileManager.saveFileAs(file, openedFile);
 	}
 	
 	/**
 	 * forwards doc to filemanager for saving.
 	 * @return true if successful. 
 	 */
-	public boolean fileSave(OpenedFile<SBMLDocument> selectedDoc) {
-		return fileManager.fileSave(selectedDoc);
+	public boolean saveFile(OpenedFile<SBMLDocument> selectedDoc) {
+		return fileManager.saveFile(selectedDoc);
 	}
 	
 	/**
@@ -250,22 +235,9 @@ public class CommandController implements PropertyChangeListener {
 	public boolean fileSaveAll() {
 		boolean success = true;
 		for (OpenedFile<SBMLDocument> file : view.getTabManager().getOpenedFiles()) {
-			success |= fileSave(file);
+			success |= saveFile(file);
 		}
 		return success;
-	}
-	
-	/**
-	 * Gets currently selected doc from view and forwards it to filemanager for saving.
-	 * @return true if successful. 
-	 */
-	@SuppressWarnings("unchecked")
-	public boolean fileSaveAs() {
-//		OpenedFile<SBMLDocument> selectedDoc = (OpenedFile<SBMLDocument>) this.view
-//				.getCurrentLayout().getSBMLDocument()
-//				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
-//		return fileManager.fileSaveAs(selectedDoc);
-		return false;
 	}
 	
 	/**
@@ -284,14 +256,6 @@ public class CommandController implements PropertyChangeListener {
 		return false;
 	}
 	
-	/**
-	 * Forwards save dialog request to view.
-	 * @return chosen filepath
-	 */
-	public File askUserSaveDialog() {
-		return view.askUserSaveDialog();
-	}
-	
 	
 	/**
 	 * @return the editorInstance
@@ -307,6 +271,7 @@ public class CommandController implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(BioModelsEdConstants.openingDone)) {
 			OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) evt.getNewValue();
+			doc.setChanged(true);
 			this.view.addTab(doc);
 			this.fileManager.addDocument(doc);
 		}
@@ -376,16 +341,6 @@ public class CommandController implements PropertyChangeListener {
 		return null;
 	}
 	
-	
-	/**
-	 * Closes the tab, that shows the given layout.
-	 * @param layout
-	 * @return true, if a tab was found and closed. false otherwise.
-	 */
-	public boolean closeTab(Layout layout) {
-		return this.view.closeTab(layout);
-	}
-	
 	/**
 	 * Shows a File-Not-Found error.
 	 */
@@ -400,44 +355,7 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	public void layoutDelete(Layout layout) {
 		//TODO implement layoutDelete
-		/*OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) layout.getSBMLDocument()
-        .getUserObject(SBMLEditorConstants.associatedOpenedFile<SBMLDocument>);
-    boolean anyopen = view.getTabManager().isAnyOpenFromDocument(layout);
-    if(doc.getListOfLayouts().size() == 1) {
-      logger.info("Document doesn't have 2 or more layouts");
-      this.view.showError("ERROR_LAYOUT_DELETE");
-    }
-    else if (anyopen || !anyopen && GUIFactory.createQuestionDelete(this.view.getFrame()) == JOptionPane.YES_OPTION){
-      logger.info("Try to delete Layout ID: " + layout.getId() + " Layout Name: " + layout.getName());
-      doc.getListOfLayouts().remove(layout);
-      doc.setFileModified(true);
-      view.closeTab(layout);
-    }*/
-	}
-	
-	/**
-	 * Asks the user, if the file should be saved and carries out the task.
-	 * @param doc
-	 * @return if user did not cancel saving progress
-	 */
-	private boolean askUserSave(OpenedFile<SBMLDocument> doc) {
-		//TODO impelement askUserSave
-		/*if (doc.isFileModified()) {
-      int returnVal = GUIFactory.createQuestionSave(this.view.getFrame(), doc.getAssociatedFilename());
-      if (returnVal == JOptionPane.YES_OPTION) {
-        logger.info("User chose to save file");
-        return fileSave();
-      }
-      else if (returnVal == JOptionPane.NO_OPTION) {
-        logger.info("User chose to not save file");
-        return true;
-      }
-      else {
-        logger.info("User canceled closing");
-        return false;
-      }
-    } */
-		return true;
+		
 	}
 	
 	/**
@@ -682,11 +600,7 @@ public class CommandController implements PropertyChangeListener {
 				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
 	}
 	
-	private void layoutModified(Layout layout) {
-		OpenedFile<SBMLDocument> doc = getDocumentFromLayout(layout);
-		doc.setChanged(true);
-		this.view.refreshTitle(layout);
-	}
+	
 	
 	/**
 	 * Renames the given layout.
@@ -695,10 +609,7 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	public boolean layoutRename(Layout layout, String name) {
 		layout.setName(name);
-		layoutModified(layout);
 		//TODO implement combobox updating
-		this.view.updateComboBox(
-			SBMLTools.getListOfLayouts(layout.getSBMLDocument()));
 		return true;
 	}
 	

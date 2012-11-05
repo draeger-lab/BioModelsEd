@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
 import org.sbml.jsbml.SBMLDocument;
@@ -72,8 +73,14 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 
 	@Override
 	public boolean closeFile() {
-		logger.info("closeFile");
-		return controller.fileClose();
+		OpenedFile<SBMLDocument> file = tabManager.getCurrentFile();
+		if (file.isChanged()) {
+			switch (JOptionPane.showConfirmDialog(this, MESSAGES.getString("CONFIRM_SAVING"))) {
+				case 0 : return file.isSetFile() ? controller.saveFile(file) : (saveFileAs() != null);
+				case 2 : return false;
+			}
+		}
+		return controller.closeFile(file);
 	}
 
 	@Override
@@ -125,26 +132,8 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	}
 
 	@Override
-	public String nameDialogue(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public TabManager getTabManager() {
 		return this.tabManager;
-	}
-
-
-	@Override
-	public File askUserSaveDialog() {
-		return GUITools.saveFileDialog(this);
-	}
-
-
-	@Override
-	public File askUserFileNew() {
-		return GUITools.saveFileDialog(this);
 	}
 
 	@Override
@@ -155,78 +144,6 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 
 	@Override
 	public void showError(String error) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean closeTab(Layout layout) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void refreshTitle(Layout layout) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateComboBox(List<Layout> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void helpAbout() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void layoutClone() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void layoutDelete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean layoutClose(Layout layout) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean layoutNew() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean layoutRename() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean layoutAuto() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void openLayoutInTab() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void openLayoutInNewTab() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -243,8 +160,14 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 
 	@Override
 	public File saveFileAs() {
-		// TODO Auto-generated method stub
-		return null;
+		File file = GUITools.saveFileDialog(this);
+		if (file != null) {
+			logger.info("saving");
+			if (controller.saveFileAs(file, tabManager.getCurrentFile())) {
+				logger.info(MESSAGES.getString("SAVING_DONE_INFO"));
+			}
+		}
+		return file;
 	}
 
 	/**

@@ -22,14 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
-import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.LayoutConstants;
 
-import de.zbit.editor.BioModelsEdConstants;
-import de.zbit.editor.gui.Resources;
 import de.zbit.editor.gui.SBMLWritingTask;
 import de.zbit.io.OpenedFile;
 import de.zbit.sbml.gui.SBMLReadingTask;
@@ -65,62 +59,15 @@ public class FileManager {
 	 * @return returns true if document was added successfully
 	 */
 	public boolean addDocument(OpenedFile<?> openedFile) {
-	  if (!openedFile.isSetFile()) {
-	    int i = 0;
-	    String name;
-      do {
-        logger.info("Filename: " + Resources.getString(BioModelsEdConstants.genericFileName) +" (" + i + ")" + " not availible.");
-	      i+=1;
-	      name = Resources.getString(BioModelsEdConstants.genericFileName) +" (" + i + ")";
-	    }while(isFileNameUsed(name));
-      
-      openedFile.setFile(new File(name));
-	  }
-		if (listOfOpenedFiles.contains(openedFile)) {
-		  logger.info("Failed to add: List already contains document");
-			return false;
-		}
-		else {
-			this.listOfOpenedFiles.add(openedFile);
-			logger.info("Succes");
-			return true;
-		}
+	  return listOfOpenedFiles.add(openedFile);
 	}
-	
-	/**
-	 * open Document
-	 * @return returns true if document was added successfully
-	 */
-	//TODO: Not used
-	
-	/*
-	public boolean openDocument(String filePath) {
-		if (isFilePathUsed(filePath)) {
-			return false;
-		}
-		else {
-			File file = commandController.askUserOpenDialog();
-			Frame frame = commandController.getEditorInstance().getFrame();
-			if(file != null) {
-				try {
-			        SBMLReadingTask task = new SBMLReadingTask(file, frame);
-			        task.addPropertyChangeListener(commandController);
-			        task.execute();
-			        return true;
-			      } catch (FileNotFoundException e) {
-			        e.printStackTrace();
-			      }
-			}
-			return true;
-		}
-	}*/
 	
 	/**
 	 * Check if filePath is already in use.
 	 * @param filePath
 	 * @return true, if it is used. false otherwise.
 	 */
-	private boolean isFilePathUsed(String filePath) {
+	private boolean isOpen(String filePath) {
 		for (OpenedFile<?> doc : listOfOpenedFiles) {
 			if (doc.isSetFile() && doc.getFile().getAbsolutePath().equals(filePath)) {
 				return true;
@@ -147,7 +94,7 @@ public class FileManager {
 	 */
   public boolean fileOpen(File file) {
   	//FIXME Check for right filetype
-    if ((file == null) || isFilePathUsed(file.getAbsolutePath())) {
+    if ((file == null) || isOpen(file.getAbsolutePath())) {
       return false;
     }
     else {
@@ -184,24 +131,8 @@ public class FileManager {
    * @param doc 
    * @return true, if succesful.
    */
-  public boolean fileClose(OpenedFile<SBMLDocument> doc) {
-    boolean success = true;
-    logger.info(doc.getFile().getName());
-    // unwrap opened file
-    Model model = doc.getDocument().getModel();
-    ExtendedLayoutModel layoutModel = (ExtendedLayoutModel) model.getExtension(
-    	LayoutConstants.getNamespaceURI(model.getVersion(), model.getVersion()));
-    
-    for (Layout layout : layoutModel.getListOfLayouts()) {
-      boolean s = commandController.closeTab(layout);
-      logger.info(layout.getName() + " closing succes? : " + s);
-      success |= s;
-    }
-    if(success) {
-      this.listOfOpenedFiles.remove(doc);
-    }
-    
-    return success;
+  public boolean fileClose(OpenedFile<?> doc) {
+    return this.listOfOpenedFiles.remove(doc);
   }
 
   /**
@@ -209,10 +140,10 @@ public class FileManager {
    * @param doc
    * @return true, if succesful
    */
-  public boolean fileSave(OpenedFile<SBMLDocument> doc) {
+  public boolean saveFile(OpenedFile<SBMLDocument> doc) {
     try {
       if(!doc.isSetFile()) {
-        return fileSaveAs(doc);
+        return false;
       }
       SBMLWritingTask task = new SBMLWritingTask(doc.getFile(), doc.getDocument());
       task.addPropertyChangeListener(commandController);
@@ -230,26 +161,19 @@ public class FileManager {
    * @param doc
    * @return true, if succesful
    */
-  public boolean fileSaveAs(OpenedFile<SBMLDocument> doc) {
-    File file = commandController.askUserSaveDialog();
-    if (file != null) {
-      doc.setFile(file);
-      return fileSave(doc);
-    }
-    return false;
-  }
-  
-  /**
-   * Checks, if the name is already used as a filename.
-   * @param name
-   * @return true, if it is used
-   */
-  public boolean isFileNameUsed(String name) { 
-    for (OpenedFile<?> doc : listOfOpenedFiles) {
-      if(doc.getFile().getName().equals(name)){
-        return true;
-      }
-    }
-    return false;
+  public boolean saveFileAs(File file, OpenedFile<SBMLDocument> openedFile) {
+  	if (file == null) {
+			return false;
+		}
+		if (openedFile.isSetFile()) {
+			OpenedFile<SBMLDocument> newOpenedFile = new OpenedFile<SBMLDocument>();
+			newOpenedFile.setDocument(new SBMLDocument(openedFile.getDocument()));
+			newOpenedFile.setFile(file);
+			return saveFile(newOpenedFile);
+		}
+		else {
+			openedFile.setFile(file);
+			return saveFile(openedFile);
+		}
   }
 }

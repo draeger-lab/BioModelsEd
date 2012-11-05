@@ -62,4 +62,7 @@
   <entry key="NAME_SPECIES">Enter species name</entry>
   <entry key="NAME_SPECIES_TITLE">Create Species</entry>
   
+  <entry key="CONFIRM_SAVING">Do you want to save?</entry>
+  <!-- Logger infos -->
+  <entry key="SAVING_DONE_INFO">Saved!</entry>
 </properties>

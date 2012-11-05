@@ -68,7 +68,7 @@ public class BioModelsEdConstants {
   public static final String openingDone = "SBML_READING_SUCCESSFULLY_DONE";
   public static final String savingDone = "savingDone";
   public static final String fileNotFound = "FILE_NOT_FOUND";
-  public static final String genericFileName = "GENERIC_FILE_NAME";
+  public static final String genericFileName = "<unnamed>";
   public static final String GLYPH_LINK_KEY = "GLYPH_LINK_KEY";
   public static final String warningTitle = "WARNING_TITLE";
   public static final String errorTitle = "ERROR_TITLE";

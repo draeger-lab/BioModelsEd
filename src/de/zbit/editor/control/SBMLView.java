@@ -16,19 +16,9 @@
  */
 package de.zbit.editor.control;
 
-import java.awt.Component;
-import java.awt.Container;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
-
-import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.util.ValuePair;
 
 import de.zbit.editor.gui.TabManager;
@@ -57,29 +47,11 @@ public interface SBMLView {
    */
   public boolean addTab(OpenedFile<SBMLDocument> file);
 
-  /**
-   * Creates pop-up for the input of a Species name.
-   * @param s, the default name
-   * @return the name
-   */
-  public String nameDialogue(String id);
 
   /**
    * @return the tabManager
    */
   public TabManager getTabManager();
-  
-  /**
-   * Creates pop-up to request File Save Input.
-   * @return the file to save
-   */
-  public File askUserSaveDialog();
-
-  /**
-   * Creates popup for the input of a filename.
-   * @eturn the filename
-   */
-  public File askUserFileNew();
 
   /**
    * Shows a warning message corresponding to the given String.
@@ -92,71 +64,6 @@ public interface SBMLView {
    * @param error
    */
   public void showError(String error);
-
-  /**
-   * Forwards a closeTab request to the TabManager, that closes the tab, that shows the layout.
-   * @param layout, the layout to be closed
-   * @return true if succesful
-   */
-  public boolean closeTab(Layout layout);
-
-  /**
-   * Refreshes the title of the layout shown in the tab.
-   * @param layout 
-   */
-  public void refreshTitle(Layout layout);
-
-  /**
-   * Updates the ComboBox for choice of layout.
-   * @param list
-   */
-  public void updateComboBox(List<Layout> list);
-  
-  /**
-   * Shows the "About"-message.
-   */
-  public void helpAbout();
-
-  /**
-   * Clones the layout shown in the current tab and opens it in a new tab.
-   */
-  public void layoutClone();
-
-  /**
-   * Deletes the layout shown in the current tab.
-   */
-  public void layoutDelete();
-
-  /**
-   * Closes the tab, that shows the given layout.
-   * @param layout
-   */
-  public boolean layoutClose(Layout layout);
-
-  /**
-   * Creates a new empty layout and opens it in a new tab.
-   */
-  public boolean layoutNew();
-  
-  /**
-   * Renames the current layout.
-   */
-  public boolean layoutRename();
-  
-  /**
-   * Applies an algorithm for an automated layout to the current layout.
-   */
-  public boolean layoutAuto();
-
-  /**
-   * Opens the layout selected in the ComboBox in the current tab.
-   */
-  public void openLayoutInTab();
-
-  /**
-   * Opens the layout selected in the ComboBox in a new tab.
-   */
-  public void openLayoutInNewTab();
 
 
   /**
