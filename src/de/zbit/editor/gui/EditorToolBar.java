@@ -19,7 +19,6 @@ package de.zbit.editor.gui;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.beans.EventHandler;
 import java.util.logging.Logger;
 
 import javax.swing.JComboBox;
@@ -29,9 +28,7 @@ import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.ext.layout.Layout;
 
 import de.zbit.editor.BioModelsEd;
-import de.zbit.editor.BioModelsEdConstants;
 import de.zbit.editor.control.SBMLView;
-import de.zbit.gui.GUITools;
 
 
 /**
@@ -56,87 +53,56 @@ public class EditorToolBar extends JToolBar {
 	 */
 	public EditorToolBar(SBMLView parent, ActionListener listener) {
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.UNKNOWN_MOLECULE),
+			Command.UNKNOWN_MOLECULE,
 			Resources.iconUnknown,
-			0,
-			0,
-			BioModelsEdConstants.addUnknownMolecule,
 			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.SIMPLE_MOLECULE),
+			Command.SIMPLE_MOLECULE,
 			Resources.iconSimpleMolecule,
-			0,
-			0,
-			BioModelsEdConstants.addSimpleMolecule,
 			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.MACROMOLECULE),
+			Command.MACROMOLECULE,
 			Resources.iconMacromolecule,
-			0,
-			0,
-			BioModelsEdConstants.addMacromolecule,
 			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.EMPTY_SET),
+			Command.EMPTY_SET,
 			Resources.iconEmptySet,
-			0,
-			0,
-			BioModelsEdConstants.addEmptySet,
 			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.REACTION),
+			Command.REACTION,
 			Resources.iconTransition,
-			0,
-			0,
-			BioModelsEdConstants.addReaction,
 			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.CATALYSIS),
+			Command.CATALYSIS,
 			Resources.iconCatalysis,
-			0,
-			0,
-			BioModelsEdConstants.addCatalysis,
 			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.INHIBITION),
+			Command.INHIBITION,
 			Resources.iconInhibition,
-			0,
-			0,
-			BioModelsEdConstants.addInhibition,
 			listener);
 		
 		
 		layoutComboBox.setMaximumSize(new Dimension(150, 24));
 		add(layoutComboBox);
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN),
+			Command.OPEN_LAYOUT,
 			Resources.iconTab,
-			0,
-			0,
-			EventHandler.create(ActionListener.class,
-				parent,
-				BioModelsEdConstants.openLayoutInTab));
+			listener);
 		
 		BioModelsEdGUIFactory.addButton(this,
-			Resources.getString(BioModelsEdConstants.MENU_TAB_OPEN_NEW),
-			Resources.iconTabNew,
-			0,
-			0,
-			EventHandler.create(ActionListener.class,
-				parent,
-				BioModelsEdConstants.openLayoutInNewTab));
+			Command.NEW_LAYOUT,
+			Resources.iconTab,
+			listener);
 		
 		BioModelsEdGUIFactory.addCheckbox(this, 
-			Resources.getString(BioModelsEdConstants.REVERSIBLE),
-			EventHandler.create(ActionListener.class,
-				parent,
-				BioModelsEdConstants.reversible));
+			Command.REVERSIBLE,
+			listener);
 		
 		BioModelsEdGUITools.setEnabled(this, false);
 	}

@@ -19,12 +19,16 @@ package de.zbit.editor;
 import java.awt.Window;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import de.zbit.AppConf;
 import de.zbit.Launcher;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.gui.BioModelsEdGUI;
+import de.zbit.gui.GUIOptions;
+import de.zbit.util.ResourceManager;
 import de.zbit.util.prefs.KeyProvider;
 
 
@@ -42,10 +46,11 @@ public class BioModelsEd extends Launcher {
 	private CommandController controller;
 	
 	/**
+	 * @param args 
 	 * 
 	 */
-	public BioModelsEd() {
-		super();
+	public BioModelsEd(String[] args) {
+		super(args);
 		controller = new CommandController();
 		
 	}
@@ -54,19 +59,20 @@ public class BioModelsEd extends Launcher {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new BioModelsEd().run();
+		new BioModelsEd(args).run();
 	}
 
 	@Override
 	public void commandLineMode(AppConf appConf) {
-		// TODO Auto-generated method stub
-		
+		Logger.getLogger(this.getClass().getName()).info("try -gui=true");
+		super.exit();
 	}
 
 	@Override
 	public List<Class<? extends KeyProvider>> getCmdLineOptions() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Class<? extends KeyProvider>> listOfCmdArgs = new ArrayList<Class<? extends KeyProvider>>();
+		listOfCmdArgs.add(GUIOptions.class);
+		return listOfCmdArgs;
 	}
 
 	@Override
@@ -77,12 +83,7 @@ public class BioModelsEd extends Launcher {
 
 	@Override
 	public URL getURLlicenseFile() {
-		try {
-			return new URL("http://www.gnu.org/licenses/gpl-3.0-standalone.html");
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("LICENSE_FILE"));
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class BioModelsEd extends Launcher {
 
 	@Override
 	public Window initGUI(AppConf appConf) {
-		BioModelsEdGUI gui = new BioModelsEdGUI();
+		BioModelsEdGUI gui = new BioModelsEdGUI(appConf);
 		controller.setView(gui);
 		gui.setController(controller);
 		return gui;

@@ -17,14 +17,11 @@
 package de.zbit.editor.gui;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -35,14 +32,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.ext.layout.Layout;
 
+import de.zbit.AppConf;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLView;
 import de.zbit.gui.BaseFrame;
 import de.zbit.gui.GUIOptions;
 import de.zbit.gui.GUITools;
-import de.zbit.gui.actioncommand.ActionCommand;
 import de.zbit.io.OpenedFile;
 import de.zbit.io.filefilter.SBFileFilter;
 import de.zbit.util.ResourceManager;
@@ -62,13 +58,14 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	private CommandController controller;
 	private final static Logger logger = Logger.getLogger(BioModelsEdGUI.class.getName());
 	//TODO rename package
-	private final static ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
+	private final static ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales.Messages");
 	
 	/**
 	 * Constructor
+	 * @param appConf 
 	 */
-	public BioModelsEdGUI() {
-		super();
+	public BioModelsEdGUI(AppConf appConf) {
+		super(appConf);
 	}
 
 	@Override
@@ -86,6 +83,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	@Override
 	protected JToolBar createJToolBar() {
 		tabManager = new TabManager(this);
+		logger.fine("creating toolbar");
 		EditorToolBar toolBar = new EditorToolBar(this, tabManager);
 		return toolBar;
 	}
@@ -99,20 +97,17 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 
 	@Override
 	public URL getURLAboutMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("ABOUT_FILE"));
 	}
 
 	@Override
 	public URL getURLLicense() {
-		// TODO Auto-generated method stub
-		return null;
+		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("LICENSE_FILE"));
 	}
 
 	@Override
 	public URL getURLOnlineHelp() {
-		// TODO Auto-generated method stub
-		return null;
+		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("ONLINE_HELP_FILE"));
 	}
 
 	@Override
@@ -181,7 +176,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	 * @see de.zbit.editor.control.SBMLView#addTab(de.zbit.io.OpenedFile, java.lang.String, boolean)
 	 */
 	@Override
-	public boolean addTab(OpenedFile<SBMLDocument> file) {
+	public boolean show(OpenedFile<SBMLDocument> file) {
 		return tabManager.addTab(file, null);
 	}
 
@@ -208,7 +203,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	protected JMenuItem[] additionalFileMenuItems() {
 		return new JMenuItem[] {
 				GUITools.createJMenuItem(this, Command.NEW),
-				GUITools.createJMenuItem(this, Command.CLOSE),
+				//GUITools.createJMenuItem(this, Command.CLOSE),
 		};
 	}
 
@@ -238,7 +233,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 		logger.info("action performed: " + evt.getActionCommand());
 		switch (Command.valueOf(evt.getActionCommand())) {
 			case NEW : controller.fileNew(); break;
-			case CLOSE : controller.fileClose(); break;
+			//case CLOSE : controller.fileClose(); break;
 		}
 	}
 }

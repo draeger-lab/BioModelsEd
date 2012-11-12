@@ -19,6 +19,7 @@ package de.zbit.editor.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
+import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,8 +35,9 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 import de.zbit.editor.control.CommandController;
+import de.zbit.util.ResourceManager;
 
 /**
  * Offers static methods for creation of Java Swing objects.
@@ -47,7 +49,8 @@ import de.zbit.editor.control.CommandController;
  * @version $Rev$
  */
 public class BioModelsEdGUIFactory {
-
+	
+	public static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales");
   /**
    * Create a JMenu on given menubar.
    * 
@@ -133,9 +136,9 @@ public class BioModelsEdGUIFactory {
    * @return the created button
    */
   public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, 
-  	int width, int height, String actionCommand, ActionListener... l) {
+  	int width, int height, Command actionCommand, ActionListener... l) {
     JButton button = createButtonIcon(icon, tooltip, width, height, l);
-    button.setActionCommand(actionCommand);
+    button.setActionCommand(actionCommand.getName());
     toolbar.add(button);
     return button;
   }
@@ -150,9 +153,9 @@ public class BioModelsEdGUIFactory {
    * @param l
    * @return the created button
    */
-  public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, 
-  	int width, int height, ActionListener... l) {
-    JButton button = createButtonIcon(icon, tooltip, width, height, l);
+  public static JButton addButton(JToolBar toolbar, Command command, ImageIcon icon, 
+  	ActionListener... l) {
+    JButton button = createButtonIcon(icon, MESSAGES.getString(command.getToolTip()), 0, 0, l);
     return button;
   }
   /**
@@ -183,9 +186,9 @@ public class BioModelsEdGUIFactory {
    * @param l
    * @return the created checkbox
    */
-  public static JCheckBox addCheckbox(JToolBar toolbar, String name,
+  public static JCheckBox addCheckbox(JToolBar toolbar, Command command,
     ActionListener... l) {
-    JCheckBox checkbox = new JCheckBox(name);
+    JCheckBox checkbox = new JCheckBox(MESSAGES.getString(command.getName()));
     if (l != null) {
       for (ActionListener listener : l) {
         checkbox.addActionListener(listener);
@@ -300,46 +303,46 @@ public class BioModelsEdGUIFactory {
    * @param controller
    * @return the created menu
    */
-  public static JPopupMenu createSpeciesGlyphPopupMenu(CommandController controller) {
-    JMenuItem menuItem;
-    // Create the popup menu.
-    JPopupMenu popup = new JPopupMenu();
-
-    menuItem = new JMenuItem(Resources.getString("NODE_RENAME"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, BioModelsEdConstants.nodeRename));
-    popup.add(menuItem);
-    
-    menuItem = new JMenuItem(Resources.getString("NODE_COPY"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, BioModelsEdConstants.nodeCopy));
-    popup.add(menuItem);
-    
-    menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, BioModelsEdConstants.nodeDelete));
-    popup.add(menuItem);
-    
-    return popup;
-  }
+//  public static JPopupMenu createSpeciesGlyphPopupMenu(CommandController controller) {
+//    JMenuItem menuItem;
+//    // Create the popup menu.
+//    JPopupMenu popup = new JPopupMenu();
+//
+//    menuItem = new JMenuItem(Resources.getString("NODE_RENAME"));
+//    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+//      controller, BioModelsEdConstants.nodeRename));
+//    popup.add(menuItem);
+//    
+//    menuItem = new JMenuItem(Resources.getString("NODE_COPY"));
+//    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+//      controller, BioModelsEdConstants.nodeCopy));
+//    popup.add(menuItem);
+//    
+//    menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
+//    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+//      controller, BioModelsEdConstants.nodeDelete));
+//    popup.add(menuItem);
+//    
+//    return popup;
+//  }
   
   /**
    * Creates a popup menu for a ReactionGlyph.
    * @param controller
    * @return the created menu
    */
-  public static JPopupMenu createReactionGlyphPopupMenu(CommandController controller) {
-    JMenuItem menuItem;
-    // Create the popup menu.
-    JPopupMenu popup = new JPopupMenu();
-       
-    menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
-    menuItem.addActionListener(EventHandler.create(ActionListener.class,
-      controller, BioModelsEdConstants.nodeDelete));
-    popup.add(menuItem);
-    
-    return popup;
-  }
+//  public static JPopupMenu createReactionGlyphPopupMenu(CommandController controller) {
+//    JMenuItem menuItem;
+//    // Create the popup menu.
+//    JPopupMenu popup = new JPopupMenu();
+//       
+//    menuItem = new JMenuItem(Resources.getString("NODE_DELETE"));
+//    menuItem.addActionListener(EventHandler.create(ActionListener.class,
+//      controller, BioModelsEdConstants.nodeDelete));
+//    popup.add(menuItem);
+//    
+//    return popup;
+//  }
   
   /**
    * Creates a popup menu for pasting nodes.

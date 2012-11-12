@@ -16,10 +16,8 @@
  */
 package de.zbit.editor.control;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -31,15 +29,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-
-import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
-import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
@@ -56,12 +48,9 @@ import y.io.ImageOutputHandler;
 import y.io.JPGIOHandler;
 import y.view.Graph2D;
 import y.view.Graph2DView;
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 import de.zbit.editor.gui.BioModelsEdGUIFactory;
 import de.zbit.editor.gui.GraphLayoutPanel;
-import de.zbit.editor.gui.Resources;
-import de.zbit.editor.gui.SBMLEditMode;
-import de.zbit.gui.GUITools;
 import de.zbit.io.OpenedFile;
 
 /**
@@ -118,7 +107,7 @@ public class CommandController implements PropertyChangeListener {
 	@SuppressWarnings("unchecked")
 	public void createSpecies(OpenedFile<SBMLDocument> selectedDoc, Layout layout, 
 		String name, PropertyChangeEvent evt, int sboTerm) {
-		String speciesId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericId);
+		String speciesId = SBMLTools.getNextGenericId(selectedDoc, Constants.genericId);
 		
 		ValuePair<Double, Double> newMousePosition = (ValuePair<Double, Double>) evt.getNewValue();
 		Double x = newMousePosition.getL();
@@ -129,8 +118,8 @@ public class CommandController implements PropertyChangeListener {
 		final int level = model.getLevel();
 		final int version = model.getVersion();
 		
-		String glyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericGlyphIdPrefix);
-		String textglyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericTextGlyphIdPrefix);
+		String glyphId = SBMLTools.getNextGenericId(selectedDoc, Constants.genericGlyphIdPrefix);
+		String textglyphId = SBMLTools.getNextGenericId(selectedDoc, Constants.genericTextGlyphIdPrefix);
 		
 		String compartmentId = findCompartmentId(x, y);
 		Species s = SBMLFactory.createSpecies(speciesId, name, sboTerm, level, version, compartmentId);
@@ -150,7 +139,7 @@ public class CommandController implements PropertyChangeListener {
 		Map<String, List<String>> layoutGlyphMap = new HashMap<String, List<String>>();
 		layoutGlyphMap.put(layout.getId(), glyphList);
 		
-		s.putUserObject(BioModelsEdConstants.GLYPH_LINK_KEY, layoutGlyphMap);
+		s.putUserObject(Constants.GLYPH_LINK_KEY, layoutGlyphMap);
 		
 	}
 	
@@ -173,6 +162,7 @@ public class CommandController implements PropertyChangeListener {
 		reaction.setName(reaction.getId());
 		model.addReaction(reaction);
 		layout.add(reactionGlyph);
+		file.setChanged(true);
 		return reactionGlyph;
 	}
 	
@@ -191,6 +181,7 @@ public class CommandController implements PropertyChangeListener {
 		SpeciesReferenceGlyph modifierGlyph = SBMLFactory.createSpeciesReferenceGlyph(file, source, target, sbo);
 		target.addSpeciesReferenceGlyph(modifierGlyph);
 		logger.info("created Modifier");
+		file.setChanged(true);
 	}
 	/**
 	 * Opens an empty {@link #SBMLDocument}.
@@ -200,7 +191,8 @@ public class CommandController implements PropertyChangeListener {
 	public boolean fileNew() {
 		SBMLDocument sbmlDocument = SBMLFactory.createNewDocument();
 		OpenedFile<SBMLDocument> doc = new OpenedFile<SBMLDocument>(sbmlDocument);
-		return fileManager.addDocument(doc) && view.addTab(doc);
+		doc.setChanged(true);
+		return fileManager.addDocument(doc) && view.show(doc);
 	}
 	
 	/**
@@ -269,10 +261,10 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(BioModelsEdConstants.openingDone)) {
+		if (evt.getPropertyName().equals(Constants.openingDone)) {
 			OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) evt.getNewValue();
-			doc.setChanged(true);
-			this.view.addTab(doc);
+			doc.setChanged(false);
+			this.view.show(doc);
 			this.fileManager.addDocument(doc);
 		}
 	}
@@ -282,6 +274,7 @@ public class CommandController implements PropertyChangeListener {
 	 * Calls {@link #updateGlyphFromNode} for every node in {@link #nodeList}.
 	 * @param evt
 	 */
+	//TODO Not in the responsibility of the controller
 	public void updateNodes(PropertyChangeEvent evt) {
 		Graph2D graph = (Graph2D) evt.getNewValue();
 		
@@ -327,13 +320,13 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	private NamedSBaseGlyph getGlyphFromNode(Node node, Layout layout) {
 		for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
-			Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+			Node n = (Node) glyph.getUserObject(Constants.GLYPH_NODE_KEY);
 			if (node == n) {
 				return glyph;
 			}
 		}
 		for (ReactionGlyph glyph : layout.getListOfReactionGlyphs()) {
-			Node n = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+			Node n = (Node) glyph.getUserObject(Constants.GLYPH_NODE_KEY);
 			if (node == n) {
 				return glyph;
 			}
@@ -345,7 +338,7 @@ public class CommandController implements PropertyChangeListener {
 	 * Shows a File-Not-Found error.
 	 */
 	public void fileNotFound() {
-		view.showError(BioModelsEdConstants.fileNotFound);
+		view.showError(Constants.fileNotFound);
 	}
 	
 	
@@ -430,7 +423,7 @@ public class CommandController implements PropertyChangeListener {
 		
 		for (ReactionGlyph rGlyph : list) {
 			layout.getListOfReactionGlyphs().remove(rGlyph);
-			layout.firePropertyChange("nodeDelete", null, rGlyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY));
+			layout.firePropertyChange("nodeDelete", null, rGlyph.getUserObject(Constants.GLYPH_NODE_KEY));
 			
 			if (this.nodeCopyList.remove(rGlyph)){
 				logger.info("Removed glyph from copylist");
@@ -513,9 +506,9 @@ public class CommandController implements PropertyChangeListener {
 		String speciesId = copySpeciesGlyph.getSpecies();
 		Species species = copySpeciesGlyph.getModel().getSpecies(speciesId);
 		
-		TextGlyph originalTextGlyph = (TextGlyph) copySpeciesGlyph.getUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY);
-		String glyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericGlyphIdPrefix);
-		String textGlyphId = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericTextGlyphIdPrefix);
+		TextGlyph originalTextGlyph = (TextGlyph) copySpeciesGlyph.getUserObject(Constants.GRAPHOBJECT_TEXTGLYPH_KEY);
+		String glyphId = SBMLTools.getNextGenericId(selectedDoc, Constants.genericGlyphIdPrefix);
+		String textGlyphId = SBMLTools.getNextGenericId(selectedDoc, Constants.genericTextGlyphIdPrefix);
 		
 		double x = copySpeciesGlyph.getBoundingBox().getPosition().getX();
 		double y = copySpeciesGlyph.getBoundingBox().getPosition().getY();
@@ -546,7 +539,7 @@ public class CommandController implements PropertyChangeListener {
 		}
 		else {
 			logger.info("nodePaste: Different Model");
-			String speciesIdNew = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericId);
+			String speciesIdNew = SBMLTools.getNextGenericId(selectedDoc, Constants.genericId);
 			Species s = SBMLFactory.createSpecies(speciesIdNew,
 				species.getName(),
 				species.getSBOTerm(),
@@ -597,7 +590,7 @@ public class CommandController implements PropertyChangeListener {
 	@SuppressWarnings("unchecked")
 	private OpenedFile<SBMLDocument> getDocumentFromLayout(Layout layout) {
 		return (OpenedFile<SBMLDocument>) layout.getSBMLDocument()
-				.getUserObject(BioModelsEdConstants.associatedOpenedFile);
+				.getUserObject(Constants.associatedOpenedFile);
 	}
 	
 	
@@ -684,7 +677,7 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	private String findCompartmentId(Double x, Double y) {
 		//FIXME findCompartmentId
-		return BioModelsEdConstants.compartmentDefaultName;
+		return Constants.compartmentDefaultName;
 	}
 	
 	//  /**

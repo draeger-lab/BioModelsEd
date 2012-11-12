@@ -1,12 +1,12 @@
 package de.zbit.graph.gui;
 
-import de.zbit.graph.sbgn.ReactionNodeRealizer;
 import y.base.Edge;
 import y.base.Node;
 import y.view.Arrow;
 import y.view.CreateEdgeMode;
 import y.view.EdgeRealizer;
 import y.view.Graph2D;
+import de.zbit.graph.sbgn.ReactionNodeRealizer;
 
 /**
  * 

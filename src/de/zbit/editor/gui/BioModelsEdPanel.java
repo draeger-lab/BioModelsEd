@@ -18,29 +18,23 @@ package de.zbit.editor.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
-import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 import y.base.Node;
 import y.view.NodeRealizer;
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLTools;
 import de.zbit.graph.sbgn.ReactionNodeRealizer;
@@ -57,7 +51,7 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	 * 
 	 */
 	private static final long serialVersionUID = -952263680143491399L;
-	private static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
+	private static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales.Messages");
 	
 	/**
    * States, which determine, which action will be taken on the next mouse click.
@@ -115,32 +109,33 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 		String action = evt.getActionCommand();
 		logger.info(action);
 		additionalInformation = null;
-		if (action.equals(BioModelsEdConstants.addCatalysis)) {
+		
+		if (action.equals(Command.CATALYSIS.getName())) {
 			state = State.catalysis;
 		}
-		else if (action.equals(BioModelsEdConstants.addReaction)) {
+		else if (action.equals(Command.REACTION.getName())) {
 			state = State.reaction;
 		}
-		else if (action.equals(BioModelsEdConstants.addEmptySet)) {
+		else if (action.equals(Command.EMPTY_SET.getName())) {
 			state = State.emptySet;
 		}
-		else if (action.equals(BioModelsEdConstants.addInhibition)) {
+		else if (action.equals(Command.INHIBITION.getName())) {
 			state = State.inhibition;
 		}
-		else if (action.equals(BioModelsEdConstants.addMacromolecule)) {
+		else if (action.equals(Command.MACROMOLECULE.getName())) {
 			state = State.macromolecule;
 		}
-		else if (action.equals(BioModelsEdConstants.addSimpleMolecule)) {
+		else if (action.equals(Command.SIMPLE_MOLECULE.getName())) {
 			state = State.simpleMolecule;
 		}
-		else if (action.equals(BioModelsEdConstants.addUnknownMolecule)) {
+		else if (action.equals(Command.UNKNOWN_MOLECULE.getName())) {
 			state = State.unknownMolecule;
 		}
 	}
 	public void receive(PropertyChangeEvent evt) {
 		String action = evt.getPropertyName();
-		//logger.info(action);
-		if (action.equals(BioModelsEdConstants.EditModeMousePressedLeft)) {
+		logger.info(action);
+		if (action.equals(Constants.MousePressedLeft)) {
 			if (isSimple()) {
 				String name = askForName();
 				if (name == null) {
@@ -150,10 +145,10 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 				state = State.idle;
 			}
 		}
-    else if (action.equals(BioModelsEdConstants.EditModeMouseDraggedLeft)) {
+    else if (action.equals(Constants.MouseDraggedLeft)) {
       
     }
-    else if (action.equals(BioModelsEdConstants.nodeClicked)) {
+    else if (action.equals(Constants.nodeClicked)) {
     	Node node = (Node) evt.getNewValue();
     	NodeRealizer shape = getGraph2DView().getGraph2D().getRealizer(node);
 			
@@ -182,10 +177,10 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
     		}
     	}
     }
-    else if (action.equals(BioModelsEdConstants.EditModeNodeReleasedLeft)) {
+    else if (action.equals(Constants.NodeReleasedLeft)) {
     	
     }
-    else if (action.equals(BioModelsEdConstants.EditModeNodePressedRight)) {
+    else if (action.equals(Constants.NodePressedRight)) {
     	/**
     	 * Creates and shows PopupMenu on right mouse click on a node.
     	 * @param evt
@@ -205,7 +200,7 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 //    		popup.show(e.getComponent(), e.getX(), e.getY());
 //    	}
     }
-    else if (action.equals(BioModelsEdConstants.EditModeMousePressedRight)) {
+    else if (action.equals(Constants.MousePressedRight)) {
     	/**
     	 * Creates and shows PopupMenu on right mouse click on empty space.
     	 * @param evt
@@ -217,10 +212,10 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 //    		popup.show(e.getComponent(), e.getX(), e.getY());    
 //    	}
     }
-    else if (action.equals(BioModelsEdConstants.EditModeSelectionChanged)) {
+    else if (action.equals(Constants.SelectionChanged)) {
     	
     }
-    else if (action.equals(BioModelsEdConstants.EditModeUpdateNodes)) {
+    else if (action.equals(Constants.UpdateNodes)) {
     	controller.updateNodes(evt);
     }
 	}
@@ -233,14 +228,14 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	private GraphicalObject getGlyphFromNode(Node node) {
 		ListOf<SpeciesGlyph> list = this.document.getListOfSpeciesGlyphs();
 		for (SpeciesGlyph glyph : list) {
-      Node glyphNode = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      Node glyphNode = (Node) glyph.getUserObject(Constants.GLYPH_NODE_KEY);
       if (glyphNode == node) {
         return glyph;
       } 
     }
 		ListOf<ReactionGlyph> reactions = this.document.getListOfReactionGlyphs();
 		for (ReactionGlyph glyph : reactions) {
-      Node glyphNode = (Node) glyph.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+      Node glyphNode = (Node) glyph.getUserObject(Constants.GLYPH_NODE_KEY);
       if (glyphNode == node) {
         return glyph;
       } 

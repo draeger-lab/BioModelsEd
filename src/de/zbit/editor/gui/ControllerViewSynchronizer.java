@@ -17,7 +17,6 @@
 package de.zbit.editor.gui;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -27,7 +26,6 @@ import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -40,7 +38,7 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 
 import y.base.Node;
 import y.view.GenericEdgeRealizer;
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 
 
 /**
@@ -92,7 +90,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
             boundingBox.getDimensions().getWidth(),
             boundingBox.getDimensions().getHeight());
         panel.getGraph2DView().updateView();
-        speciesGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, n);
+        speciesGlyph.putUserObject(Constants.GLYPH_NODE_KEY, n);
       }
     }
     else if (node instanceof ReactionGlyph) {
@@ -115,7 +113,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       SBMLCreateEdgeMode createEdgeMode = (SBMLCreateEdgeMode) editMode.getCreateEdgeMode();
 			Node reactionNode = createEdgeMode.createEdgeNode(panel.getGraph2DView().getGraph2D(), 
       	source, target, new GenericEdgeRealizer(), reaction.getReversible());
-      reactionGlyph.putUserObject(BioModelsEdConstants.GLYPH_NODE_KEY, reactionNode);
+      reactionGlyph.putUserObject(Constants.GLYPH_NODE_KEY, reactionNode);
       logger.info("CVS : Reaction Drawn");
     }
     else if (node instanceof ListOf<?>) {
@@ -144,7 +142,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 	 * @return
 	 */
 	private Node getNode(GraphicalObject g) {
-		return (Node) g.getUserObject(BioModelsEdConstants.GLYPH_NODE_KEY);
+		return (Node) g.getUserObject(Constants.GLYPH_NODE_KEY);
 	}
 
 	/**

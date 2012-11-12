@@ -18,11 +18,6 @@ package de.zbit.editor.gui;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
 
 /**
  * Offers static methods for several GUI actions.

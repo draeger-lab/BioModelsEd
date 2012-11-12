@@ -35,10 +35,9 @@ import org.sbml.jsbml.ext.layout.Layout;
 
 import y.layout.organic.OrganicLayouter;
 import y.view.Graph2DView;
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 import de.zbit.editor.control.SBMLTools;
 import de.zbit.editor.control.SBMLView;
-import de.zbit.gui.BaseFrame;
 import de.zbit.gui.BaseFrame.BaseAction;
 import de.zbit.gui.GUITools;
 import de.zbit.gui.JTabbedPaneDraggableAndCloseable;
@@ -62,7 +61,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
   private List<OpenedFile<SBMLDocument>> openedFiles;
   private JMenuBar menuBar;
   private JToolBar toolBar;
-  private static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
+  private static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales.Messages");
 
   /**
    * Constructor.
@@ -131,9 +130,14 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
   	setSelectedComponent(panel);
   	OpenedFile<SBMLDocument> file = getFile(panel.getDocument());
   	if ((file == null) || file.isChanged()) {
+  		panel.setName(createTitle(file, panel.getDocument()));
   		GUITools.setEnabled(true, menuBar, toolBar, 
   				BaseAction.FILE_SAVE_AS,
   				BaseAction.FILE_CLOSE);
+  		if (file.isChanged()) {
+  			GUITools.setEnabled(true, menuBar, toolBar,
+  				BaseAction.FILE_SAVE);
+  		}
   	}
   }
   /**
@@ -144,7 +148,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
 	private String createTitle(OpenedFile<SBMLDocument> file, Layout layout) {
 		String title = "";
 		title += file.isChanged() ? "*" : "";
-		title += file.isSetFile() ? file.getFile().getName() : BioModelsEdConstants.genericFileName; 
+		title += file.isSetFile() ? file.getFile().getName() : Constants.genericFileName; 
 		title += ":" + (layout.isSetName() ? layout.getName() : layout.getId());
 		return title;
 	}

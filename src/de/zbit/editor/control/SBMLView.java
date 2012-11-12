@@ -16,8 +16,6 @@
  */
 package de.zbit.editor.control;
 
-import java.io.File;
-
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.util.ValuePair;
 
@@ -45,7 +43,7 @@ public interface SBMLView {
    * Opens the layout in a new tab.
    * @return true if successful
    */
-  public boolean addTab(OpenedFile<SBMLDocument> file);
+  public boolean show(OpenedFile<SBMLDocument> file);
 
 
   /**

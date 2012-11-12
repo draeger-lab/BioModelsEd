@@ -31,8 +31,6 @@ import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
-//import org.sbml.jsbml.ext.render.RenderConstants;
-//import org.sbml.jsbml.ext.render.RenderListOfLayoutsPlugin;
 
 import y.view.EditMode;
 import y.view.Graph2DView;

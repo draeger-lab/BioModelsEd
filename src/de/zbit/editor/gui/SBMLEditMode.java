@@ -25,11 +25,8 @@ import org.sbml.jsbml.util.ValuePair;
 import y.base.Node;
 import y.base.NodeCursor;
 import y.view.EditMode;
-import y.view.Graph2D;
 import y.view.HitInfo;
-import de.zbit.editor.BioModelsEdConstants;
-import de.zbit.editor.control.CommandController;
-import de.zbit.editor.control.SBMLView;
+import de.zbit.editor.Constants;
 
 /**
  * This class accepts user input on the yFiles interface panel and decides the resulting actions.
@@ -66,7 +63,7 @@ public class SBMLEditMode extends EditMode  {
   public void mousePressedLeft(double x, double y) {
   	super.mousePressedLeft(x, y);
   	ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-  	firePropertyChange(BioModelsEdConstants.EditModeMousePressedLeft, null, newPositionMouseClicked);
+  	firePropertyChange(Constants.MousePressedLeft, null, newPositionMouseClicked);
   }
   /* (non-Javadoc)
 	 * @see y.view.EditMode#nodeClicked(y.base.Node)
@@ -74,7 +71,7 @@ public class SBMLEditMode extends EditMode  {
 	@Override
 	protected void nodeClicked(Node node) {
 		super.nodeClicked(node);
-		firePropertyChange(BioModelsEdConstants.nodeClicked, null, node);
+		firePropertyChange(Constants.nodeClicked, null, node);
 	}
 
 	/**
@@ -82,18 +79,18 @@ public class SBMLEditMode extends EditMode  {
    */
   @Override
   public void mouseReleasedLeft(double x, double y) {
-  	//TODO not sure if needed super.mouseReleasedLeft(x, y);
+  	super.mouseReleasedLeft(x, y);
   	List<Node> list = getSelectedNodes();      
   	
   	// Set list of nodes in CommandController
-  	firePropertyChange(BioModelsEdConstants.EditModeSelectionChanged, null, list);
+  	firePropertyChange(Constants.SelectionChanged, null, list);
   	// Initiate updating of glyphs
   	if (!list.isEmpty()) {
-  		firePropertyChange(BioModelsEdConstants.EditModeUpdateNodes, null, this.getGraph2D());
+  		firePropertyChange(Constants.UpdateNodes, null, this.getGraph2D());
   	}
   	// Send mouse position
   	ValuePair<Double, Double> positionMouseReleased = new ValuePair<Double, Double>(x, y);
-  	firePropertyChange(BioModelsEdConstants.EditModeMouseReleasedLeft, null, positionMouseReleased);  
+  	firePropertyChange(Constants.MouseReleasedLeft, null, positionMouseReleased);  
   } 
   
   /**
@@ -131,16 +128,16 @@ public class SBMLEditMode extends EditMode  {
       List<Node> list = this.getSelectedNodes();
       
       // Set list of nodes in CommandController
-      firePropertyChange(BioModelsEdConstants.EditModeSelectionChanged, null, list);
+      firePropertyChange(Constants.SelectionChanged, null, list);
       
-      firePropertyChange(BioModelsEdConstants.EditModeNodePressedRight, null, node);      
+      firePropertyChange(Constants.NodePressedRight, null, node);      
       //oldNodePosition = new ValuePair<Double, Double>(nodeX, nodeY);      
     }
     else {
 
       
       ValuePair<Double, Double> newPositionMouseClicked = new ValuePair<Double, Double>(x, y);
-      firePropertyChange(BioModelsEdConstants.EditModeMousePressedRight, null, newPositionMouseClicked);
+      firePropertyChange(Constants.MousePressedRight, null, newPositionMouseClicked);
       //lastPositionMouseClicked = newPositionMouseClicked;
     }
   }

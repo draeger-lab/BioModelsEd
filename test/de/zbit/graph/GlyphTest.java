@@ -30,7 +30,7 @@ import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 
 
 /**
@@ -60,12 +60,12 @@ public class GlyphTest {
     sGlyph.setId("glyph_s1");
     sGlyph.setSpecies("s1");
     sGlyph.setBoundingBox(sGlyph.createBoundingBox(
-        BioModelsEdConstants.glyphDefaultWidth,
-        BioModelsEdConstants.glyphDefaultHeight,
-        BioModelsEdConstants.glyphDefaultDepth,
+        Constants.glyphDefaultWidth,
+        Constants.glyphDefaultHeight,
+        Constants.glyphDefaultDepth,
         10,
         10,
-        BioModelsEdConstants.glyphDefaultZ));
+        Constants.glyphDefaultZ));
     layout.add(sGlyph);
 
     model.addSpecies(s);

@@ -37,7 +37,7 @@ import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 import de.zbit.io.OpenedFile;
 
 /**
@@ -82,9 +82,9 @@ public class SBMLFactory {
    * @return the modified SpeciesGlyph
    */
   public static SpeciesGlyph addSpeciesGlyphToLayout(Layout layout, SpeciesGlyph sGlyph, double x, double y, String name) {
-    return addSpeciesGlyphToLayout(layout, sGlyph, x, y, BioModelsEdConstants.glyphDefaultDepth, 
-      BioModelsEdConstants.glyphDefaultWidth, BioModelsEdConstants.glyphDefaultHeight, 
-      BioModelsEdConstants.glyphDefaultDepth, name);
+    return addSpeciesGlyphToLayout(layout, sGlyph, x, y, Constants.glyphDefaultDepth, 
+      Constants.glyphDefaultWidth, Constants.glyphDefaultHeight, 
+      Constants.glyphDefaultDepth, name);
   }
   
   /**
@@ -121,7 +121,7 @@ public class SBMLFactory {
     TextGlyph tg = new TextGlyph(id, level, version);
     tg.setGraphicalObject(graphicalObject);
     tg.setOriginOfText(speciesId);
-    graphicalObject.putUserObject(BioModelsEdConstants.GRAPHOBJECT_TEXTGLYPH_KEY, tg);
+    graphicalObject.putUserObject(Constants.GRAPHOBJECT_TEXTGLYPH_KEY, tg);
     return tg;
   }
   
@@ -137,7 +137,7 @@ public class SBMLFactory {
    * @return the created Reaction
    */
   public static Reaction createReaction(OpenedFile<SBMLDocument> selectedDoc, Species source, Species target, boolean reversible, int level, int version){
-    String id = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericReactionIdPrefix);
+    String id = SBMLTools.getNextGenericId(selectedDoc, Constants.genericReactionIdPrefix);
     Reaction reaction = new Reaction(id, level, version);
     SpeciesReference sourceRef = new SpeciesReference(source);
     SpeciesReference targetRef = new SpeciesReference(target);
@@ -160,7 +160,7 @@ public class SBMLFactory {
    * @return the created ReactionGlyph
    */
   public static ReactionGlyph createReactionGlyph(OpenedFile<SBMLDocument> selectedDoc, Reaction reaction, SpeciesGlyph source, SpeciesGlyph target, int level, int version) {
-    String id = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericReactionGlyphIdPrefix);
+    String id = SBMLTools.getNextGenericId(selectedDoc, Constants.genericReactionGlyphIdPrefix);
     ReactionGlyph reactionGlyph = new ReactionGlyph(id, level, version);
     if (source.isSetBoundingBox() && target.isSetBoundingBox()) {
       double x = source.getBoundingBox().getPosition().getX()
@@ -176,11 +176,11 @@ public class SBMLFactory {
       reactionGlyph.setBoundingBox(bb);
     }
     
-    id = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericSpeciesReferenceGlyphIdPrefix);
+    id = SBMLTools.getNextGenericId(selectedDoc, Constants.genericSpeciesReferenceGlyphIdPrefix);
     SpeciesReferenceGlyph sourceRef = new SpeciesReferenceGlyph(id, level, version);
     sourceRef.setSpeciesGlyph(source.getId());
     sourceRef.setRole(SpeciesReferenceRole.SUBSTRATE);
-    id = SBMLTools.getNextGenericId(selectedDoc, BioModelsEdConstants.genericSpeciesReferenceGlyphIdPrefix);
+    id = SBMLTools.getNextGenericId(selectedDoc, Constants.genericSpeciesReferenceGlyphIdPrefix);
     SpeciesReferenceGlyph targetRef = new SpeciesReferenceGlyph(id, level, version);
     targetRef.setSpeciesGlyph(target.getId());
     targetRef.setRole(SpeciesReferenceRole.PRODUCT);
@@ -203,7 +203,7 @@ public class SBMLFactory {
     }
     Model model = doc.getDocument().getModel();
     
-    modifierGlyph.setId(SBMLTools.getNextGenericId(doc, BioModelsEdConstants.genericModifierReferenceGlyphIdPrefix));
+    modifierGlyph.setId(SBMLTools.getNextGenericId(doc, Constants.genericModifierReferenceGlyphIdPrefix));
     modifierGlyph.setLevel(model.getLevel());
     modifierGlyph.setVersion(model.getVersion());
     if (sbo >= 0) {
@@ -433,7 +433,7 @@ public class SBMLFactory {
 	public static ModifierSpeciesReference createModifierSpeciesReference(
 		OpenedFile<SBMLDocument> file, Model model, int sbo, SpeciesGlyph source) {
 		ModifierSpeciesReference modifier = new ModifierSpeciesReference();
-		modifier.setId(SBMLTools.getNextGenericId(file, BioModelsEdConstants.genericModifierReferenceIdPrefix));
+		modifier.setId(SBMLTools.getNextGenericId(file, Constants.genericModifierReferenceIdPrefix));
 		modifier.setLevel(model.getLevel());
 		modifier.setVersion(model.getVersion());
 		modifier.setSBOTerm(sbo);
@@ -454,9 +454,9 @@ public class SBMLFactory {
 		SBMLDocument sbmlDocument = new SBMLDocument(
 			SBMLView.DEFAULT_LEVEL_VERSION.getL(),
 			SBMLView.DEFAULT_LEVEL_VERSION.getV());
-		Model model = sbmlDocument.createModel(BioModelsEdConstants.modelDefaultName);
-		model.setName(BioModelsEdConstants.genricModelId);
-		model.createCompartment(BioModelsEdConstants.compartmentDefaultName);
+		Model model = sbmlDocument.createModel(Constants.modelDefaultName);
+		model.setName(Constants.genricModelId);
+		model.createCompartment(Constants.compartmentDefaultName);
 		return sbmlDocument;
 	}
 }

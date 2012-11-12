@@ -77,18 +77,6 @@ public class FileManager {
 	}
 	
 	/**
-	 * Check if any file has been modified.
-	 * @return true, if any file is modified. false otherwise.
-	 */
-	public boolean anyFileIsModified() {
-	  boolean anyModified = false;
-    for (OpenedFile<?> doc : listOfOpenedFiles) {
-      anyModified = anyModified || doc.isChanged();
-    }
-    return anyModified;
-	}
-	
-	/**
 	 * Open File.
 	 * @return true if successful
 	 */

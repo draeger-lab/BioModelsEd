@@ -41,7 +41,7 @@ public enum Command implements ActionCommand{
 	 * File menu actions
 	 */
 	NEW,
-	CLOSE, 
+	//CLOSE, 
 	/**
 	 * layout menu actions
 	 */
@@ -49,12 +49,28 @@ public enum Command implements ActionCommand{
 	RENAME_LAYOUT, 
 	DELETE_LAYOUT, 
 	CLONE_LAYOUT, 
-	AUTOMATIC_LAYOUT;
+	AUTOMATIC_LAYOUT,
+	OPEN_LAYOUT,
+
+	DELETE_NODE,
+	COPY_NODE,
+	RENAME_NODE,
+	
+	MACROMOLECULE,
+	INHIBITION,
+	CATALYSIS,
+	REACTION,
+	UNKNOWN_MOLECULE,
+	SIMPLE_MOLECULE,
+	EMPTY_SET,
+	REVERSIBLE,
+	
+	;
 
 	/* (non-Javadoc)
 	 * @see de.zbit.gui.ActionCommand#getName()
 	 */
-	private final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.locales.Messages");
+	private final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales.Messages");
 	public String getName() {
 		return MESSAGES.getString(name());
 	}

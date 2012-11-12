@@ -35,7 +35,7 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 
-import de.zbit.editor.BioModelsEdConstants;
+import de.zbit.editor.Constants;
 import de.zbit.io.OpenedFile;
 
 /**
@@ -144,7 +144,7 @@ public class SBMLTools {
 		Model model = sbmlDoc.getModel();
 		if (model == null) {
 			logger.info("creating Model");
-			sbmlDoc.createModel(BioModelsEdConstants.genricModelId);
+			sbmlDoc.createModel(Constants.genricModelId);
 			model = sbmlDoc.getModel();
 		}
 		return model;
@@ -159,16 +159,16 @@ public class SBMLTools {
 		Model model = layout.getModel();
 		List<Compartment> compartments = model.getListOfCompartments();
     for (Compartment c : compartments) {
-      layout.createCompartmentGlyph(getNextGenericId(doc, BioModelsEdConstants.genericGlyphIdPrefix), c.getId());
+      layout.createCompartmentGlyph(getNextGenericId(doc, Constants.genericGlyphIdPrefix), c.getId());
       logger.info("CompartmentGlyph created.");
     }
     
     List<Species> species = model.getListOfSpecies();
     for (Species s : species) {
-      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(getNextGenericId(doc, BioModelsEdConstants.genericGlyphIdPrefix),
+      SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(getNextGenericId(doc, Constants.genericGlyphIdPrefix),
         s.getLevel(), s.getVersion(), s.getId());
       layout.add(sGlyph);
-      TextGlyph tGlyph = SBMLFactory.createTextGlyph(getNextGenericId(doc, BioModelsEdConstants.genericTextGlyphIdPrefix),
+      TextGlyph tGlyph = SBMLFactory.createTextGlyph(getNextGenericId(doc, Constants.genericTextGlyphIdPrefix),
         model.getLevel(), model.getVersion(), sGlyph, s.getId());
       layout.addTextGlyph(tGlyph);
       logger.info("SpeciesGlyph created.");
@@ -249,8 +249,8 @@ public class SBMLTools {
 		Model model = getOrCreateModel(sbmlDoc);
 		Compartment c1 = model.getCompartment(0);
 		if (c1 == null) {
-			model.createCompartment(BioModelsEdConstants.defaultCompartmentId);
-			return BioModelsEdConstants.defaultCompartmentId;
+			model.createCompartment(Constants.defaultCompartmentId);
+			return Constants.defaultCompartmentId;
 		}
 		else {
 			return c1.getId();
@@ -303,7 +303,7 @@ public class SBMLTools {
 	 */
 	public static String findCompartmentId(Double x, Double y) {
 		// TODO implement this
-		return BioModelsEdConstants.defaultCompartmentId;
+		return Constants.defaultCompartmentId;
 	}
 	
 }
