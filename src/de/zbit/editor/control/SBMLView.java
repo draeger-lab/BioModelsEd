@@ -16,6 +16,8 @@
  */
 package de.zbit.editor.control;
 
+import java.util.List;
+
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.util.ValuePair;
 
@@ -45,23 +47,23 @@ public interface SBMLView {
    */
   public boolean show(OpenedFile<SBMLDocument> file);
 
-
-  /**
-   * @return the tabManager
-   */
-  public TabManager getTabManager();
-
-  /**
-   * Shows a warning message corresponding to the given String.
-   * @param warning
-   */
-  public void showWarning(String warning);
-  
-  /**
-   * Shows an error message corresponding to the given String.
-   * @param error
-   */
-  public void showError(String error);
+//
+//  /**
+//   * @return the tabManager
+//   */
+//  public TabManager getTabManager();
+//
+//  /**
+//   * Shows a warning message corresponding to the given String.
+//   * @param warning
+//   */
+//  public void showWarning(String warning);
+//  
+//  /**
+//   * Shows an error message corresponding to the given String.
+//   * @param error
+//   */
+//  public void showError(String error);
 
 
   /**
@@ -69,5 +71,12 @@ public interface SBMLView {
    * @return
    */
   public CommandController getController();
+
+
+	/**
+	 * notify view, that a file was saved
+	 * @param newValue
+	 */
+	public void fileSaved(OpenedFile<SBMLDocument> file);
 
 }

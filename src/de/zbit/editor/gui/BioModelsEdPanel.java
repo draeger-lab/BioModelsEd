@@ -355,4 +355,11 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 //			graph2d.updateViews();
 //		}
 //	}
+	
+	/**
+	 * @return
+	 */
+	public OpenedFile<SBMLDocument> getFile() {
+		return this.file;
+	}
 }

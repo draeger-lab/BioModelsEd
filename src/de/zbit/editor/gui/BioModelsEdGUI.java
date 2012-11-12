@@ -77,6 +77,7 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 				case 2 : return false;
 			}
 		}
+		tabManager.closeFile(file);
 		return controller.closeFile(file);
 	}
 
@@ -96,17 +97,17 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 
 	@Override
 	public URL getURLAboutMessage() {
-		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("ABOUT_FILE"));
+		return getClass().getResource(MESSAGES.getString("ABOUT_FILE"));
 	}
 
 	@Override
 	public URL getURLLicense() {
-		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("LICENSE_FILE"));
+		return getClass().getResource(MESSAGES.getString("LICENSE_FILE"));
 	}
 
 	@Override
 	public URL getURLOnlineHelp() {
-		return getClass().getResource(ResourceManager.getBundle("de.zbit.editor.locales.Messages").getString("ONLINE_HELP_FILE"));
+		return getClass().getResource(MESSAGES.getString("ONLINE_HELP_FILE"));
 	}
 
 	@Override
@@ -125,22 +126,21 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 		return controller.openFile(files);
 	}
 
-	@Override
-	public TabManager getTabManager() {
-		return this.tabManager;
-	}
-
-	@Override
-	public void showWarning(String warning) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void showError(String error) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public TabManager getTabManager() {
+//		return this.tabManager;
+//	}
+//
+//	@Override
+//	public void showWarning(String warning) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void showError(String error) {
+//		// TODO Auto-generated method stub
+//	}
 
 	@Override
 	public CommandController getController() {
@@ -156,7 +156,6 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	public File saveFileAs() {
 		File file = GUITools.saveFileDialog(this);
 		if (file != null) {
-			logger.info("saving");
 			if (controller.saveFileAs(file, tabManager.getCurrentFile())) {
 				logger.info(MESSAGES.getString("SAVING_DONE_INFO"));
 			}
@@ -234,5 +233,14 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 			case NEW : controller.fileNew(); break;
 			//case CLOSE : controller.fileClose(); break;
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.editor.control.SBMLView#fileSaved(de.zbit.io.OpenedFile)
+	 */
+	@Override
+	public void fileSaved(OpenedFile<SBMLDocument> file) {
+		this.tabManager.updateTitle(file);
+		
 	}
 }

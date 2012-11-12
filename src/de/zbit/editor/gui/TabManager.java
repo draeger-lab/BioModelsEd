@@ -29,6 +29,8 @@ import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.ext.layout.Layout;
@@ -53,7 +55,7 @@ import de.zbit.util.ResourceManager;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class TabManager extends JTabbedPaneDraggableAndCloseable implements ActionListener, PropertyChangeListener{
+public class TabManager extends JTabbedPaneDraggableAndCloseable implements ChangeListener, ActionListener, PropertyChangeListener{
 
   private static final long serialVersionUID = -905908829761611472L;
   private static Logger logger = Logger.getLogger(TabManager.class.getName());
@@ -71,6 +73,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
   public TabManager(SBMLView view) {
     this.view = view;
     openedFiles = new LinkedList<OpenedFile<SBMLDocument>>();
+    this.addChangeListener(this);
   }
 
   /**
@@ -126,17 +129,28 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
   }
   
 
+  /**
+   * all tab changes need to be processed by switchTo for GUI elements
+   * to be enabled/disabled and titles to be updated
+   * @param panel
+   */
   private void switchTo(BioModelsEdPanel panel) {
-  	setSelectedComponent(panel);
-  	OpenedFile<SBMLDocument> file = getFile(panel.getDocument());
-  	if ((file == null) || file.isChanged()) {
-  		panel.setName(createTitle(file, panel.getDocument()));
-  		GUITools.setEnabled(true, menuBar, toolBar, 
+  	if (panel == null) {
+  		logger.info("nothing to show");
+  		BioModelsEdGUITools.setEnabled(toolBar, false);
+  	}
+  	else {
+  		setSelectedComponent(panel);
+  		OpenedFile<SBMLDocument> file = panel.getFile();
+  		if ((file == null) || file.isChanged()) {
+  			panel.setName(createTitle(file, panel.getDocument()));
+  			GUITools.setEnabled(true, menuBar, toolBar, 
   				BaseAction.FILE_SAVE_AS,
   				BaseAction.FILE_CLOSE);
-  		if (file.isChanged()) {
-  			GUITools.setEnabled(true, menuBar, toolBar,
-  				BaseAction.FILE_SAVE);
+  			if (file.isChanged()) {
+  				GUITools.setEnabled(true, menuBar, toolBar,
+  					BaseAction.FILE_SAVE);
+  			}
   		}
   	}
   }
@@ -150,6 +164,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
 		title += file.isChanged() ? "*" : "";
 		title += file.isSetFile() ? file.getFile().getName() : Constants.genericFileName; 
 		title += ":" + (layout.isSetName() ? layout.getName() : layout.getId());
+		logger.info("new tab title: " + title);
 		return title;
 	}
 
@@ -164,9 +179,9 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
 		Layout layout = SBMLTools.getLayout(file, layoutId);
 		Component[] components = getComponents();
 		for (int i = 0; i < getComponentCount(); i++) {
-			BioModelsEdPanel panel = (BioModelsEdPanel) components[i];
-			if (panel.getDocument().equals(layout)) {
-				return i;
+			if (components[i] instanceof BioModelsEdPanel) {
+				BioModelsEdPanel panel = (BioModelsEdPanel) components[i];
+				if (panel.getDocument().equals(layout)) { return i; }
 			}
 		}
 		return -1;
@@ -193,8 +208,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
     	view.getController().fileSaveAll();
     }
     BioModelsEdPanel selected = (BioModelsEdPanel) getSelectedComponent();
-    Layout layout = selected.getDocument();
-    OpenedFile<SBMLDocument> openedFile = getFile(layout);
+    OpenedFile<SBMLDocument> openedFile = selected.getFile();
     openedFiles.clear();
     openedFiles.add(openedFile);
     setComponentAt(0, selected);
@@ -203,32 +217,19 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
     }
     return true;
   }
-
-  /**
-   * retrieves a sbml document from layout and the associated
-   * opened file from openedFiles
-	 * @param layout
+	
+	/**
 	 * @return
 	 */
-	private OpenedFile<SBMLDocument> getFile(Layout layout) {
-		SBMLDocument sbmlDoc = layout.getSBMLDocument();
-		for (OpenedFile<SBMLDocument> file : openedFiles) {
-			if (file.getDocument().equals(sbmlDoc)) {
-				return file;
-			}
-		}
-		return null;
-	}
-	
 	public OpenedFile<SBMLDocument> getCurrentFile() {
-		return getFile(getCurrentLayout());
+		return ((BioModelsEdPanel) getSelectedComponent()).getFile();
 	}
 
 	/**
 	 * @return
 	 */
 	public Layout getCurrentLayout() {
-		return ((GraphLayoutPanel) getSelectedComponent()).getDocument();
+		return ((BioModelsEdPanel) getSelectedComponent()).getDocument();
 	}
   
   /**
@@ -285,6 +286,58 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Acti
 		BioModelsEdPanel panel = (BioModelsEdPanel) this.getSelectedComponent();
 		if(panel != null) {
 			panel.receive(evt);
+		}
+	}
+
+	/**
+	 * closes all tabs associated with file
+	 * @param file
+	 */
+	public void closeFile(OpenedFile<SBMLDocument> file) {
+		logger.info("closing " + file.getFile().getName());
+		for (Component component : this.getComponents()) {
+			if (component instanceof BioModelsEdPanel) {
+				BioModelsEdPanel panel = (BioModelsEdPanel) component;
+				if (panel.getFile().equals(file)) {
+					this.remove(panel);
+				}
+			}
+		}
+//		if (this.getComponentCount() > 0) {
+//			switchTo((BioModelsEdPanel) this.getComponent(0));
+//		}
+//		else {
+//			
+//		}
+	}
+
+	/**
+	 * updated tab titles, invoked after saving
+	 * @param file
+	 */
+	public void updateTitle(OpenedFile<SBMLDocument> file) {
+		for (Component component : this.getComponents()) {
+			if (component instanceof BioModelsEdPanel) {
+				BioModelsEdPanel panel = (BioModelsEdPanel) component;
+				if (panel.getFile().equals(file)) {
+					panel.setName(createTitle(file, panel.getDocument()));
+				}
+			}
+		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
+	@Override
+	public void stateChanged(ChangeEvent arg0) {
+		// invoked when tabs are removed by mouseClicked in super.addCloseIconToTabComponentAt
+		if (getTabCount() > 0) {
+			switchTo((BioModelsEdPanel) getSelectedComponent());
+		}
+		else {
+			switchTo(null);
 		}
 	}
 }

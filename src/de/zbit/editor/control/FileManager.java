@@ -41,7 +41,7 @@ public class FileManager {
 	/**
 	 * List of all opened Documents
 	 */
-	List<OpenedFile<?>> listOfOpenedFiles = new ArrayList<OpenedFile<?>>();
+	List<OpenedFile<SBMLDocument>> listOfOpenedFiles = new ArrayList<OpenedFile<SBMLDocument>>();
 	CommandController commandController;
 	Logger logger = Logger.getLogger(FileManager.class.getName());
 
@@ -58,22 +58,15 @@ public class FileManager {
 	 * Add Document only if not already added.
 	 * @return returns true if document was added successfully
 	 */
-	public boolean addDocument(OpenedFile<?> openedFile) {
+	public boolean addDocument(OpenedFile<SBMLDocument> openedFile) {
 	  return listOfOpenedFiles.add(openedFile);
 	}
 	
 	/**
-	 * Check if filePath is already in use.
-	 * @param filePath
-	 * @return true, if it is used. false otherwise.
+	 * @return the listOfOpenedFiles
 	 */
-	private boolean isOpen(String filePath) {
-		for (OpenedFile<?> doc : listOfOpenedFiles) {
-			if (doc.isSetFile() && doc.getFile().getAbsolutePath().equals(filePath)) {
-				return true;
-			}
-		}
-		return false;
+	public List<OpenedFile<SBMLDocument>> getListOfOpenedFiles() {
+		return listOfOpenedFiles;
 	}
 	
 	/**
@@ -82,7 +75,7 @@ public class FileManager {
 	 */
   public boolean fileOpen(File file) {
   	//FIXME Check for right filetype
-    if ((file == null) || isOpen(file.getAbsolutePath())) {
+    if (file == null) {
       return false;
     }
     else {
@@ -92,7 +85,6 @@ public class FileManager {
         task.execute();
         return true;
       } catch (FileNotFoundException e) {
-        commandController.fileNotFound();
         return false;
       }
     }
@@ -133,7 +125,7 @@ public class FileManager {
       if(!doc.isSetFile()) {
         return false;
       }
-      SBMLWritingTask task = new SBMLWritingTask(doc.getFile(), doc.getDocument());
+      SBMLWritingTask task = new SBMLWritingTask(doc);
       task.addPropertyChangeListener(commandController);
       task.execute();
       doc.setChanged(false);

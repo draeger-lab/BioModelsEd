@@ -27,6 +27,7 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLWriter;
 
 import de.zbit.editor.Constants;
+import de.zbit.io.OpenedFile;
 
 /**
  * This class represents a file writing task for a SBMLDocument.
@@ -42,22 +43,21 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
   private OutputStream stream;
   private File file;
   private SBMLDocument doc;
+  private OpenedFile<SBMLDocument> openedFile;
 
   /**
-   * Constructor.
-   * @param file
-   * @param doc
-   * @throws FileNotFoundException
-   */
-  public SBMLWritingTask(File file, SBMLDocument doc)
-    throws FileNotFoundException {
-    this.file = file;
-    this.doc = doc;
-    this.stream = new FileOutputStream(this.file);
-  }
+	 * @param doc2
+   * @throws FileNotFoundException 
+	 */
+	public SBMLWritingTask(OpenedFile<SBMLDocument> openedFile) throws FileNotFoundException {
+		this.openedFile = openedFile;
+		this.file = openedFile.getFile();
+		this.doc = openedFile.getDocument();
+		this.stream = new FileOutputStream(this.file);
+	}
 
 
-  /**
+	/**
    * Writes the document into a file using a SBMLWriter.
    */
   protected Void doInBackground() throws Exception {
@@ -71,6 +71,6 @@ public class SBMLWritingTask extends SwingWorker<Void, Void> {
    */
   @Override
   protected void done() {
-    firePropertyChange(Constants.savingDone, null, null);
+    firePropertyChange(Constants.savingDone, null, openedFile);
   }
 }

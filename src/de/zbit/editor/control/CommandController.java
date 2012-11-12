@@ -226,7 +226,7 @@ public class CommandController implements PropertyChangeListener {
 	 */
 	public boolean fileSaveAll() {
 		boolean success = true;
-		for (OpenedFile<SBMLDocument> file : view.getTabManager().getOpenedFiles()) {
+		for (OpenedFile<SBMLDocument> file : fileManager.getListOfOpenedFiles()) {
 			success |= saveFile(file);
 		}
 		return success;
@@ -266,6 +266,9 @@ public class CommandController implements PropertyChangeListener {
 			doc.setChanged(false);
 			this.view.show(doc);
 			this.fileManager.addDocument(doc);
+		}
+		else if (evt.getPropertyName().equals(Constants.savingDone)) {
+			this.view.fileSaved((OpenedFile<SBMLDocument>) evt.getNewValue());
 		}
 	}
 	
@@ -334,12 +337,12 @@ public class CommandController implements PropertyChangeListener {
 		return null;
 	}
 	
-	/**
-	 * Shows a File-Not-Found error.
-	 */
-	public void fileNotFound() {
-		view.showError(Constants.fileNotFound);
-	}
+//	/**
+//	 * Shows a File-Not-Found error.
+//	 */
+//	public void fileNotFound() {
+//		view.showError(Constants.fileNotFound);
+//	}
 	
 	
 	/**
@@ -610,21 +613,22 @@ public class CommandController implements PropertyChangeListener {
 	 * Exports the current view as a JPED or GIF.
 	 * @return true, if file was exported succesfully. false otherwise.
 	 */
-	public boolean fileExport(File file) {
-		GraphLayoutPanel panel = (GraphLayoutPanel) view.getTabManager().getSelectedComponent();
-		Graph2DView view = panel.getGraph2DView();
-		Graph2D graph = view.getGraph2D();
-		
-		if(BioModelsEdGUIFactory.createFilterGIF().accept(file)) {
-			logger.info("Exporting gif file: " + file.getAbsolutePath());
-			exportGraphToImageFileFormat(graph, new GIFIOHandler(), file.getAbsolutePath());
-		}
-		else if (BioModelsEdGUIFactory.createFilterJPEG().accept(file)) {
-			logger.info("Exporting jpeg file: " + file.getAbsolutePath());
-			exportGraphToImageFileFormat(graph, new JPGIOHandler(), file.getAbsolutePath());      
-		}
-		return false;
-	}
+//	public boolean fileExport(File file) {
+//	TODO who is responsible for this?
+//		GraphLayoutPanel panel = (GraphLayoutPanel) view.getTabManager().getSelectedComponent();
+//		Graph2DView view = panel.getGraph2DView();
+//		Graph2D graph = view.getGraph2D();
+//		
+//		if(BioModelsEdGUIFactory.createFilterGIF().accept(file)) {
+//			logger.info("Exporting gif file: " + file.getAbsolutePath());
+//			exportGraphToImageFileFormat(graph, new GIFIOHandler(), file.getAbsolutePath());
+//		}
+//		else if (BioModelsEdGUIFactory.createFilterJPEG().accept(file)) {
+//			logger.info("Exporting jpeg file: " + file.getAbsolutePath());
+//			exportGraphToImageFileFormat(graph, new JPGIOHandler(), file.getAbsolutePath());      
+//		}
+//		return false;
+//	}
 	
 	/**
 	 * Exports the graph in the format specified by ioh.
