@@ -17,7 +17,6 @@
 package de.zbit.editor;
 
 import java.awt.Window;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +51,13 @@ public class BioModelsEd extends Launcher {
 	public BioModelsEd(String[] args) {
 		super(args);
 		controller = new CommandController();
-		
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new BioModelsEd(args).run();
+		new BioModelsEd(args);
 	}
 
 	@Override

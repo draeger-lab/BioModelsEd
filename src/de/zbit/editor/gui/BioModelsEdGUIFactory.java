@@ -50,7 +50,7 @@ import de.zbit.util.ResourceManager;
  */
 public class BioModelsEdGUIFactory {
 	
-	public static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales");
+	public static final ResourceBundle MESSAGES = ResourceManager.getBundle("de.zbit.editor.locales.Messages");
   /**
    * Create a JMenu on given menubar.
    * 
@@ -135,10 +135,10 @@ public class BioModelsEdGUIFactory {
    * @param l
    * @return the created button
    */
-  public static JButton addButton(JToolBar toolbar, String tooltip, ImageIcon icon, 
-  	int width, int height, Command actionCommand, ActionListener... l) {
-    JButton button = createButtonIcon(icon, tooltip, width, height, l);
-    button.setActionCommand(actionCommand.getName());
+  public static JButton addButton(JToolBar toolbar, Command command, ImageIcon icon, 
+  	int width, int height, ActionListener... l) {
+    JButton button = createButtonIcon(icon, command.getToolTip(), width, height, l);
+    button.setActionCommand(command.getName());
     toolbar.add(button);
     return button;
   }
@@ -155,7 +155,7 @@ public class BioModelsEdGUIFactory {
    */
   public static JButton addButton(JToolBar toolbar, Command command, ImageIcon icon, 
   	ActionListener... l) {
-    JButton button = createButtonIcon(icon, MESSAGES.getString(command.getToolTip()), 0, 0, l);
+    JButton button = addButton(toolbar, command, icon, 0, 0, l);
     return button;
   }
   /**
@@ -188,7 +188,7 @@ public class BioModelsEdGUIFactory {
    */
   public static JCheckBox addCheckbox(JToolBar toolbar, Command command,
     ActionListener... l) {
-    JCheckBox checkbox = new JCheckBox(MESSAGES.getString(command.getName()));
+    JCheckBox checkbox = new JCheckBox(command.getName());
     if (l != null) {
       for (ActionListener listener : l) {
         checkbox.addActionListener(listener);

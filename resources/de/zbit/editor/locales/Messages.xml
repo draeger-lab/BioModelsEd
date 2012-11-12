@@ -69,13 +69,21 @@
 	<entry key="RENAME_NODE">Rename Node</entry>
 
 	<entry key="MACROMOLECULE">Macromolecule</entry>
+	<entry key="MACROMOLECULE_TOOLTIP">Macromolecule</entry>
 	<entry key="INHIBITION">Inhibition</entry>
+	<entry key="INHIBITION_TOOLTIP">Inhibition</entry>
 	<entry key="CATALYSIS">Catalysis</entry>
+	<entry key="CATALYSIS_TOOLTIP">Catalysis</entry>
 	<entry key="REACTION">Reaction</entry>
+	<entry key="REACTION_TOOLTIP">Reaction</entry>
 	<entry key="UNKNOWN_MOLECULE">Unknown Molecule</entry>
+	<entry key="UNKNOWN_MOLECULE_TOOLTIP">Unknown Molecule</entry>
 	<entry key="SIMPLE_MOLECULE">Simple Molecule</entry>
+	<entry key="SIMPLE_MOLECULE_TOOLTIP">Simple Molecule</entry>
 	<entry key="EMPTY_SET">Sink</entry>
+	<entry key="EMPTY_SET_TOOLTIP">Sink</entry>
 	<entry key="REVERSIBLE">Reversible</entry>
+	<entry key="REVERSIBLE_TOOLTIP">Reversible</entry>
 
 	<!-- Popup Windows -->
 	<entry key="NAME_SPECIES">Enter species name</entry>
