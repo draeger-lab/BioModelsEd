@@ -19,6 +19,12 @@ package de.zbit.editor.gui;
 import java.awt.Component;
 import java.awt.Container;
 
+import javax.swing.JMenuBar;
+import javax.swing.JToolBar;
+
+import de.zbit.gui.GUITools;
+import de.zbit.gui.BaseFrame.BaseAction;
+
 /**
  * Offers static methods for several GUI actions.
  * 
@@ -43,5 +49,37 @@ public class BioModelsEdGUITools {
 				setEnabled((Container)component, enable);
 			}
 		}
+	}
+
+	/**
+	 * @param b
+	 * @param menuBar
+	 * @param toolBar
+	 */
+	public static void setGuiFileChanged(boolean b, JMenuBar menuBar,
+		JToolBar toolBar) {
+		GUITools.setEnabled(b, menuBar, toolBar, 
+			BaseAction.FILE_SAVE,
+			BaseAction.FILE_SAVE_AS,
+			BaseAction.FILE_CLOSE);
+	}
+
+	/**
+	 * @param b
+	 * @param menuBar
+	 * @param toolBar
+	 */
+	public static void setGuiStart(boolean b, JMenuBar menuBar, JToolBar toolBar) {
+		BioModelsEdGUITools.setEnabled(toolBar, !b);
+		GUITools.setEnabled(!b, menuBar, toolBar,
+			BaseAction.FILE_SAVE,
+			BaseAction.FILE_SAVE_AS,
+			BaseAction.FILE_CLOSE,
+			Command.CLONE_LAYOUT,
+			Command.DELETE_LAYOUT,
+			Command.NEW_LAYOUT,
+			Command.RENAME_LAYOUT,
+			Command.AUTOMATIC_LAYOUT);
+
 	}
 }

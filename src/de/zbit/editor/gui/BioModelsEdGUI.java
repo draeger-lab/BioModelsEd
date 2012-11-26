@@ -126,22 +126,6 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 		return controller.openFile(files);
 	}
 
-//	@Override
-//	public TabManager getTabManager() {
-//		return this.tabManager;
-//	}
-//
-//	@Override
-//	public void showWarning(String warning) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void showError(String error) {
-//		// TODO Auto-generated method stub
-//	}
-
 	@Override
 	public CommandController getController() {
 		return this.controller;
@@ -161,6 +145,16 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 			}
 		}
 		return file;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.zbit.gui.BaseFrame#saveFile()
+	 */
+	@Override
+	public File saveFile() {
+		OpenedFile<SBMLDocument> currentFile = tabManager.getCurrentFile();
+		controller.saveFile(currentFile);
+		return currentFile.getFile();
 	}
 
 	/**
@@ -206,6 +200,14 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	}
 
 	/* (non-Javadoc)
+	 * @see de.zbit.gui.BaseFrame#showsSaveMenuEntry()
+	 */
+	@Override
+	protected boolean showsSaveMenuEntry() {
+		return true;
+	}
+
+	/* (non-Javadoc)
 	 * @see de.zbit.gui.BaseFrame#additionalMenus()
 	 */
 	@Override
@@ -241,6 +243,5 @@ public class BioModelsEdGUI extends BaseFrame implements SBMLView, ActionListene
 	@Override
 	public void fileSaved(OpenedFile<SBMLDocument> file) {
 		this.tabManager.updateTitle(file);
-		
 	}
 }

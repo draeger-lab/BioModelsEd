@@ -39,6 +39,8 @@ import org.sbml.jsbml.util.TreeNodeRemovedEvent;
 import y.base.Node;
 import y.view.GenericEdgeRealizer;
 import de.zbit.editor.Constants;
+import de.zbit.graph.gui.LayoutGraphPanel;
+import de.zbit.sbml.layout.y.SBMLCreateEdgeMode;
 
 
 /**
@@ -52,7 +54,7 @@ import de.zbit.editor.Constants;
  */
 public class ControllerViewSynchronizer implements TreeNodeChangeListener {
 
-  private GraphLayoutPanel panel;
+  private LayoutGraphPanel panel;
   private SBMLEditMode editMode;
   private Layout layout;
   private Logger logger = Logger.getLogger(ControllerViewSynchronizer.class.getName());
@@ -63,7 +65,7 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
    * @param layout
    * @param editMode
    */
-  public ControllerViewSynchronizer(GraphLayoutPanel panel, Layout layout, SBMLEditMode editMode) {
+  public ControllerViewSynchronizer(LayoutGraphPanel panel, Layout layout, SBMLEditMode editMode) {
     this.panel = panel;
     this.layout = layout;
     this.editMode = editMode;
@@ -82,15 +84,16 @@ public class ControllerViewSynchronizer implements TreeNodeChangeListener {
       BoundingBox boundingBox = speciesGlyph.getBoundingBox();
       Species s = layout.getModel().getSpecies(speciesGlyph.getSpecies());
       if (boundingBox != null) {
-        Node n = panel.getConverter().createNode(speciesGlyph.getId(),
-            s.getName(),
-            s.getSBOTerm(),
-            boundingBox.getPosition().getX(),
-            boundingBox.getPosition().getY(),
-            boundingBox.getDimensions().getWidth(),
-            boundingBox.getDimensions().getHeight());
-        panel.getGraph2DView().updateView();
-        speciesGlyph.putUserObject(Constants.GLYPH_NODE_KEY, n);
+      	// FIXME
+//        Node n = panel.getConverter().createNode(speciesGlyph.getId(),
+//            s.getName(),
+//            s.getSBOTerm(),
+//            boundingBox.getPosition().getX(),
+//            boundingBox.getPosition().getY(),
+//            boundingBox.getDimensions().getWidth(),
+//            boundingBox.getDimensions().getHeight());
+//        panel.getGraph2DView().updateView();
+//        speciesGlyph.putUserObject(Constants.GLYPH_NODE_KEY, n);
       }
     }
     else if (node instanceof ReactionGlyph) {

@@ -27,6 +27,7 @@ import y.base.NodeCursor;
 import y.view.EditMode;
 import y.view.HitInfo;
 import de.zbit.editor.Constants;
+import de.zbit.sbml.layout.y.SBMLCreateEdgeMode;
 
 /**
  * This class accepts user input on the yFiles interface panel and decides the resulting actions.

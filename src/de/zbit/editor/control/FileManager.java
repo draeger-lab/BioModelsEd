@@ -94,7 +94,6 @@ public class FileManager {
    * Open files and returns all successful for history
    */
   public File[] openFile(File... arg0) {
-  	logger.info("openFile");
   	ArrayList<File> list = new ArrayList<File>();
   	for (File f : arg0) {
   		if(fileOpen(f)) {

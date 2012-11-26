@@ -37,6 +37,7 @@ import y.view.NodeRealizer;
 import de.zbit.editor.Constants;
 import de.zbit.editor.control.CommandController;
 import de.zbit.editor.control.SBMLTools;
+import de.zbit.graph.gui.LayoutGraphPanel;
 import de.zbit.graph.sbgn.ReactionNodeRealizer;
 import de.zbit.io.OpenedFile;
 import de.zbit.util.ResourceManager;
@@ -45,7 +46,7 @@ import de.zbit.util.ResourceManager;
  * @author Jan Rudolph
  * @version $Rev$
  */
-public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener{
+public class BioModelsEdPanel extends LayoutGraphPanel implements ActionListener{
 
 	/**
 	 * 
@@ -362,4 +363,14 @@ public class BioModelsEdPanel extends GraphLayoutPanel implements ActionListener
 	public OpenedFile<SBMLDocument> getFile() {
 		return this.file;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

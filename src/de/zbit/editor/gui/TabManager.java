@@ -104,27 +104,23 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
    * return true if successful
    */
   public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId) {
-    if (openedFiles.isEmpty()) {
-    	// FIXME use GUITools.setEnabled (squeezer)
-    	BioModelsEdGUITools.setEnabled(toolBar,true);
-    }
-  	if (openedFiles.contains(file)) {
-    	int index = isOpen(file, layoutId);
-			if (index != -1) {
-    		logger.info("Layout already opened, switching to right tab");
-    		setSelectedIndex(index);
-    		return false;
+    if (file != null) {
+    	if (openedFiles.contains(file)) {
+    		BioModelsEdPanel panel = isOpen(file, layoutId);
+    		if (panel != null) {
+    			switchTo(panel);
+    		}
     	}
-    }
-    else {
-    	openedFiles.add(file);
+    	else {
+    		openedFiles.add(file);
+    	}
     }
     Layout layout = (layoutId != null) ?
     		SBMLTools.getLayout(file, layoutId) : SBMLTools.getOrCreateDefaultLayout(file);
-    BioModelsEdPanel panel = createPanelFromLayout(layout, file);
     String title = createTitle(file, layout);
-    addTab(title, panel);
-    switchTo(panel);
+		BioModelsEdPanel panel = createPanelFromLayout(layout, file);
+		super.addTab(title, panel);
+		setSelectedComponent(panel);
     return true;
   }
   
@@ -136,25 +132,20 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
    */
   private void switchTo(BioModelsEdPanel panel) {
   	if (panel == null) {
-  		logger.info("nothing to show");
-  		BioModelsEdGUITools.setEnabled(toolBar, false);
+  		BioModelsEdGUITools.setGuiStart(true, menuBar, toolBar);
   	}
   	else {
-  		setSelectedComponent(panel);
+  		BioModelsEdGUITools.setGuiStart(false, menuBar, toolBar);
+  		
   		OpenedFile<SBMLDocument> file = panel.getFile();
   		if ((file == null) || file.isChanged()) {
-  			panel.setName(createTitle(file, panel.getDocument()));
-  			GUITools.setEnabled(true, menuBar, toolBar, 
-  				BaseAction.FILE_SAVE_AS,
-  				BaseAction.FILE_CLOSE);
-  			if (file.isChanged()) {
-  				GUITools.setEnabled(true, menuBar, toolBar,
-  					BaseAction.FILE_SAVE);
-  			}
+  			BioModelsEdGUITools.setGuiFileChanged(true, menuBar, toolBar);
   		}
+  		setSelectedComponent(panel);
   	}
   }
-  /**
+
+	/**
 	 * @param file
 	 * @param layout
 	 * @return
@@ -175,16 +166,18 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
 	 * @param layoutId
 	 * @return index where layout is shown or -1 if not opened
 	 */
-	private int isOpen(OpenedFile<SBMLDocument> file, String layoutId) {
+	private BioModelsEdPanel isOpen(OpenedFile<SBMLDocument> file, String layoutId) {
 		Layout layout = SBMLTools.getLayout(file, layoutId);
 		Component[] components = getComponents();
 		for (int i = 0; i < getComponentCount(); i++) {
 			if (components[i] instanceof BioModelsEdPanel) {
 				BioModelsEdPanel panel = (BioModelsEdPanel) components[i];
-				if (panel.getDocument().equals(layout)) { return i; }
+				if (panel.getDocument().equals(layout)) {
+					return panel;
+				}
 			}
 		}
-		return -1;
+		return null;
 	}
   
   /**
@@ -303,12 +296,8 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
 				}
 			}
 		}
-//		if (this.getComponentCount() > 0) {
-//			switchTo((BioModelsEdPanel) this.getComponent(0));
-//		}
-//		else {
-//			
-//		}
+		// TODO improve by changing to next component, not first
+		switchTo((BioModelsEdPanel) this.getComponent(0));
 	}
 
 	/**
@@ -320,7 +309,9 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
 			if (component instanceof BioModelsEdPanel) {
 				BioModelsEdPanel panel = (BioModelsEdPanel) component;
 				if (panel.getFile().equals(file)) {
-					panel.setName(createTitle(file, panel.getDocument()));
+					int index = getTabIndexByComponent(component);
+					String title = createTitle(file, panel.getDocument());
+					setTitleAt(index, title);
 				}
 			}
 		}
@@ -332,6 +323,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
 	 */
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
+		logger.info("state changed");
 		// invoked when tabs are removed by mouseClicked in super.addCloseIconToTabComponentAt
 		if (getTabCount() > 0) {
 			switchTo((BioModelsEdPanel) getSelectedComponent());

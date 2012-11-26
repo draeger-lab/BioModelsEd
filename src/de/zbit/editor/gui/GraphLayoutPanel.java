@@ -85,8 +85,8 @@ public class GraphLayoutPanel extends TranslatorGraphLayerPanel<Layout> {
 	protected Graph2D createGraphFromDocument(Layout layout) {
 		//TODO plug in layout director
 		
-		converter = new Layout2GraphML();
-		return converter.createGraph(layout, editMode);
+		converter = new Layout2GraphML(editMode);
+		return converter.createGraph(layout);
 	}
 
 	/**

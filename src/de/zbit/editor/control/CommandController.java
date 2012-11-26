@@ -236,7 +236,6 @@ public class CommandController implements PropertyChangeListener {
 	 * Open files and return all successful for history
 	 */
 	public File[] openFile(File... arg0) {
-		logger.info("openFile");
 		return arg0 != null ? fileManager.openFile(arg0) : null;
 	}
 	/**
@@ -263,7 +262,7 @@ public class CommandController implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(Constants.openingDone)) {
 			OpenedFile<SBMLDocument> doc = (OpenedFile<SBMLDocument>) evt.getNewValue();
-			doc.setChanged(false);
+			doc.setChanged(false); // this needs to be done since default is true
 			this.view.show(doc);
 			this.fileManager.addDocument(doc);
 		}
