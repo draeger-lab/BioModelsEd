@@ -55,6 +55,14 @@ import de.zbit.util.ResourceManager;
  * @author Jan Rudolph
  * @version $Rev$
  */
+/**
+ * @author Jan Rudolph
+ * @version $Rev$
+ */
+/**
+ * @author Jan Rudolph
+ * @version $Rev$
+ */
 public class TabManager extends JTabbedPaneDraggableAndCloseable implements ChangeListener, ActionListener, PropertyChangeListener{
 
   private static final long serialVersionUID = -905908829761611472L;
@@ -97,11 +105,12 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
     return view;
   }
   
+ 
   /**
-   * Adds a tab for the given layout and runs the autoLayout algorithm on it, when autoLayout is true.
-   * @param layout
-   * @param autolayout
-   * return true if successful
+   * FIXME add comment
+   * @param file
+   * @param layoutId
+   * @return
    */
   public boolean addTab(OpenedFile<SBMLDocument> file, String layoutId) {
     if (file != null) {
@@ -251,7 +260,7 @@ public class TabManager extends JTabbedPaneDraggableAndCloseable implements Chan
     SBMLEditMode editMode = new SBMLEditMode(this);
     BioModelsEdPanel panel = new BioModelsEdPanel(layout, editMode, view.getController(), file);
     Graph2DView view = panel.getGraph2DView();
-    boolean autoLayout = true; //TODO read from options 
+    boolean autoLayout = false; //TODO read from options 
     if (autoLayout) {
       view.applyLayout(new OrganicLayouter());
     }
