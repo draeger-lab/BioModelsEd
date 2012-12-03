@@ -3,10 +3,11 @@
   <model id="defalt_model" name="two_species">
     <listOfCompartments>
       <compartment id="default"/>
+      <compartment id="intracellular"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species id="s0" name="simple molecule" sboTerm="SBO:0000247" compartment="default"/>
-      <species id="s1" name="macromolecule" sboTerm="SBO:0000245" compartment="default"/>
+      <species id="s0" name="simple molecule" sboTerm="SBO:0000247" compartment="intracellular"/>
+      <species id="s1" name="macromolecule" sboTerm="SBO:0000245" compartment="intracellular"/>
     </listOfSpecies>
   </model>
 </sbml>
