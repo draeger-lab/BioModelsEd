@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model id="compartments">
+    <listOfCompartments>
+      <compartment id="default"/>
+      <compartment id="int" name="intracellular"/>
+    </listOfCompartments>
+
+    <listOfSpecies>
+      <species id="s0" name="a" sboTerm="SBO:0000247" compartment="int"/>
+      <species id="s1" name="b" sboTerm="SBO:0000247" compartment="int"/>
+    </listOfSpecies>
+
+    <listOfReactions>
+      <reaction id="r0" reversible="false" sboTerm="SBO:0000176">
+        <listOfReactants>
+          <speciesReference species="s0"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="s1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+
+    <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1">
+      <layout:layout id="layout0" name="default_layout">
+        <layout:listOfCompartmentGlyphs>
+          <layout:compartmentGlyph layout:id="intglyph" layout:compartment="int"/>
+        </layout:listOfCompartmentGlyphs>
+
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph layout:id="glyph0" layout:species="s0">
+            <layout:boundingBox>
+              <layout:dimensions layout:width="25" layout:height="25" layout:depth="0"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph layout:id="glyph1" layout:species="s1">
+            <layout:boundingBox>
+              <layout:dimensions layout:width="25" layout:height="25" layout:depth="0"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph layout:id="reactionglyph0" sboTerm="SBO:0000176" layout:reaction="r0">
+            <layout:boundingBox>
+              <layout:dimensions layout:width="20" layout:height="10" layout:depth="0"/>
+            </layout:boundingBox>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph layout:id="speciesReferenceGlyph0" layout:role="substrate" layout:speciesGlyph="glyph0"/>
+              <layout:speciesReferenceGlyph layout:id="speciesReferenceGlyph1" layout:role="product" layout:speciesGlyph="glyph1"/>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+
+        <layout:listOfTextGlyphs>
+          <layout:textGlyph layout:graphicalObject="glyph0" layout:id="textglyph0" layout:originOfText="s0"/>
+          <layout:textGlyph layout:graphicalObject="glyph1" layout:id="textglyph1" layout:originOfText="s1"/>
+          <layout:textGlyph layout:graphicalObject="intglyph" layout:id="textglyph_int" layout:originOfText="int"/>
+        </layout:listOfTextGlyphs>
+
+      </layout:layout>
+    </layout:listOfLayouts>
+  </model>
+</sbml>
