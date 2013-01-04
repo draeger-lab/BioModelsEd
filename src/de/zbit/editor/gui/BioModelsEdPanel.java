@@ -4,7 +4,7 @@
  * ---------------------------------------------------------------------
  * This file is part of BioModelsEd.
  *
- * Copyright (C) 20012-2012 by the University of Tuebingen, Germany.
+ * Copyright (C) 20012-2013 by the University of Tuebingen, Germany.
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as

@@ -8,7 +8,7 @@
  * <http://www.cogsys.cs.uni-tuebingen.de/software/KEGGtranslator> to
  * obtain the latest version of KEGGtranslator.
  *
- * Copyright (C) 2011 by the University of Tuebingen, Germany.
+ * Copyright (C) 2011-2013 by the University of Tuebingen, Germany.
  *
  * KEGGtranslator is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -192,8 +192,9 @@ public class SBGNVisualizationProperties {
   /**
    * 
    * @param sboTerm
-   * @return the adaquate {@link ShapeNodeRealizer}, if for this sboterm no {@link ShapeNodeRealizer}
-   * is available it return the {@link #defaultShape}
+   * @return the adequate {@link ShapeNodeRealizer}, if for this sboTerm no
+   *         {@link ShapeNodeRealizer} is available it return the
+   *         {@link #defaultShape}
    */
   public static NodeRealizer getNodeRealizer(int sboTerm) {
     if (sbo2shape == null) {
@@ -212,9 +213,9 @@ public class SBGNVisualizationProperties {
   }
 
   /**
-   * Most graphics suites (e.g. yFiles) don't distinct an elipse
+   * Most graphics suites (e.g., yFiles) don't distinct an ellipse
    * and a circle, but SBGN does. If this returns true, a node
-   * realizer, even if it is an eliptical realizer, should have
+   * realizer, even if it is an elliptical realizer, should have
    * the same with and height (resulting in a circle).
    * @param sboTerm
    * @return
