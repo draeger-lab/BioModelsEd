@@ -20,6 +20,7 @@
     </listOfReactions>
     <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1">
       <layout:layout id="layout0" name="default_layout">
+        <layout:dimensions layout:width="1000" layout:height="1000" layout:depth="0"/>
         <layout:listOfSpeciesGlyphs>
           <layout:speciesGlyph layout:id="glyph0" name="a" layout:species="s0">
             <layout:boundingBox>
