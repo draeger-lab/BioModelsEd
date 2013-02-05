@@ -138,21 +138,21 @@ public class FileManager {
   /**
    * Asks user, where to save the file and calls {@link #fileSave}.
    * @param doc
-   * @return true, if succesful
+   * @return {@code true} if successful, {@code false} otherwise.
    */
   public boolean saveFileAs(File file, OpenedFile<SBMLDocument> openedFile) {
-  	if (file == null) {
-			return false;
-		}
-		if (openedFile.isSetFile()) {
-			OpenedFile<SBMLDocument> newOpenedFile = new OpenedFile<SBMLDocument>();
-			newOpenedFile.setDocument(new SBMLDocument(openedFile.getDocument()));
-			newOpenedFile.setFile(file);
-			return saveFile(newOpenedFile);
-		}
-		else {
-			openedFile.setFile(file);
-			return saveFile(openedFile);
-		}
+	  if (file == null) {
+		  return false;
+	  }
+	  if (openedFile.isSetFile()) {
+		  OpenedFile<SBMLDocument> newOpenedFile = new OpenedFile<SBMLDocument>();
+		  newOpenedFile.setDocument(new SBMLDocument(openedFile.getDocument()));
+		  newOpenedFile.setFile(file);
+		  return saveFile(newOpenedFile);
+	  }
+
+	  openedFile.setFile(file);
+	  return saveFile(openedFile);
   }
+
 }
