@@ -55,6 +55,9 @@ public class Resources {
   public static final ImageIcon iconTransition = Resources.createImageIcon("img/ButtonTransition.png", null);
   public static final ImageIcon iconCatalysis = Resources.createImageIcon("img/ButtonCatalysis.png", null);
   public static final ImageIcon iconInhibition = Resources.createImageIcon("img/ButtonInhibition.png", null);
+  // TODO fix icon paths for modulation and necessary stimulation
+  public static final ImageIcon iconModulation = Resources.createImageIcon("img/ButtonCatalysis.png", null);
+  public static final ImageIcon iconNecessaryStimulation = Resources.createImageIcon("img/ButtonInhibition.png", null);
   public static final ImageIcon iconPositive = Resources.createImageIcon("img/Positive.png", null);
   public static final ImageIcon iconTab = Resources.createImageIcon("img/ButtonTab.png", null);
   public static final ImageIcon iconTabNew = Resources.createImageIcon("img/ButtonTabNew.png", null);

@@ -74,6 +74,10 @@
 	<entry key="INHIBITION_TOOLTIP">Inhibition</entry>
 	<entry key="CATALYSIS">Catalysis</entry>
 	<entry key="CATALYSIS_TOOLTIP">Catalysis</entry>
+	<entry key="MODULATION">Modulation</entry>
+	<entry key="MODULATION_TOOLTIP">Modulation</entry>
+	<entry key="NECESSARY_STIMULATION">Necessary Stimulation</entry>
+	<entry key="NECESSARY_STIMULATION_TOOLTIP">Necessary Stimulation</entry>
 	<entry key="REACTION">Reaction</entry>
 	<entry key="REACTION_TOOLTIP">Reaction</entry>
 	<entry key="UNKNOWN_MOLECULE">Unknown Molecule</entry>

@@ -63,6 +63,8 @@ public class BioModelsEdPanel extends LayoutGraphPanel implements ActionListener
     catalysis,
     emptySet,
     inhibition,
+    modulation,
+    necessaryStimulation,
     macromolecule,
     normal,
     reaction,
@@ -121,6 +123,12 @@ public class BioModelsEdPanel extends LayoutGraphPanel implements ActionListener
 			state = State.emptySet;
 		}
 		else if (action.equals(Command.INHIBITION.getName())) {
+			state = State.inhibition;
+		}
+		else if (action.equals(Command.MODULATION.getName())) {
+			state = State.inhibition;
+		}
+		else if (action.equals(Command.NECESSARY_STIMULATION.getName())) {
 			state = State.inhibition;
 		}
 		else if (action.equals(Command.MACROMOLECULE.getName())) {

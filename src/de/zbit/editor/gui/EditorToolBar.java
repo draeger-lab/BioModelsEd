@@ -87,6 +87,16 @@ public class EditorToolBar extends JToolBar {
 			Resources.iconInhibition,
 			listener);
 		
+		BioModelsEdGUIFactory.addButton(this,
+			Command.MODULATION,
+			Resources.iconModulation,
+			listener);
+		
+		BioModelsEdGUIFactory.addButton(this,
+			Command.NECESSARY_STIMULATION,
+			Resources.iconNecessaryStimulation,
+			listener);
+		
 		
 		layoutComboBox.setMaximumSize(new Dimension(150, 24));
 		add(layoutComboBox);
