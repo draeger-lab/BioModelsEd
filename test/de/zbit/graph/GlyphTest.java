@@ -25,7 +25,7 @@ import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
@@ -43,7 +43,7 @@ public class GlyphTest {
   private void test() {
     Model model = doc.createModel("myModel");
 
-    ExtendedLayoutModel extendedLayoutModel = new ExtendedLayoutModel(model);
+    LayoutModelPlugin extendedLayoutModel = new LayoutModelPlugin(model);
     model.addExtension(LayoutConstants.namespaceURI, extendedLayoutModel);
     Layout layout = extendedLayoutModel.createLayout("defaultLayout");
     

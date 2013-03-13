@@ -27,7 +27,7 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
@@ -66,7 +66,7 @@ public class GraphTest {
 		r1.createReactant(s1).setStoichiometry(1f);
 		r1.createProduct(s2).setStoichiometry(2d);
 		
-		ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+		LayoutModelPlugin extLayout = new LayoutModelPlugin(model);
 		Layout layout = extLayout.createLayout();
 		
 		//RenderListOfLayoutsPlugin render = new RenderListOfLayoutsPlugin(extLayout.getListOfLayouts());

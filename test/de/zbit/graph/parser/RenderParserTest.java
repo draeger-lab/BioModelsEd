@@ -32,7 +32,7 @@ public class RenderParserTest {
 //    s1.setSBOTerm(SBO.getComplex());
 //    Species s2 = model.createSpecies("s2", "Species 2", c);
 //    
-//    ExtendedLayoutModel extLayout = new ExtendedLayoutModel(model);
+//    LayoutModelPlugin extLayout = new LayoutModelPlugin(model);
 //    Layout layout = extLayout.createLayout("l1");
 //    
 //    RenderLayoutPlugin render = new RenderLayoutPlugin(extLayout.getLayout(0));

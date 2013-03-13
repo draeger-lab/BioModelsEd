@@ -43,7 +43,7 @@ import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
@@ -132,7 +132,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 	private void initializeLayout(SBMLDocument doc) {
 		Model m = doc.getModel();
 		if ((m != null) && (m.getExtension(LayoutConstants.namespaceURI) == null)) {
-			ExtendedLayoutModel layoutExt = new ExtendedLayoutModel(m);
+			LayoutModelPlugin layoutExt = new LayoutModelPlugin(m);
 			m.addExtension(LayoutConstants.namespaceURI, layoutExt);
 			layout = layoutExt.createLayout();
 		}

@@ -27,7 +27,7 @@ import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
-import org.sbml.jsbml.ext.layout.ExtendedLayoutModel;
+import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
@@ -66,7 +66,7 @@ public class SBMLTools {
 		SBMLDocument sbmlDoc = doc.getDocument();
 		if (sbmlDoc == null) return null;
 		Model model = getOrCreateModel(sbmlDoc);
-		ExtendedLayoutModel layoutModel = getOrCreateExtendedLayoutModel(model);
+		LayoutModelPlugin layoutModel = getOrCreateLayoutModelPlugin(model);
 		List<Layout> listOfLayouts = getOrCreateListOfLayouts(layoutModel);
 		logger.info("Layout(s) found, returning first");
 		return listOfLayouts.get(0);
@@ -85,7 +85,7 @@ public class SBMLTools {
 		if (model == null) {
 			return false;
 		}
-		ExtendedLayoutModel extLayoutModel = getExtendedLayoutModel(model);
+		LayoutModelPlugin extLayoutModel = getLayoutModelPlugin(model);
 		if (extLayoutModel == null) {
 			return false;
 		}
@@ -97,8 +97,8 @@ public class SBMLTools {
 	 * @param model
 	 * @return
 	 */
-	private static ExtendedLayoutModel getExtendedLayoutModel(Model model) {
-		ExtendedLayoutModel extLayoutModel = (ExtendedLayoutModel)model.getExtension(
+	private static LayoutModelPlugin getLayoutModelPlugin(Model model) {
+		LayoutModelPlugin extLayoutModel = (LayoutModelPlugin)model.getExtension(
 			LayoutConstants.getNamespaceURI(model.getLevel(), model.getVersion()));
 		return extLayoutModel;
 	}
@@ -108,7 +108,7 @@ public class SBMLTools {
 	 * @param layoutModel
 	 * @return
 	 */
-	private static List<Layout> getOrCreateListOfLayouts(ExtendedLayoutModel layoutModel) {
+	private static List<Layout> getOrCreateListOfLayouts(LayoutModelPlugin layoutModel) {
 		List<Layout> listOfLayouts = layoutModel.getListOfLayouts();
 		if (listOfLayouts == null || listOfLayouts.isEmpty()) {
 			logger.info("creating Layout");
@@ -118,15 +118,15 @@ public class SBMLTools {
 	}
 
 	/**
-	 * extracts ExtendedLayoutModel, creates one if not present
+	 * extracts LayoutModelPlugin, creates one if not present
 	 * @param model
 	 * @return
 	 */
-	private static ExtendedLayoutModel getOrCreateExtendedLayoutModel(Model model) {
-		ExtendedLayoutModel layoutModel = getExtendedLayoutModel(model);
+	private static LayoutModelPlugin getOrCreateLayoutModelPlugin(Model model) {
+		LayoutModelPlugin layoutModel = getLayoutModelPlugin(model);
 		if (layoutModel == null) {
-			logger.info("creating ExtendedLayoutModel");
-			ExtendedLayoutModel newExtLayout = new ExtendedLayoutModel(model);
+			logger.info("creating LayoutModelPlugin");
+			LayoutModelPlugin newExtLayout = new LayoutModelPlugin(model);
 			model.addExtension(
 				LayoutConstants.getNamespaceURI(model.getLevel(), model.getVersion()),
 				newExtLayout);
@@ -264,7 +264,7 @@ public class SBMLTools {
 	public static List<Layout> getListOfLayouts(SBMLDocument documentFromLayout) {
 		Model model = documentFromLayout.getModel();
 		if (hasLayout(model)) {
-			return getOrCreateListOfLayouts(getOrCreateExtendedLayoutModel(model));
+			return getOrCreateListOfLayouts(getOrCreateLayoutModelPlugin(model));
 		}
 		else {
 			logger.info("No Layouts set for " + documentFromLayout);
@@ -278,7 +278,7 @@ public class SBMLTools {
 	 * @return
 	 */
 	private static boolean hasLayout(Model model) {
-		ExtendedLayoutModel extension = (ExtendedLayoutModel) model.getExtension(
+		LayoutModelPlugin extension = (LayoutModelPlugin) model.getExtension(
 			LayoutConstants.getNamespaceURI(model.getLevel(), model.getVersion()));
 		return extension != null && extension.getLayout(0) != null;
 	}
