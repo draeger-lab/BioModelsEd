@@ -23,20 +23,27 @@
         <layout:listOfSpeciesGlyphs>
           <layout:speciesGlyph layout:id="glyph0" name="a" layout:species="s0">
             <layout:boundingBox>
-              <layout:position layout:x="179" layout:y="165" layout:z="0"/>
               <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <!-- center at 0,0 -->
+              <layout:position layout:x="-50" layout:y="-150" />
             </layout:boundingBox>
           </layout:speciesGlyph>
           <layout:speciesGlyph layout:id="glyph1" name="b" layout:species="s1">
             <layout:boundingBox>
-              <layout:position layout:x="446" layout:y="57" layout:z="0"/>
               <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <!-- center at 200,0 -->
+              <layout:position layout:x="150" layout:y="-50" />
             </layout:boundingBox>
           </layout:speciesGlyph>
         </layout:listOfSpeciesGlyphs>
         <layout:listOfReactionGlyphs>
           <layout:reactionGlyph layout:id="reactionglyph0" sboTerm="SBO:0000176" layout:reaction="r0">
+                                  <layout:boundingBox>
+              <layout:dimensions layout:width="20" layout:height="10" layout:depth="0"/>
+
+            </layout:boundingBox>
             <layout:listOfSpeciesReferenceGlyphs>
+
               <layout:speciesReferenceGlyph layout:id="speciesReferenceGlyph0" layout:role="substrate" layout:speciesGlyph="glyph0"/>
               <layout:speciesReferenceGlyph layout:id="speciesReferenceGlyph1" layout:role="product" layout:speciesGlyph="glyph1"/>
             </layout:listOfSpeciesReferenceGlyphs>

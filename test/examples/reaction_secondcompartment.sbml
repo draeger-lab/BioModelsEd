@@ -38,8 +38,8 @@
         <layout:listOfReactionGlyphs>
           <layout:reactionGlyph layout:id="reactionglyph0" sboTerm="SBO:0000176" layout:reaction="r0">
             <layout:boundingBox>
-              <layout:position layout:x="427" layout:y="218.5" layout:z="0"/>
-              <layout:dimensions layout:width="10" layout:height="10" layout:depth="0"/>
+              <!-- <layout:position layout:x="427" layout:y="218.5" layout:z="0"/> -->
+              <!-- <layout:dimensions layout:width="10" layout:height="10" layout:depth="0"/> -->
             </layout:boundingBox>
             <layout:listOfSpeciesReferenceGlyphs>
               <layout:speciesReferenceGlyph layout:id="speciesReferenceGlyph0" layout:role="substrate" layout:speciesGlyph="glyph0"/>

@@ -6,23 +6,45 @@
     </listOfCompartments>
     <listOfSpecies>
       <species id="s1" name="macromolecule" sboTerm="SBO:0000245" compartment="default"/>
+      <species id="s2" name="x" sboTerm="SBO:0000245" compartment="default"/>
     </listOfSpecies>
     <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1">
       <layout:layout id="layout0" name="default_layout">
+
         <layout:listOfSpeciesGlyphs>
           <layout:speciesGlyph layout:id="glyph1" layout:species="s1">
             <layout:boundingBox>
                <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="100" layout:y="100" layout:z="0"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+
+          <layout:speciesGlyph layout:id="glyph2" layout:species="s2">
+            <layout:boundingBox>
+               <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="400" layout:y="200" layout:z="0"/>
             </layout:boundingBox>
           </layout:speciesGlyph>
         </layout:listOfSpeciesGlyphs>
+
         <layout:listOfTextGlyphs>
-          <layout:textGlyph layout:graphicalObject="glyph1" layout:id="textglyph1" layout:originOfText="s1"/>
+
+          <layout:textGlyph layout:graphicalObject="glyph1" layout:id="textglyph1" layout:originOfText="s1">
+            <layout:boundingBox>
+              <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="100" layout:y="300" layout:z="0"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+
+          <layout:textGlyph layout:graphicalObject="glyph2" layout:id="textglyph2" layout:originOfText="s2" />
+
           <layout:textGlyph layout:id="independenttextglyph0" layout:text="independent text">
             <layout:boundingBox>
               <layout:position layout:x="446" layout:y="57" layout:z="0"/>
+              <layout:dimensions layout:width="140" layout:height="40" layout:depth="0"/>
             </layout:boundingBox>
           </layout:textGlyph>
+
         </layout:listOfTextGlyphs>
       </layout:layout>
     </layout:listOfLayouts>

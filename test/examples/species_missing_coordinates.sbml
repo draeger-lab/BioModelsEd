@@ -13,6 +13,7 @@
           <layout:speciesGlyph layout:id="glyph0" layout:species="s0">
             <layout:boundingBox>
               <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="200" layout:y="200" layout:z="0" />
             </layout:boundingBox>
           </layout:speciesGlyph>
         </layout:listOfSpeciesGlyphs>

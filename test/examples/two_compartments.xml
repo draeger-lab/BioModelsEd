@@ -18,18 +18,21 @@
           <layout:speciesGlyph layout:id="glyph0" layout:species="s0">
             <layout:boundingBox>
               <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="30" layout:y="40"/>
             </layout:boundingBox>
           </layout:speciesGlyph>
           
           <layout:speciesGlyph layout:id="glyph1" layout:species="s1">
             <layout:boundingBox>
                <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="160" layout:y="40"/>
             </layout:boundingBox>
           </layout:speciesGlyph>
           
           <layout:speciesGlyph layout:id="glyph12" layout:species="s1">
             <layout:boundingBox>
                <layout:dimensions layout:width="100" layout:height="100" layout:depth="0"/>
+              <layout:position layout:x="80" layout:y="170"/>
             </layout:boundingBox>
           </layout:speciesGlyph>
           
