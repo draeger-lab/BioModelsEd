@@ -33,9 +33,10 @@ import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.layout.AbstractReferenceGlyph;
 import org.sbml.jsbml.ext.layout.Layout;
-import org.sbml.jsbml.ext.layout.NamedSBaseGlyph;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
+import org.sbml.jsbml.ext.layout.ReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
@@ -43,14 +44,10 @@ import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.jsbml.util.ValuePair;
 
 import y.base.Node;
-import y.io.GIFIOHandler;
 import y.io.ImageOutputHandler;
-import y.io.JPGIOHandler;
 import y.view.Graph2D;
 import y.view.Graph2DView;
 import de.zbit.editor.Constants;
-import de.zbit.editor.gui.BioModelsEdGUIFactory;
-import de.zbit.editor.gui.GraphLayoutPanel;
 import de.zbit.io.OpenedFile;
 
 /**
@@ -70,7 +67,7 @@ public class CommandController implements PropertyChangeListener {
 	
 	
 	private List<Node> nodeList = new ArrayList<Node>();
-	private List<NamedSBaseGlyph> nodeCopyList = new ArrayList<NamedSBaseGlyph>();
+	private List<ReferenceGlyph> nodeCopyList = new ArrayList<ReferenceGlyph>();
 	
 	/**
 	 * Constructor
@@ -161,7 +158,7 @@ public class CommandController implements PropertyChangeListener {
 		ReactionGlyph reactionGlyph = SBMLFactory.createReactionGlyph(file, reaction, source, target, model.getLevel(), model.getVersion());
 		reaction.setName(reaction.getId());
 		model.addReaction(reaction);
-		layout.add(reactionGlyph);
+		layout.addReactionGlyph(reactionGlyph);
 		file.setChanged(true);
 		return reactionGlyph;
 	}
@@ -320,7 +317,7 @@ public class CommandController implements PropertyChangeListener {
 	 * @param node
 	 * @return the Glyph or null, if it wasn't found within the SpeciesGlyph or ReactionGlyph lists.
 	 */
-	private NamedSBaseGlyph getGlyphFromNode(Node node, Layout layout) {
+	private AbstractReferenceGlyph getGlyphFromNode(Node node, Layout layout) {
 		for (SpeciesGlyph glyph : layout.getListOfSpeciesGlyphs()) {
 			Node n = (Node) glyph.getUserObject(Constants.GLYPH_NODE_KEY);
 			if (node == n) {
@@ -369,7 +366,7 @@ public class CommandController implements PropertyChangeListener {
 //				String speciesId = ((SpeciesGlyph) glyph).getSpecies();
 //				deleteReactionGlyphs((SpeciesGlyph) glyph, layout);
 //				
-//				if (this.nodeCopyList.remove(glyph)){
+//				if (this.nodeCopyList.remove(glyph)) {
 //					logger.info("Removed glyph from copylist");
 //				}
 //				layout.getListOfSpeciesGlyphs().remove(glyph);
@@ -405,7 +402,7 @@ public class CommandController implements PropertyChangeListener {
 			for (int i = 0; i < sRefList.size(); i++) {
 				if((speciesGlyph.getId().equals(sRefList.get(i).getSpeciesGlyph())) && 
 						((sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT) ||
-								(sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE))){
+								(sRefList.get(i).getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE))) {
 					logger.info("Reaktionen löschen: Reaction"+ rGlyph.getId() + " zur Liste hinzugefügt.");
 					list.add(rGlyph);
 				}
@@ -427,7 +424,7 @@ public class CommandController implements PropertyChangeListener {
 			layout.getListOfReactionGlyphs().remove(rGlyph);
 			layout.firePropertyChange("nodeDelete", null, rGlyph.getUserObject(Constants.GLYPH_NODE_KEY));
 			
-			if (this.nodeCopyList.remove(rGlyph)){
+			if (this.nodeCopyList.remove(rGlyph)) {
 				logger.info("Removed glyph from copylist");
 			}
 			logger.info("Reaktionen löschen: Reaction gelöscht.");
@@ -521,7 +518,7 @@ public class CommandController implements PropertyChangeListener {
 			logger.info("nodePaste: Same Model");  
 			
 			SpeciesGlyph speciesGlyph = SBMLFactory.createSpeciesGlyph(glyphId, SBMLView.DEFAULT_LEVEL_VERSION.getL(), SBMLView.DEFAULT_LEVEL_VERSION.getV(), x, y, width, height, speciesId);
-			layout.add(speciesGlyph);
+			layout.addSpeciesGlyph(speciesGlyph);
 			
 			logger.info("New Glyph: " + 
 					"Id: " + speciesGlyph.getId() + 
@@ -535,7 +532,7 @@ public class CommandController implements PropertyChangeListener {
 					SBMLView.DEFAULT_LEVEL_VERSION.getL(),
 					SBMLView.DEFAULT_LEVEL_VERSION.getV(),
 					speciesGlyph,
-					originalTextGlyph.getNamedSBase());
+					originalTextGlyph.getReference());
 				layout.addTextGlyph(newTextGlyph);
 			}
 		}
@@ -557,7 +554,7 @@ public class CommandController implements PropertyChangeListener {
 				width,
 				height,
 				speciesIdNew);
-			layout.add(speciesGlyph);
+			layout.addSpeciesGlyph(speciesGlyph);
 			
 			logger.info("New Glyph: " + 
 					"Id: " + speciesGlyph.getId() + 

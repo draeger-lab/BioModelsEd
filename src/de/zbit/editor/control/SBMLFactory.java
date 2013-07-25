@@ -136,7 +136,7 @@ public class SBMLFactory {
    * @param version
    * @return the created Reaction
    */
-  public static Reaction createReaction(OpenedFile<SBMLDocument> selectedDoc, Species source, Species target, boolean reversible, int level, int version){
+  public static Reaction createReaction(OpenedFile<SBMLDocument> selectedDoc, Species source, Species target, boolean reversible, int level, int version) {
     String id = SBMLTools.getNextGenericId(selectedDoc, Constants.genericReactionIdPrefix);
     Reaction reaction = new Reaction(id, level, version);
     SpeciesReference sourceRef = new SpeciesReference(source);

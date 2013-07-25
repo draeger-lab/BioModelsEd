@@ -69,7 +69,7 @@ public class Resources {
 	 * @param key
 	 * @return a localized string in the default language
 	 */
-	public static String getString(String key){
+	public static String getString(String key) {
 		return bundleDefault.getString(key);
 	}
 	

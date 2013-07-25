@@ -139,7 +139,7 @@ public class EditorToolBar extends JToolBar {
 	public void updateComboBox(ListOf<Layout> list) {
 		this.listOfLayouts = list;
 		layoutComboBox.removeAllItems();
-		for(Layout l: listOfLayouts){
+		for(Layout l: listOfLayouts) {
 			layoutComboBox.addItem(new ListItem(l.getName()));
 		}
 	}
@@ -150,7 +150,7 @@ public class EditorToolBar extends JToolBar {
 	 */
 	public Layout getSelectedLayout() {
 		String msg = "";
-		for(Layout l: listOfLayouts){
+		for(Layout l: listOfLayouts) {
 			msg += l.getId() +";";
 		}
 		

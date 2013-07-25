@@ -66,7 +66,7 @@ public class GlyphTest {
         10,
         10,
         Constants.glyphDefaultZ));
-    layout.add(sGlyph);
+    layout.addSpeciesGlyph(sGlyph);
 
     model.addSpecies(s);
   }

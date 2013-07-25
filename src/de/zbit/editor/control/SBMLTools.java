@@ -167,7 +167,7 @@ public class SBMLTools {
     for (Species s : species) {
       SpeciesGlyph sGlyph = SBMLFactory.createSpeciesGlyph(getNextGenericId(doc, Constants.genericGlyphIdPrefix),
         s.getLevel(), s.getVersion(), s.getId());
-      layout.add(sGlyph);
+      layout.addSpeciesGlyph(sGlyph);
       TextGlyph tGlyph = SBMLFactory.createTextGlyph(getNextGenericId(doc, Constants.genericTextGlyphIdPrefix),
         model.getLevel(), model.getVersion(), sGlyph, s.getId());
       layout.addTextGlyph(tGlyph);
@@ -215,7 +215,7 @@ public class SBMLTools {
           }
         }
         
-        layout.add(rGlyph);
+        layout.addReactionGlyph(rGlyph);
         logger.info("ReactionGlyph created.");
       }
     }

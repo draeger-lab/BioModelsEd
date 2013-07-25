@@ -205,7 +205,7 @@ public class CellDesignerAnnotationParser implements Runnable {
 				else if (name.equals(CellDesignerContstants.baseProduct)) {
           listOfSpeciesReferenceGlyphs = createBaseProduct(attributeMap,listOfSpeciesReferenceGlyphs);
         }
-				else if (name.equals(CellDesignerContstants.moleculeClass)){
+				else if (name.equals(CellDesignerContstants.moleculeClass)) {
 				  attributeMap.put(CellDesignerContstants.moleculeClass, streamReader.getElementText());
 				  createProtein(attributeMap);
 				}
@@ -440,7 +440,7 @@ public class CellDesignerAnnotationParser implements Runnable {
       sr.unsetAnnotation();
     }
     
-    layout.add(SBMLFactory.createReactionGlyph(id, level, version, listOfSpeciesReferenceGlyphs,
+    layout.addReactionGlyph(SBMLFactory.createReactionGlyph(id, level, version, listOfSpeciesReferenceGlyphs,
       reactionId, getReactionSBO(reactionType)));
   }
 
@@ -491,7 +491,7 @@ public class CellDesignerAnnotationParser implements Runnable {
     String width = attributeMap.get(b + CellDesignerContstants.width);
     String height = attributeMap.get(b + CellDesignerContstants.heigth);
 
-    layout.add(SBMLFactory.createSpeciesGlyph(id, layout.getLevel(), layout.getVersion(), 
+    layout.addSpeciesGlyph(SBMLFactory.createSpeciesGlyph(id, layout.getLevel(), layout.getVersion(), 
       x, y, width, height, speciesId));
   }
 
